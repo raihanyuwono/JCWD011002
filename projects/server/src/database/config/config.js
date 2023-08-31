@@ -8,6 +8,8 @@ const PASSWORD = process.env.DB_PASSWORD;
 const DATABASE = process.env.DB_DATABASE;
 const HOST = process.env.DB_HOST;
 
+console.log(USERNAME);
+
 module.exports = {
     development: {
         username: USERNAME,
