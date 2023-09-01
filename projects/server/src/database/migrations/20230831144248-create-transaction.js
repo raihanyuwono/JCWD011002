@@ -18,9 +18,6 @@ module.exports = {
       id_status: {
         type: Sequelize.INTEGER
       },
-      receipt: {
-        type: Sequelize.STRING
-      },
       is_confirm: {
         type: Sequelize.BOOLEAN
       },
