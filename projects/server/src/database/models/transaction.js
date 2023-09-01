@@ -8,7 +8,8 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models["transaction_product"], {
         foreignKey: "id_transaction",
       });
-      this.hasMany(models["stock_history"], {
+      this.hasMany(models["stock_history"], { foreignKey: "id_transaction" });
+      this.hasMany(models["transaction_payment"], {
         foreignKey: "id_transaction",
       });
     }
@@ -18,10 +19,6 @@ module.exports = (sequelize, DataTypes) => {
       id_user: DataTypes.INTEGER,
       total: DataTypes.BIGINT,
       id_status: DataTypes.INTEGER,
-      receipt: {
-        type: DataTypes.STRING,
-        unique: true,
-      },
       is_confirm: DataTypes.BOOLEAN,
       shipping_method: DataTypes.STRING,
     },
@@ -31,7 +28,6 @@ module.exports = (sequelize, DataTypes) => {
       underscored: true,
       createdAt: "created_at",
       updatedAt: "updated_at",
-      indexes: [{ unique: true, fields: ["receipt"] }],
     }
   );
   return transaction;
