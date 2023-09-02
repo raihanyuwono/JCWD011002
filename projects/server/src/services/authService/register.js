@@ -30,7 +30,7 @@ async function sendMail(email, payload) {
   await mailer.send(email, subject, { redirect });
 }
 
-async function register(email, id_role) {
+async function register(email, id_role = 1) {
   // Check if email is exsist
   const isExist = await users.findOne({ where: { email } });
   if (isExist) return messages.error(500, "Email is already exist");
@@ -44,7 +44,6 @@ async function register(email, id_role) {
     await sendMail(email, { id: user["id"] });
     // Send response after finsihed register
     return messages.success(MESSAGE_SUCCESS);
-    // return messages.success(MESSAGE_SUCCESS);
   });
 }
 
