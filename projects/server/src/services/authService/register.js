@@ -6,6 +6,8 @@ require("dotenv").config({
   path: path.resolve(__dirname, "../../../.env"),
 });
 
+// db.sequelize.sync({ alter: true });
+
 const FE_URL = process.env.WHITELIST;
 const JWT_KEY = process.env.JWT_KEY;
 
@@ -33,8 +35,8 @@ async function register(email, id_role) {
   const isExist = await users.findOne({ where: { email } });
   if (isExist) return messages.error(500, "Email is already exist");
   // Create new user
-  await db.sequelize.transaction(async function (t) {
-    const user = await users.create({ email, role }, { transaction: t });
+  return await db.sequelize.transaction(async function (t) {
+    const user = await users.create({ email, id_role }, { transaction: t });
     // check role
     const role = await roles.findOne({ where: { id: id_role } });
     if (role["name"] == "user") await createCart(user, t);
@@ -42,6 +44,7 @@ async function register(email, id_role) {
     await sendMail(email, { id: user["id"] });
     // Send response after finsihed register
     return messages.success(MESSAGE_SUCCESS);
+    // return messages.success(MESSAGE_SUCCESS);
   });
 }
 
