@@ -1,5 +1,4 @@
-const db = require("../../database");
-const cart_product = db["cart_product"];
+const { cart_product } = require("../../database");
 const { messages } = require("../../helpers");
 
 const removeFromCart = async (userId, productId) => {

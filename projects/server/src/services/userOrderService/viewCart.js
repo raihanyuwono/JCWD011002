@@ -1,6 +1,4 @@
-const db = require("../../database");
-const cart_product = db["cart_product"];
-const product = db["product"];
+const { cart_product, product } = require("../../database");
 
 const viewCart = async (userId) => {
   try {
