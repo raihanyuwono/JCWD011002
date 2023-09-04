@@ -70,13 +70,14 @@ const AddressList = ({ onSelectAddress }) => {
       </Button>
       <Modal size={"2xl"} isOpen={isModalOpen} onClose={closeModal}>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Select an Address</ModalHeader>
+        <ModalContent bgColor={"#233947"}>
+          <ModalHeader color={"white"}>Select an Address</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Box>
               {dummyAddress.map((address) => (
                 <Text
+                  bgColor={"white"}
                   boxShadow={"xl"}
                   borderRadius={"5px"}
                   mt={4}
