@@ -8,8 +8,8 @@ import {
   TabPanels,
   Tabs,
 } from "@chakra-ui/react";
-import FormLogin from "./FormLogin";
-import FormRegister from "./FormRegister";
+import FormLogin from "../Form/FormLogin";
+import FormRegisterMail from "../Form/FormRegisterMail";
 
 const modalOverlayAttr = {
   backdropFilter: "blur(2px)",
@@ -35,7 +35,7 @@ function ModalPopup({ isOpen, onClose }) {
               <FormLogin />
             </TabPanel>
             <TabPanel>
-              <FormRegister />
+              <FormRegisterMail />
             </TabPanel>
           </TabPanels>
         </Tabs>
