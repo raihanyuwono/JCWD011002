@@ -24,9 +24,9 @@ const dummyAddress = [
     id: 1,
     name: "Rumah",
     id_user: "Febry Dharmawan Jr",
-    province: "California",
-    city_name: "Los Angeles",
-    postal_code: 90001,
+    province: "Jawa Timur",
+    city_name: "Sidoarjo",
+    postal_code: 61252,
     full_address: "123 Main St",
     is_default: true,
   },
@@ -34,9 +34,9 @@ const dummyAddress = [
     id: 2,
     name: "Kantor",
     id_user: "Andre Djawa Temanggung",
-    province: "New York",
-    city_name: "New York City",
-    postal_code: 10001,
+    province: "Nusa Tenggara Timur (NTT)",
+    city_name: "Alor",
+    postal_code: 85811,
     full_address: "456 Elm St",
     is_default: false,
   },
@@ -44,9 +44,9 @@ const dummyAddress = [
     id: 3,
     name: "Kantor",
     id_user: "Rizky Freon",
-    province: "Los Santos",
-    city_name: "San Andreas",
-    postal_code: 70001,
+    province: "Kalimantan Timur",
+    city_name: "Balikpapan",
+    postal_code: 76111,
     full_address: "789 San St",
     is_default: false,
   },
@@ -78,9 +78,20 @@ const SelectAddress = ({ onSelectAddress }) => {
     setIsSelectAddressModalOpen(true);
   };
 
+  // const handleSelect = (address) => {
+  //   setSelectedAddress(address);
+  //   localStorage.setItem("selectedAddress", JSON.stringify(address));
+  //   console.log(localStorage.getItem("selectedAddress").city_name);
+  //   closeSelectAddressModal();
+  // };
   const handleSelect = (address) => {
     setSelectedAddress(address);
-    console.log(address);
+
+    // Store individual properties in localStorage
+    localStorage.setItem("city_name", address.city_name);
+    localStorage.setItem("province", address.province);
+    localStorage.setItem("postal_code", address.postal_code);
+
     closeSelectAddressModal();
   };
 
