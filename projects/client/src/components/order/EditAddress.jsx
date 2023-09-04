@@ -60,6 +60,8 @@ const EditAddress = ({ isOpen, onClose, onEditAddress, addressData }) => {
           <FormControl mb={2}>
             <FormLabel>Name</FormLabel>
             <Input
+              bg={"white"}
+              color={"#233947"}
               type="text"
               name="name"
               value={formData.name}
@@ -70,6 +72,8 @@ const EditAddress = ({ isOpen, onClose, onEditAddress, addressData }) => {
             <FormLabel>Province</FormLabel>
             <Input
               type="text"
+              bg={"white"}
+              color={"#233947"}
               name="province"
               value={formData.province}
               onChange={handleChange}
@@ -79,6 +83,8 @@ const EditAddress = ({ isOpen, onClose, onEditAddress, addressData }) => {
             <FormLabel>City Name</FormLabel>
             <Input
               type="text"
+              bg={"white"}
+              color={"#233947"}
               name="city_name"
               value={formData.city_name}
               onChange={handleChange}
@@ -88,6 +94,8 @@ const EditAddress = ({ isOpen, onClose, onEditAddress, addressData }) => {
             <FormLabel>Postal Code</FormLabel>
             <Input
               type="number"
+              bg={"white"}
+              color={"#233947"}
               name="postal_code"
               value={formData.postal_code}
               onChange={handleChange}
@@ -97,6 +105,8 @@ const EditAddress = ({ isOpen, onClose, onEditAddress, addressData }) => {
             <FormLabel>Full Address</FormLabel>
             <Input
               type="text"
+              bg={"white"}
+              color={"#233947"}
               name="full_address"
               value={formData.full_address}
               onChange={handleChange}

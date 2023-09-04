@@ -51,6 +51,8 @@ const AddAddress = ({ isOpen, onClose, onAddAddress }) => {
             <FormLabel>Name</FormLabel>
             <Input
               type="text"
+              bg={"white"}
+              color={"#233947"}
               name="name"
               value={formData.name}
               onChange={handleChange}
@@ -60,6 +62,8 @@ const AddAddress = ({ isOpen, onClose, onAddAddress }) => {
             <FormLabel>Province</FormLabel>
             <Input
               type="text"
+              bg={"white"}
+              color={"#233947"}
               name="province"
               value={formData.province}
               onChange={handleChange}
@@ -69,6 +73,8 @@ const AddAddress = ({ isOpen, onClose, onAddAddress }) => {
             <FormLabel>City Name</FormLabel>
             <Input
               type="text"
+              bg={"white"}
+              color={"#233947"}
               name="city_name"
               value={formData.city_name}
               onChange={handleChange}
@@ -78,6 +84,8 @@ const AddAddress = ({ isOpen, onClose, onAddAddress }) => {
             <FormLabel>Postal Code</FormLabel>
             <Input
               type="number"
+              bg={"white"}
+              color={"#233947"}
               name="postal_code"
               value={formData.postal_code}
               onChange={handleChange}
@@ -87,6 +95,8 @@ const AddAddress = ({ isOpen, onClose, onAddAddress }) => {
             <FormLabel>Full Address</FormLabel>
             <Input
               type="text"
+              bg={"white"}
+              color={"#233947"}
               name="full_address"
               value={formData.full_address}
               onChange={handleChange}
