@@ -8,8 +8,8 @@ import {
   TabPanels,
   Tabs,
 } from "@chakra-ui/react";
-import FormLogin from "./FromLogin";
-import FormRegister from "./FromRegister";
+import FormLogin from "./FormLogin";
+import FormRegister from "./FormRegister";
 
 const modalOverlayAttr = {
   backdropFilter: "blur(2px)",
