@@ -1,8 +1,9 @@
-import { Text } from "@chakra-ui/react";
+import Login from "./components/Login";
 import SelectAddress from "./components/order/SelectAddress";
 function App() {
   return (
     <>
+      <Login />
       <SelectAddress />
     </>
   );
