@@ -60,7 +60,7 @@ function InputTextCustom({ id, type, placeholder, icon, formik }) {
   };
 
   return (
-    <FormControl isInvalid={formik.errors[id]}>
+    <FormControl isInvalid={formik.errors[id] && formik.touched[id]}>
       <VStack>
         <InputGroup {...inputGroupAttr}>
           <InputLeftElement>{icon}</InputLeftElement>
