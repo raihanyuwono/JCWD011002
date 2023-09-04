@@ -1,3 +1,5 @@
-function Register(){}
+function Register(){
+  return <>Registration</>
+}
 
 export default Register;

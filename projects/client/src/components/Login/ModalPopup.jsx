@@ -9,7 +9,7 @@ import {
   Tabs,
 } from "@chakra-ui/react";
 import FormLogin from "../Form/FormLogin";
-import FormRegisterMail from "../Form/FormRegisterMail";
+import FormRegisterMail from "../Form/FormRegister";
 
 const modalOverlayAttr = {
   backdropFilter: "blur(2px)",
