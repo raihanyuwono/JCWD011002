@@ -40,6 +40,16 @@ const dummyAddress = [
     full_address: "456 Elm St",
     is_default: false,
   },
+  {
+    id: 3,
+    name: "Kantor",
+    id_user: "Rizky Freon",
+    province: "Los Santos",
+    city_name: "San Andreas",
+    postal_code: 70001,
+    full_address: "789 San St",
+    is_default: false,
+  },
 ];
 
 const SelectAddress = ({ onSelectAddress }) => {
