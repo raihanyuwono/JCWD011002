@@ -17,10 +17,6 @@ const roles = db["role"];
 
 const MESSAGE_SUCCESS = "Please check your email to complete the registration";
 
-async function createCart(user, t) {
-  await carts.create({ id_user: user["id"] }, { transaction: t });
-}
-
 async function sendMail(email, payload) {
   const subject = "Complete your registration";
   // Create token
@@ -30,6 +26,11 @@ async function sendMail(email, payload) {
   await mailer.send(email, subject, { redirect });
 }
 
+async function createCart(user, t) {
+  const role = await roles.findOne({ where: { id: user["id_role"] } });
+  if (role["name"] == "user") await carts.create({ id_user: user["id"] }, { transaction: t });
+}
+
 async function register(email, id_role = 1) {
   // Check if email is exsist
   const isExist = await users.findOne({ where: { email } });
@@ -37,9 +38,8 @@ async function register(email, id_role = 1) {
   // Create new user
   return await db.sequelize.transaction(async function (t) {
     const user = await users.create({ email, id_role }, { transaction: t });
-    // check role
-    const role = await roles.findOne({ where: { id: id_role } });
-    if (role["name"] == "user") await createCart(user, t);
+    // Create cart, if member
+    await createCart(user, t);
     // Send email to verify
     await sendMail(email, { id: user["id"] });
     // Send response after finsihed register

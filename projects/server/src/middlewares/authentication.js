@@ -6,7 +6,7 @@ require("dotenv").config({
 
 const JWT_KEY = process.env.JWT_KEY;
 
-function authentication(req, res, next) {
+async function authentication(req, res, next) {
   try {
     let token = req.headers.authorization;
     if (!token || token == "null")

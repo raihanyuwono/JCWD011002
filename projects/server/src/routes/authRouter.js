@@ -2,6 +2,6 @@ const router = require("express").Router();
 const { authController } = require("../controllers");
 
 // Register - for member and admin
-router.post("/users", authController.register);
+router.post("/user", authController.register);
 
 module.exports = router;
