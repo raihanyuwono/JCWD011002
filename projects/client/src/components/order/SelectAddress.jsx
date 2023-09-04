@@ -135,7 +135,7 @@ const SelectAddress = ({ onSelectAddress }) => {
       >
         <ModalOverlay />
         <ModalContent bgColor={"#233947"}>
-          <ModalHeader color={"white"}>Select an Address</ModalHeader>
+          <ModalHeader color={"white"}>Shipping to?</ModalHeader>
           <ModalCloseButton color={"white"} />
           <ModalBody>
             <Button
