@@ -93,11 +93,7 @@ async function getCartTotal(req, res) {
     const userId = req.params.userId;
     const result = await userOrderService.getCartTotal(userId);
     if (result.status === 200) {
-      return res
-        .status(200)
-        .json(
-          messages.response({ message: `Cart total: ${result.data.total}` })
-        );
+      return res.status(200).json(messages.response({ data: result.data }));
     } else {
       return res
         .status(result.status)
