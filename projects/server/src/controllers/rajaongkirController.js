@@ -1,7 +1,12 @@
+const path = require("path");
 const axios = require("axios");
+require("dotenv").config({
+  path: path.resolve(__dirname, "../../.env"),
+});
+
 const headers = {
   headers: {
-    key: "7d254ee5a1cdeffa9f45a68c11883e43",
+    key: process.env.RAJAONGKIR_KEY,
   },
 };
 
@@ -45,7 +50,6 @@ const getCost = async (req, res) => {
     res.send(response.data);
   } catch (error) {
     console.log(error);
-    res.status(500).send("Internal Server Error");
   }
 };
 
