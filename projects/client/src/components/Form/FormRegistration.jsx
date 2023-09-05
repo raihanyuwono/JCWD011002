@@ -2,13 +2,14 @@ import { Button, Flex, useToast } from "@chakra-ui/react";
 import { FiUser, FiUnlock, FiPhone } from "react-icons/fi";
 import InputTextCustom, { setAttr } from "../Custom/InputTextCustom";
 import { useFormik } from "formik";
-import * as Yup from "yup";
 import { useState } from "react";
 import { registrationSchema } from "../../helpers/FormikSchema";
+import { registration } from "../../api/auth";
 
 const container = {
   direction: "column",
-  gap: "8px",
+  gap: { sm: "4px", md: "8px", lg: "16px" },
+  w: "40vw",
 };
 
 const initialValues = {
@@ -19,18 +20,26 @@ const initialValues = {
   confirmPassword: "",
 };
 
+function getToken() {
+  const url = window.location.href.split("/");
+  return url.pop();
+}
+
 function FormRegistration() {
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
 
-  async function handleSubmit(attributes) {
+  async function handleSubmit(values) {
     setIsLoading(true);
+    const attributes = { ...values };
+    delete attributes["confirmPassword"];
+    await registration(toast, getToken(), attributes);
     setIsLoading(false);
   }
 
   const formik = useFormik({
     initialValues,
-    validationSchema: Yup.object().shape(registrationSchema),
+    validationSchema: registrationSchema,
     onSubmit: (values) => handleSubmit(values),
   });
 
@@ -61,11 +70,12 @@ function FormRegistration() {
   const buttonAttr = {
     type: "submit",
     variant: "capsuleSuccess",
+    mt: "8px",
     isLoading,
   };
 
   return (
-    <form>
+    <form onSubmit={formik.handleSubmit}>
       <Flex {...container}>
         <InputTextCustom {...nameAttr} />
         <InputTextCustom {...usernameAttr} />

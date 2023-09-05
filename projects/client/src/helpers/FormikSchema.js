@@ -15,21 +15,20 @@ const password = Yup.string()
   .matches(/\d+/, "Min 1 number")
   .matches(/\W+/, "Min 1 special character")
   .required("Required");
-const confirmPassword = Yup.string().oneOf(
-  [Yup.ref("password"), null],
-  "Password must be same"
-);
+const confirmPassword = Yup.string()
+  .oneOf([Yup.ref("password"), null], "Password must be same")
+  .required("Required");
 
-const registerSchema = {
+const registerSchema = Yup.object().shape({
   email,
-};
+});
 
-const registrationSchema = {
+const registrationSchema = Yup.object().shape({
   name,
   username,
   phone,
   password,
   confirmPassword,
-};
+});
 
 export { registerSchema, registrationSchema };

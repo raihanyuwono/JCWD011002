@@ -1,10 +1,21 @@
 const router = require("express").Router();
-const { authentication } = require("../middlewares");
+const { authentication, validation } = require("../middlewares");
 const { authController } = require("../controllers");
 
 // Register - for member and admin
-router.post("/user", authController.register);
+router.post(
+  "/user",
+  validation.register,
+  validation.result,
+  authController.register
+);
 // Registration - Complete data
-router.put("/user", authentication, authController.registration);
+router.put(
+  "/user",
+  authentication,
+  validation.registration,
+  validation.result,
+  authController.registration
+);
 
 module.exports = router;

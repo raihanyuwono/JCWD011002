@@ -47,6 +47,14 @@ const themes = extendTheme({
     warningSecondary: "#FF9800",
   },
   components: {
+    Text: {
+      variants: {
+        title: {
+          fontWeight: "bold",
+          fontSize: "32px",
+        },
+      },
+    },
     Button: {
       baseStyle: {
         borderRadius: "8px",
