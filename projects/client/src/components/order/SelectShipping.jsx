@@ -4,6 +4,8 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
+  MenuGroup,
+  MenuDivider,
   Box,
   Text,
   Button,
@@ -18,49 +20,64 @@ const SelectShipping = () => {
     postal_code: "63219",
     province_name: "Jawa Timur",
   };
-  const [selectedCourier, setSelectedCourier] = useState("jne");
+  const [selectedService, setSelectedService] = useState(null);
   const [warehouseCityId, setWarehouseCityId] = useState(null);
   const [destinationCityId, setDestinationCityId] = useState(null);
-
   const warehouseCityName = warehouseAddress.city_name;
   const destinationCityName = localStorage.getItem("city_name");
+
+  const fetchShippingMethods = async (courier) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/rajaongkir/cost",
+        {
+          origin: warehouseCityId,
+          destination: destinationCityId,
+          weight: 1000,
+          courier: courier,
+        }
+      );
+      if (response.data.rajaongkir.results) {
+        return response.data.rajaongkir.results[0].costs.map((cost) => ({
+          ...cost,
+          code: courier,
+        }));
+      }
+    } catch (error) {
+      console.error(`Error fetching ${courier} courier data:`, error);
+      return [];
+    }
+  };
+
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "https://api.rajaongkir.com/starter/city",
-        {
-          headers: {
-            key: "94bdba76d9396716fca4ab37cae797de",
-          },
-        }
+        "http://localhost:8000/api/rajaongkir/city"
       );
 
-      if (response.data.rajaongkir.results) {
-        const cities = response.data.rajaongkir.results;
-        const warehouseCity = cities.find(
-          (c) => c.city_name === warehouseCityName
-        );
-        const destinationCity = cities.find(
-          (c) => c.city_name === destinationCityName
-        );
+      const cities = response.data.rajaongkir.results;
+      const warehouseCity = cities.find(
+        (city) => city.city_name === warehouseCityName
+      );
+      const destinationCity = cities.find(
+        (city) => city.city_name === destinationCityName
+      );
 
-        if (warehouseCity) {
-          setWarehouseCityId(warehouseCity.city_id);
-        } else {
-          console.error("Warehouse city not found in the list");
-        }
-        if (destinationCity) {
-          setDestinationCityId(destinationCity.city_id);
-        } else {
-          console.error("Destination city not found in the list");
-        }
+      if (warehouseCity) {
+        setWarehouseCityId(warehouseCity.city_id);
       } else {
-        console.error("No results found in the city response");
+        console.error("Warehouse city not found");
+      }
+      if (destinationCity) {
+        setDestinationCityId(destinationCity.city_id);
+      } else {
+        console.error("Destination city not found");
       }
     } catch (error) {
       console.error("Error fetching city data:", error);
     }
   };
+
   useEffect(() => {
     fetchData();
   }, [warehouseAddress.city_name]);
@@ -68,47 +85,43 @@ const SelectShipping = () => {
   useEffect(() => {
     if (warehouseCityId && destinationCityId) {
       const fetchCourierData = async () => {
-        try {
-          const courierResponse = await axios.post(
-            "https://api.rajaongkir.com/starter/cost",
-            {
-              origin: warehouseCityId,
-              destination: destinationCityId,
-              weight: 1000,
-              courier: selectedCourier,
-            },
-            {
-              headers: {
-                "Content-Type": "application/json",
-                key: "94bdba76d9396716fca4ab37cae797de",
-              },
-            }
-          );
+        const jneData = await fetchShippingMethods("jne");
+        const posData = await fetchShippingMethods("pos");
+        const tikiData = await fetchShippingMethods("tiki");
+        const combinedData = [...jneData, ...posData, ...tikiData];
 
-          if (courierResponse.data.rajaongkir.results) {
-            const data = courierResponse.data.rajaongkir.results[0].costs;
-            setCourierData(data);
-          } else {
-            console.error("Error fetching courier data");
-          }
-        } catch (error) {
-          console.error("Error fetching courier data:", error);
-        }
+        setCourierData(combinedData);
       };
 
       fetchCourierData();
     }
-  }, [selectedCourier, warehouseCityId, destinationCityId]);
+  }, [warehouseCityId, destinationCityId]);
 
-  const handleMenuItemSelect = (courier) => {
-    setSelectedCourier(courier);
+  const groupService = () => {
+    const groupedServices = {};
+
+    courierData.forEach((method) => {
+      const courierCode = method.code;
+      if (!groupedServices[courierCode]) {
+        groupedServices[courierCode] = [];
+      }
+      groupedServices[courierCode].push(method);
+    });
+
+    return groupedServices;
+  };
+
+  const handleMenuItemSelect = (service) => {
+    const selected = courierData.find((method) => method.service === service);
+    setSelectedService(selected);
+    console.log(selected.cost);
   };
 
   return (
     <>
       <Box>
         <Text>
-          warehouse address: {warehouseAddress.city_name},{" "}
+          Warehouse Address: {warehouseAddress.city_name},{" "}
           {warehouseAddress.province_name}, {warehouseAddress.postal_code}
         </Text>
       </Box>
@@ -117,24 +130,39 @@ const SelectShipping = () => {
           Select Shipping Methods
         </MenuButton>
         <MenuList>
-          <MenuItem onClick={() => handleMenuItemSelect("jne")}>JNE</MenuItem>
-          <MenuItem onClick={() => handleMenuItemSelect("pos")}>POS</MenuItem>
-          <MenuItem onClick={() => handleMenuItemSelect("tiki")}>TIKI</MenuItem>
+          {Object.entries(groupService()).map(
+            ([courier, methods], index, array) => (
+              <React.Fragment key={courier}>
+                <MenuGroup title={courier.toUpperCase()}>
+                  {methods.map((method) => (
+                    <MenuItem
+                      ml={1}
+                      key={method.service}
+                      onClick={() => handleMenuItemSelect(method.service)}
+                    >
+                      {method.service} - {method.description}:{" "}
+                      {method.cost[0].value} {method.cost[0].etd}
+                    </MenuItem>
+                  ))}
+                </MenuGroup>
+                {index !== array.length - 1 && <MenuDivider />}{" "}
+              </React.Fragment>
+            )
+          )}
         </MenuList>
       </Menu>
-      <Box mt={4}>
-        <Text>Selected Courier: {selectedCourier.toUpperCase()}</Text>
-      </Box>
-      <Box mt={4}>
-        <Text>Available Shipping Methods:</Text>
-        <ul>
-          {courierData.map((courier) => (
-            <li key={courier.service}>
-              {courier.service} - {courier.description}: {courier.cost[0].value}{" "}
-              {courier.cost[0].etd}
-            </li>
-          ))}
-        </ul>
+      <Box>
+        {selectedService ? (
+          <>
+            <Text>Selected Service:</Text>
+            <Text>
+              {selectedService.service} - {selectedService.description}:{" "}
+              {selectedService.cost[0].value} {selectedService.cost[0].etd}
+            </Text>
+          </>
+        ) : (
+          <Text>No service selected</Text>
+        )}
       </Box>
     </>
   );

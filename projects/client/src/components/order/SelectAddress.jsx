@@ -1,4 +1,3 @@
-// components/AddressList.js
 import React, { useState } from "react";
 import {
   Button,
@@ -52,13 +51,14 @@ const dummyAddress = [
   },
 ];
 
-const SelectAddress = ({ onSelectAddress }) => {
+const SelectAddress = () => {
   const [isSelectAddressModalOpen, setIsSelectAddressModalOpen] =
     useState(false);
   const [isAddAddressModalOpen, setIsAddAddressModalOpen] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [isEditAddressModalOpen, setIsEditAddressModalOpen] = useState(false);
   const [editAddressData, setEditAddressData] = useState(null);
+  const selectAddress = JSON.parse(localStorage.getItem("selectedAddress"));
 
   const openSelectAddressModal = () => {
     setIsSelectAddressModalOpen(true);
@@ -86,12 +86,10 @@ const SelectAddress = ({ onSelectAddress }) => {
   // };
   const handleSelect = (address) => {
     setSelectedAddress(address);
-
-    // Store individual properties in localStorage
+    localStorage.setItem("selectedAddress", JSON.stringify(address));
     localStorage.setItem("city_name", address.city_name);
     localStorage.setItem("province", address.province);
     localStorage.setItem("postal_code", address.postal_code);
-
     closeSelectAddressModal();
   };
 
@@ -112,7 +110,6 @@ const SelectAddress = ({ onSelectAddress }) => {
   };
 
   const handleEditAddress = (formData) => {
-    // handle update adres
     console.log("Editing address:", formData);
     closeEditAddressModal();
   };
@@ -139,6 +136,7 @@ const SelectAddress = ({ onSelectAddress }) => {
           addressData={editAddressData}
         />
       )}
+
       <Modal
         size={"2xl"}
         isOpen={isSelectAddressModalOpen}
@@ -221,7 +219,17 @@ const SelectAddress = ({ onSelectAddress }) => {
           <ModalFooter></ModalFooter>
         </ModalContent>
       </Modal>
-      {selectedAddress && (
+      {selectAddress && (
+        <Box key={selectAddress.id}>
+          <Text>Selected Address:</Text>
+          <Text>
+            {selectAddress.name}, {selectAddress.full_address},{" "}
+            {selectAddress.city_name}, {selectAddress.province},{" "}
+            {selectAddress.postal_code}
+          </Text>
+        </Box>
+      )}
+      {/* {selectedAddress && (
         <Box mt={4}>
           <Text>Selected Address:</Text>
           <Text>
@@ -230,7 +238,7 @@ const SelectAddress = ({ onSelectAddress }) => {
             {selectedAddress.postal_code}
           </Text>
         </Box>
-      )}
+      )} */}
     </Box>
   );
 };
