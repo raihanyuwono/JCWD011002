@@ -1,26 +1,25 @@
-import axios from "axios";
-import logo from "./logo.svg";
-import "./App.css";
-import { useEffect, useState } from "react";
+import { Route, Routes } from "react-router-dom";
+import { Flex } from "@chakra-ui/react";
+import Registration from "./pages/Registration";
+import HomePage from "./pages/HomePage";
+import NavUser from "./components/Navbar/NavUser";
+
+const mainContainerAttr = {
+  w: "100vw",
+  h: "100vh",
+  color: "textPrimary",
+  direction: "column",
+};
 
 function App() {
-  const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    (async () => {
-      const { data } = await axios.get(
-        `${process.env.REACT_APP_API_BASE_URL}/greetings`
-      );
-      setMessage(data?.message || "");
-    })();
-  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        {message}
-      </header>
-    </div>
+    <Flex {...mainContainerAttr}>
+      <NavUser />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/registration/:token" element={<Registration />} />
+      </Routes>
+    </Flex>
   );
 }
 

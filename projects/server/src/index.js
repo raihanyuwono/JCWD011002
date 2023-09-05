@@ -2,6 +2,9 @@ require("dotenv/config");
 const express = require("express");
 const cors = require("cors");
 const { join } = require("path");
+const { authRouter } = require("./routes");
+const { userOrderRouter } = require("./routes");
+const { rajaongkirRouter } = require("./routes");
 
 const { userOrderRouter } = require("./routes");
 
@@ -11,18 +14,23 @@ app.use(
   cors({
     origin: [
       process.env.WHITELISTED_DOMAIN &&
-        process.env.WHITELISTED_DOMAIN.split(","),
+      process.env.WHITELISTED_DOMAIN.split(","),
     ],
   })
 );
 
 app.use(express.json());
+// const db = require("./database/models");
+// db.sequelize.sync({ alter: true });
 
 //#region API ROUTES
 
 // ===========================
 // NOTE : Add your routes here
 app.use("/api/order", userOrderRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/rajaongkir", rajaongkirRouter);
+
 
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`);
