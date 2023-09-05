@@ -22,21 +22,7 @@ app.use(express.json());
 // db.sequelize.sync({ alter: true });
 
 //#region API ROUTES
-// app.get("/coba", async (req, res) => {
-//   try {
-//     const response = await axios.get(
-//       "https://api.rajaongkir.com/starter/city",
-//       {
-//         headers: {
-//           key: "308983a3d4f002ee079a21a4428b6e22",
-//         },
-//       }
-//     );
-//     res.send(response.data);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });
+
 // ===========================
 // NOTE : Add your routes here
 app.use("/api/order", userOrderRouter);
