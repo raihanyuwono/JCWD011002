@@ -1,10 +1,14 @@
-import Login from "./components/Login";
-import SelectAddress from "./components/order/SelectAddress";
+import Footer from "./components/Footer/Footer";
+import NavUser from "./components/Navbar/NavUser";
+// import SelectAddress from "./components/order/SelectAddress";
+import HomePage from "./pages/HomePage";
 function App() {
   return (
     <>
-      <Login />
-      <SelectAddress />
+      {/* <SelectAddress /> */}
+      <NavUser />
+      <HomePage />
+      <Footer />
     </>
   );
 }
