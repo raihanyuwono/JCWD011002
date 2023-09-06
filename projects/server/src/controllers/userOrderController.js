@@ -1,4 +1,4 @@
-const { userOrderService } = require("../services");
+const { userOrderService, transactionService } = require("../services");
 const { messages } = require("../helpers");
 
 const addToCart = async (req, res) => {
@@ -136,7 +136,22 @@ async function setQty(req, res) {
     return res.status(500).json(messages.error(500, "Internal server error"));
   }
 }
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++ TRANSACTION ZONE +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+async function addTransaction(req, res) {
+  try {
+    const { userId, payment, shipping } = req.body;
+    const result = await transactionService.addTransaction(
+      userId,
+      payment,
+      shipping
+    );
+    return res.status(result.status).json(messages.response({ data: result.data }));
+  } catch (error) {
+    console.error("Error adding transaction:", error);
+    return res.status(500).json(messages.error(500, "Internal server error"));
+  }
+}
 module.exports = {
   addToCart,
   removeFromCart,
@@ -145,4 +160,5 @@ module.exports = {
   getCartTotal,
   viewCart,
   setQty,
+  addTransaction,
 };
