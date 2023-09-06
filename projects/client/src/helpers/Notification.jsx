@@ -1,6 +1,6 @@
 function setToastParams(response) {
   return {
-    title: response.data.message,
+    title: response.data?.message || response.message,
     status: response.status,
   };
 }

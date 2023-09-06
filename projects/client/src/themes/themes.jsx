@@ -3,7 +3,7 @@ import { extendTheme } from "@chakra-ui/react";
 const buttonDark = {
   fontFamily: "Fira Code, monospace",
   color: "textPrimary",
-}
+};
 
 const successScheme = {
   ...buttonDark,
@@ -22,6 +22,13 @@ const errorScheme = {
 };
 
 const themes = extendTheme({
+  styles: {
+    global: {
+      body: {
+        bgColor: "bgSecondary",
+      },
+    },
+  },
   fonts: {
     body: "JetBrains Mono, monospace",
   },
@@ -40,6 +47,14 @@ const themes = extendTheme({
     warningSecondary: "#FF9800",
   },
   components: {
+    Text: {
+      variants: {
+        title: {
+          fontWeight: "bold",
+          fontSize: "32px",
+        },
+      },
+    },
     Button: {
       baseStyle: {
         borderRadius: "8px",

@@ -8,7 +8,7 @@ require("dotenv").config({
 
 // db.sequelize.sync({ alter: true });
 
-const FE_URL = process.env.WHITELIST;
+const FE_URL = process.env.WHITELISTED_DOMAIN;
 const JWT_KEY = process.env.JWT_KEY;
 
 const users = db["user"];

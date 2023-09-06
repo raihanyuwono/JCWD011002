@@ -8,10 +8,10 @@ function getToken() {
   return localStorage.getItem("token");
 }
 
-function setHeaders() {
+function setHeaders(token) {
   return {
     headers: {
-      Authorization: `Bearer ${getToken}`,
+      Authorization: `Bearer ${token || getToken()}`,
     },
   };
 }
@@ -21,8 +21,24 @@ async function register(toast, attributes) {
     const response = await axios.post(`${AUTH_URL}/user`, attributes);
     notification(toast, setToastParams(response));
   } catch (error) {
-    notification(toast, setToastParams(error.response));
+    const { response } = error;
+    notification(toast, setToastParams(response.status ? response : error));
   }
 }
 
-export { register };
+async function registration(toast, token, attributes) {
+  try {
+    const response = await axios.put(
+      `${AUTH_URL}/user`,
+      attributes,
+      setHeaders(token)
+    );
+    notification(toast, setToastParams(response));
+    setTimeout(() => (document.location.href = "/"), 2500);
+  } catch (error) {
+    const { response } = error;
+    notification(toast, setToastParams(response.status ? response : error));
+  }
+}
+
+export { register, registration };

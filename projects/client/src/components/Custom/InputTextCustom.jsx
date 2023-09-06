@@ -10,6 +10,11 @@ import {
 import { useState } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
+const additionalAttr = {
+  color: "textPrimary",
+  bgColor: "primary",
+};
+
 function setAttr(id, type, placeholder, icon, formik) {
   return { id, type, placeholder, icon, formik };
 }
@@ -29,7 +34,7 @@ function rightElement(id, type, showPass, setShowPass) {
   };
 
   return (
-    <InputRightElement>
+    <InputRightElement {...additionalAttr}>
       {showPass ? <FiEye {...attr} /> : <FiEyeOff {...attr} />}
     </InputRightElement>
   );
@@ -43,16 +48,21 @@ function InputTextCustom({ id, type, placeholder, icon, formik }) {
     formik.setFieldValue(id, target.value);
   }
 
+  const formControlAttr = {
+    isInvalid: formik.errors[id] && formik.touched[id],
+  };
   const inputGroupAttr = {
     border: "1px solid",
     borderRadius: "3rem",
     overflow: "hidden",
-    borderColor: formik.errors[id] ? "red" : "black",
+    borderColor: formik.errors[id] ? "errorPrimary" : "primary",
   };
   const inputAttr = {
     id,
     type,
     placeholder,
+    border: "none",
+    pl: "3rem",
     onChange: (event) => handleOnChange(event),
   };
   const formErrorAttr = {
@@ -60,14 +70,16 @@ function InputTextCustom({ id, type, placeholder, icon, formik }) {
   };
 
   return (
-    <FormControl isInvalid={formik.errors[id]}>
+    <FormControl {...formControlAttr}>
       <VStack>
         <InputGroup {...inputGroupAttr}>
-          <InputLeftElement>{icon}</InputLeftElement>
+          <InputLeftElement {...additionalAttr}>{icon}</InputLeftElement>
           <Input {...inputAttr} />
           {rightElement(id, type, showPass, setShowPass)}
         </InputGroup>
-        <FormErrorMessage {...formErrorAttr}>{formik.errors[id]}</FormErrorMessage>
+        <FormErrorMessage {...formErrorAttr}>
+          {formik.errors[id]}
+        </FormErrorMessage>
       </VStack>
     </FormControl>
   );
