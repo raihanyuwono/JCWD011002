@@ -7,10 +7,8 @@ import {
   PopoverContent,
   PopoverHeader,
   PopoverBody,
-  PopoverFooter,
   PopoverArrow,
   PopoverCloseButton,
-  PopoverAnchor,
   Table,
   Thead,
   Tbody,
@@ -28,8 +26,9 @@ import {
   Flex,
   useToast,
 } from "@chakra-ui/react";
-import OrderSummary from "../components/order/OrderSummary";
+import OrderSummary from "../components/Order/OrderSummary";
 import { Link } from "react-router-dom";
+import ClearAlert from "../components/Order/ClearAlert";
 
 const CartPage = () => {
   const userId = localStorage.getItem("userId");
@@ -92,21 +91,6 @@ const CartPage = () => {
         isClosable: true,
       });
       console.error("Error updating item quantity:", error);
-    }
-  };
-
-  const clearCart = async () => {
-    try {
-      const response = await axios.delete(
-        `http://localhost:8000/api/order/${userId}`
-      );
-      viewCart();
-      toast({
-        title: "Cart Cleared!",
-        status: "success",
-      });
-    } catch (error) {
-      console.error("Error clearing cart:", error);
     }
   };
 
@@ -214,31 +198,10 @@ const CartPage = () => {
           </Table>
         </TableContainer>
         <Box mt={"77px"}>
-          <Popover isLazy>
-            <PopoverTrigger>
-              <Button borderRadius={"none"} variant={"error"}>
-                Clear
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent>
-              <PopoverHeader
-                bg={"textSecondary"}
-                color={"primary"}
-                fontWeight="semibold"
-              >
-                Clear Cart
-              </PopoverHeader>
-              <PopoverArrow />
-              <PopoverCloseButton />
-              <PopoverBody bgColor={"textSecondary"} color={"primary"}>
-                <Text>Are you sure want to clear your cart?</Text>
-                <Button mt={2} mb={1} variant={"error"} onClick={clearCart}>
-                  Clear
-                </Button>
-              </PopoverBody>
-            </PopoverContent>
-          </Popover>
+          <ClearAlert coba={viewCart} userId={userId} />
           <Button
+            as={Link}
+            to={"/checkout"}
             borderRadius={"none"}
             colorScheme="green"
             borderTopRightRadius={"10px"}
