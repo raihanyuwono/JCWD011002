@@ -1,5 +1,7 @@
 import { Grid, GridItem } from "@chakra-ui/react";
 import Register from "../components/Register";
+import { useEffect } from "react";
+import { keepLogin } from "../api/auth";
 
 const container = {
   h: "full",
@@ -15,6 +17,11 @@ const banner = {
 };
 
 function Registration() {
+
+  useEffect(() => {
+    keepLogin();
+    console.log("KEEP LOGIN");
+  });
   return (
     <Grid {...container}>
       <GridItem {...banner}></GridItem>
