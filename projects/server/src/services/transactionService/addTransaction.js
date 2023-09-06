@@ -10,7 +10,7 @@ const axios = require("axios");
 const addTransaction = async (userId, payment, shipping) => {
   try {
     const total = await getTotal(userId);
-    const cartItems = await cart_product.findAll({
+    const cartProduct = await cart_product.findAll({
       where: { id_cart: userId },
       include: [{ model: product }],
     });
@@ -23,11 +23,11 @@ const addTransaction = async (userId, payment, shipping) => {
       shipping_method: shipping,
     });
 
-    const transactionProducts = cartItems.map((cartItem) => ({
+    const transactionProducts = cartProduct.map((item) => ({
       id_transaction: newTransaction.id,
-      id_product: cartItem.id_product,
-      qty: cartItem.qty,
-      price: cartItem.product.price,
+      id_product: item.id_product,
+      qty: item.qty,
+      price: item.product.price,
     }));
     await transaction_product.bulkCreate(transactionProducts);
 
@@ -42,7 +42,7 @@ const addTransaction = async (userId, payment, shipping) => {
       success: true,
       status: 200,
       data: {
-        transactionId: newTransaction.id,
+        id_transaction: newTransaction.id,
       },
     };
   } catch (error) {
