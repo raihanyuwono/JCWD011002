@@ -2,13 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { DeleteIcon } from "@chakra-ui/icons";
 import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverArrow,
-  PopoverCloseButton,
   Table,
   Thead,
   Tbody,
@@ -29,9 +22,11 @@ import {
 import OrderSummary from "../components/Order/OrderSummary";
 import { Link } from "react-router-dom";
 import ClearAlert from "../components/Order/ClearAlert";
+import jwt_decode from "jwt-decode";
 
 const CartPage = () => {
-  const userId = localStorage.getItem("userId");
+  const token = localStorage.getItem("token");
+  const userId = jwt_decode(token).id;
   const toast = useToast();
   const [cart, setCart] = useState([]);
   const [cartLength, setCartLength] = useState(0);
