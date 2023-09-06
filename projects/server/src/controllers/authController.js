@@ -22,7 +22,29 @@ async function registration(req, res) {
   }
 }
 
+async function login(req, res) {
+  try {
+    const { identifier, password } = req.body;
+    const result = await authService.login(identifier, password);
+    res.status(result.status).json(messages.response(result));
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+async function keepLogin(req, res) {
+  try {
+    const { id } = req.account;
+    const result = await authService.keepLogin(id);
+    res.status(result.status).json(messages.response(result));
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 module.exports = {
   register,
   registration,
+  login,
+  keepLogin,
 };
