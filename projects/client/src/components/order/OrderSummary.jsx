@@ -10,14 +10,13 @@ const OrderSummary = ({ cartLength, userId }) => {
     );
     setTotal(response.data.data.total);
   };
-
   useEffect(() => {
     const intervalId = setInterval(() => {
       getCartTotal();
     }, 1500);
     return () => clearInterval(intervalId);
   }, []);
-  
+
   return (
     <>
       <Flex
@@ -36,7 +35,7 @@ const OrderSummary = ({ cartLength, userId }) => {
         </Text>
         <Divider />
         <br />
-        <Text>Checkout ({cartLength} Barang)</Text>
+        <Text>Checkout ({cartLength} Product)</Text>
         <Text fontWeight={"bold"}>Total: Rp. {total}</Text>
         <br />
         <Link to="/">Or continue shopping?</Link>

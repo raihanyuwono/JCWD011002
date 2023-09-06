@@ -118,6 +118,25 @@ async function viewCart(req, res) {
   }
 }
 
+async function setQty(req, res) {
+  try {
+    const { quantity, userId, productId } = req.body;
+    const result = await userOrderService.setQty(userId, productId, quantity);
+    if (result.status === 200) {
+      return res
+        .status(200)
+        .json(messages.success("Cart item updated successfully"));
+    } else {
+      return res
+        .status(result.status)
+        .json(messages.error(result.status, result.message));
+    }
+  } catch (error) {
+    console.error("Error setting quantity:", error);
+    return res.status(500).json(messages.error(500, "Internal server error"));
+  }
+}
+
 module.exports = {
   addToCart,
   removeFromCart,
@@ -125,4 +144,5 @@ module.exports = {
   clearCart,
   getCartTotal,
   viewCart,
+  setQty,
 };

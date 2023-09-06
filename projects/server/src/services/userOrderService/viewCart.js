@@ -4,14 +4,17 @@ const viewCart = async (userId) => {
   try {
     const cartItems = await cart_product.findAll({
       where: { id_cart: userId },
-      include: [{ model: product, attributes: ["name", "price", "image"] }],
+      include: [
+        { model: product, attributes: ["id", "name", "price", "image"] },
+      ],
     });
 
     const cartData = cartItems.map((cartItem) => {
-      const { name, price, image } = cartItem.product;
+      const { id, name, price, image } = cartItem.product;
       const subtotal = price * cartItem.qty;
 
       return {
+        productId: id,
         name,
         price,
         image,
