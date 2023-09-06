@@ -12,10 +12,13 @@ import {
   Input,
   Button,
 } from "@chakra-ui/react";
-
+import jwt_decode from "jwt-decode";
 const AddAddress = ({ isOpen, onClose, onAddAddress }) => {
+  const token = localStorage.getItem("token");
+  const userId = jwt_decode(token).id;
+
   const initialFormData = {
-    id_user: "get from local storage",
+    id_user: userId,
     name: "",
     province: "",
     city_name: "",

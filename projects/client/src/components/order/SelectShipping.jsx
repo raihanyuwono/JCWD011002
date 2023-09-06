@@ -126,7 +126,7 @@ const SelectShipping = () => {
         </Text>
       </Box>
       <Menu>
-        <MenuButton as={Button} rightIcon={<AiOutlineCaretDown />}>
+        <MenuButton w={"300px"} as={Button} rightIcon={<AiOutlineCaretDown />}>
           Select Shipping Methods
         </MenuButton>
         <MenuList>
