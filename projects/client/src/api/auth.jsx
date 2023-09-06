@@ -41,4 +41,31 @@ async function registration(toast, token, attributes) {
   }
 }
 
-export { register, registration };
+async function login(toast, attributes) {
+  try {
+    const response = await axios.post(`${AUTH_URL}/login`, attributes);
+    notification(toast, setToastParams(response));
+    console.log(response);
+    // Set token to localStorage
+    const { token } = response.data.data;
+    localStorage.setItem("token", token);
+    // Reload to last page
+    setTimeout(() => document.location.reload(), 2500);
+  } catch (error) {
+    const { response } = error;
+    notification(toast, setToastParams(response.status ? response : error));
+  }
+}
+
+async function keepLogin() {
+  try {
+    const response = await axios.get(`${AUTH_URL}/login`, setHeaders());
+    // Update token on localStorage
+    const { token } = response.data.data;
+    localStorage.setItem("token", token);
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
+export { register, registration, login, keepLogin };
