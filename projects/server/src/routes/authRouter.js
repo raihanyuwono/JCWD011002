@@ -21,5 +21,9 @@ router.put(
 router.post("/login", authController.login);
 // Keep Login - update token login
 router.get("/login", authentication, authController.keepLogin);
+// Forget Password
+router.post("/reset", authController.forgotPassword);
+// Reset Password
+router.patch("/reset", authentication, authController.resetPassword);
 
 module.exports = router;

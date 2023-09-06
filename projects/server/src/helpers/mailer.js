@@ -6,9 +6,8 @@ require("dotenv").config({
   path: path.resolve(__dirname, "../../.env"),
 });
 
-async function notificationTemp(content) {
-  const tempPath = path.resolve(__dirname, "../templates/registration.html");
-  console.log(tempPath);
+async function notificationTemp(type, content) {
+  const tempPath = path.resolve(__dirname, `../templates/${type}.html`);
   const template = await fs.readFile(
     path.resolve(__dirname, tempPath),
     "utf-8"
@@ -31,11 +30,11 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-async function send(email, subject, content) {
+async function send(type, email, subject, content) {
   await transporter.sendMail({
     to: email,
     subject,
-    html: await notificationTemp(content),
+    html: await notificationTemp(type, content),
   });
 }
 
