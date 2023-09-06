@@ -1,7 +1,7 @@
 import React from 'react'
 import ProductCard from '../components/Card/ProductCard'
 import CategoryCard from '../components/Card/CategoryCard'
-import { Box} from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 import LineBreak from '../components/Custom/LineBreak'
 
 const HomePage = () => {
