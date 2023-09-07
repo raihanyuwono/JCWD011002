@@ -47,7 +47,7 @@ const addTransaction = async (userId, payment, shipping) => {
       id_transaction: newTransaction.id,
       id_payment_method: payment,
       shipping_method: shipping,
-      id_status: null,
+      id_status: 7,
     });
 
     await cart_product.destroy({

@@ -1,4 +1,5 @@
 const { product, product_warehouse, stock_history } = require("../../database");
+
 const handleStock = async (cartProduct, userId, transactionId) => {
   try {
     for (const item of cartProduct) {
@@ -11,6 +12,7 @@ const handleStock = async (cartProduct, userId, transactionId) => {
         });
 
         let qtyToReduce = item.qty;
+
         for (const warehouse of productWarehouses) {
           if (qtyToReduce > 0) {
             if (warehouse.stock >= qtyToReduce) {
@@ -20,7 +22,7 @@ const handleStock = async (cartProduct, userId, transactionId) => {
 
               await stock_history.create({
                 id_user: userId,
-                id_warehouse_from: warehouse.id,
+                id_warehouse_from: warehouse.id_warehouse,
                 id_warehouse_to: null,
                 id_product: item.id_product,
                 id_transaction: transactionId,
@@ -30,9 +32,9 @@ const handleStock = async (cartProduct, userId, transactionId) => {
               qtyToReduce = 0;
             } else {
               await stock_history.create({
-                id_user: transactionId,
-                id_warehouse_from: warehouse.id,
-                id_warehouse_to: null, 
+                id_user: userId,
+                id_warehouse_from: warehouse.id_warehouse, 
+                id_warehouse_to: null,
                 id_product: item.id_product,
                 id_transaction: transactionId,
                 qty: warehouse.stock,
