@@ -9,6 +9,8 @@ const axios = require("axios");
 const handleStock = require("./handleStock");
 
 const addTransaction = async (userId, payment, shipping) => {
+  const myLatitude = -7.417166656128915;
+  const myLongitude = 112.75669259021905;
   try {
     const total = await getTotal(userId);
 
