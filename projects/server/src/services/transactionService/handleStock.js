@@ -7,8 +7,8 @@ const {
 const geolib = require("geolib");
 
 const handleStock = async (cartProduct, userId, transactionId) => {
-  const myLatitude = -7.417166656128915;
-  const myLongitude = 112.75669259021905;
+  const myLatitude = -6.948254099996949;
+  const myLongitude = 107.85884718197198;
   try {
     for (const item of cartProduct) {
       const productInfo = await product.findOne({

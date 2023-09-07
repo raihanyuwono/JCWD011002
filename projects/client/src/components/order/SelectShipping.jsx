@@ -14,17 +14,29 @@ import { AiOutlineCaretDown } from "react-icons/ai";
 import axios from "axios";
 
 const SelectShipping = () => {
-  const [courierData, setCourierData] = useState([]);
   const warehouseAddress = {
     city_name: "Ngawi",
     postal_code: "63219",
     province_name: "Jawa Timur",
   };
+  const [courierData, setCourierData] = useState([]);
   const [selectedService, setSelectedService] = useState(null);
   const [warehouseCityId, setWarehouseCityId] = useState(null);
   const [destinationCityId, setDestinationCityId] = useState(null);
   const warehouseCityName = warehouseAddress.city_name;
   const destinationCityName = localStorage.getItem("city_name");
+
+  useEffect(() => {
+    if (
+      selectedService &&
+      selectedService.cost &&
+      selectedService.cost.length > 0
+    ) {
+      localStorage.setItem("shipping", selectedService.cost[0].value);
+    } else {
+      console.log("Shipping information is not available.");
+    }
+  }, [selectedService]);
 
   const fetchShippingMethods = async (courier) => {
     try {
@@ -114,20 +126,14 @@ const SelectShipping = () => {
   const handleMenuItemSelect = (service) => {
     const selected = courierData.find((method) => method.service === service);
     setSelectedService(selected);
-    console.log(selected.cost);
+    // console.log(selected.cost);
   };
 
   return (
     <>
-      <Box>
-        <Text>
-          Warehouse Address: {warehouseAddress.city_name},{" "}
-          {warehouseAddress.province_name}, {warehouseAddress.postal_code}
-        </Text>
-      </Box>
       <Menu>
-        <MenuButton w={"300px"} as={Button} rightIcon={<AiOutlineCaretDown />}>
-          Select Shipping Methods
+        <MenuButton as={Button} rightIcon={<AiOutlineCaretDown />}>
+          Shipping Methods
         </MenuButton>
         <MenuList>
           {Object.entries(groupService()).map(
@@ -151,13 +157,14 @@ const SelectShipping = () => {
           )}
         </MenuList>
       </Menu>
-      <Box>
+      <Box mt={2}>
         {selectedService ? (
           <>
-            <Text>Selected Service:</Text>
+            {/* <Text>Selected Service:</Text> */}
+            <Text>{selectedService.service}</Text>
             <Text>
-              {selectedService.service} - {selectedService.description}:{" "}
-              {selectedService.cost[0].value} {selectedService.cost[0].etd}
+              {selectedService.description}: {selectedService.cost[0].value}{" "}
+              {selectedService.cost[0].etd}
             </Text>
           </>
         ) : (
