@@ -6,14 +6,24 @@ const {
   product,
 } = require("../../database");
 const axios = require("axios");
+const handleStock = require("./handleStock");
 
 const addTransaction = async (userId, payment, shipping) => {
   try {
     const total = await getTotal(userId);
+
     const cartProduct = await cart_product.findAll({
       where: { id_cart: userId },
       include: [{ model: product }],
     });
+
+    if (cartProduct.length === 0) {
+      return {
+        success: false,
+        status: 404,
+        message: "Cart is empty.",
+      };
+    }
 
     const newTransaction = await transaction.create({
       id_user: userId,
@@ -31,11 +41,17 @@ const addTransaction = async (userId, payment, shipping) => {
     }));
     await transaction_product.bulkCreate(transactionProducts);
 
+    await handleStock(cartProduct);
+
     await transaction_payment.create({
       id_transaction: newTransaction.id,
       id_payment_method: payment,
       shipping_method: shipping,
       id_status: 1, // Default status ("Menunggu Pembayaran")
+    });
+
+    await cart_product.destroy({
+      where: { id_cart: userId },
     });
 
     return {
@@ -63,7 +79,8 @@ const getTotal = async (userId) => {
     console.log(total);
     return total;
   } catch (error) {
-    console.error("Error get total from API:", error);
+    console.error("Error fetching total from API:", error);
+    throw error;
   }
 };
 
