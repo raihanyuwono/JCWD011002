@@ -41,13 +41,13 @@ const addTransaction = async (userId, payment, shipping) => {
     }));
     await transaction_product.bulkCreate(transactionProducts);
 
-    await handleStock(cartProduct);
+    await handleStock(cartProduct, userId, newTransaction.id);
 
     await transaction_payment.create({
       id_transaction: newTransaction.id,
       id_payment_method: payment,
       shipping_method: shipping,
-      id_status: 1, // Default status ("Menunggu Pembayaran")
+      id_status: null,
     });
 
     await cart_product.destroy({
