@@ -11,7 +11,7 @@ async function hashPassword(password) {
 
 async function resetPassword(id, password) {
   password = await hashPassword(password);
-  return db.sequelize.transaction(async function (t) {
+  return await db.sequelize.transaction(async function (t) {
     await users.update({ password }, { where: { id }, transaction: t });
     return messages.success("Password successfully reseted");
   });
