@@ -1,6 +1,8 @@
 const { product, product_warehouse, stock_history } = require("../../database");
 
 const handleStock = async (cartProduct, userId, transactionId) => {
+  const myLatitude = -7.417166656128915;
+  const myLongitude = 112.75669259021905;
   try {
     for (const item of cartProduct) {
       const productInfo = await product.findOne({
@@ -33,7 +35,7 @@ const handleStock = async (cartProduct, userId, transactionId) => {
             } else {
               await stock_history.create({
                 id_user: userId,
-                id_warehouse_from: warehouse.id_warehouse, 
+                id_warehouse_from: warehouse.id_warehouse,
                 id_warehouse_to: null,
                 id_product: item.id_product,
                 id_transaction: transactionId,
