@@ -28,7 +28,6 @@ const handleStock = async (cartProduct, userId, transactionId) => {
           );
 
           if (warehouseInfo) {
-            // Calculate the distance between your location and the warehouse
             const distance = geolib.getDistance(
               { latitude: myLatitude, longitude: myLongitude },
               {
