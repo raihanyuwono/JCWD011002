@@ -102,11 +102,11 @@ const Checkout = () => {
         <Text fontSize={"3xl"} mt={8} mb={4}>
           Checkout
         </Text>
-        <Box mb={2} w={"60vw"} px={6} py={6} bgColor={"secondary"}>
+        <Box mb={2} w={"80vw"} px={6} py={6} bgColor={"secondary"}>
           <SelectAddress />
         </Box>
         <TableContainer>
-          <Table variant="simple" color={"#34638a"} w={"60vw"} bgColor="white">
+          <Table variant="simple" color={"#34638a"} w={"80vw"} bgColor="white">
             <Thead>
               <Tr>
                 <Th></Th>
@@ -131,9 +131,16 @@ const Checkout = () => {
                         <Image w={"50px"} src={item.image} />
                       </Td>
                       <Td>{item.name}</Td>
-                      <Td textAlign={"center"}>{toRupiah(item.price)}</Td>
+                      <Td textAlign={"center"}>
+                        {toRupiah(item.price, { dot: ".", floatingPoint: 0 })}
+                      </Td>
                       <Td textAlign={"center"}>{item.quantity}</Td>
-                      <Td textAlign={"center"}>{toRupiah(item.subtotal)}</Td>
+                      <Td textAlign={"center"}>
+                        {toRupiah(item.subtotal, {
+                          dot: ".",
+                          floatingPoint: 0,
+                        })}
+                      </Td>
                     </Tr>
                   ) : null
                 )
@@ -148,7 +155,7 @@ const Checkout = () => {
             color={"#34638a"}
             mt={1}
             // h={"15vh"}
-            w={"40vw"}
+            w={"50vw"}
             bgColor="white"
           >
             <Flex justifyContent={"space-between"}>
@@ -184,16 +191,16 @@ const Checkout = () => {
             py={6}
             color={"#34638a"}
             mt={1}
-            w={"20vw"}
+            w={"30vw"}
             bgColor="textSecondary"
           >
             <Flex justifyContent={"space-between"}>
               <Text mt={1}>Subtotal Product:</Text>
-              <Text>Rp{total}</Text>
+              <Text>{toRupiah(total, { dot: ".", floatingPoint: 0 })}</Text>
             </Flex>
             <Flex justifyContent={"space-between"}>
               <Text mt={1}>Shipping Cost:</Text>
-              <Text>{toRupiah(shipping)}</Text>
+              <Text>{toRupiah(shipping, { dot: ".", floatingPoint: 0 })}</Text>
             </Flex>
             <Flex justifyContent={"space-between"}>
               <Text mt={1}>Tax:</Text>
@@ -204,20 +211,25 @@ const Checkout = () => {
                 Grand Total:
               </Text>
               <Text fontWeight={"bold"} fontSize={"xl"} mt={4}>
-                {toRupiah(grand)}
+                {toRupiah(grand, { dot: ".", floatingPoint: 0 })}
               </Text>
             </Flex>
           </Box>
         </Flex>
         <Flex>
-          <Box mt={1} w={"40vw"}></Box>
-          <Box color={"#34638a"} mt={1} w={"20vw"} bgColor="textSecondary">
+          <Box mt={1} w={"50vw"}></Box>
+          <Box
+            color={"#34638a"}
+            mt={1}
+            mb={7}
+            w={"30vw"}
+            bgColor="textSecondary"
+          >
             <Button
               onClick={checkout}
               w={"100%"}
               borderRadius={"none"}
               variant={"success"}
-              disabled={!selectedPayment}
             >
               Checkout
             </Button>

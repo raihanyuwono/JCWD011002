@@ -13,7 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { AiOutlineCaretDown } from "react-icons/ai";
 import axios from "axios";
-
+import toRupiah from "@develoka/angka-rupiah-js";
 const SelectShipping = () => {
   const warehouseAddress = {
     city_name: "Ngawi",
@@ -27,21 +27,6 @@ const SelectShipping = () => {
   const warehouseCityName = warehouseAddress.city_name;
   const destinationCityName = localStorage.getItem("city_name");
   const [courier, setCourier] = useState(null);
-  // useEffect(() => {
-  //   if (
-  //     selectedService &&
-  //     selectedService.cost &&
-  //     selectedService.cost.length > 0
-  //   ) {
-  //     localStorage.setItem("shipping", selectedService.cost[0].value);
-  //     localStorage.setItem("service", selectedService.code);
-  //     localStorage.setItem("selectedCourier", JSON.stringify(selectedService));
-  //     // const selectedCourier = localStorage.getItem("selectedCourier");
-  //     // const object = JSON.parse(selectedCourier);
-  //   } else {
-  //     console.log("Shipping information is not available.");
-  //   }
-  // }, [selectedService]);
   useEffect(() => {
     if (
       selectedService &&
@@ -186,7 +171,11 @@ const SelectShipping = () => {
               {selectedService.code.toUpperCase()}
             </Text>
             <Text>
-              {selectedService.description}: Rp{selectedService.cost[0].value}{" "}
+              {selectedService.description}:{" "}
+              {toRupiah(selectedService.cost[0].value, {
+                dot: ".",
+                floatingPoint: 0,
+              })}
             </Text>
             <Text>{selectedService.cost[0].etd} Day Estimated Delivery</Text>
           </>
@@ -194,7 +183,8 @@ const SelectShipping = () => {
           <>
             <Text fontWeight={"bold"}>{courier.code.toUpperCase()}</Text>
             <Text>
-              {courier.description}: Rp{courier.cost[0].value}
+              {courier.description}:{" "}
+              {toRupiah(courier.cost[0].value, { dot: ".", floatingPoint: 0 })}
             </Text>{" "}
             <Text>{courier.cost[0].etd} Day Estimated Delivery</Text>
           </>

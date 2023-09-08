@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Divider, Flex, Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import toRupiah from "@develoka/angka-rupiah-js";
+
 const OrderSummary = ({ userId, cartLength }) => {
   const [total, setTotal] = useState(0);
   const getCartTotal = async () => {
@@ -36,7 +38,9 @@ const OrderSummary = ({ userId, cartLength }) => {
         <Divider />
         <br />
         <Text>Checkout ({cartLength} Product)</Text>
-        <Text fontWeight={"bold"}>Total: Rp. {total}</Text>
+        <Text fontWeight={"bold"}>
+          Total: {toRupiah(total, { dot: ".", floatingPoint: 0 })}
+        </Text>
         <br />
         <Link to="/">Or continue shopping?</Link>
       </Flex>
