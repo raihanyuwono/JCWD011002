@@ -20,6 +20,7 @@ const tabsAttr = {
 
 function ModalPopup({ isOpen, onClose }) {
   const modalAttr = { isOpen, onClose };
+  const tabsPanelAttr = {onClose}
 
   return (
     <Modal {...modalAttr}>
@@ -32,10 +33,10 @@ function ModalPopup({ isOpen, onClose }) {
           </TabList>
           <TabPanels>
             <TabPanel>
-              <FormLogin />
+              <FormLogin {...tabsPanelAttr}/>
             </TabPanel>
             <TabPanel>
-              <FormRegisterMail />
+              <FormRegisterMail {...tabsPanelAttr}/>
             </TabPanel>
           </TabPanels>
         </Tabs>

@@ -65,7 +65,40 @@ async function keepLogin() {
     localStorage.setItem("token", token);
   } catch (error) {
     console.error(error.message);
+    localStorage.removeItem("token");
   }
 }
 
-export { register, registration, login, keepLogin };
+async function forgotPassword(toast, attributes) {
+  try {
+    const response = await axios.post(`${AUTH_URL}/reset`, attributes);
+    notification(toast, setToastParams(response));
+  } catch (error) {
+    const { response } = error;
+    notification(toast, setToastParams(response.status ? response : error));
+  }
+}
+
+async function resetPassword(toast, token, attributes) {
+  try {
+    const response = await axios.patch(
+      `${AUTH_URL}/reset`,
+      attributes,
+      setHeaders(token)
+    );
+    notification(toast, setToastParams(response));
+    setTimeout(() => (document.location.href = "/"), 2500);
+  } catch (error) {
+    const { response } = error;
+    notification(toast, setToastParams(response.status ? response : error));
+  }
+}
+
+export {
+  register,
+  registration,
+  login,
+  keepLogin,
+  forgotPassword,
+  resetPassword,
+};
