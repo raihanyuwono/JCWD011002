@@ -2,9 +2,7 @@ require("dotenv/config");
 const express = require("express");
 const cors = require("cors");
 const { join } = require("path");
-const { authRouter } = require("./routes");
-const { userOrderRouter } = require("./routes");
-const { rajaongkirRouter } = require("./routes");
+const { authRouter, userOrderRouter, rajaongkirRouter, userProfileRouter } = require("./routes");
 
 const PORT = process.env.PORT || 8000;
 const app = express();
@@ -28,6 +26,7 @@ app.use(express.json());
 app.use("/api/order", userOrderRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/rajaongkir", rajaongkirRouter);
+app.use("/api/user", userProfileRouter);
 
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`);
@@ -44,7 +43,7 @@ app.get("/api/greetings", (req, res, next) => {
 // not found
 app.use((req, res, next) => {
   if (req.path.includes("/api/")) {
-    res.status(404).send("Not found !");
+    res.status(404).send("Route Not found !");
   } else {
     next();
   }

@@ -1,9 +1,8 @@
 const router = require("express").Router();
-const updateProfile = require("../controllers/userProfileController");
-const {authentication, multer} = require("../middlewares");
-const { multerUpload, handleFileSizeError } = require("../middlewares/multer");
+const { getUser, updateProfile, changePassword } = require("../controllers/userProfileController");
+const { authentication, multer } = require("../middlewares");
 
-router.get("/user", authentication)
-router.patch("/user", authentication, multer.multerUpload.single("avatar"),multer.handleFileSizeError, updateProfile)
-
+router.get("/", authentication, getUser)
+router.patch("/", authentication, multer.multerUpload("avatar"), updateProfile)
+router.patch("/", authentication, changePassword)
 module.exports = router;

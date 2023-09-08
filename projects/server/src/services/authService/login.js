@@ -30,7 +30,7 @@ async function login(identifier, password) {
   if (!compared) return messages.error(400, "Wrong password");
 
   const payload = { id: account["id"], role: account["role"]["name"] };
-  const token = jwt.sign(payload, JWT_KEY, { expiresIn: "1hr" });
+  const token = jwt.sign(payload, JWT_KEY);
 
   return messages.success("Login success", { token });
 }

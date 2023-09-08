@@ -3,6 +3,7 @@ import { Flex } from "@chakra-ui/react";
 import Registration from "./pages/Registration";
 import HomePage from "./pages/HomePage";
 import NavUser from "./components/Navbar/NavUser";
+import Profile from "./pages/Profile";
 
 const mainContainerAttr = {
   w: "100vw",
@@ -18,6 +19,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/registration/:token" element={<Registration />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </Flex>
   );

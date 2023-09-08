@@ -7,7 +7,7 @@ const services = {};
 fs.readdirSync(__dirname)
   .filter((file) => file != basename)
   .forEach((file) => {
-    const key = file;
+    const key = file.slice(0, -3);
     services[key] = require(path.join(__dirname, file));
   });
 
