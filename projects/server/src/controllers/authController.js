@@ -42,9 +42,33 @@ async function keepLogin(req, res) {
   }
 }
 
+async function forgotPassword(req, res) {
+  try {
+    const { email } = req.body;
+    const result = await authService.forgotPassword(email);
+    res.status(result.status).json(messages.response(result));
+  } catch (error) {
+    res.status(500).json({ message: error.messsage });
+  }
+}
+
+async function resetPassword(req, res) {
+  try {
+    const { token } = req;
+    const { id } = req.account;
+    const { password } = req.body;
+    const result = await authService.resetPassword(token, id, password);
+    res.status(result.status).json(messages.response(result));
+  } catch (error) {
+    res.status(500).json({ message: error.messsage });
+  }
+}
+
 module.exports = {
   register,
   registration,
   login,
   keepLogin,
+  forgotPassword,
+  resetPassword,
 };

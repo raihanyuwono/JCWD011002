@@ -11,7 +11,7 @@ const container = {
   gap: "8px",
 };
 
-function FormRegister() {
+function FormRegister({ onClose }) {
   const [isLoading, setIsLoading] = useState(false);
   const toast = useToast();
   const initialValues = {
@@ -22,6 +22,7 @@ function FormRegister() {
     setIsLoading(true);
     await register(toast, attributes);
     setIsLoading(false);
+    onClose();
   }
 
   const formik = useFormik({
