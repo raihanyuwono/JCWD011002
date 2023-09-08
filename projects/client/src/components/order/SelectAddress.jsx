@@ -24,7 +24,7 @@ const dummyAddress = [
   {
     id: 1,
     name: "Rumah",
-    id_user: "Febry Dharmawan Jr",
+    id_user: "Febry Dharmawan",
     province: "Jawa Timur",
     city_name: "Sidoarjo",
     postal_code: 61252,
@@ -34,7 +34,7 @@ const dummyAddress = [
   {
     id: 2,
     name: "Kantor",
-    id_user: "Andre Djawa Temanggung",
+    id_user: "Andre Djawa",
     province: "Nusa Tenggara Timur (NTT)",
     city_name: "Alor",
     postal_code: 85811,
@@ -234,7 +234,9 @@ const SelectAddress = () => {
           </Modal>
           {selectAddress && (
             <Box key={selectAddress.id}>
-              <Text fontWeight={"bold"}> {selectAddress.name}</Text>
+              <Text fontWeight={"bold"}>
+                {selectAddress.id_user} ({selectAddress.name})
+              </Text>
               <Text>
                 {selectAddress.full_address}, {selectAddress.city_name},{" "}
                 {selectAddress.province}, {selectAddress.postal_code}

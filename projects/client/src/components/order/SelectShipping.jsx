@@ -9,6 +9,7 @@ import {
   Box,
   Text,
   Button,
+  Flex,
 } from "@chakra-ui/react";
 import { AiOutlineCaretDown } from "react-icons/ai";
 import axios from "axios";
@@ -25,7 +26,6 @@ const SelectShipping = () => {
   const [destinationCityId, setDestinationCityId] = useState(null);
   const warehouseCityName = warehouseAddress.city_name;
   const destinationCityName = localStorage.getItem("city_name");
-
   useEffect(() => {
     if (
       selectedService &&
@@ -33,10 +33,12 @@ const SelectShipping = () => {
       selectedService.cost.length > 0
     ) {
       localStorage.setItem("shipping", selectedService.cost[0].value);
+      localStorage.setItem("service", selectedService.code);
+      localStorage.setItem("courier", selectedService);
     } else {
       console.log("Shipping information is not available.");
     }
-  }, [selectedService]);
+  });
 
   const fetchShippingMethods = async (courier) => {
     try {
@@ -119,7 +121,6 @@ const SelectShipping = () => {
       }
       groupedServices[courierCode].push(method);
     });
-
     return groupedServices;
   };
 
@@ -130,7 +131,7 @@ const SelectShipping = () => {
   };
 
   return (
-    <>
+    <Flex direction={"column"}>
       <Menu>
         <MenuButton as={Button} rightIcon={<AiOutlineCaretDown />}>
           Shipping Methods
@@ -146,8 +147,8 @@ const SelectShipping = () => {
                       key={method.service}
                       onClick={() => handleMenuItemSelect(method.service)}
                     >
-                      {method.service} - {method.description}:{" "}
-                      {method.cost[0].value} {method.cost[0].etd}
+                      {method.service} - {method.description}{" "}
+                      {/* {method.cost[0].value} {method.cost[0].etd} */}
                     </MenuItem>
                   ))}
                 </MenuGroup>
@@ -161,17 +162,17 @@ const SelectShipping = () => {
         {selectedService ? (
           <>
             {/* <Text>Selected Service:</Text> */}
-            <Text>{selectedService.service}</Text>
+            <Text>{selectedService.code.toUpperCase()}</Text>
             <Text>
-              {selectedService.description}: {selectedService.cost[0].value}{" "}
-              {selectedService.cost[0].etd}
+              {selectedService.description}: Rp{selectedService.cost[0].value}{" "}
             </Text>
+            <Text>{selectedService.cost[0].etd} Day Estimated Delivery</Text>
           </>
         ) : (
           <Text>No service selected</Text>
         )}
       </Box>
-    </>
+    </Flex>
   );
 };
 

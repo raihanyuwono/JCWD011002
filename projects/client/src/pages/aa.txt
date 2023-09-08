@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
   Table,
@@ -11,13 +11,15 @@ import {
   Text,
   Image,
   Button,
+  HStack,
+  Input,
   Box,
+  IconButton,
   Flex,
   useToast,
-  Select,
 } from "@chakra-ui/react";
-import { AiOutlineCaretDown } from "react-icons/ai";
 import jwt_decode from "jwt-decode";
+import { Link } from "react-router-dom";
 import SelectAddress from "../components/Order/SelectAddress";
 import SelectShipping from "../components/Order/SelectShipping";
 const Checkout = () => {
@@ -26,22 +28,9 @@ const Checkout = () => {
   const userId = jwt_decode(token).id;
   const [cart, setCart] = useState([]);
   const [total, setTotal] = useState(0);
+  const shipping = localStorage.getItem("shipping");
   const service = localStorage.getItem("service").toUpperCase();
-  const [shipping, setShipping] = useState(
-    parseInt(localStorage.getItem("shipping")) || 0
-  );
   const grand = total + parseInt(shipping);
-
-  const getShippingFromLocalStorage = () => {
-    const updatedShipping = parseInt(localStorage.getItem("shipping")) || 0;
-    setShipping(updatedShipping);
-  };
-  useEffect(() => {
-    const intervalId = setInterval(getShippingFromLocalStorage, 200);
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, []);
 
   const viewCart = async () => {
     const response = await axios.get(
@@ -133,19 +122,7 @@ const Checkout = () => {
             w={"40vw"}
             bgColor="white"
           >
-            <Flex justifyContent={"space-between"}>
-              <SelectShipping />
-              <Box>
-                <Select
-                  icon={<AiOutlineCaretDown />}
-                  placeholder="Payment Methods  "
-                >
-                  <option value="option1">Option 1</option>
-                  <option value="option2">Option 2</option>
-                  <option value="option3">Option 3</option>
-                </Select>
-              </Box>
-            </Flex>
+            <SelectShipping />
           </Box>
           <Box
             px={6}

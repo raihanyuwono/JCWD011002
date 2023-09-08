@@ -5,15 +5,12 @@ const {
   cart_product,
   product,
 } = require("../../database");
-const axios = require("axios");
 const handleStock = require("./handleStock");
 
-const addTransaction = async (userId, payment, shipping) => {
+const addTransaction = async (userId, payment, shipping, total) => {
   const myLatitude = -7.417166656128915;
   const myLongitude = 112.75669259021905;
   try {
-    const total = await getTotal(userId);
-
     const cartProduct = await cart_product.findAll({
       where: { id_cart: userId },
       include: [{ model: product }],
@@ -69,20 +66,6 @@ const addTransaction = async (userId, payment, shipping) => {
       success: false,
       message: "Failed to add the transaction.",
     };
-  }
-};
-
-const getTotal = async (userId) => {
-  try {
-    const response = await axios.get(
-      `http://localhost:8000/api/order/${userId}`
-    );
-    const total = response.data.data.total;
-    console.log(total);
-    return total;
-  } catch (error) {
-    console.error("Error fetching total from API:", error);
-    throw error;
   }
 };
 

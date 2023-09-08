@@ -194,15 +194,28 @@ const CartPage = () => {
         </TableContainer>
         <Box mt={"77px"}>
           <ClearAlert coba={viewCart} userId={userId} />
-          <Button
-            as={Link}
-            to={"/checkout"}
-            borderRadius={"none"}
-            colorScheme="green"
-            borderTopRightRadius={"10px"}
-          >
-            Checkout
-          </Button>
+          {cart.length === 0 ? (
+            <Button
+              as={Link}
+              display={"none"}
+              to={"/checkout"}
+              borderRadius={"none"}
+              colorScheme="green"
+              borderTopRightRadius={"10px"}
+            >
+              Checkout
+            </Button>
+          ) : (
+            <Button
+              as={Link}
+              to={"/checkout"}
+              borderRadius={"none"}
+              colorScheme="green"
+              borderTopRightRadius={"10px"}
+            >
+              Checkout
+            </Button>
+          )}
           <OrderSummary cartLength={cartLength} userId={userId} />
         </Box>
       </Flex>
