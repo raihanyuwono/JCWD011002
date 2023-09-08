@@ -153,6 +153,16 @@ async function addTransaction(req, res) {
     return res.status(500).json(messages.error(500, error.message));
   }
 }
+
+async function getPayment(req, res) {
+  try {
+    const result = await transactionService.getPayment();
+    return res.status(200).json(messages.response(result));
+  } catch (error) {
+    console.error("Error getting payment:", error);
+    return res.status(500).json(messages.error(500, error.message));
+  }
+}
 module.exports = {
   addToCart,
   removeFromCart,
@@ -162,4 +172,5 @@ module.exports = {
   viewCart,
   setQty,
   addTransaction,
+  getPayment,
 };

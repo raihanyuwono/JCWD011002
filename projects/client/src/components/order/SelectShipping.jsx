@@ -26,6 +26,22 @@ const SelectShipping = () => {
   const [destinationCityId, setDestinationCityId] = useState(null);
   const warehouseCityName = warehouseAddress.city_name;
   const destinationCityName = localStorage.getItem("city_name");
+  const [courier, setCourier] = useState(null);
+  // useEffect(() => {
+  //   if (
+  //     selectedService &&
+  //     selectedService.cost &&
+  //     selectedService.cost.length > 0
+  //   ) {
+  //     localStorage.setItem("shipping", selectedService.cost[0].value);
+  //     localStorage.setItem("service", selectedService.code);
+  //     localStorage.setItem("selectedCourier", JSON.stringify(selectedService));
+  //     // const selectedCourier = localStorage.getItem("selectedCourier");
+  //     // const object = JSON.parse(selectedCourier);
+  //   } else {
+  //     console.log("Shipping information is not available.");
+  //   }
+  // }, [selectedService]);
   useEffect(() => {
     if (
       selectedService &&
@@ -34,12 +50,18 @@ const SelectShipping = () => {
     ) {
       localStorage.setItem("shipping", selectedService.cost[0].value);
       localStorage.setItem("service", selectedService.code);
-      localStorage.setItem("courier", selectedService);
+      localStorage.setItem("selectedCourier", JSON.stringify(selectedService));
     } else {
       console.log("Shipping information is not available.");
     }
-  });
+    const selectedCourierJSON = localStorage.getItem("selectedCourier");
 
+    if (selectedCourierJSON) {
+      const selectedCourier = JSON.parse(selectedCourierJSON);
+      console.log("Selected Courier:", selectedCourier);
+      setCourier(selectedCourier);
+    }
+  }, [selectedService]);
   const fetchShippingMethods = async (courier) => {
     try {
       const response = await axios.post(
@@ -127,13 +149,12 @@ const SelectShipping = () => {
   const handleMenuItemSelect = (service) => {
     const selected = courierData.find((method) => method.service === service);
     setSelectedService(selected);
-    // console.log(selected.cost);
   };
 
   return (
     <Flex direction={"column"}>
       <Menu>
-        <MenuButton as={Button} rightIcon={<AiOutlineCaretDown />}>
+        <MenuButton w={"210px"} as={Button} rightIcon={<AiOutlineCaretDown />}>
           Shipping Methods
         </MenuButton>
         <MenuList>
@@ -161,15 +182,24 @@ const SelectShipping = () => {
       <Box mt={2}>
         {selectedService ? (
           <>
-            {/* <Text>Selected Service:</Text> */}
-            <Text>{selectedService.code.toUpperCase()}</Text>
+            <Text fontWeight={"bold"}>
+              {selectedService.code.toUpperCase()}
+            </Text>
             <Text>
               {selectedService.description}: Rp{selectedService.cost[0].value}{" "}
             </Text>
             <Text>{selectedService.cost[0].etd} Day Estimated Delivery</Text>
           </>
+        ) : courier ? (
+          <>
+            <Text fontWeight={"bold"}>{courier.code.toUpperCase()}</Text>
+            <Text>
+              {courier.description}: Rp{courier.cost[0].value}
+            </Text>{" "}
+            <Text>{courier.cost[0].etd} Day Estimated Delivery</Text>
+          </>
         ) : (
-          <Text>No service selected</Text>
+          <Text></Text>
         )}
       </Box>
     </Flex>

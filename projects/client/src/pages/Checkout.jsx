@@ -20,6 +20,8 @@ import { AiOutlineCaretDown } from "react-icons/ai";
 import jwt_decode from "jwt-decode";
 import SelectAddress from "../components/Order/SelectAddress";
 import SelectShipping from "../components/Order/SelectShipping";
+import toRupiah from "@develoka/angka-rupiah-js";
+
 const Checkout = () => {
   const toast = useToast();
   const token = localStorage.getItem("token");
@@ -31,13 +33,22 @@ const Checkout = () => {
     parseInt(localStorage.getItem("shipping")) || 0
   );
   const grand = total + parseInt(shipping);
+  const [payment, setPayment] = useState([]);
+  const [selectedPayment, setSelectedPayment] = useState(null);
+  const handlePaymentMethodChange = (event) => {
+    const selectedMethodId = event.target.value;
+    const selectedMethod = payment.find(
+      (method) => method.id === parseInt(selectedMethodId)
+    );
+    setSelectedPayment(selectedMethod);
+  };
 
-  const getShippingFromLocalStorage = () => {
+  const getShippingLS = () => {
     const updatedShipping = parseInt(localStorage.getItem("shipping")) || 0;
     setShipping(updatedShipping);
   };
   useEffect(() => {
-    const intervalId = setInterval(getShippingFromLocalStorage, 200);
+    const intervalId = setInterval(getShippingLS, 200);
     return () => {
       clearInterval(intervalId);
     };
@@ -58,7 +69,7 @@ const Checkout = () => {
   const checkout = async () => {
     const response = await axios.post("http://localhost:8000/api/transaction", {
       userId: userId,
-      payment: 2,
+      payment: selectedPayment ? selectedPayment.id : null,
       shipping: service,
       total: grand,
     });
@@ -68,14 +79,22 @@ const Checkout = () => {
       duration: 3000,
       isClosable: true,
     });
+    setSelectedPayment(null);
     localStorage.setItem("shipping", 0);
     localStorage.setItem("service", "none");
+    localStorage.setItem("selectedCourier", null);
     viewCart();
+  };
+
+  const getPayment = async () => {
+    const response = await axios.get("http://localhost:8000/api/transaction");
+    setPayment(response.data.data);
   };
 
   useEffect(() => {
     viewCart();
     getTotal();
+    getPayment();
   }, []);
   return (
     <>
@@ -95,7 +114,6 @@ const Checkout = () => {
                 <Th textAlign={"center"}>Price</Th>
                 <Th textAlign={"center"}>Quantity</Th>
                 <Th textAlign={"center"}>Subtotal</Th>
-                {/* <Th textAlign={"center"}></Th> */}
               </Tr>
             </Thead>
             <Tbody>
@@ -113,9 +131,9 @@ const Checkout = () => {
                         <Image w={"50px"} src={item.image} />
                       </Td>
                       <Td>{item.name}</Td>
-                      <Td textAlign={"center"}>Rp{item.price}</Td>
+                      <Td textAlign={"center"}>{toRupiah(item.price)}</Td>
                       <Td textAlign={"center"}>{item.quantity}</Td>
-                      <Td textAlign={"center"}>Rp{item.subtotal}</Td>
+                      <Td textAlign={"center"}>{toRupiah(item.subtotal)}</Td>
                     </Tr>
                   ) : null
                 )
@@ -137,13 +155,27 @@ const Checkout = () => {
               <SelectShipping />
               <Box>
                 <Select
+                  bgColor={"#EDF2F7"}
+                  color={"black"}
+                  fontWeight={"bold"}
+                  w={"210px"}
                   icon={<AiOutlineCaretDown />}
-                  placeholder="Payment Methods  "
+                  placeholder="Payment Methods"
+                  onChange={handlePaymentMethodChange}
+                  value={selectedPayment ? selectedPayment.id : ""}
                 >
-                  <option value="option1">Option 1</option>
-                  <option value="option2">Option 2</option>
-                  <option value="option3">Option 3</option>
+                  {payment.map((item) => (
+                    <option key={item.id} value={item.id}>
+                      {item.name}
+                    </option>
+                  ))}
                 </Select>
+                {selectedPayment && (
+                  <Box key={selectedPayment.id}>
+                    <Text mt={2}>Payment: {selectedPayment.name}</Text>
+                    Please Transfer to: {selectedPayment.identifier}
+                  </Box>
+                )}
               </Box>
             </Flex>
           </Box>
@@ -152,7 +184,6 @@ const Checkout = () => {
             py={6}
             color={"#34638a"}
             mt={1}
-            // h={"30vh"}
             w={"20vw"}
             bgColor="textSecondary"
           >
@@ -162,7 +193,7 @@ const Checkout = () => {
             </Flex>
             <Flex justifyContent={"space-between"}>
               <Text mt={1}>Shipping Cost:</Text>
-              <Text>Rp{shipping}</Text>
+              <Text>{toRupiah(shipping)}</Text>
             </Flex>
             <Flex justifyContent={"space-between"}>
               <Text mt={1}>Tax:</Text>
@@ -173,7 +204,7 @@ const Checkout = () => {
                 Grand Total:
               </Text>
               <Text fontWeight={"bold"} fontSize={"xl"} mt={4}>
-                Rp{grand}
+                {toRupiah(grand)}
               </Text>
             </Flex>
           </Box>
@@ -186,6 +217,7 @@ const Checkout = () => {
               w={"100%"}
               borderRadius={"none"}
               variant={"success"}
+              disabled={!selectedPayment}
             >
               Checkout
             </Button>
