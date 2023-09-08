@@ -29,6 +29,8 @@ const Checkout = () => {
   const [cart, setCart] = useState([]);
   const [total, setTotal] = useState(0);
   const service = localStorage.getItem("service").toUpperCase();
+  const myLatitude = localStorage.getItem("myLatitude");
+  const myLongitude = localStorage.getItem("myLongitude");
   const [shipping, setShipping] = useState(
     parseInt(localStorage.getItem("shipping")) || 0
   );
@@ -43,6 +45,8 @@ const Checkout = () => {
     setSelectedPayment(selectedMethod);
   };
 
+  console.log(myLatitude);
+  console.log(myLongitude);
   const getShippingLS = () => {
     const updatedShipping = parseInt(localStorage.getItem("shipping")) || 0;
     setShipping(updatedShipping);
@@ -72,6 +76,8 @@ const Checkout = () => {
       payment: selectedPayment ? selectedPayment.id : null,
       shipping: service,
       total: grand,
+      myLatitude,
+      myLongitude,
     });
     toast({
       title: "Thanks for your purchase!",
@@ -83,6 +89,7 @@ const Checkout = () => {
     localStorage.setItem("shipping", 0);
     localStorage.setItem("service", "none");
     localStorage.setItem("selectedCourier", null);
+    setTotal(0);
     viewCart();
   };
 

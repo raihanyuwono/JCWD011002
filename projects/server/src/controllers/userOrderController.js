@@ -140,12 +140,15 @@ async function setQty(req, res) {
 
 async function addTransaction(req, res) {
   try {
-    const { userId, payment, shipping, total } = req.body;
+    const { userId, payment, shipping, total, myLatitude, myLongitude } =
+      req.body;
     const result = await transactionService.addTransaction(
       userId,
       payment,
       shipping,
-      total
+      total,
+      myLatitude,
+      myLongitude
     );
     return res.status(result.status).json(messages.response(result));
   } catch (error) {

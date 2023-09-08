@@ -6,9 +6,13 @@ const {
 } = require("../../database");
 const geolib = require("geolib");
 
-const handleStock = async (cartProduct, userId, transactionId) => {
-  const myLatitude = -6.948254099996949;
-  const myLongitude = 107.85884718197198;
+const handleStock = async (
+  cartProduct,
+  userId,
+  transactionId,
+  myLatitude,
+  myLongitude
+) => {
   try {
     for (const item of cartProduct) {
       const productInfo = await product.findOne({
@@ -19,14 +23,12 @@ const handleStock = async (cartProduct, userId, transactionId) => {
         const productWarehouses = await product_warehouse.findAll({
           where: { id_product: item.id_product },
         });
-        // let qtyToReduce = item.qty;
         let nearestWarehouse = null;
         let nearestDistance = Infinity;
         for (const warehouseData of productWarehouses) {
           const warehouseInfo = await warehouse.findByPk(
             warehouseData.id_warehouse
           );
-
           if (warehouseInfo) {
             const distance = geolib.getDistance(
               { latitude: myLatitude, longitude: myLongitude },

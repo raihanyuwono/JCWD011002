@@ -7,9 +7,16 @@ const {
 } = require("../../database");
 const handleStock = require("./handleStock");
 
-const addTransaction = async (userId, payment, shipping, total) => {
-  const myLatitude = -7.417166656128915;
-  const myLongitude = 112.75669259021905;
+const addTransaction = async (
+  userId,
+  payment,
+  shipping,
+  total,
+  myLatitude,
+  myLongitude
+) => {
+  // const myLatitude = -7.417166656128915;
+  // const myLongitude = 112.75669259021905;
   try {
     const cartProduct = await cart_product.findAll({
       where: { id_cart: userId },
@@ -40,7 +47,13 @@ const addTransaction = async (userId, payment, shipping, total) => {
     }));
     await transaction_product.bulkCreate(transactionProducts);
 
-    await handleStock(cartProduct, userId, newTransaction.id);
+    await handleStock(
+      cartProduct,
+      userId,
+      newTransaction.id,
+      myLatitude,
+      myLongitude
+    );
 
     await transaction_payment.create({
       id_transaction: newTransaction.id,

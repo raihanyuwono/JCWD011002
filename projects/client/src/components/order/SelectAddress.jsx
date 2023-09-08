@@ -28,8 +28,10 @@ const dummyAddress = [
     province: "Jawa Timur",
     city_name: "Sidoarjo",
     postal_code: 61252,
-    full_address: "123 Main St",
+    full_address: "Jl Sesama No 22 Sidoarjo",
     is_default: true,
+    latitude: -7.417166656128915,
+    longitude: 112.75669259021905,
   },
   {
     id: 2,
@@ -38,8 +40,10 @@ const dummyAddress = [
     province: "Nusa Tenggara Timur (NTT)",
     city_name: "Alor",
     postal_code: 85811,
-    full_address: "456 Elm St",
+    full_address: "Jl Laksda Adisucipto No 1 Alor",
     is_default: false,
+    latitude: -8.696554473073343,
+    longitude: 121.2176540613792,
   },
   {
     id: 3,
@@ -48,8 +52,10 @@ const dummyAddress = [
     province: "Kalimantan Timur",
     city_name: "Balikpapan",
     postal_code: 76111,
-    full_address: "789 San St",
+    full_address: "Jl Balik Papan No 90 Balikpapan",
     is_default: false,
+    latitude: -1.696554473073343,
+    longitude: 116.696554473073343,
   },
 ];
 
@@ -80,18 +86,12 @@ const SelectAddress = () => {
     setIsSelectAddressModalOpen(true);
   };
 
-  // const handleSelect = (address) => {
-  //   setSelectedAddress(address);
-  //   localStorage.setItem("selectedAddress", JSON.stringify(address));
-  //   console.log(localStorage.getItem("selectedAddress").city_name);
-  //   closeSelectAddressModal();
-  // };
   const handleSelect = (address) => {
     setSelectedAddress(address);
     localStorage.setItem("selectedAddress", JSON.stringify(address));
     localStorage.setItem("city_name", address.city_name);
-    localStorage.setItem("province", address.province);
-    localStorage.setItem("postal_code", address.postal_code);
+    localStorage.setItem("myLatitude", address.latitude);
+    localStorage.setItem("myLongitude", address.longitude);
     closeSelectAddressModal();
   };
 
@@ -244,13 +244,7 @@ const SelectAddress = () => {
             </Box>
           )}
         </Box>
-        <Button
-          size="md"
-          mt={2}
-          // variant={"outline"}
-          // colorScheme="blue"
-          onClick={openSelectAddressModal}
-        >
+        <Button size="md" mt={2} onClick={openSelectAddressModal}>
           Select Address
         </Button>
       </Flex>
