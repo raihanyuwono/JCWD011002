@@ -166,6 +166,24 @@ async function getPayment(req, res) {
     return res.status(500).json(messages.error(500, error.message));
   }
 }
+
+async function getDistance(req, res) {
+  try {
+    const { myLatitude, myLongitude } = req.body;
+    const result = await transactionService.getDistance(
+      myLatitude,
+      myLongitude
+    );
+    if (!result) {
+      return res.status(404).json({ error: "No warehouses found" });
+    }
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error("Error calculating nearest warehouse:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}
+
 module.exports = {
   addToCart,
   removeFromCart,
@@ -176,4 +194,5 @@ module.exports = {
   setQty,
   addTransaction,
   getPayment,
+  getDistance,
 };
