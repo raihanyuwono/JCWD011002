@@ -3,7 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const { join } = require("path");
 const { authRouter, userOrderRouter, rajaongkirRouter, userProfileRouter } = require("./routes");
-
+const path = require("path");
 const PORT = process.env.PORT || 8000;
 const app = express();
 app.use(
@@ -27,7 +27,7 @@ app.use("/api/order", userOrderRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/rajaongkir", rajaongkirRouter);
 app.use("/api/user", userProfileRouter);
-
+app.use("/api/public", express.static(path.resolve(__dirname, "../public")));
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`);
 });
@@ -62,13 +62,13 @@ app.use((err, req, res, next) => {
 //#endregion
 
 //#region CLIENT
-const clientPath = "../../client/build";
-app.use(express.static(join(__dirname, clientPath)));
+// const clientPath = "../../client/build";
+// app.use(express.static(join(__dirname, clientPath)));
 
 // Serve the HTML page
-app.get("*", (req, res) => {
-  res.sendFile(join(__dirname, clientPath, "index.html"));
-});
+// app.get("*", (req, res) => {
+//   res.sendFile(join(__dirname, clientPath, "index.html"));
+// });
 
 //#endregion
 

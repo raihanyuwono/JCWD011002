@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Flex,
@@ -61,7 +61,7 @@ export default function Simple() {
 
   return (
     <>
-      <Box boxShadow={"lg"} px={4}>
+      <Box bg={'bgSecondary'} boxShadow={"lg"} px={4} pos={"fixed"} top={0} w={"full"} zIndex={100}>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <IconButton
             size={"md"}
@@ -69,6 +69,7 @@ export default function Simple() {
             aria-label={"Open Menu"}
             display={{ md: "none" }}
             onClick={isOpen ? onClose : onOpen}
+            className="navbar"
           />
           <HStack spacing={8} alignItems={"center"}>
             <Box>Logo</Box>

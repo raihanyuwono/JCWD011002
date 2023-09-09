@@ -1,5 +1,5 @@
 "use client"
-import React from "react"
+import React, { useEffect, useState } from "react"
 import {
   IconButton,
   Box,
@@ -11,7 +11,8 @@ import {
   Drawer,
   DrawerContent,
   useDisclosure,
-  Avatar
+  Avatar,
+  useToast
 } from "@chakra-ui/react"
 import {
   FiHome,
@@ -21,20 +22,43 @@ import {
   FiSettings,
   FiMenu
 } from "react-icons/fi"
+import UserProfile from "../components/Profile/UpdateProfile"
+import { getUser } from "../api/profile"
 const LinkItems = [
-  { name: "Home", icon: FiHome },
-  { name: "Trending", icon: FiTrendingUp },
-  { name: "Explore", icon: FiCompass },
-  { name: "Favourites", icon: FiStar },
-  { name: "Settings", icon: FiSettings }
+  { name: "Profile", icon: FiHome },
+  { name: "Address", icon: FiCompass },
+  { name: "Transaction", icon: FiTrendingUp },
 ]
 
 export default function Profile() {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [userData, setUserData] = useState({
+    name: '',
+    username: '',
+    email: '',
+    phone: '',
+    is_verified: false,
+    role: '',
+    current_password: '',
+    new_password: '',
+    confirm_password: '',
+    avatar: '',
+  });
+  const toast = useToast()
+  const token = localStorage.getItem('token')
+  const fetchUserData = async () => {
+    await getUser(token, setUserData, toast);
+  };
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
   return (
     <Box minH="100vh">
       <SidebarContent
         onClose={() => onClose}
+        userData={userData}
         display={{ base: "none", md: "block" }}
       />
       <Drawer
@@ -46,34 +70,37 @@ export default function Profile() {
         size="full"
       >
         <DrawerContent>
-          <SidebarContent onClose={onClose} />
+          <SidebarContent onClose={onClose} userData={userData} />
         </DrawerContent>
       </Drawer>
       {/* mobilenav */}
       <MobileNav display={{ base: "flex", md: "none" }} onOpen={onOpen} />
       <Box ml={{ base: 0, md: 60 }} p="4">
         {/* Content */}
+        <UserProfile userData={userData} setUserData={setUserData} />
       </Box>
     </Box>
   )
 }
 
-const SidebarContent = ({ onClose, ...rest }) => {
+const SidebarContent = ({ userData, onClose, ...rest }) => {
+  console.log('user data di sidebar', userData)
   return (
     <Box
       borderRight="1px"
       borderRightColor={useColorModeValue("gray.200", "gray.700")}
       w={{ base: "full", md: 60 }}
       pos="fixed"
+      mt={{ base: 0, md: 16 }}
       h="full"
       {...rest}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="center">
-        <Avatar />
+        <Avatar src={`${process.env.REACT_APP_API_BASE_URL}/${userData?.avatar}`} />
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
       <Text align={"center"} fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-        user
+        {userData?.name}
       </Text>
       {LinkItems.map(link => (
         <NavItem key={link.name} icon={link.icon}>

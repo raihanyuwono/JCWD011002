@@ -55,7 +55,6 @@ const updateProfile = async (req, id, body) => {
     } catch (error) {
       return messages.error(400, error.message)
     }
-
     const updateData = await bodyData(body, password, req, userLogin)
     return await sequelize.transaction(async (t) => {
       await user.update(updateData, { where: { id }, transaction: t })
