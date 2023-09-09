@@ -20,6 +20,7 @@ async function authentication(req, res, next) {
     if (!account)
       return res.status(500).json({ message: "Token has been expired" });
 
+    req.token = token;
     req.account = account;
     next();
   } catch (error) {

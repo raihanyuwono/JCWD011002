@@ -6,8 +6,6 @@ require("dotenv").config({
   path: path.resolve(__dirname, "../../../.env"),
 });
 
-// db.sequelize.sync({ alter: true });
-
 const FE_URL = process.env.WHITELISTED_DOMAIN;
 const JWT_KEY = process.env.JWT_KEY;
 
@@ -23,12 +21,13 @@ async function sendMail(email, payload) {
   const token = jwt.sign(payload, JWT_KEY, { expiresIn: "4h" });
   const redirect = `${FE_URL}/registration/${token}`;
   // Send Mail
-  await mailer.send(email, subject, { redirect });
+  await mailer.send("registration", email, subject, { redirect });
 }
 
 async function createCart(user, t) {
   const role = await roles.findOne({ where: { id: user["id_role"] } });
-  if (role["name"] == "user") await carts.create({ id_user: user["id"] }, { transaction: t });
+  if (role["name"] == "user")
+    await carts.create({ id_user: user["id"] }, { transaction: t });
 }
 
 async function register(email, id_role = 1) {
