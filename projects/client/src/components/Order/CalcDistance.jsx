@@ -77,7 +77,7 @@ function CalcDistance() {
   }
 
   async function fetchData(latitude, longitude) {
-    const apiKey = "AIzaSyCMmNBOvjg1DljJCkujD9OrFWXN7655bJE";
+    const apiKey = "";
     const language = "id";
 
     const apiUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}&language=${language}`;
