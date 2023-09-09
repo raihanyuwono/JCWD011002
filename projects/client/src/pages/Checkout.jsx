@@ -21,8 +21,10 @@ import jwt_decode from "jwt-decode";
 import SelectAddress from "../components/Order/SelectAddress";
 import SelectShipping from "../components/Order/SelectShipping";
 import toRupiah from "@develoka/angka-rupiah-js";
+import { useNavigate } from "react-router-dom";
 
 const Checkout = () => {
+  const navigate = useNavigate();
   const toast = useToast();
   const token = localStorage.getItem("token");
   const userId = jwt_decode(token).id;
@@ -91,6 +93,7 @@ const Checkout = () => {
     localStorage.setItem("selectedCourier", null);
     setTotal(0);
     viewCart();
+    navigate("/");
   };
 
   const getPayment = async () => {

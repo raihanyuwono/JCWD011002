@@ -13,18 +13,14 @@ import {
 } from "@chakra-ui/react";
 import { AiOutlineCaretDown } from "react-icons/ai";
 import axios from "axios";
+import CalcDistance from "./CalcDistance";
 import toRupiah from "@develoka/angka-rupiah-js";
 const SelectShipping = () => {
-  const warehouseAddress = {
-    city_name: "Ngawi",
-    postal_code: "63219",
-    province_name: "Jawa Timur",
-  };
   const [courierData, setCourierData] = useState([]);
   const [selectedService, setSelectedService] = useState(null);
   const [warehouseCityId, setWarehouseCityId] = useState(null);
   const [destinationCityId, setDestinationCityId] = useState(null);
-  const warehouseCityName = warehouseAddress.city_name;
+  const warehouseCityName = localStorage.getItem("wh_city");
   const destinationCityName = localStorage.getItem("city_name");
   const [courier, setCourier] = useState(null);
   useEffect(() => {
@@ -101,7 +97,7 @@ const SelectShipping = () => {
 
   useEffect(() => {
     fetchData();
-  }, [warehouseAddress.city_name]);
+  }, [warehouseCityName]);
 
   useEffect(() => {
     if (warehouseCityId && destinationCityId) {
@@ -138,6 +134,7 @@ const SelectShipping = () => {
 
   return (
     <Flex direction={"column"}>
+      <CalcDistance />
       <Menu>
         <MenuButton w={"210px"} as={Button} rightIcon={<AiOutlineCaretDown />}>
           Shipping Methods
