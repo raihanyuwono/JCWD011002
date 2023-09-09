@@ -25,6 +25,7 @@ import ClearAlert from "../components/Order/ClearAlert";
 import jwt_decode from "jwt-decode";
 import toRupiah from "@develoka/angka-rupiah-js";
 const CartPage = () => {
+  const API_URL = process.env.REACT_APP_API_BASE_URL;
   const token = localStorage.getItem("token");
   const userId = jwt_decode(token).id;
   const toast = useToast();
@@ -32,9 +33,7 @@ const CartPage = () => {
   const [cartLength, setCartLength] = useState(0);
 
   const viewCart = async () => {
-    const response = await axios.get(
-      `http://localhost:8000/api/order/cart/${userId}`
-    );
+    const response = await axios.get(`${API_URL}/order/cart/${userId}`);
     setCart(response.data.data);
     setCartLength(response.data.data.length);
   };
@@ -45,13 +44,10 @@ const CartPage = () => {
 
   const handleDelete = async (productId) => {
     try {
-      const response = await axios.post(
-        "http://localhost:8000/api/order/remove",
-        {
-          userId: userId,
-          productId: productId,
-        }
-      );
+      const response = await axios.post(`${API_URL}/order/remove`, {
+        userId: userId,
+        productId: productId,
+      });
       if (response.status === 200) {
         viewCart();
       } else {
@@ -65,12 +61,12 @@ const CartPage = () => {
   const handleSetQuantity = async (productId, newQuantity) => {
     try {
       if (newQuantity === 0) {
-        await axios.post("http://localhost:8000/api/order/remove", {
+        await axios.post(`${API_URL}/order/remove`, {
           userId: userId,
           productId: productId,
         });
       } else {
-        await axios.patch("http://localhost:8000/api/order/set", {
+        await axios.patch(`${API_URL}/order/set`, {
           userId: userId,
           productId: productId,
           quantity: newQuantity,

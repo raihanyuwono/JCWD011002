@@ -24,6 +24,7 @@ import toRupiah from "@develoka/angka-rupiah-js";
 import { useNavigate } from "react-router-dom";
 
 const Checkout = () => {
+  const API_URL = process.env.REACT_APP_API_BASE_URL;
   const navigate = useNavigate();
   const toast = useToast();
   const token = localStorage.getItem("token");
@@ -59,44 +60,71 @@ const Checkout = () => {
   }, []);
 
   const viewCart = async () => {
-    const response = await axios.get(
-      `http://localhost:8000/api/order/cart/${userId}`
-    );
+    const response = await axios.get(`${API_URL}/order/cart/${userId}`);
     setCart(response.data.data);
   };
   const getTotal = async () => {
-    const response = await axios.get(
-      `http://localhost:8000/api/order/${userId}`
-    );
+    const response = await axios.get(`${API_URL}/order/${userId}`);
     setTotal(response.data.data.total);
   };
   const checkout = async () => {
-    const response = await axios.post("http://localhost:8000/api/transaction", {
-      userId: userId,
-      payment: selectedPayment ? selectedPayment.id : null,
-      shipping: service,
-      total: grand,
-      myLatitude,
-      myLongitude,
-    });
-    toast({
-      title: "Thanks for your purchase!",
-      status: "success",
-      duration: 3000,
-      isClosable: true,
-    });
-    setSelectedPayment(null);
-    localStorage.setItem("shipping", 0);
-    localStorage.setItem("service", "none");
-    localStorage.setItem("selectedCourier", null);
-    localStorage.removeItem("wh_city");
-    setTotal(0);
-    viewCart();
-    navigate("/");
+    try {
+      const response = await axios.post(`${API_URL}/transaction`, {
+        userId: userId,
+        payment: selectedPayment ? selectedPayment.id : null,
+        shipping: service,
+        total: grand,
+        myLatitude,
+        myLongitude,
+      });
+      toast({
+        title: "Thanks for your purchase!",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+      setSelectedPayment(null);
+      localStorage.setItem("shipping", 0);
+      localStorage.setItem("service", "none");
+      localStorage.setItem("selectedCourier", null);
+      localStorage.removeItem("wh_city");
+      setTotal(0);
+      viewCart();
+      navigate("/");
+    } catch (error) {
+      toast({
+        description: error.response.data.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
+  const handleCheckout = () => {
+    const selectedCourier = localStorage.getItem("selectedCourier");
+    if (selectedPayment === null) {
+      toast({
+        title: "Please select a payment method!",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    } else if (selectedCourier === "null") {
+      toast({
+        title: "Please select a shipping method!",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    } else {
+      checkout();
+    }
   };
 
   const getPayment = async () => {
-    const response = await axios.get("http://localhost:8000/api/transaction");
+    const response = await axios.get(`${API_URL}/transaction`);
     setPayment(response.data.data);
   };
 
@@ -235,7 +263,7 @@ const Checkout = () => {
             bgColor="textSecondary"
           >
             <Button
-              onClick={checkout}
+              onClick={handleCheckout}
               w={"100%"}
               borderRadius={"none"}
               variant={"success"}
