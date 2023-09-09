@@ -91,6 +91,7 @@ const Checkout = () => {
     localStorage.setItem("shipping", 0);
     localStorage.setItem("service", "none");
     localStorage.setItem("selectedCourier", null);
+    localStorage.removeItem("wh_city");
     setTotal(0);
     viewCart();
     navigate("/");
