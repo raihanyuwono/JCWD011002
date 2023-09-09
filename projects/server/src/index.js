@@ -5,6 +5,7 @@ const { join } = require("path");
 const { authRouter } = require("./routes");
 const { userOrderRouter } = require("./routes");
 const { rajaongkirRouter } = require("./routes");
+const { transactionRouter } = require("./routes");
 
 const PORT = process.env.PORT || 8000;
 const app = express();
@@ -28,6 +29,7 @@ app.use(express.json());
 app.use("/api/order", userOrderRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/rajaongkir", rajaongkirRouter);
+app.use("/api/transaction", transactionRouter);
 
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`);

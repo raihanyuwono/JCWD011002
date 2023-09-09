@@ -23,7 +23,7 @@ import OrderSummary from "../components/Order/OrderSummary";
 import { Link } from "react-router-dom";
 import ClearAlert from "../components/Order/ClearAlert";
 import jwt_decode from "jwt-decode";
-
+import toRupiah from "@develoka/angka-rupiah-js";
 const CartPage = () => {
   const token = localStorage.getItem("token");
   const userId = jwt_decode(token).id;
@@ -100,7 +100,7 @@ const CartPage = () => {
           <Text fontSize={"3xl"} mt={4} mb={4}>
             Cart
           </Text>
-          <Table variant="simple" color={"#34638a"} w={"50vw"} bgColor="white">
+          <Table variant="simple" color={"#34638a"} w={"65vw"} bgColor="white">
             <Thead>
               <Tr>
                 <Th></Th>
@@ -135,7 +135,9 @@ const CartPage = () => {
                         <Image src={item.image} />
                       </Td>
                       <Td>{item.name}</Td>
-                      <Td>Rp.{item.price}</Td>
+                      <Td>
+                        {toRupiah(item.price, { dot: ".", floatingPoint: 0 })}
+                      </Td>
                       <Td>
                         <Box>
                           <HStack textAlign={"center"} maxW="220px">
@@ -173,7 +175,12 @@ const CartPage = () => {
                           </HStack>
                         </Box>
                       </Td>
-                      <Td>Rp.{item.subtotal}</Td>
+                      <Td>
+                        {toRupiah(item.subtotal, {
+                          dot: ".",
+                          floatingPoint: 0,
+                        })}
+                      </Td>
                       <Td>
                         <IconButton
                           isRound={true}
@@ -194,15 +201,28 @@ const CartPage = () => {
         </TableContainer>
         <Box mt={"77px"}>
           <ClearAlert coba={viewCart} userId={userId} />
-          <Button
-            as={Link}
-            to={"/checkout"}
-            borderRadius={"none"}
-            colorScheme="green"
-            borderTopRightRadius={"10px"}
-          >
-            Checkout
-          </Button>
+          {cart.length === 0 ? (
+            <Button
+              as={Link}
+              display={"none"}
+              to={"/checkout"}
+              borderRadius={"none"}
+              colorScheme="green"
+              borderTopRightRadius={"10px"}
+            >
+              Checkout
+            </Button>
+          ) : (
+            <Button
+              as={Link}
+              to={"/checkout"}
+              borderRadius={"none"}
+              colorScheme="green"
+              borderTopRightRadius={"10px"}
+            >
+              Checkout
+            </Button>
+          )}
           <OrderSummary cartLength={cartLength} userId={userId} />
         </Box>
       </Flex>
