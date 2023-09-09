@@ -13,12 +13,11 @@ import {
   useToast,
 } from "@chakra-ui/react";
 const ClearAlert = ({ coba, userId }) => {
+  const API_URL = process.env.REACT_APP_API_BASE_URL;
   const toast = useToast();
   const clearCart = async () => {
     try {
-      const response = await axios.delete(
-        `http://localhost:8000/api/order/${userId}`
-      );
+      const response = await axios.delete(`${API_URL}/order/${userId}`);
       coba();
       toast({
         title: "Cart Cleared!",

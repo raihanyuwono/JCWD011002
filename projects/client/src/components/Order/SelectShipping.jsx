@@ -16,6 +16,7 @@ import axios from "axios";
 import CalcDistance from "./CalcDistance";
 import toRupiah from "@develoka/angka-rupiah-js";
 const SelectShipping = () => {
+  const API_URL = process.env.REACT_APP_API_BASE_URL;
   const [courierData, setCourierData] = useState([]);
   const [selectedService, setSelectedService] = useState(null);
   const [warehouseCityId, setWarehouseCityId] = useState(null);
@@ -45,15 +46,12 @@ const SelectShipping = () => {
   }, [selectedService]);
   const fetchShippingMethods = async (courier) => {
     try {
-      const response = await axios.post(
-        "http://localhost:8000/api/rajaongkir/cost",
-        {
-          origin: warehouseCityId,
-          destination: destinationCityId,
-          weight: 1000,
-          courier: courier,
-        }
-      );
+      const response = await axios.post(`${API_URL}/rajaongkir/cost`, {
+        origin: warehouseCityId,
+        destination: destinationCityId,
+        weight: 1000,
+        courier: courier,
+      });
       if (response.data.rajaongkir.results) {
         return response.data.rajaongkir.results[0].costs.map((cost) => ({
           ...cost,
@@ -68,9 +66,7 @@ const SelectShipping = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8000/api/rajaongkir/city"
-      );
+      const response = await axios.get(`${API_URL}/rajaongkir/city`);
 
       const cities = response.data.rajaongkir.results;
       const warehouseCity = cities.find(
