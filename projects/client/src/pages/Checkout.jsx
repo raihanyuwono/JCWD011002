@@ -47,8 +47,6 @@ const Checkout = () => {
     setSelectedPayment(selectedMethod);
   };
 
-  console.log(myLatitude);
-  console.log(myLongitude);
   const getShippingLS = () => {
     const updatedShipping = parseInt(localStorage.getItem("shipping")) || 0;
     setShipping(updatedShipping);
