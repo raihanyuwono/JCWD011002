@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const { getUser, updateProfile, changePassword } = require("../controllers/userProfileController");
-const { authentication, multer } = require("../middlewares");
+const { authentication, multer, validation } = require("../middlewares");
 
 router.get("/", authentication, getUser)
-router.patch("/", authentication, multer.multerUpload("avatar"), updateProfile)
+router.patch("/", authentication, multer.multerUpload("avatar"), validation.updateProfile, validation.result, updateProfile)
 router.patch("/", authentication, changePassword)
 module.exports = router;

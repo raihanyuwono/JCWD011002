@@ -34,6 +34,19 @@ const password = body("password")
     "Password length min 8, uppercase min 1, number min 1, symbol min 1"
   );
 
+const newPassword = body("new_password")
+  .bail()
+  .isStrongPassword({
+    minLength: 8,
+    minLowercase: 1,
+    minUppercase: 1,
+    minNumbers: 1,
+    minSymbols: 1,
+  })
+  .withMessage(
+    "Password length min 8, uppercase min 1, number min 1, symbol min 1"
+  );
+
 const phone = body("phone")
   .notEmpty()
   .withMessage("Phone is Empty")
@@ -43,7 +56,7 @@ const phone = body("phone")
 
 const register = [email];
 const registration = [name, username, phone, password];
-
+const updateProfile = [name, username, email, phone, newPassword];
 function result(req, res, next) {
   const { errors } = validationResult(req);
   if (errors.length > 0) {
@@ -59,4 +72,4 @@ function result(req, res, next) {
   next();
 }
 
-module.exports = { register, registration, result };
+module.exports = { register, registration, updateProfile, result };

@@ -27,13 +27,18 @@ const getUser = async (token, setUserData, toast) => {
   }
 }
 
-const updateUser = async (token, toast, userData) => {
+const updateUser = async (token, toast, userData, isEditingPassword) => {
   try {
     const response = await axios.patch(`${USER_URL}`, userData, setHeaders(token));
+    if (isEditingPassword) {
+      localStorage.removeItem('token');
+      window.location.href = '/'
+    }
     notification(toast, setToastParams(response));
   } catch (error) {
+    console.log(error.response.data.data);
     const { response } = error;
-    notification(toast, setToastParams(response.status ? response : error));
+    notification(toast, setToastParams(response.status ? response.data : error));
   }
 }
 
