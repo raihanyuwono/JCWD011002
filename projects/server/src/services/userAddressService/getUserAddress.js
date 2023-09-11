@@ -4,7 +4,18 @@ const { messages } = require("../../helpers");
 
 const getUserAddress = async (id) => {
   const result = await UserAddress.findAll({ where: { id_user: id } });
+  if (!result) {
+    return messages.error(404, 'Alamat pengguna tidak ditemukan');
+  }
   return messages.success('successfully get user address', result)
 }
 
-module.exports = getUserAddress
+const getUserAddressById = async (id, id_user) => {
+  const result = await UserAddress.findOne({ where: { id: id, id_user: id_user } });
+  if (!result) {
+    return messages.error(404, 'Alamat pengguna tidak ditemukan');
+  }
+  return messages.success('successfully get user address', result)
+}
+
+module.exports = { getUserAddress, getUserAddressById }
