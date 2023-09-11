@@ -8,6 +8,10 @@ router.get("/", userOrderController.getPayment);
 router.post("/", userOrderController.addTransaction);
 // get distance
 router.post("/distance", userOrderController.getDistance);
+// get transaction by user
+router.get("/:userId", userOrderController.getTransaction);
+// get detail transaction
+router.post("/detail", userOrderController.getDetailTransaction);
 
 //upload receipt
 router.post(

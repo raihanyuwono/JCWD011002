@@ -1,8 +1,5 @@
 // const db = require("../../database");
 // db.sequelize.sync({ alter: true });
-// const product = db["product"];
-// const product_warehouse = db["product_warehouse"];
-// const cart_product = db["cart_product"];
 const { product, cart_product, product_warehouse } = require("../../database");
 const { messages } = require("../../helpers");
 

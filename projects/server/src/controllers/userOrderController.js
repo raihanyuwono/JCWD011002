@@ -184,7 +184,45 @@ async function getDistance(req, res) {
     return res.status(500).json({ error: "Internal server error" });
   }
 }
+
+async function getTransaction(req, res) {
+  try {
+    const userId = req.params.userId;
+    const { searchProductName, sortBy, page, pageSize, filterStatus } =
+      req.query;
+
+    const result = await transactionService.getTransaction(
+      userId,
+      searchProductName,
+      sortBy,
+      page,
+      pageSize,
+      filterStatus
+    );
+
+    return res.status(200).json(messages.response(result));
+  } catch (error) {
+    console.error("Error getting transaction:", error);
+    return res.status(500).json(messages.error(500, error.message));
+  }
+}
+
+async function getDetailTransaction(req, res) {
+  try {
+    const { userId, transactionId } = req.body;
+    const result = await transactionService.getDetailTransaction(
+      userId,
+      transactionId
+    );
+    return res.status(200).json(messages.response(result));
+  } catch (error) {
+    console.error("Error getting detail transaction:", error);
+    return res.status(500).json(messages.error(500, error.message));
+  }
+}
+
 // +++++++++++++++++++++++++++++++++++++++++++++++ RECEIPT +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 async function UploadReceipt(req, res) {
   try {
     const transactionId = req.params.transactionId;
@@ -211,4 +249,6 @@ module.exports = {
   getPayment,
   getDistance,
   UploadReceipt,
+  getTransaction,
+  getDetailTransaction,
 };
