@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const user = require("../../database/models");
+const { user, sequelize } = require("../../database/models");
 const { messages } = require("../../helpers");
 
 async function hashPassword(password) {
@@ -8,16 +8,27 @@ async function hashPassword(password) {
   return await bcrypt.hash(password, salt);
 }
 
+const checkPassword = async (body, userLogin) => {
+  let password = userLogin.password;
+  if (body.current_password && body.new_password && body.confirm_password) {
+    if (body.new_password !== body.confirm_password) {
+      throw new Error('password not match');
+    }
+    const currentPassword = await bcrypt.compare(body.current_password, userLogin.password)
+    if (!currentPassword) {
+      throw new Error('Wrong password');
+    }
+    password = await hashPassword(body.new_password)
+  }
+  return password;
+}
 const changePassword = async (id, body) => {
   try {
     const userLogin = await user.findOne({
       where: { id }
     })
     if (!userLogin) return messages.error(404, 'User not found')
-    const currentPassword = await bcrypt.compare(body.current_password, userLogin.password)
-    if (!currentPassword) return messages.error(400, 'Wrong password')
-    if (body.new_password !== body.confirm_password) return messages.error(400, 'password not match')
-    const password = await hashPassword(body.new_password)
+    const password = await checkPassword(body, userLogin)
     return await sequelize.transaction(async (t) => {
       await user.update({ password: password }, { where: { id }, transaction: t })
       return messages.success('Password updated successfully')

@@ -18,13 +18,8 @@ function UserProfile({ userData, setUserData }) {
   });
   const [isEditingAvatar, setIsEditingAvatar] = useState(false);
   const [isEditingPassword, setIsEditingPassword] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   const toast = useToast();
   const token = localStorage.getItem('token');
-
-  const toggleShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
 
   const handleEditPasswordClick = () => {
     setIsEditingPassword(true);
@@ -42,7 +37,7 @@ function UserProfile({ userData, setUserData }) {
   };
 
   const handleSaveClick = async (fieldName) => {
-    await updateUser(token, toast, userData, isEditingPassword);
+    await updateUser(token, toast, userData);
     setIsEditing({ ...isEditing, [fieldName]: false });
     setIsEditingPassword(false);
   };
@@ -54,9 +49,8 @@ function UserProfile({ userData, setUserData }) {
     setIsEditingAvatar(false);
   }
   const handleSaveAvatarClick = async () => {
-    await updateAvatar(token, toast, file);
+    await updateAvatar(token, toast, file, userData);
     setIsEditingAvatar(false);
-    window.location.reload();
   }
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -89,15 +83,25 @@ function UserProfile({ userData, setUserData }) {
 
 
   return (
-    <Flex justifyContent={'center'} alignItems={'center'} minH="100vh">
-      <Card bg={"blueCold"} w={'70%'} p={10}>
-        <Flex align={'center'} justifyContent={'center'} direction={['column', 'row']}>
-          {/* Change Avatar */}
-          <ChangeAvatar userData={userData} isEditingAvatar={isEditingAvatar} handleCancelAvatarClick={handleCancelAvatarClick} handleSaveAvatarClick={handleSaveAvatarClick} handleFileChange={handleFileChange} handleEditAvatarClick={handleEditAvatarClick} />
-          {/* Render Data User */}
+    <Flex mt={16} justifyContent={"center"} alignItems={"center"} >
+      <Card w={['100%', '80%', '70%']} bg={"blueCold"}>
+        <Flex flexWrap={"wrap"} justifyContent="center" alignItems="center" minH="100vh">
+          <ChangeAvatar
+            userData={userData}
+            isEditingAvatar={isEditingAvatar}
+            handleCancelAvatarClick={handleCancelAvatarClick}
+            handleSaveAvatarClick={handleSaveAvatarClick}
+            handleFileChange={handleFileChange}
+            handleEditAvatarClick={handleEditAvatarClick}
+          />
           <RenderDataUser userData={userData} renderField={renderField} />
-          {/* Modal Change Password */}
-          <ModalChangePassword userData={userData} isOpen={isEditingPassword} onClose={handleCancelPasswordClick} handleSaveClick={handleSaveClick} toggleShowPassword={toggleShowPassword} showPassword={showPassword} handleInputChange={handleInputChange} />
+          <ModalChangePassword
+            userData={userData}
+            isOpen={isEditingPassword}
+            onClose={handleCancelPasswordClick}
+            handleSaveClick={handleSaveClick}
+            handleInputChange={handleInputChange}
+          />
         </Flex>
       </Card>
     </Flex>

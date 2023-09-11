@@ -56,7 +56,7 @@ const phone = body("phone")
 
 const register = [email];
 const registration = [name, username, phone, password];
-const updateProfile = [name, username, email, phone, newPassword];
+const updateProfile = [name, username, email, phone];
 function result(req, res, next) {
   const { errors } = validationResult(req);
   if (errors.length > 0) {

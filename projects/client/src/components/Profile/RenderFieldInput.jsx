@@ -5,6 +5,7 @@ import { FaRegEdit, FaRegSave } from 'react-icons/fa';
 import { MdOutlineCancelPresentation } from 'react-icons/md';
 
 function RenderFieldInput({ handleEditPasswordClick, fieldName, label, type, fieldValue, isEditing, onEditClick, onSaveClick, onCancelClick, onChange }) {
+
   return (
     <Flex align="center" justify="space-between">
       <FormControl m={4}>

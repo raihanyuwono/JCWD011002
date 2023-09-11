@@ -18,8 +18,6 @@ import {
   FiHome,
   FiTrendingUp,
   FiCompass,
-  FiStar,
-  FiSettings,
   FiMenu
 } from "react-icons/fi"
 import UserProfile from "../components/Profile/UpdateProfile"
@@ -84,16 +82,17 @@ export default function Profile() {
 }
 
 const SidebarContent = ({ userData, onClose, ...rest }) => {
-  console.log('user data di sidebar', userData)
   return (
     <Box
       borderRight="1px"
       borderRightColor={useColorModeValue("gray.200", "gray.700")}
+      bg={"bgSecondary"}
       w={{ base: "full", md: 60 }}
       pos="fixed"
       mt={{ base: 0, md: 16 }}
       h="full"
       {...rest}
+      color={'white'}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="center">
         <Avatar src={`${process.env.REACT_APP_API_BASE_URL}/${userData?.avatar}`} />
@@ -153,24 +152,24 @@ const MobileNav = ({ onOpen, ...rest }) => {
     <Flex
       ml={{ base: 0, md: 60 }}
       px={{ base: 4, md: 24 }}
+      mt={16}
       height="20"
       alignItems="center"
-      bg={useColorModeValue("white", "gray.900")}
       borderBottomWidth="1px"
       borderBottomColor={useColorModeValue("gray.200", "gray.700")}
       justifyContent="flex-start"
       {...rest}
     >
       <IconButton
+        position={"absolute"}
+        top={3}
+        left={4}
+        zIndex={999}
         variant="outline"
         onClick={onOpen}
         aria-label="open menu"
         icon={<FiMenu />}
       />
-
-      <Text fontSize="2xl" ml="8" fontFamily="monospace" fontWeight="bold">
-        Logo
-      </Text>
     </Flex>
   )
 }
