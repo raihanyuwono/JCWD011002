@@ -9,34 +9,49 @@ import {
   Box,
   Text,
   Button,
+  Flex,
 } from "@chakra-ui/react";
 import { AiOutlineCaretDown } from "react-icons/ai";
 import axios from "axios";
-
+import CalcDistance from "./CalcDistance";
+import toRupiah from "@develoka/angka-rupiah-js";
 const SelectShipping = () => {
+  const API_URL = process.env.REACT_APP_API_BASE_URL;
   const [courierData, setCourierData] = useState([]);
-  const warehouseAddress = {
-    city_name: "Ngawi",
-    postal_code: "63219",
-    province_name: "Jawa Timur",
-  };
   const [selectedService, setSelectedService] = useState(null);
   const [warehouseCityId, setWarehouseCityId] = useState(null);
   const [destinationCityId, setDestinationCityId] = useState(null);
-  const warehouseCityName = warehouseAddress.city_name;
+  const warehouseCityName = localStorage.getItem("wh_city");
   const destinationCityName = localStorage.getItem("city_name");
+  const [courier, setCourier] = useState(null);
+  useEffect(() => {
+    if (
+      selectedService &&
+      selectedService.cost &&
+      selectedService.cost.length > 0
+    ) {
+      localStorage.setItem("shipping", selectedService.cost[0].value);
+      localStorage.setItem("service", selectedService.code);
+      localStorage.setItem("selectedCourier", JSON.stringify(selectedService));
+    } else {
+      console.log("Shipping information is not available.");
+    }
+    const selectedCourierJSON = localStorage.getItem("selectedCourier");
 
+    if (selectedCourierJSON) {
+      const selectedCourier = JSON.parse(selectedCourierJSON);
+      console.log("Selected Courier:", selectedCourier);
+      setCourier(selectedCourier);
+    }
+  }, [selectedService]);
   const fetchShippingMethods = async (courier) => {
     try {
-      const response = await axios.post(
-        "http://localhost:8000/api/rajaongkir/cost",
-        {
-          origin: warehouseCityId,
-          destination: destinationCityId,
-          weight: 1000,
-          courier: courier,
-        }
-      );
+      const response = await axios.post(`${API_URL}/rajaongkir/cost`, {
+        origin: warehouseCityId,
+        destination: destinationCityId,
+        weight: 1000,
+        courier: courier,
+      });
       if (response.data.rajaongkir.results) {
         return response.data.rajaongkir.results[0].costs.map((cost) => ({
           ...cost,
@@ -51,9 +66,7 @@ const SelectShipping = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:8000/api/rajaongkir/city"
-      );
+      const response = await axios.get(`${API_URL}/rajaongkir/city`);
 
       const cities = response.data.rajaongkir.results;
       const warehouseCity = cities.find(
@@ -80,7 +93,7 @@ const SelectShipping = () => {
 
   useEffect(() => {
     fetchData();
-  }, [warehouseAddress.city_name]);
+  }, [warehouseCityName]);
 
   useEffect(() => {
     if (warehouseCityId && destinationCityId) {
@@ -107,27 +120,20 @@ const SelectShipping = () => {
       }
       groupedServices[courierCode].push(method);
     });
-
     return groupedServices;
   };
 
   const handleMenuItemSelect = (service) => {
     const selected = courierData.find((method) => method.service === service);
     setSelectedService(selected);
-    console.log(selected.cost);
   };
 
   return (
-    <>
-      <Box>
-        <Text>
-          Warehouse Address: {warehouseAddress.city_name},{" "}
-          {warehouseAddress.province_name}, {warehouseAddress.postal_code}
-        </Text>
-      </Box>
+    <Flex direction={"column"}>
+      <CalcDistance />
       <Menu>
-        <MenuButton w={"300px"} as={Button} rightIcon={<AiOutlineCaretDown />}>
-          Select Shipping Methods
+        <MenuButton w={"210px"} as={Button} rightIcon={<AiOutlineCaretDown />}>
+          Shipping Methods
         </MenuButton>
         <MenuList>
           {Object.entries(groupService()).map(
@@ -140,8 +146,8 @@ const SelectShipping = () => {
                       key={method.service}
                       onClick={() => handleMenuItemSelect(method.service)}
                     >
-                      {method.service} - {method.description}:{" "}
-                      {method.cost[0].value} {method.cost[0].etd}
+                      {method.service} - {method.description}{" "}
+                      {/* {method.cost[0].value} {method.cost[0].etd} */}
                     </MenuItem>
                   ))}
                 </MenuGroup>
@@ -151,20 +157,35 @@ const SelectShipping = () => {
           )}
         </MenuList>
       </Menu>
-      <Box>
+      <Box mt={2}>
         {selectedService ? (
           <>
-            <Text>Selected Service:</Text>
-            <Text>
-              {selectedService.service} - {selectedService.description}:{" "}
-              {selectedService.cost[0].value} {selectedService.cost[0].etd}
+            <Text fontWeight={"bold"}>
+              {selectedService.code.toUpperCase()}
             </Text>
+            <Text>
+              {selectedService.description}:{" "}
+              {toRupiah(selectedService.cost[0].value, {
+                dot: ".",
+                floatingPoint: 0,
+              })}
+            </Text>
+            <Text>{selectedService.cost[0].etd} Day Estimated Delivery</Text>
+          </>
+        ) : courier ? (
+          <>
+            <Text fontWeight={"bold"}>{courier.code.toUpperCase()}</Text>
+            <Text>
+              {courier.description}:{" "}
+              {toRupiah(courier.cost[0].value, { dot: ".", floatingPoint: 0 })}
+            </Text>{" "}
+            <Text>{courier.cost[0].etd} Day Estimated Delivery</Text>
           </>
         ) : (
-          <Text>No service selected</Text>
+          <Text></Text>
         )}
       </Box>
-    </>
+    </Flex>
   );
 };
 

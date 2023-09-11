@@ -17,6 +17,8 @@ module.exports = (sequelize, DataTypes) => {
       postal_code: DataTypes.INTEGER,
       full_address: DataTypes.STRING,
       is_default: DataTypes.BOOLEAN,
+      latitude: DataTypes.STRING,
+      longitude: DataTypes.STRING,
     },
     {
       sequelize,
