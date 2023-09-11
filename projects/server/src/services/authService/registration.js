@@ -19,7 +19,7 @@ async function registration(id, attributes) {
   attributes["is_verified"] = true;
 
   // Update user data
-  return db.sequelize.transaction(async function (t) {
+  return await db.sequelize.transaction(async function (t) {
     await users.update(attributes, { where: { id }, transaction: t });
     return messages.success("Registration is successful");
   });
