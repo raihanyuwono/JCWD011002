@@ -18,6 +18,7 @@ const getCity = async (req, res) => {
     );
     res.send(response.data);
   } catch (error) {
+    res.send(error);
     console.log(error);
   }
 };
@@ -30,6 +31,7 @@ const getProvince = async (req, res) => {
     );
     res.send(response.data);
   } catch (error) {
+    res.send(error);
     console.log(error);
   }
 };
@@ -49,6 +51,7 @@ const getCost = async (req, res) => {
     );
     res.send(response.data);
   } catch (error) {
+    res.send(error);
     console.log(error);
   }
 };

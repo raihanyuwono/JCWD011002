@@ -1,4 +1,4 @@
-const { userOrderService } = require("../services");
+const { userOrderService, transactionService } = require("../services");
 const { messages } = require("../helpers");
 
 const addToCart = async (req, res) => {
@@ -22,7 +22,7 @@ const addToCart = async (req, res) => {
     }
   } catch (error) {
     console.error("Error adding to cart:", error);
-    return res.status(500).json(messages.error(500, "Internal server error"));
+    return res.status(500).json(messages.error(500, error.message));
   }
 };
 
@@ -41,7 +41,7 @@ async function removeFromCart(req, res) {
     }
   } catch (error) {
     console.error("Error removing from cart:", error);
-    return res.status(500).json(messages.error(500, "Internal server error"));
+    return res.status(500).json(messages.error(500, error.message));
   }
 }
 
@@ -65,7 +65,7 @@ const editCartItem = async (req, res) => {
     }
   } catch (error) {
     console.error("Error editing cart item:", error);
-    return res.status(500).json(messages.error(500, "Internal server error"));
+    return res.status(500).json(messages.error(500, error.message));
   }
 };
 
@@ -84,7 +84,7 @@ async function clearCart(req, res) {
     }
   } catch (error) {
     console.error("Error resetting cart:", error);
-    return res.status(500).json(messages.error(500, "Internal server error"));
+    return res.status(500).json(messages.error(500, error.message));
   }
 }
 
@@ -101,7 +101,7 @@ async function getCartTotal(req, res) {
     }
   } catch (error) {
     console.error("Error getting cart total:", error);
-    return res.status(500).json(messages.error(500, "Internal server error"));
+    return res.status(500).json(messages.error(500, error.message));
   }
 }
 
@@ -114,7 +114,7 @@ async function viewCart(req, res) {
       .json(messages.response({ data: result.data }));
   } catch (error) {
     console.error("Error viewing cart:", error);
-    return res.status(500).json(messages.error(500, "Internal server error"));
+    return res.status(500).json(messages.error(500, error.message));
   }
 }
 
@@ -133,7 +133,54 @@ async function setQty(req, res) {
     }
   } catch (error) {
     console.error("Error setting quantity:", error);
-    return res.status(500).json(messages.error(500, "Internal server error"));
+    return res.status(500).json(messages.error(500, error.message));
+  }
+}
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++ TRANSACTION ZONE +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+async function addTransaction(req, res) {
+  try {
+    const { userId, payment, shipping, total, myLatitude, myLongitude } =
+      req.body;
+    const result = await transactionService.addTransaction(
+      userId,
+      payment,
+      shipping,
+      total,
+      myLatitude,
+      myLongitude
+    );
+    return res.status(result.status).json(messages.response(result));
+  } catch (error) {
+    console.error("Error adding transaction:", error);
+    return res.status(500).json(messages.error(500, error.message));
+  }
+}
+
+async function getPayment(req, res) {
+  try {
+    const result = await transactionService.getPayment();
+    return res.status(200).json(messages.response(result));
+  } catch (error) {
+    console.error("Error getting payment:", error);
+    return res.status(500).json(messages.error(500, error.message));
+  }
+}
+
+async function getDistance(req, res) {
+  try {
+    const { myLatitude, myLongitude } = req.body;
+    const result = await transactionService.getDistance(
+      myLatitude,
+      myLongitude
+    );
+    if (!result) {
+      return res.status(404).json({ error: "No warehouses found" });
+    }
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error("Error calculating nearest warehouse:", error);
+    return res.status(500).json({ error: "Internal server error" });
   }
 }
 
@@ -145,4 +192,7 @@ module.exports = {
   getCartTotal,
   viewCart,
   setQty,
+  addTransaction,
+  getPayment,
+  getDistance,
 };
