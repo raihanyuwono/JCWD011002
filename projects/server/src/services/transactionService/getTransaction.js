@@ -14,7 +14,6 @@ const getTransaction = async (
   pageSize,
   filterStatus
 ) => {
-  console.log("userId", userId);
   try {
     const pageNumber = parseInt(page, 10) || 1;
     const limit = parseInt(pageSize, 10) || 10;
