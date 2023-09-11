@@ -18,7 +18,7 @@ function getStatus(status) {
   }
 }
 
-function Notification(toast, { title, description, status }) {
+function Notification(toast, { title, status }) {
   return toast({
     title,
     status: getStatus(status),
