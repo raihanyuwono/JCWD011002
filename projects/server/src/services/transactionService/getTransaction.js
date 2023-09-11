@@ -34,7 +34,7 @@ const getTransaction = async (
           include: [
             {
               model: product,
-              attributes: ["name", "image"], 
+              attributes: ["name", "image"],
               where: searchProductName
                 ? { name: { [Op.like]: `%${searchProductName}%` } }
                 : {},
@@ -57,9 +57,10 @@ const getTransaction = async (
       const productName = firstProduct ? firstProduct.product.name : "N/A";
       const productImage = firstProduct ? firstProduct.product.image : "N/A";
       const numProducts = txn.transaction_products.length;
+      const options = { year: "numeric", month: "long", day: "numeric" };
       return {
         transactionId: id,
-        txn_date: created_at.toLocaleDateString("ID"),
+        txn_date: created_at.toLocaleString("id-ID", options),
         total,
         status: status.name,
         product_name: productName,
