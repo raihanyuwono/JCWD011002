@@ -1,6 +1,7 @@
 const { userOrderService, transactionService } = require("../services");
 const { messages } = require("../helpers");
 
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ CART ZONE +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 const addToCart = async (req, res) => {
   try {
     const { productId, quantity, userId } = req.body;
@@ -136,7 +137,7 @@ async function setQty(req, res) {
     return res.status(500).json(messages.error(500, error.message));
   }
 }
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++ TRANSACTION ZONE +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++ CHECKOUT/TRANSACTION ZONE +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 async function addTransaction(req, res) {
   try {
@@ -183,6 +184,20 @@ async function getDistance(req, res) {
     return res.status(500).json({ error: "Internal server error" });
   }
 }
+// +++++++++++++++++++++++++++++++++++++++++++++++ RECEIPT +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+async function UploadReceipt(req, res) {
+  try {
+    const transactionId = req.params.transactionId;
+    const { file } = req;
+    const UploadedReceipt = await transactionService.UploadReceipt(
+      transactionId,
+      file
+    );
+    return res.status(200).json(UploadedReceipt);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+}
 
 module.exports = {
   addToCart,
@@ -195,4 +210,5 @@ module.exports = {
   addTransaction,
   getPayment,
   getDistance,
+  UploadReceipt,
 };

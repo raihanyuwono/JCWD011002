@@ -8,6 +8,7 @@ import Footer from "./components/Footer/Footer";
 import ResetPassword from "./pages/ResetPassword";
 import CartPage from "./pages/CartPage";
 import Checkout from "./pages/Checkout";
+import TransactionList from "./components/Transaction/TransactionList";
 
 const mainContainerAttr = {
   w: "100vw",
@@ -27,6 +28,7 @@ function App() {
         <Route path="/reset/:token" element={<ResetPassword />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/transaction" element={<TransactionList />} />
       </Routes>
       <Footer />
     </Flex>
