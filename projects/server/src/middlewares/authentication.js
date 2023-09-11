@@ -9,6 +9,7 @@ const JWT_KEY = process.env.JWT_KEY;
 async function authentication(req, res, next) {
   try {
     let token = req.headers.authorization;
+    console.log('initoken auth', token)
     if (!token || token == "null")
       return res.status(400).json({ message: "Access Denied" });
 
