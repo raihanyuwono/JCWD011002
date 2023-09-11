@@ -11,9 +11,7 @@ const deleteUserAddress = async (addressId) => {
     if (!existingAddress) {
       return messages.error(404, 'Alamat pengguna tidak ditemukan');
     }
-
     await existingAddress.destroy();
-
     return messages.success('Alamat pengguna berhasil dihapus', {});
   } catch (error) {
     return messages.error(500, error.message);
