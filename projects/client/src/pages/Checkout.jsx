@@ -40,7 +40,7 @@ const Checkout = () => {
   const grand = total + parseInt(shipping);
   const [payment, setPayment] = useState([]);
   const [selectedPayment, setSelectedPayment] = useState(null);
-
+  const [isLoading, setIsLoading] = useState(false);
   const handlePaymentMethodChange = (event) => {
     const selectedMethodId = event.target.value;
     const selectedMethod = payment.find(
@@ -73,6 +73,7 @@ const Checkout = () => {
   const { province, city_name, full_address, postal_code } = address;
   const formattedAddress = `${city_name}, ${province}, ${full_address}, ${postal_code}`;
   const checkout = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.post(`${API_URL}/transaction`, {
         userId: userId,
@@ -98,6 +99,7 @@ const Checkout = () => {
       setTotal(0);
       viewCart();
       navigate("/");
+      setIsLoading(false);
     } catch (error) {
       toast({
         description: error.response.data.message,
@@ -147,11 +149,11 @@ const Checkout = () => {
         <Text fontSize={"3xl"} mt={8} mb={4}>
           Checkout
         </Text>
-        <Box mb={2} w={"80vw"} px={6} py={6} bgColor={"secondary"}>
+        <Box mb={2} w={"100vw"} px={6} py={6} bgColor={"secondary"}>
           <SelectAddress />
         </Box>
         <TableContainer>
-          <Table variant="simple" color={"#34638a"} w={"80vw"} bgColor="white">
+          <Table variant="simple" color={"#34638a"} bg={"white"} w={"100vw"}>
             <Thead>
               <Tr>
                 <Th></Th>
@@ -200,7 +202,7 @@ const Checkout = () => {
             color={"#34638a"}
             mt={1}
             // h={"15vh"}
-            w={"50vw"}
+            w={"70vw"}
             bgColor="white"
           >
             <Flex justifyContent={"space-between"}>
@@ -262,19 +264,21 @@ const Checkout = () => {
           </Box>
         </Flex>
         <Flex>
-          <Box mt={1} w={"50vw"}></Box>
+          <Box mt={1} w={"70vw"}></Box>
           <Box
             color={"#34638a"}
             mt={1}
-            mb={7}
+            mb={8}
             w={"30vw"}
             bgColor="textSecondary"
           >
             <Button
               onClick={handleCheckout}
               w={"100%"}
+              h={"50px"}
               borderRadius={"none"}
               variant={"success"}
+              isLoading={isLoading}
             >
               Checkout
             </Button>

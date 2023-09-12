@@ -21,7 +21,7 @@ const OrderSummary = ({ userId, cartLength }) => {
   return (
     <>
       <Flex
-        borderRightRadius={"10px"}
+        // borderRightRadius={"10px"}
         display={"flex"}
         direction={"column"}
         alignSelf={"flex-end"}
@@ -29,7 +29,7 @@ const OrderSummary = ({ userId, cartLength }) => {
         color={"#34638a"}
         px={6}
         py={6}
-        w={"20vw"}
+        w={"30vw"}
       >
         <Text fontWeight={"bold"} fontSize={"2xl"}>
           ORDER SUMMARY
