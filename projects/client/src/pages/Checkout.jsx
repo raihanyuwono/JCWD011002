@@ -40,6 +40,7 @@ const Checkout = () => {
   const grand = total + parseInt(shipping);
   const [payment, setPayment] = useState([]);
   const [selectedPayment, setSelectedPayment] = useState(null);
+
   const handlePaymentMethodChange = (event) => {
     const selectedMethodId = event.target.value;
     const selectedMethod = payment.find(
@@ -67,6 +68,10 @@ const Checkout = () => {
     const response = await axios.get(`${API_URL}/order/${userId}`);
     setTotal(response.data.data.total);
   };
+
+  const address = JSON.parse(localStorage.getItem("selectedAddress"));
+  const { province, city_name, full_address, postal_code } = address;
+  const formattedAddress = `${city_name}, ${province}, ${full_address}, ${postal_code}`;
   const checkout = async () => {
     try {
       const response = await axios.post(`${API_URL}/transaction`, {
@@ -76,6 +81,8 @@ const Checkout = () => {
         total: grand,
         myLatitude,
         myLongitude,
+        shipping_cost: shipping,
+        shipping_address: formattedAddress,
       });
       toast({
         title: "Thanks for your purchase!",
@@ -133,6 +140,7 @@ const Checkout = () => {
     getTotal();
     getPayment();
   }, []);
+
   return (
     <>
       <Flex direction={"column"} alignItems={"center"}>

@@ -8,7 +8,7 @@ import Footer from "./components/Footer/Footer";
 import ResetPassword from "./pages/ResetPassword";
 import CartPage from "./pages/CartPage";
 import Checkout from "./pages/Checkout";
-import TransactionList from "./components/Transaction/TransactionList";
+import TransactionList from "./pages/TransactionList";
 
 const mainContainerAttr = {
   w: "100vw",

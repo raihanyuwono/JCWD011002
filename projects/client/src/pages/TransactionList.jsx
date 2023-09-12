@@ -7,12 +7,12 @@ const TransactionList = () => {
       <Tabs isFitted variant="enclosed">
         <TabList mb="1em">
           <Tab>All</Tab>
-          <Tab>Menunggu Pembayaran</Tab>
-          <Tab>Menunggu Konfirmasi Pembayaran</Tab>
-          <Tab>Diproses</Tab>
-          <Tab>Dikirim</Tab>
-          <Tab>Pesanan Dikonfirmasi</Tab>
-          <Tab>Dibatalkan</Tab>
+          <Tab>To Pay</Tab>
+          <Tab>Waiting Confirmation</Tab>
+          <Tab>Processed</Tab>
+          <Tab>Shipped</Tab>
+          <Tab>Completed</Tab>
+          <Tab>Cancelled</Tab>
         </TabList>
         <TabPanels>
           <TabPanel>
