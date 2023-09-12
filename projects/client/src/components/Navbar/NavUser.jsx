@@ -61,7 +61,7 @@ export default function Simple() {
 
   return (
     <>
-      <Box bg={'bgSecondary'} boxShadow={"lg"} px={4} pos={"fixed"} top={0} w={"full"} zIndex={100}>
+      <Box bg={'primary'} boxShadow={"lg"} px={4} pos={"fixed"} top={0} w={"full"} zIndex={100}>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <IconButton
             size={"md"}
@@ -72,7 +72,7 @@ export default function Simple() {
           />
           <HStack spacing={8} alignItems={"center"}>
             <Box>Logo</Box>
-            <HStack
+            {/* <HStack
               as={"nav"}
               spacing={4}
               display={{ base: "none", md: "flex" }}
@@ -80,7 +80,7 @@ export default function Simple() {
               {Links.map((link) => (
                 <NavLink key={link}>{link}</NavLink>
               ))}
-            </HStack>
+            </HStack> */}
           </HStack>
           <InputGroup maxW={"300px"} display={{ base: "none", md: "block" }}>
             <InputLeftElement
