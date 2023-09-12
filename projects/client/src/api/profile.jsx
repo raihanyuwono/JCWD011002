@@ -32,10 +32,8 @@ const updateUser = async (token, toast, userData) => {
     const response = await axios.patch(`${USER_URL}`, userData, setHeaders(token));
     notification(toast, setToastParams(response));
   } catch (error) {
-    console.log(error.response.data.data);
     const { response } = error;
-    console.log(response.data.data);
-    notification(toast, setToastParams(response.status ? response : error));
+    notification(toast, { title: response.data?.data[0], status: response.status });
   }
 }
 

@@ -5,6 +5,7 @@ const { join } = require("path");
 const { authRouter, userOrderRouter, rajaongkirRouter, userProfileRouter } = require("./routes");
 const path = require("path");
 const { transactionRouter } = require("./routes");
+const { addressRouter } = require("./routes");
 
 const PORT = process.env.PORT || 8000;
 const app = express();
@@ -31,6 +32,7 @@ app.use("/api/rajaongkir", rajaongkirRouter);
 app.use("/api/user", userProfileRouter);
 app.use("/api/public", express.static(path.resolve(__dirname, "../public")));
 app.use("/api/transaction", transactionRouter);
+app.use("/api/address", addressRouter);
 
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`);

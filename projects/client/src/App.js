@@ -8,31 +8,62 @@ import Footer from "./components/Footer/Footer";
 import ResetPassword from "./pages/ResetPassword";
 import CartPage from "./pages/CartPage";
 import Checkout from "./pages/Checkout";
-import TransactionList from "./pages/TransactionList";
+import AdminDashboard from "./pages/AdminDashboard";
+import { getRole } from "./helpers/Roles";
+import { useEffect, useState } from "react";
+
+const ADMIN_PATH = ["/", "/profile"];
 
 const mainContainerAttr = {
   w: "100vw",
-  h: "100vh",
+  pt: "64px",
   color: "textPrimary",
   direction: "column",
 };
 
+const contentContainerAttr = {
+  w: "100vw",
+  minH: "calc(100vh - 64px - 187px)",
+};
+
+function setPage() {
+  if (getRole() === "admin") return <AdminDashboard />;
+  return <HomePage />;
+}
+
+function adminPath() {
+  const role = getRole();
+  const currentPath = document.location.pathname;
+  if (role === "admin" && !ADMIN_PATH.includes(currentPath))
+    document.location.href = "/";
+}
+
 function App() {
-  return (
-    <Flex {...mainContainerAttr}>
-      <NavUser />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/registration/:token" element={<Registration />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/reset/:token" element={<ResetPassword />} />
-        <Route path="/cart" element={<CartPage />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/transaction" element={<TransactionList />} />
-      </Routes>
-      <Footer />
-    </Flex>
-  );
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    adminPath();
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 10);
+  }, []);
+
+  if (!isLoading)
+    return (
+      <Flex {...mainContainerAttr}>
+        <NavUser />
+        <Flex {...contentContainerAttr}>
+          <Routes>
+            <Route path="/" element={setPage()} />
+            <Route path="/registration/:token" element={<Registration />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/reset/:token" element={<ResetPassword />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/checkout" element={<Checkout />} />
+          </Routes>
+        </Flex>
+        <Footer />
+      </Flex>
+    );
 }
 
 export default App;
