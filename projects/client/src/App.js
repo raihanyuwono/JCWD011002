@@ -7,8 +7,9 @@ import Footer from "./components/Footer/Footer";
 import ResetPassword from "./pages/ResetPassword";
 import CartPage from "./pages/CartPage";
 import Checkout from "./pages/Checkout";
-import jwt_decode from "jwt-decode";
 import AdminDashboard from "./pages/AdminDashboard";
+import { getRole } from "./helpers/Roles";
+import { useEffect, useState } from "react";
 
 const mainContainerAttr = {
   w: "100vw",
@@ -17,32 +18,41 @@ const mainContainerAttr = {
   direction: "column",
 };
 
-function getRole() {
-  const token = localStorage.getItem("token");
-  if (!token) return;
-  return jwt_decode(token)["role"];
-}
-
 function setPage() {
   if (getRole() === "admin") return <AdminDashboard />;
   return <HomePage />;
 }
 
+function adminPath() {
+  const role = getRole();
+  const currentPath = document.location.pathname;
+  console.log(currentPath);
+  if (role === "admin" && currentPath !== "/") document.location.href = "/";
+}
+
 function App() {
-  return (
-    <Flex {...mainContainerAttr}>
-      <NavUser />
-      <Routes>
-        <Route path="/" element={setPage()} />
-        <Route path="/registration/:token" element={<Registration />} />
-        <Route path="/reset/:token" element={<ResetPassword />} />
-        <Route path="/cart" element={<CartPage />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/dashboard" element={<AdminDashboard />} />
-      </Routes>
-      <Footer />
-    </Flex>
-  );
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    adminPath();
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 10);
+  }, []);
+
+  if (!isLoading)
+    return (
+      <Flex {...mainContainerAttr}>
+        <NavUser />
+        <Routes>
+          <Route path="/" element={setPage()} />
+          <Route path="/registration/:token" element={<Registration />} />
+          <Route path="/reset/:token" element={<ResetPassword />} />
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/checkout" element={<Checkout />} />
+        </Routes>
+        <Footer />
+      </Flex>
+    );
 }
 
 export default App;
