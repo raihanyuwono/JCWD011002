@@ -2,7 +2,6 @@ import { Badge, Box, Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import UploadReceipt from "./UploadReceipt";
-import { PiUploadBold } from "react-icons/pi";
 
 export default function ButtonUpload({ transactionId }) {
   const [uploadedImage, setUploadedImage] = useState("");

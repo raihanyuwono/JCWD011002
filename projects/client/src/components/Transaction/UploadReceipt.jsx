@@ -80,6 +80,15 @@ const UploadReceipt = ({ isOpen, onClose, onSave, txnid }) => {
     fetchPayment();
   }, []);
 
+  const initoast = () => {
+    toast({
+      title: "Copied!",
+      status: "success",
+      duration: 1000,
+      isClosable: true,
+    });
+  };
+
   return (
     <Modal
       isCentered
@@ -106,10 +115,12 @@ const UploadReceipt = ({ isOpen, onClose, onSave, txnid }) => {
                   &nbsp;&nbsp;&nbsp;{identifier}&nbsp;
                 </Text>
                 <LuCopy
-                  toast={toast}
                   size={18}
                   cursor={"pointer"}
-                  onClick={() => navigator.clipboard.writeText(identifier)}
+                  onClick={() => {
+                    navigator.clipboard.writeText(identifier);
+                    initoast();
+                  }}
                 />
               </Flex>
               4. Input amount of the transfer <br /> 5. Make sure the
