@@ -1,6 +1,7 @@
 const { userOrderService, transactionService } = require("../services");
 const { messages } = require("../helpers");
 
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ CART ZONE +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 const addToCart = async (req, res) => {
   try {
     const { productId, quantity, userId } = req.body;
@@ -136,19 +137,29 @@ async function setQty(req, res) {
     return res.status(500).json(messages.error(500, error.message));
   }
 }
-// +++++++++++++++++++++++++++++++++++++++++++++++++++++ TRANSACTION ZONE +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++ CHECKOUT/TRANSACTION ZONE +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 async function addTransaction(req, res) {
   try {
-    const { userId, payment, shipping, total, myLatitude, myLongitude } =
-      req.body;
+    const {
+      userId,
+      payment,
+      shipping,
+      total,
+      myLatitude,
+      myLongitude,
+      shipping_cost,
+      shipping_address,
+    } = req.body;
     const result = await transactionService.addTransaction(
       userId,
       payment,
       shipping,
       total,
       myLatitude,
-      myLongitude
+      myLongitude,
+      shipping_cost,
+      shipping_address
     );
     return res.status(result.status).json(messages.response(result));
   } catch (error) {
@@ -184,6 +195,58 @@ async function getDistance(req, res) {
   }
 }
 
+async function getTransaction(req, res) {
+  try {
+    const userId = req.params.userId;
+    const { searchProductName, sortBy, page, pageSize, filterStatus } =
+      req.query;
+
+    const result = await transactionService.getTransaction(
+      userId,
+      searchProductName,
+      sortBy,
+      page,
+      pageSize,
+      filterStatus
+    );
+
+    return res.status(200).json(messages.response(result));
+  } catch (error) {
+    console.error("Error getting transaction:", error);
+    return res.status(500).json(messages.error(500, error.message));
+  }
+}
+
+async function getDetailTransaction(req, res) {
+  try {
+    const { userId, transactionId } = req.body;
+    const result = await transactionService.getDetailTransaction(
+      userId,
+      transactionId
+    );
+    return res.status(200).json(messages.response(result));
+  } catch (error) {
+    console.error("Error getting detail transaction:", error);
+    return res.status(500).json(messages.error(500, error.message));
+  }
+}
+
+// +++++++++++++++++++++++++++++++++++++++++++++++ RECEIPT +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+async function UploadReceipt(req, res) {
+  try {
+    const transactionId = req.params.transactionId;
+    const { file } = req;
+    const UploadedReceipt = await transactionService.UploadReceipt(
+      transactionId,
+      file
+    );
+    return res.status(200).json(UploadedReceipt);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+}
+
 module.exports = {
   addToCart,
   removeFromCart,
@@ -195,4 +258,7 @@ module.exports = {
   addTransaction,
   getPayment,
   getDistance,
+  UploadReceipt,
+  getTransaction,
+  getDetailTransaction,
 };

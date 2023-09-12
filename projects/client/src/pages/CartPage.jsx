@@ -87,16 +87,16 @@ const CartPage = () => {
 
   return (
     <>
-      <Flex justify={"center"}>
+      <Flex>
         <TableContainer
           borderBottomRadius={"10px"}
           borderTopLeftRadius={"10px"}
           borderLeftRadius={"10px"}
         >
-          <Text fontSize={"3xl"} mt={4} mb={4}>
-            Cart
+          <Text textAlign={"center"} fontSize={"3xl"} mt={4} mb={4}>
+            SHOPPING CART
           </Text>
-          <Table variant="simple" color={"#34638a"} w={"65vw"} bgColor="white">
+          <Table variant="simple" color={"#34638a"} w={"70vw"} bgColor="white">
             <Thead>
               <Tr>
                 <Th></Th>
@@ -104,7 +104,9 @@ const CartPage = () => {
                 <Th textAlign={"center"}>Price</Th>
                 <Th textAlign={"center"}>Quantity</Th>
                 <Th textAlign={"center"}>Subtotal</Th>
-                <Th textAlign={"center"}></Th>
+                <Th p={0}>
+                  <ClearAlert coba={viewCart} userId={userId} />
+                </Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -127,15 +129,15 @@ const CartPage = () => {
                 cart.map((item) =>
                   item.quantity > 0 ? (
                     <Tr key={item.productId}>
-                      <Td>
+                      <Td textAlign={"center"}>
                         <Image src={item.image} />
                       </Td>
                       <Td>{item.name}</Td>
-                      <Td>
+                      <Td textAlign={"center"}>
                         {toRupiah(item.price, { dot: ".", floatingPoint: 0 })}
                       </Td>
-                      <Td>
-                        <Box>
+                      <Td textAlign={"center"}>
+                        <Box justifyContent={"center"} display={"flex"}>
                           <HStack textAlign={"center"} maxW="220px">
                             <Button
                               border={"1px solid #2D2D2D"}
@@ -171,13 +173,13 @@ const CartPage = () => {
                           </HStack>
                         </Box>
                       </Td>
-                      <Td>
+                      <Td textAlign={"center"}>
                         {toRupiah(item.subtotal, {
                           dot: ".",
                           floatingPoint: 0,
                         })}
                       </Td>
-                      <Td>
+                      <Td textAlign={"center"}>
                         <IconButton
                           isRound={true}
                           variant="solid"
@@ -196,7 +198,7 @@ const CartPage = () => {
           </Table>
         </TableContainer>
         <Box mt={"77px"}>
-          <ClearAlert coba={viewCart} userId={userId} />
+          {/* <ClearAlert coba={viewCart} userId={userId} /> */}
           {cart.length === 0 ? (
             <Button
               as={Link}

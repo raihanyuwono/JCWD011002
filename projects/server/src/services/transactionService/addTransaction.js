@@ -13,7 +13,9 @@ const addTransaction = async (
   shipping,
   total,
   myLatitude,
-  myLongitude
+  myLongitude,
+  shipping_cost,
+  shipping_address
 ) => {
   // const myLatitude = -7.417166656128915;
   // const myLongitude = 112.75669259021905;
@@ -37,6 +39,8 @@ const addTransaction = async (
       id_status: 1,
       is_confirm: false,
       shipping_method: shipping,
+      shipping_cost,
+      shipping_address,
     });
 
     const transactionProducts = cartProduct.map((item) => ({
