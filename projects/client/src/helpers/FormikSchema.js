@@ -31,9 +31,13 @@ const registrationSchema = Yup.object().shape({
   confirmPassword,
 });
 
+const changePasswordSchema = Yup.object().shape({
+  password,
+  confirmPassword
+})
 const resetPasswordSchema = Yup.object().shape({
   password,
   confirmPassword,
 });
 
-export { registerSchema, registrationSchema, resetPasswordSchema };
+export { registerSchema, registrationSchema, resetPasswordSchema, changePasswordSchema };

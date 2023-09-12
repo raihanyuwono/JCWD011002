@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Flex,
@@ -61,14 +61,14 @@ export default function Simple() {
 
   return (
     <>
-      <Box boxShadow={"lg"} px={4}>
+      <Box bg={'bgSecondary'} boxShadow={"lg"} px={4} pos={"fixed"} top={0} w={"full"} zIndex={100}>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <IconButton
             size={"md"}
-            icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
             aria-label={"Open Menu"}
             display={{ md: "none" }}
             onClick={isOpen ? onClose : onOpen}
+            className="navbar"
           />
           <HStack spacing={8} alignItems={"center"}>
             <Box>Logo</Box>
@@ -124,15 +124,6 @@ export default function Simple() {
           </Flex>
         </Flex>
 
-        {isOpen ? (
-          <Box pb={4} display={{ md: "none" }}>
-            <Stack as={"nav"} spacing={4}>
-              {Links.map((link) => (
-                <NavLink key={link}>{link}</NavLink>
-              ))}
-            </Stack>
-          </Box>
-        ) : null}
         {isCartOpen && (
           <Box
             position="absolute"
