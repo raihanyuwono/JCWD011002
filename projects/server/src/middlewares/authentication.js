@@ -24,6 +24,7 @@ async function authentication(req, res, next) {
     req.account = account;
     next();
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Please Try Again" });
   }
 }
