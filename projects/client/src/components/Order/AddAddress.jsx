@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import {
   Modal,
   ModalOverlay,
@@ -11,11 +12,37 @@ import {
   FormLabel,
   Input,
   Button,
+  useToast,
+  Select,
 } from "@chakra-ui/react";
 import jwt_decode from "jwt-decode";
+import { getCityByProvince, getProvince } from "../../api/address";
 const AddAddress = ({ isOpen, onClose, onAddAddress }) => {
+  const [city, setCity] = useState([]);
+  const [province, setProvince] = useState([]);
+  const [selectedProvinceId, setSelectedProvinceId] = useState("");
+  console.log('selected province', selectedProvinceId)
   const token = localStorage.getItem("token");
   const userId = jwt_decode(token).id;
+  const toast = useToast();
+  const fetchProvince = async () => {
+    await getProvince(setProvince, toast)
+  }
+
+  const fetchCity = async () => {
+    if (selectedProvinceId) {
+      await getCityByProvince(selectedProvinceId, setCity, toast)
+    }
+  }
+  useEffect(() => {
+    fetchProvince();
+    fetchCity();
+  }, [selectedProvinceId])
+
+  const handleSelectProvince = (e) => {
+    setSelectedProvinceId(e.target.value);
+    setCity([]);
+  }
 
   const initialFormData = {
     id_user: userId,
@@ -49,12 +76,11 @@ const AddAddress = ({ isOpen, onClose, onAddAddress }) => {
       <ModalContent color={"white"} bgColor={"#233947"}>
         <ModalHeader>Add New Address</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
+        <ModalBody color={"white"}>
           <FormControl mb={2}>
             <FormLabel>Name</FormLabel>
             <Input
               type="text"
-              bg={"white"}
               color={"#233947"}
               name="name"
               value={formData.name}
@@ -63,31 +89,24 @@ const AddAddress = ({ isOpen, onClose, onAddAddress }) => {
           </FormControl>
           <FormControl mb={2}>
             <FormLabel>Province</FormLabel>
-            <Input
-              type="text"
-              bg={"white"}
-              color={"#233947"}
-              name="province"
-              value={formData.province}
-              onChange={handleChange}
-            />
+            <Select placeholder='Select Province' value={selectedProvinceId} onChange={handleSelectProvince}>
+              {province.map((province) => (
+                <option key={province.province_id} value={province.province_id}>{province.province}</option>
+              ))}
+            </Select>
           </FormControl>
           <FormControl mb={2}>
             <FormLabel>City Name</FormLabel>
-            <Input
-              type="text"
-              bg={"white"}
-              color={"#233947"}
-              name="city_name"
-              value={formData.city_name}
-              onChange={handleChange}
-            />
+            <Select>
+              {city.map((city) => (
+                <option style={{ color: "white" }} key={city.city_id} value={city.city_name}>{city.city_name}</option>
+              ))}
+            </Select>
           </FormControl>
           <FormControl mb={2}>
             <FormLabel>Postal Code</FormLabel>
             <Input
               type="number"
-              bg={"white"}
               color={"#233947"}
               name="postal_code"
               value={formData.postal_code}
@@ -98,7 +117,6 @@ const AddAddress = ({ isOpen, onClose, onAddAddress }) => {
             <FormLabel>Full Address</FormLabel>
             <Input
               type="text"
-              bg={"white"}
               color={"#233947"}
               name="full_address"
               value={formData.full_address}

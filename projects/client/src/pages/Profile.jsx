@@ -22,6 +22,7 @@ import {
 } from "react-icons/fi"
 import UserProfile from "../components/Profile/UpdateProfile"
 import { getUser } from "../api/profile"
+import UserAddress from "./UserAddress"
 const LinkItems = [
   { name: "Profile", icon: FiHome },
   { name: "Address", icon: FiCompass },

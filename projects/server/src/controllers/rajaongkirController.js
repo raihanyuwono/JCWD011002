@@ -36,6 +36,22 @@ const getProvince = async (req, res) => {
   }
 };
 
+const getCityByProvince = async (req, res) => {
+  try {
+    const { province } = req.query;
+    console.log(province);
+    const response = await axios.get(
+      `https://api.rajaongkir.com/starter/city?province=${province}`,
+      headers
+    );
+    res.send(response.data);
+    console.log(response.data)
+  } catch (error) {
+    res.send(error);
+    console.log(error);
+  }
+}
+
 const getCost = async (req, res) => {
   try {
     const { origin, destination, weight, courier } = req.body;
@@ -60,4 +76,5 @@ module.exports = {
   getCity,
   getProvince,
   getCost,
+  getCityByProvince
 };

@@ -3,16 +3,17 @@ const UserAddress = db.user_address;
 const sequelize = db.sequelize;
 const { messages } = require('../../helpers');
 const getLatLongFromAddress = require('../../helpers/addressCoordinate');
+const defaultAddressUpdate = require('../../helpers/defaultAddressUpdate');
 
-const updateUserAddress = async (addressId, body) => {
+const updateUserAddress = async (addressId, body, id_user) => {
   try {
     const existingAddress = await UserAddress.findOne({
       where: { id: addressId },
     });
-
     if (!existingAddress) {
       return messages.error(404, 'Alamat pengguna tidak ditemukan');
     }
+    await defaultAddressUpdate(body, id_user);
     const { latitude, longitude } = await getLatLongFromAddress(body.province, body.city_name);
 
     const updatedAddress = await sequelize.transaction(async (t) => {
