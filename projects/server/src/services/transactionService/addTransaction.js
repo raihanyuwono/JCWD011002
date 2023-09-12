@@ -17,8 +17,6 @@ const addTransaction = async (
   shipping_cost,
   shipping_address
 ) => {
-  // const myLatitude = -7.417166656128915;
-  // const myLongitude = 112.75669259021905;
   try {
     const cartProduct = await cart_product.findAll({
       where: { id_cart: userId },

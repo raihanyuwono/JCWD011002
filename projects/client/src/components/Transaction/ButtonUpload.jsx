@@ -1,4 +1,4 @@
-import { Box, Button } from "@chakra-ui/react";
+import { Badge, Box, Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import UploadReceipt from "./UploadReceipt";
@@ -34,16 +34,14 @@ export default function ButtonUpload() {
   };
 
   return (
-    <Box mt={16}>
-      <Button
-        color={"white"}
-        variant={"outline"}
+    <Box>
+      <Badge
+        cursor={"pointer"}
         _hover={{ bgColor: "white", color: "black" }}
         onClick={openPhotoModal}
       >
-        <PiUploadBold size={18} />
-        &nbsp;Upload Receipt
-      </Button>
+        UPLOAD RECEIPT
+      </Badge>
       <UploadReceipt
         isOpen={uploadReceipt}
         onClose={closePhotoModal}

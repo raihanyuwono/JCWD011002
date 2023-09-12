@@ -15,14 +15,15 @@ const SeeDetailTxn = ({ transactionId, isOpen, onClose }) => {
     <>
       <Modal
         isCentered
-        size={"lg"}
+        size={"xl"}
         onClose={onClose}
         isOpen={isOpen}
         scrollBehavior="outside"
+        motionPreset="slideInBottom"
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
+          <ModalHeader>Transaction Detail</ModalHeader>
           <ModalCloseButton />
           <ModalBody>{transactionId}</ModalBody>
           <ModalFooter>

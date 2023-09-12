@@ -80,7 +80,7 @@ const handleStock = async (
                 id_product: item.id_product,
                 id_transaction: transactionId,
                 qty: productWarehouse.stock,
-                id_status: 8, //approve
+                id_status: 8,
               });
 
               qtyToReduce -= productWarehouse.stock;

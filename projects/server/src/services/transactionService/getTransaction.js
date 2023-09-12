@@ -28,7 +28,6 @@ const getTransaction = async (
     }
 
     if (startDate && endDate) {
-      // Add date range filtering conditions for created_at
       whereConditions.created_at = {
         [Op.between]: [startDate, endDate],
       };

@@ -21,10 +21,10 @@ async function uploadReceipt(transactionId, file) {
       { where: { id: transactionId }, transaction: t }
     );
 
-    await t.commit(); // Commit the transaction
+    await t.commit(); 
     return messages.success("Receipt uploaded!");
   } catch (error) {
-    await t.rollback(); // Rollback the transaction in case of an error
+    await t.rollback(); 
     throw messages.error(500, error.message);
   }
 }
