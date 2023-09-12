@@ -198,8 +198,15 @@ async function getDistance(req, res) {
 async function getTransaction(req, res) {
   try {
     const userId = req.params.userId;
-    const { searchProductName, sortBy, page, pageSize, filterStatus } =
-      req.query;
+    const {
+      searchProductName,
+      sortBy,
+      page,
+      pageSize,
+      filterStatus,
+      startDate,
+      endDate,
+    } = req.query;
 
     const result = await transactionService.getTransaction(
       userId,
@@ -207,7 +214,9 @@ async function getTransaction(req, res) {
       sortBy,
       page,
       pageSize,
-      filterStatus
+      filterStatus,
+      startDate,
+      endDate
     );
     return res.status(200).json(result);
   } catch (error) {

@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  Input,
-  InputGroup,
-  InputLeftElement,
-  InputRightElement,
-  Stack,
-} from "@chakra-ui/react";
+import { Input, InputGroup, InputRightElement, Stack } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 
 const SearchBar = ({ onSearch }) => {
@@ -25,13 +19,15 @@ const SearchBar = ({ onSearch }) => {
     <Stack spacing={4}>
       <InputGroup>
         <Input
+          bgColor={"white"}
+          color={"black"}
           onKeyDown={handleKeyboard}
           placeholder="Search by product name"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
         <InputRightElement>
-          <SearchIcon color="white" onClick={handleSearch} />
+          <SearchIcon color="black" onClick={handleSearch} />
         </InputRightElement>
       </InputGroup>
     </Stack>
