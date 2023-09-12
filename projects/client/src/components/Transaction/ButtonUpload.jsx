@@ -4,9 +4,9 @@ import React, { useState, useEffect } from "react";
 import UploadReceipt from "./UploadReceipt";
 import { PiUploadBold } from "react-icons/pi";
 
-export default function ButtonUpload() {
+export default function ButtonUpload({ transactionId }) {
   const [uploadedImage, setUploadedImage] = useState("");
-
+  const txnid = transactionId;
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -48,6 +48,7 @@ export default function ButtonUpload() {
         currentPhoto={currentPhoto}
         onSave={handleSavePhoto}
         onImageUpload={handleImageUpload}
+        txnid={txnid}
       />
     </Box>
   );

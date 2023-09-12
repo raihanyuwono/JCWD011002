@@ -8,6 +8,7 @@ import SearchBar from "./SearchBar";
 import FilterBy from "./FilterBy";
 import toRupiah from "@develoka/angka-rupiah-js";
 import SeeDetailTxn from "./SeeDetailTxn";
+import ButtonUpload from "./ButtonUpload";
 
 const ToPay = () => {
   const API_URL = process.env.REACT_APP_API_BASE_URL;
@@ -83,9 +84,10 @@ const ToPay = () => {
               <Badge alignSelf={"center"} colorScheme="green">
                 {item.status}
               </Badge>
-              <Text>&nbsp;DESKBOT/ID/TXN{item.transactionId}</Text>
+              <Text>&nbsp;MWEC/ID/TXN{item.transactionId}</Text>
             </Flex>
-            <Badge alignSelf={"center"}>UPLOAD RECEIPT</Badge>
+            {/* <Badge alignSelf={"center"}>UPLOAD RECEIPT</Badge> */}
+            <ButtonUpload transactionId={item.transactionId} />
           </Flex>
           <Divider mt={2} mb={2} />
           <Flex align={"center"} justifyContent={"space-between"}>

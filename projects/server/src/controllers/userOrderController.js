@@ -168,9 +168,9 @@ async function addTransaction(req, res) {
   }
 }
 
-async function getPayment(req, res) {
+async function getListPayment(req, res) {
   try {
-    const result = await transactionService.getPayment();
+    const result = await transactionService.getListPayment();
     return res.status(200).json(messages.response(result));
   } catch (error) {
     console.error("Error getting payment:", error);
@@ -239,6 +239,18 @@ async function getDetailTransaction(req, res) {
   }
 }
 
+async function getPayment(req, res) {
+  try {
+    const userId = req.params.id;
+    const { transactionId } = req.body;
+    const result = await transactionService.getPayment(userId, transactionId);
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error("Error getting payment:", error);
+    return res.status(500).json(messages.error(500, error.message));
+  }
+}
+
 // +++++++++++++++++++++++++++++++++++++++++++++++ RECEIPT +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 async function UploadReceipt(req, res) {
@@ -264,9 +276,10 @@ module.exports = {
   viewCart,
   setQty,
   addTransaction,
-  getPayment,
+  getListPayment,
   getDistance,
   UploadReceipt,
   getTransaction,
   getDetailTransaction,
+  getPayment,
 };
