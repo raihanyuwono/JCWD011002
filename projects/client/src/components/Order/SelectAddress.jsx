@@ -22,45 +22,6 @@ import { MdLocationOn } from "react-icons/md";
 import axios from "axios";
 const API_URL = process.env.REACT_APP_API_BASE_URL;
 
-// const dummyAddress = [
-//   {
-//     id: 1,
-//     name: "Rumah",
-//     id_user: "Febry Dharmawan",
-//     province: "Jawa Timur",
-//     city_name: "Sidoarjo",
-//     postal_code: 61252,
-//     full_address: "Jl Sesama No 22 Sidoarjo",
-//     is_default: true,
-//     latitude: -7.417166656128915,
-//     longitude: 112.75669259021905,
-//   },
-//   {
-//     id: 2,
-//     name: "Kantor",
-//     id_user: "Andre Djawa",
-//     province: "Nusa Tenggara Timur (NTT)",
-//     city_name: "Alor",
-//     postal_code: 85811,
-//     full_address: "Jl Laksda Adisucipto No 1 Alor",
-//     is_default: false,
-//     latitude: -8.696554473073343,
-//     longitude: 121.2176540613792,
-//   },
-//   {
-//     id: 3,
-//     name: "Kantor",
-//     id_user: "Rizky Freon",
-//     province: "Kalimantan Timur",
-//     city_name: "Balikpapan",
-//     postal_code: 76111,
-//     full_address: "Jl Balik Papan No 90 Balikpapan",
-//     is_default: false,
-//     latitude: -1.696554473073343,
-//     longitude: 116.696554473073343,
-//   },
-// ];
-
 const SelectAddress = () => {
   const [isSelectAddressModalOpen, setIsSelectAddressModalOpen] =
     useState(false);

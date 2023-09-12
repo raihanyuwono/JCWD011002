@@ -209,8 +209,7 @@ async function getTransaction(req, res) {
       pageSize,
       filterStatus
     );
-
-    return res.status(200).json(messages.response(result));
+    return res.status(200).json(result);
   } catch (error) {
     console.error("Error getting transaction:", error);
     return res.status(500).json(messages.error(500, error.message));

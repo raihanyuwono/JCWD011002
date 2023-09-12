@@ -1,0 +1,105 @@
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import jwt_decode from "jwt-decode";
+import { Box, Divider, Flex, Image, Text } from "@chakra-ui/react";
+import { Badge } from "@chakra-ui/react";
+import Pagination from "./Pagination"; // Import the Pagination component
+import SearchBar from "./SearchBar"; // Import the SearchBar component
+import FilterBy from "./FilterBy"; // Import the FilterBy component
+
+const ToPay = () => {
+  const API_URL = process.env.REACT_APP_API_BASE_URL;
+  const userId = jwt_decode(localStorage.getItem("token")).id;
+  const [data, setData] = useState([]);
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterBy, setFilterBy] = useState("asc");
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `${API_URL}/transaction/${userId}/?sortBy=${filterBy}&page=${currentPage}&pageSize=10&filterStatus=1&searchProductName=${searchQuery}`
+      );
+      setData(response.data.data);
+      setTotalPages(response.data.total_page);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [currentPage, filterBy, searchQuery]);
+
+  return (
+    <>
+      <Flex mb={4}>
+        <Box w={"29vw"}>
+          <SearchBar onSearch={setSearchQuery} />
+        </Box>
+        &nbsp;&nbsp;
+        <Box w={"20vw"}>
+          <FilterBy onFilterChange={setFilterBy} />
+        </Box>
+      </Flex>
+      {data.map((item) => (
+        <Box
+          key={item.transactionId}
+          mb={2}
+          bg={"white"}
+          p={4}
+          w={"50vw"}
+          color={"black"}
+        >
+          <Flex justifyContent={"space-between"}>
+            <Flex>
+              <Text fontWeight={"bold"}>{item.txn_date}&nbsp;</Text>
+              <Badge alignSelf={"center"} colorScheme="green">
+                {item.status}
+              </Badge>
+              <Text>&nbsp;IDTXN:{item.transactionId}</Text>
+            </Flex>
+            <Badge alignSelf={"center"}>UPLOAD RECEIPT</Badge>
+          </Flex>
+          <Divider mt={2} mb={2} />
+          <Flex align={"center"} justifyContent={"space-between"}>
+            <Flex>
+              <Image borderRadius={"5px"} src={item.product_image} />
+              <Flex direction={"column"}>
+                <Text ml={4} fontWeight={"bold"}>
+                  {item.product_name}
+                </Text>
+                {item.numProducts > 1 ? (
+                  <Text ml={4} fontSize={"sm"}>
+                    + {item.numProducts} other
+                  </Text>
+                ) : (
+                  <></>
+                )}
+              </Flex>
+            </Flex>
+            <Flex direction={"column"}>
+              <Text fontSize={"sm"}>Total:</Text>
+              <Text fontWeight={"bold"} fontSize={"xl"}>
+                {item.total}
+              </Text>
+            </Flex>
+          </Flex>
+          {/* <Box mt={4}>
+        <Link>Upload Receipt</Link>
+        <Text></Text>
+      </Box> */}
+        </Box>
+      ))}
+      <Pagination
+        totalItems={totalPages * 10} // Assuming 10 items per page
+        itemsPerPage={10}
+        onPageChange={setCurrentPage}
+        currentPage={currentPage}
+      />
+    </>
+  );
+};
+
+export default ToPay;

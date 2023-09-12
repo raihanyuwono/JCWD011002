@@ -11,6 +11,7 @@ import Checkout from "./pages/Checkout";
 import AdminDashboard from "./pages/AdminDashboard";
 import { getRole } from "./helpers/Roles";
 import { useEffect, useState } from "react";
+import TransactionList from "./pages/TransactionList";
 
 const ADMIN_PATH = ["/", "/profile"];
 
@@ -59,6 +60,7 @@ function App() {
             <Route path="/reset/:token" element={<ResetPassword />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/checkout" element={<Checkout />} />
+            <Route path="/transaction" element={<TransactionList />} />
           </Routes>
         </Flex>
         <Footer />

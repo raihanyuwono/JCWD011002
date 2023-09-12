@@ -25,6 +25,8 @@ const getTransaction = async (
       whereConditions.id_status = filterStatus;
     }
 
+    const totalCount = await transaction.count({ where: whereConditions });
+
     const transactions = await transaction.findAll({
       where: whereConditions,
       include: [
@@ -68,7 +70,16 @@ const getTransaction = async (
       };
     });
 
-    return { status: 200, data: transactionData };
+    const totalPages = Math.ceil(totalCount / limit);
+    const currentPage = pageNumber;
+
+    return {
+      // status: 200,
+      total_page: totalPages,
+      total_item: totalCount,
+      current_page: currentPage,
+      data: transactionData,
+    };
   } catch (error) {
     console.error("Error getting transactions:", error);
     return { status: 500, message: error.message };

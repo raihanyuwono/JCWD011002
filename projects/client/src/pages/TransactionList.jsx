@@ -1,14 +1,25 @@
-import { Box, TabList, TabPanel, Tab, Tabs, TabPanels } from "@chakra-ui/react";
+import {
+  Box,
+  TabList,
+  TabPanel,
+  Tab,
+  Tabs,
+  TabPanels,
+  Text,
+  Flex,
+} from "@chakra-ui/react";
 import React from "react";
+import Pagination from "../components/Transaction/Pagination";
+import ToPay from "../components/Transaction/ToPay";
 
 const TransactionList = () => {
   return (
-    <Box mt={20}>
-      <Tabs isFitted variant="enclosed">
-        <TabList mb="1em">
+    <Box>
+      <Tabs w={"70vw"} isFitted variant="enclosed">
+        <TabList color={"white"} h={"3em"} mb="1em">
           <Tab>All</Tab>
           <Tab>To Pay</Tab>
-          <Tab>Waiting Confirmation</Tab>
+          <Tab>To Confirm</Tab>
           <Tab>Processed</Tab>
           <Tab>Shipped</Tab>
           <Tab>Completed</Tab>
@@ -16,10 +27,10 @@ const TransactionList = () => {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <p>Semua!</p>
+            <Text>Semua!</Text>
           </TabPanel>
           <TabPanel>
-            <p>Menunggu Pembayaran!</p>
+            <ToPay />
           </TabPanel>
           <TabPanel>
             <p>Menunggu Konfirmasi Pembayaran!</p>
@@ -38,6 +49,7 @@ const TransactionList = () => {
           </TabPanel>
         </TabPanels>
       </Tabs>
+      <Pagination />
     </Box>
   );
 };
