@@ -10,13 +10,13 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import Pagination from "../components/Transaction/Pagination";
-import ToPay from "../components/Transaction/ToPay";
-import ToConfirm from "../components/Transaction/ToConfirm";
-import Processed from "../components/Transaction/Processed";
-import Shipped from "../components/Transaction/Shipped";
-import Completed from "../components/Transaction/Completed";
-import Cancelled from "../components/Transaction/Cancelled";
-import AllStatus from "../components/Transaction/AllStatus";
+import ToPay from "../components/Transaction/Status/ToPay";
+import ToConfirm from "../components/Transaction/Status/ToConfirm";
+import Processed from "../components/Transaction/Status/Processed";
+import Shipped from "../components/Transaction/Status/Shipped";
+import Completed from "../components/Transaction/Status/Completed";
+import Cancelled from "../components/Transaction/Status/Cancelled";
+import AllStatus from "../components/Transaction/Status/AllStatus";
 
 const TransactionList = () => {
   return (

@@ -3,13 +3,13 @@ import axios from "axios";
 import jwt_decode from "jwt-decode";
 import { Box, Divider, Flex, Image, Text } from "@chakra-ui/react";
 import { Badge } from "@chakra-ui/react";
-import Pagination from "./Pagination";
-import SearchBar from "./SearchBar";
-import FilterBy from "./FilterBy";
+import Pagination from "../Pagination";
+import SearchBar from "../SearchBar";
+import FilterBy from "../FilterBy";
 import toRupiah from "@develoka/angka-rupiah-js";
-import SeeDetailTxn from "./SeeDetailTxn";
-import ButtonUpload from "./ButtonUpload";
-import CancelOrder from "./CancelOrder";
+import SeeDetailTxn from "../SeeDetailTxn";
+import ButtonUpload from "../ButtonUpload";
+import CancelOrder from "../CancelOrder";
 
 const ToPay = () => {
   const API_URL = process.env.REACT_APP_API_BASE_URL;

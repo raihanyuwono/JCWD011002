@@ -3,15 +3,14 @@ import axios from "axios";
 import jwt_decode from "jwt-decode";
 import { Box, Divider, Flex, Image, Text } from "@chakra-ui/react";
 import { Badge } from "@chakra-ui/react";
-import Pagination from "./Pagination";
-import SearchBar from "./SearchBar";
-import FilterBy from "./FilterBy";
+import Pagination from "../Pagination";
+import SearchBar from "../SearchBar";
+import FilterBy from "../FilterBy";
 import toRupiah from "@develoka/angka-rupiah-js";
-import SeeDetailTxn from "./SeeDetailTxn";
-import ButtonUpload from "./ButtonUpload";
-import ViewReceipt from "./ViewReceipt";
+import SeeDetailTxn from "../SeeDetailTxn";
+import ViewReceipt from "../ViewReceipt";
 
-const Completed = () => {
+const AllStatus = () => {
   const API_URL = process.env.REACT_APP_API_BASE_URL;
   const userId = jwt_decode(localStorage.getItem("token")).id;
   const [data, setData] = useState([]);
@@ -27,7 +26,7 @@ const Completed = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `${API_URL}/transaction/${userId}/?sortBy=${filterBy}&page=${currentPage}&pageSize=10&filterStatus=5&searchProductName=${searchQuery}&startDate=${startDate}&endDate=${endDate}`
+        `${API_URL}/transaction/${userId}/?sortBy=${filterBy}&page=${currentPage}&pageSize=10&searchProductName=${searchQuery}&startDate=${startDate}&endDate=${endDate}`
       );
       setData(response.data.data);
       setTotalPages(response.data.total_page);
@@ -81,9 +80,15 @@ const Completed = () => {
           <Flex justifyContent={"space-between"}>
             <Flex onClick={() => handleOpenModal(item.transactionId)}>
               <Text fontWeight={"bold"}>{item.txn_date}&nbsp;</Text>
-              <Badge alignSelf={"center"} colorScheme="green">
-                {item.status}
-              </Badge>
+              {item.status === "Dibatalkan" ? (
+                <Badge alignSelf={"center"} colorScheme="red">
+                  Dibatalkan
+                </Badge>
+              ) : (
+                <Badge alignSelf={"center"} colorScheme="green">
+                  {item.status}
+                </Badge>
+              )}
               <Text>&nbsp;MWECG2/ID/TXN{item.transactionId}</Text>
             </Flex>
             <ViewReceipt transactionId={item.transactionId} />
@@ -133,4 +138,4 @@ const Completed = () => {
   );
 };
 
-export default Completed;
+export default AllStatus;
