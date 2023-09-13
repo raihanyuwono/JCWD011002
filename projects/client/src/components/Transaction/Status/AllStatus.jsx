@@ -91,7 +91,12 @@ const AllStatus = () => {
               )}
               <Text>&nbsp;MWECG2/ID/TXN{item.transactionId}</Text>
             </Flex>
-            <ViewReceipt transactionId={item.transactionId} />
+            {item.status === "Dibatalkan" ||
+            item.status === "Menunggu Pembayaran" ? (
+              <></>
+            ) : (
+              <ViewReceipt transactionId={item.transactionId} />
+            )}
           </Flex>
           <Divider mt={2} mb={2} />
           <Flex

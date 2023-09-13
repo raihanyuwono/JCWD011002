@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import { Box, Divider, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Button, Divider, Flex, Image, Text } from "@chakra-ui/react";
 import { Badge } from "@chakra-ui/react";
 import Pagination from "../Pagination";
 import SearchBar from "../SearchBar";
@@ -85,7 +85,10 @@ const Completed = () => {
               </Badge>
               <Text>&nbsp;MWECG2/ID/TXN{item.transactionId}</Text>
             </Flex>
-            <ViewReceipt transactionId={item.transactionId} />
+            {/* <ViewReceipt transactionId={item.transactionId} /> */}
+            <Button size={"xs"} borderRadius={"none"} variant={"success"}>
+              ORDER RECEIVED
+            </Button>
           </Flex>
           <Divider mt={2} mb={2} />
           <Flex
