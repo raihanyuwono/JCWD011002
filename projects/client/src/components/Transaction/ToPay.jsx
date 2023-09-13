@@ -9,6 +9,7 @@ import FilterBy from "./FilterBy";
 import toRupiah from "@develoka/angka-rupiah-js";
 import SeeDetailTxn from "./SeeDetailTxn";
 import ButtonUpload from "./ButtonUpload";
+import CancelOrder from "./CancelOrder";
 
 const ToPay = () => {
   const API_URL = process.env.REACT_APP_API_BASE_URL;
@@ -76,27 +77,27 @@ const ToPay = () => {
           w={"50vw"}
           color={"black"}
           cursor={"pointer"}
-          onClick={() => handleOpenModal(item.transactionId)}
         >
           <Flex justifyContent={"space-between"}>
-            <Flex>
+            <Flex onClick={() => handleOpenModal(item.transactionId)}>
               <Text fontWeight={"bold"}>{item.txn_date}&nbsp;</Text>
               <Badge alignSelf={"center"} colorScheme="green">
                 {item.status}
               </Badge>
               <Text>&nbsp;MWECG2/ID/TXN{item.transactionId}</Text>
             </Flex>
-            {/* <Badge alignSelf={"center"}>UPLOAD RECEIPT</Badge> */}
             <Flex>
               <ButtonUpload transactionId={item.transactionId} />
               &nbsp;
-              <Badge alignSelf={"center"} colorScheme="red">
-                Cancel
-              </Badge>
+              <CancelOrder transactionId={item.transactionId} />
             </Flex>
           </Flex>
           <Divider mt={2} mb={2} />
-          <Flex align={"center"} justifyContent={"space-between"}>
+          <Flex
+            onClick={() => handleOpenModal(item.transactionId)}
+            align={"center"}
+            justifyContent={"space-between"}
+          >
             <Flex>
               <Image borderRadius={"5px"} src={item.product_image} />
               <Flex direction={"column"}>
