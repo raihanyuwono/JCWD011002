@@ -12,6 +12,11 @@ import React from "react";
 import Pagination from "../components/Transaction/Pagination";
 import ToPay from "../components/Transaction/ToPay";
 import ToConfirm from "../components/Transaction/ToConfirm";
+import Processed from "../components/Transaction/Processed";
+import Shipped from "../components/Transaction/Shipped";
+import Completed from "../components/Transaction/Completed";
+import Cancelled from "../components/Transaction/Cancelled";
+import AllStatus from "../components/Transaction/AllStatus";
 
 const TransactionList = () => {
   return (
@@ -28,7 +33,7 @@ const TransactionList = () => {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <Text>Semua!</Text>
+            <AllStatus />
           </TabPanel>
           <TabPanel>
             <ToPay />
@@ -37,16 +42,16 @@ const TransactionList = () => {
             <ToConfirm />
           </TabPanel>
           <TabPanel>
-            <p>Diproses!</p>
+            <Processed />
           </TabPanel>
           <TabPanel>
-            <p>Dikirim</p>
+            <Shipped />
           </TabPanel>
           <TabPanel>
-            <p>Pesanan Dikonfirmasi</p>
+            <Completed />
           </TabPanel>
           <TabPanel>
-            <p>Dibatalkan!</p>
+            <Cancelled />
           </TabPanel>
         </TabPanels>
       </Tabs>
