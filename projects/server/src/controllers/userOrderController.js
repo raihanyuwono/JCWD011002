@@ -232,7 +232,7 @@ async function getDetailTransaction(req, res) {
       userId,
       transactionId
     );
-    return res.status(200).json(messages.response(result));
+    return res.status(200).json(result);
   } catch (error) {
     console.error("Error getting detail transaction:", error);
     return res.status(500).json(messages.error(500, error.message));
@@ -267,6 +267,16 @@ async function UploadReceipt(req, res) {
   }
 }
 
+async function getReceipt(req, res) {
+  try {
+    const transactionId = req.params.transactionId;
+    const result = await transactionService.getReceipt(transactionId);
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+}
+
 module.exports = {
   addToCart,
   removeFromCart,
@@ -282,4 +292,5 @@ module.exports = {
   getTransaction,
   getDetailTransaction,
   getPayment,
+  getReceipt,
 };

@@ -9,8 +9,9 @@ import FilterBy from "./FilterBy";
 import toRupiah from "@develoka/angka-rupiah-js";
 import SeeDetailTxn from "./SeeDetailTxn";
 import ButtonUpload from "./ButtonUpload";
+import ViewReceipt from "./ViewReceipt";
 
-const ToPay = () => {
+const ToConfirm = () => {
   const API_URL = process.env.REACT_APP_API_BASE_URL;
   const userId = jwt_decode(localStorage.getItem("token")).id;
   const [data, setData] = useState([]);
@@ -26,7 +27,7 @@ const ToPay = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `${API_URL}/transaction/${userId}/?sortBy=${filterBy}&page=${currentPage}&pageSize=10&filterStatus=1&searchProductName=${searchQuery}&startDate=${startDate}&endDate=${endDate}`
+        `${API_URL}/transaction/${userId}/?sortBy=${filterBy}&page=${currentPage}&pageSize=10&filterStatus=2&searchProductName=${searchQuery}&startDate=${startDate}&endDate=${endDate}`
       );
       setData(response.data.data);
       setTotalPages(response.data.total_page);
@@ -76,27 +77,23 @@ const ToPay = () => {
           w={"50vw"}
           color={"black"}
           cursor={"pointer"}
-          onClick={() => handleOpenModal(item.transactionId)}
         >
           <Flex justifyContent={"space-between"}>
-            <Flex>
+            <Flex onClick={() => handleOpenModal(item.transactionId)}>
               <Text fontWeight={"bold"}>{item.txn_date}&nbsp;</Text>
               <Badge alignSelf={"center"} colorScheme="green">
                 {item.status}
               </Badge>
               <Text>&nbsp;MWECG2/ID/TXN{item.transactionId}</Text>
             </Flex>
-            {/* <Badge alignSelf={"center"}>UPLOAD RECEIPT</Badge> */}
-            <Flex>
-              <ButtonUpload transactionId={item.transactionId} />
-              &nbsp;
-              <Badge alignSelf={"center"} colorScheme="red">
-                Cancel
-              </Badge>
-            </Flex>
+            <ViewReceipt transactionId={item.transactionId} />
           </Flex>
           <Divider mt={2} mb={2} />
-          <Flex align={"center"} justifyContent={"space-between"}>
+          <Flex
+            onClick={() => handleOpenModal(item.transactionId)}
+            align={"center"}
+            justifyContent={"space-between"}
+          >
             <Flex>
               <Image borderRadius={"5px"} src={item.product_image} />
               <Flex direction={"column"}>
@@ -136,4 +133,4 @@ const ToPay = () => {
   );
 };
 
-export default ToPay;
+export default ToConfirm;

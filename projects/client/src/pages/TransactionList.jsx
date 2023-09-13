@@ -11,6 +11,7 @@ import {
 import React from "react";
 import Pagination from "../components/Transaction/Pagination";
 import ToPay from "../components/Transaction/ToPay";
+import ToConfirm from "../components/Transaction/ToConfirm";
 
 const TransactionList = () => {
   return (
@@ -33,7 +34,7 @@ const TransactionList = () => {
             <ToPay />
           </TabPanel>
           <TabPanel>
-            <p>Menunggu Konfirmasi Pembayaran!</p>
+            <ToConfirm />
           </TabPanel>
           <TabPanel>
             <p>Diproses!</p>

@@ -59,6 +59,7 @@ const FilterBy = ({ onFilterChange, onDateRangeFilter }) => {
       <Button
         variant={"outline"}
         color={"white"}
+        _hover={{ color: "black", bg: "white" }}
         ml={2}
         onClick={handleApplyDateFilter}
       >

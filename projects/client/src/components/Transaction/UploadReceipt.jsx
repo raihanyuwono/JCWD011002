@@ -103,7 +103,7 @@ const UploadReceipt = ({ isOpen, onClose, onSave, txnid }) => {
         <ModalBody>
           <FormControl>
             <Text mb={2} fontSize="xs">
-              MWEC/ID/TXN{txnid}
+              MWECG2/ID/TXN{txnid}
             </Text>
             <Text fontSize="xs">Method: {payment}</Text>
             <Text mb={2} fontSize="xs">

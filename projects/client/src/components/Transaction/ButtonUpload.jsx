@@ -24,7 +24,8 @@ export default function ButtonUpload({ transactionId }) {
     setCurrentPhoto(newPhoto);
   };
 
-  const openPhotoModal = () => {
+  const openPhotoModal = (e) => {
+    e.stopPropagation();
     setUploadReceipt(true);
   };
 
