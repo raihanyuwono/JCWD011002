@@ -8,6 +8,8 @@ router.get("/", userOrderController.getListPayment);
 router.post("/", userOrderController.addTransaction);
 // get detail transaction
 router.post("/detail", userOrderController.getDetailTransaction);
+//cancel
+router.post("/cancel", userOrderController.cancelOrder);
 // get distance
 router.post("/distance", userOrderController.getDistance);
 // get receipt by transaction

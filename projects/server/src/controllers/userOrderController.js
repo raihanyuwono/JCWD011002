@@ -251,6 +251,17 @@ async function getPayment(req, res) {
   }
 }
 
+async function cancelOrder(req, res) {
+  try {
+    const { userId, transactionId } = req.body;
+    const result = await transactionService.cancelOrder(userId, transactionId);
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error("Error canceling order:", error);
+    return res.status(500).json(messages.error(500, error.message));
+  }
+}
+
 // +++++++++++++++++++++++++++++++++++++++++++++++ RECEIPT +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 async function UploadReceipt(req, res) {
@@ -293,4 +304,5 @@ module.exports = {
   getDetailTransaction,
   getPayment,
   getReceipt,
+  cancelOrder,
 };
