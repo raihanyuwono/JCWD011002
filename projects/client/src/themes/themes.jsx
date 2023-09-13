@@ -25,7 +25,7 @@ const themes = extendTheme({
   styles: {
     global: {
       body: {
-        bgColor: "bgSecondary",
+        bgColor: "bgPrimary",
       },
     },
   },

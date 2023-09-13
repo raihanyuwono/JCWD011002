@@ -26,9 +26,8 @@ const storage = multer.diskStorage({
   },
 });
 
-const maxSize = 1 * 1000 * 1000;
+const maxSize = 1 * 1024 * 1024;
 const fileSize = (err, req, res, next) => {
-  const maxSize = 1 * 1000 * 1000;
   if (err instanceof multer.MulterError) {
     if (err.code === "LIMIT_FILE_SIZE") {
       return res

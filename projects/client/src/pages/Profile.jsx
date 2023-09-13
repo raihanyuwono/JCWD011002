@@ -90,7 +90,6 @@ const SidebarContent = ({ userData, onClose, ...rest }) => {
       bg={"bgSecondary"}
       w={{ base: "full", md: 60 }}
       pos="fixed"
-      mt={{ base: 0, md: 16 }}
       h="full"
       {...rest}
       color={'white'}
@@ -127,7 +126,7 @@ const NavItem = ({ icon, children, ...rest }) => {
         role="group"
         cursor="pointer"
         _hover={{
-          bg: "cyan.400",
+          bg: "primary",
           color: "white"
         }}
         {...rest}
@@ -153,7 +152,6 @@ const MobileNav = ({ onOpen, ...rest }) => {
     <Flex
       ml={{ base: 0, md: 60 }}
       px={{ base: 4, md: 24 }}
-      mt={16}
       height="20"
       alignItems="center"
       borderBottomWidth="1px"

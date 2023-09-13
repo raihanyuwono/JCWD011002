@@ -25,7 +25,6 @@ const createUserAddress = async (id, body, id_user) => {
       return messages.success('successfully created user address', newAddress);
     })
   } catch (error) {
-    console.log(error);
     return messages.error(500, error.message);
   }
 };
