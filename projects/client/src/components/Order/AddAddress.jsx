@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import {
   Modal,
   ModalOverlay,
@@ -14,16 +13,16 @@ import {
   Button,
   useToast,
   Select,
+  Checkbox,
 } from "@chakra-ui/react";
 import jwt_decode from "jwt-decode";
-import { getCityByProvince, getProvince } from "../../api/address";
+import { addAddress, getCityByProvince, getProvince } from "../../api/address";
 const AddAddress = ({ isOpen, onClose, onAddAddress }) => {
   const [city, setCity] = useState([]);
   const [province, setProvince] = useState([]);
   const [selectedProvinceId, setSelectedProvinceId] = useState("");
-  console.log('selected province', selectedProvinceId)
-  const token = localStorage.getItem("token");
-  const userId = jwt_decode(token).id;
+  const [selectedProvinceName, setSelectedProvinceName] = useState("");
+
   const toast = useToast();
   const fetchProvince = async () => {
     await getProvince(setProvince, toast)
@@ -40,12 +39,14 @@ const AddAddress = ({ isOpen, onClose, onAddAddress }) => {
   }, [selectedProvinceId])
 
   const handleSelectProvince = (e) => {
-    setSelectedProvinceId(e.target.value);
+    const selectedId = e.target.value;
+    const selectedName = e.target.options[e.target.selectedIndex].text;
+    setSelectedProvinceId(selectedId);
+    setSelectedProvinceName(selectedName);
     setCity([]);
   }
 
   const initialFormData = {
-    id_user: userId,
     name: "",
     province: "",
     city_name: "",
@@ -55,19 +56,32 @@ const AddAddress = ({ isOpen, onClose, onAddAddress }) => {
   };
 
   const [formData, setFormData] = React.useState(initialFormData);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+  const sendDataToApi = async () => {
+    try {
+      await addAddress(formData, selectedProvinceName, toast, onAddAddress, setFormData, initialFormData, onClose)
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleAddAddress = () => {
-    onAddAddress(formData);
-    setFormData(initialFormData);
-    onClose();
+  const handleChange = (e) => {
+    const { name, value, checked } = e.target;
+    if (name === "city_name") {
+      setFormData({
+        ...formData,
+        city_name: value,
+      });
+    } else if (name === "is_default") {
+      setFormData({
+        ...formData,
+        is_default: checked,
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
   return (
@@ -81,7 +95,6 @@ const AddAddress = ({ isOpen, onClose, onAddAddress }) => {
             <FormLabel>Name</FormLabel>
             <Input
               type="text"
-              color={"#233947"}
               name="name"
               value={formData.name}
               onChange={handleChange}
@@ -89,7 +102,7 @@ const AddAddress = ({ isOpen, onClose, onAddAddress }) => {
           </FormControl>
           <FormControl mb={2}>
             <FormLabel>Province</FormLabel>
-            <Select placeholder='Select Province' value={selectedProvinceId} onChange={handleSelectProvince}>
+            <Select placeholder='Select Province' name="province" value={selectedProvinceId} onChange={handleSelectProvince}>
               {province.map((province) => (
                 <option key={province.province_id} value={province.province_id}>{province.province}</option>
               ))}
@@ -97,7 +110,7 @@ const AddAddress = ({ isOpen, onClose, onAddAddress }) => {
           </FormControl>
           <FormControl mb={2}>
             <FormLabel>City Name</FormLabel>
-            <Select>
+            <Select placeholder='Select City' name="city_name" value={formData.city_name} onChange={handleChange} >
               {city.map((city) => (
                 <option style={{ color: "white" }} key={city.city_id} value={city.city_name}>{city.city_name}</option>
               ))}
@@ -107,7 +120,6 @@ const AddAddress = ({ isOpen, onClose, onAddAddress }) => {
             <FormLabel>Postal Code</FormLabel>
             <Input
               type="number"
-              color={"#233947"}
               name="postal_code"
               value={formData.postal_code}
               onChange={handleChange}
@@ -117,12 +129,12 @@ const AddAddress = ({ isOpen, onClose, onAddAddress }) => {
             <FormLabel>Full Address</FormLabel>
             <Input
               type="text"
-              color={"#233947"}
               name="full_address"
               value={formData.full_address}
               onChange={handleChange}
             />
           </FormControl>
+          <Checkbox mt={4} name="is_default" defaultChecked isChecked={formData.is_default} onChange={handleChange}>Default Address</Checkbox>
         </ModalBody>
         <ModalFooter>
           <Button
@@ -130,7 +142,7 @@ const AddAddress = ({ isOpen, onClose, onAddAddress }) => {
             bgColor={"#34638A"}
             color={"white"}
             _hover={{ bgColor: "gray.200", color: "#34638A" }}
-            onClick={handleAddAddress}
+            onClick={sendDataToApi}
           >
             Submit
           </Button>
