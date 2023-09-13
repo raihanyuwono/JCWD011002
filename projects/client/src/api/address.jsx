@@ -1,9 +1,9 @@
 import axios from "axios";
 import notification, { setToastParams } from "../helpers/Notification";
-
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const RAJA_ONGKIR_URL = `${BASE_URL}/rajaongkir`;
 const ADDRESS_URL = `${BASE_URL}/address`;
+
 function getToken() {
   return localStorage.getItem("token");
 }
@@ -57,4 +57,31 @@ const addAddress = async (formData, selectedProvinceName, toast, onAddAddress, s
   }
 }
 
-export { getProvince, getCityByProvince, addAddress };
+const getAddressUser = async (toast, setDataAddress) => {
+  try {
+    const response = await axios.get(`${ADDRESS_URL}`, setHeaders());
+    setDataAddress(response.data.data);
+    console.log(response.data.data);
+  } catch (error) {
+    console.log(error);
+    const { response } = error;
+    notification(toast, setToastParams(response.status ? response : error));
+  }
+}
+
+const updateAddressUser = async (addressData, formData, toast, onEditAddress, onClose, selectedProvinceName) => {
+  try {
+    const response = await axios.patch(`${ADDRESS_URL}/${addressData.id}`, {
+      ...formData,
+      province: selectedProvinceName,
+    }, setHeaders());
+    onEditAddress(formData);
+    onClose();
+    console.log(response.data);
+  } catch (error) {
+    const { response } = error;
+    notification(toast, setToastParams(response.status ? response : error));
+  }
+}
+
+export { getProvince, getCityByProvince, addAddress, getAddressUser, updateAddressUser };

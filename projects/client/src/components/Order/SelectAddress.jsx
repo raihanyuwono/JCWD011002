@@ -128,6 +128,7 @@ const SelectAddress = () => {
         },
       });
       setDataAddress(response.data.data);
+      console.log(response.data.data);
     } catch (error) {
       console.log(error);
     }
@@ -168,7 +169,7 @@ const SelectAddress = () => {
           >
             <ModalOverlay />
             <ModalContent bgColor={"#233947"}>
-              <ModalHeader color={"white"}>Shipping to?</ModalHeader>
+              <ModalHeader color={"white"}>Shipping tojgjg?</ModalHeader>
               <ModalCloseButton color={"white"} />
               <ModalBody>
                 <Button
@@ -178,7 +179,7 @@ const SelectAddress = () => {
                   _hover={{ bgColor: "white", color: "#34638A" }}
                   variant={"outline"}
                 >
-                  Add New Address
+                  Add New Addresshhgjh
                 </Button>
                 <Box>
                   {dataAddress.length === 0 ? (
@@ -264,7 +265,7 @@ const SelectAddress = () => {
           )}
         </Box>
         <Button size="md" mt={2} onClick={openSelectAddressModal}>
-          Select Address
+          Select Address hgjhgj
         </Button>
       </Flex>
       {/* {selectedAddress && (

@@ -12,6 +12,7 @@ import UserAddress from "./pages/UserAddress";
 import AdminDashboard from "./pages/AdminDashboard";
 import { getRole } from "./helpers/Roles";
 import { useEffect, useState } from "react";
+import SelectAddress from "./components/Order/SelectAddress";
 
 const ADMIN_PATH = ["/", "/profile"];
 
@@ -52,6 +53,7 @@ function App() {
     return (
       <Flex {...mainContainerAttr}>
         <NavUser />
+        {/* <SelectAddress /> */}
         <Flex {...contentContainerAttr}>
           <Routes>
             <Route path="/" element={setPage()} />

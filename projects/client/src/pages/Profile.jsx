@@ -54,12 +54,19 @@ export default function Profile() {
   }, []);
 
   return (
-    <Box minH="100vh">
-      <SidebarContent
-        onClose={() => onClose}
-        userData={userData}
-        display={{ base: "none", md: "block" }}
-      />
+    <Box w={"full"} mx="auto">
+      <Flex>
+
+        <SidebarContent
+          // onClose={() => onClose}
+          userData={userData}
+          display={{ base: "none", md: "block" }}
+        />
+        <Box w={"full"} ml={{ base: 0, md: 60 }} p="4">
+          {/* Content */}
+          <UserProfile userData={userData} setUserData={setUserData} />
+        </Box>
+      </Flex>
       <Drawer
         isOpen={isOpen}
         placement="left"
@@ -74,10 +81,7 @@ export default function Profile() {
       </Drawer>
       {/* mobilenav */}
       <MobileNav display={{ base: "flex", md: "none" }} onOpen={onOpen} />
-      <Box ml={{ base: 0, md: 60 }} p="4">
-        {/* Content */}
-        <UserProfile userData={userData} setUserData={setUserData} />
-      </Box>
+
     </Box>
   )
 }

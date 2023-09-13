@@ -30,7 +30,7 @@ const updateUserAddress = async (addressId, body, id_user) => {
         },
         { transaction: t }
       );
-      return existingAddress;
+      return existingAddress; b
     });
 
     return messages.success('Alamat pengguna berhasil diperbarui', updatedAddress);
