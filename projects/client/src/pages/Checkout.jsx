@@ -113,19 +113,25 @@ const Checkout = () => {
   const handleCheckout = () => {
     const selectedCourier = localStorage.getItem("selectedCourier");
     if (selectedPayment === null) {
-      toast({
-        title: "Please select a payment method!",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
+      if (!toast.isActive("payment")) {
+        toast({
+          id: "payment",
+          description: "Please select a payment method",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
     } else if (selectedCourier === "null") {
-      toast({
-        title: "Please select a shipping method!",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
+      if (!toast.isActive("error-toast")) {
+        toast({
+          id: "error-toast",
+          description: "Please select a courier service",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
       return;
     } else {
       checkout();

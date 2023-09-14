@@ -50,6 +50,15 @@ const CartPage = () => {
       });
       if (response.status === 200) {
         viewCart();
+        if (!toast.isActive("success")) {
+          toast({
+            id: "success",
+            description: "Product removed!",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
       } else {
         console.error("Failed to delete from cart.");
       }
@@ -74,13 +83,15 @@ const CartPage = () => {
       }
       viewCart();
     } catch (error) {
-      toast({
-        title: "Oh no:(",
-        description: error.response.data.message,
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
+      if (!toast.isActive("error-toast")) {
+        toast({
+          id: "error-toast",
+          description: error.response.data.message,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
       console.error("Error updating item quantity:", error);
     }
   };

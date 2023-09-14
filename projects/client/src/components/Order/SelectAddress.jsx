@@ -21,9 +21,11 @@ import EditAddress from "./EditAddress";
 import { MdLocationOn } from "react-icons/md";
 import axios from "axios";
 import DeleteAddress from "../Profile/DeleteAddress";
-const API_URL = process.env.REACT_APP_API_BASE_URL;
+import jwtDecode from "jwt-decode";
 
 const SelectAddress = () => {
+  const API_URL = process.env.REACT_APP_API_BASE_URL;
+  const userId = jwtDecode(localStorage.getItem("token")).id;
   const [isSelectAddressModalOpen, setIsSelectAddressModalOpen] =
     useState(false);
   const [isAddAddressModalOpen, setIsAddAddressModalOpen] = useState(false);
@@ -90,13 +92,28 @@ const SelectAddress = () => {
         },
       });
       setDataAddress(response.data.data);
-      console.log(response.data.data);
     } catch (error) {
       console.log(error);
     }
   };
+
+  const fetchDefault = async () => {
+    try {
+      const response = await axios.post(`${API_URL}/address/default`, {
+        userId: userId,
+      });
+      localStorage.setItem(
+        "selectedAddress",
+        JSON.stringify(response.data.data)
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     fetchAddress();
+    fetchDefault();
   }, []);
 
   return (
@@ -158,7 +175,11 @@ const SelectAddress = () => {
                         key={address.id}
                       >
                         <Flex flexDirection={"column"}>
-                          <Flex alignItems={"center"} justifyContent={"space-between"} mr={5}>
+                          <Flex
+                            alignItems={"center"}
+                            justifyContent={"space-between"}
+                            mr={5}
+                          >
                             <Text
                               px={3}
                               py={2}
@@ -182,7 +203,9 @@ const SelectAddress = () => {
                           >
                             {address.user.name}
                           </Text>
-                          <Text px={3} fontSize={"sm"}>{address.user.phone}</Text>
+                          <Text px={3} fontSize={"sm"}>
+                            {address.user.phone}
+                          </Text>
                           <Text px={3} fontSize={"sm"}>
                             {address.full_address}, {address.city_name},{" "}
                             {address.province}, {address.postal_code}
@@ -234,16 +257,6 @@ const SelectAddress = () => {
           Select Address
         </Button>
       </Flex>
-      {/* {selectedAddress && (
-        <Box mt={4}>
-          <Text>Selected Address:</Text>
-          <Text>
-            {selectedAddress.name}, {selectedAddress.full_address},{" "}
-            {selectedAddress.city_name}, {selectedAddress.province},{" "}
-            {selectedAddress.postal_code}
-          </Text>
-        </Box>
-      )} */}
     </Box>
   );
 };
