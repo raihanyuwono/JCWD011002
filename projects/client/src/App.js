@@ -12,9 +12,6 @@ import UserAddress from "./pages/UserAddress";
 import AdminDashboard from "./pages/AdminDashboard";
 import { getRole } from "./helpers/Roles";
 import { useEffect, useState } from "react";
-
-import TransactionList from "./pages/TransactionList";
-
 import UserProfile from "./components/Profile/UpdateProfile";
 import { getUser } from "./api/profile";
 import Transaction from "./components/Profile/Transaction";
@@ -93,7 +90,6 @@ function App() {
             <Route path="/reset/:token" element={<ResetPassword />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/checkout" element={<Checkout />} />
-            <Route path="/transaction" element={<TransactionList />} />
           </Routes>
         </Flex>
         <Footer />

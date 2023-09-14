@@ -20,7 +20,7 @@ import AllStatus from "../components/Transaction/Status/AllStatus";
 
 const TransactionList = () => {
   return (
-    <Box>
+    <>
       <Tabs w={"70vw"} isFitted variant="enclosed">
         <TabList color={"white"} h={"3em"} mb="1em">
           <Tab>All</Tab>
@@ -31,7 +31,11 @@ const TransactionList = () => {
           <Tab>Completed</Tab>
           <Tab>Cancelled</Tab>
         </TabList>
-        <TabPanels>
+        <TabPanels
+          justifyContent={"center"}
+          display={"flex"}
+          alignItems={"center"}
+        >
           <TabPanel>
             <AllStatus />
           </TabPanel>
@@ -56,7 +60,7 @@ const TransactionList = () => {
         </TabPanels>
       </Tabs>
       <Pagination />
-    </Box>
+    </>
   );
 };
 

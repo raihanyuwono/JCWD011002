@@ -93,10 +93,17 @@ const CartPage = () => {
           borderTopLeftRadius={"10px"}
           borderLeftRadius={"10px"}
         >
-          <Text textAlign={"center"} fontSize={"3xl"} mt={4} mb={4}>
+          <Text ml={2} fontSize={"3xl"} mt={4} mb={4}>
             SHOPPING CART
           </Text>
-          <Table variant="simple" color={"#34638a"} w={"70vw"} bgColor="white">
+          <Table
+            ml={2}
+            mr={1}
+            variant="simple"
+            color={"#34638a"}
+            w={"69vw"}
+            bgColor="white"
+          >
             <Thead>
               <Tr>
                 <Th></Th>
@@ -198,30 +205,33 @@ const CartPage = () => {
           </Table>
         </TableContainer>
         <Box mt={"77px"}>
+          <OrderSummary cartLength={cartLength} userId={userId} />
           {/* <ClearAlert coba={viewCart} userId={userId} /> */}
           {cart.length === 0 ? (
             <Button
+              mt={1}
               as={Link}
+              h={"50px"}
               display={"none"}
               to={"/checkout"}
               borderRadius={"none"}
               colorScheme="green"
-              borderTopRightRadius={"10px"}
             >
               Checkout
             </Button>
           ) : (
             <Button
               as={Link}
+              mt={1}
+              h={"50px"}
+              w={"100%"}
               to={"/checkout"}
               borderRadius={"none"}
               colorScheme="green"
-              borderTopRightRadius={"10px"}
             >
               Checkout
             </Button>
           )}
-          <OrderSummary cartLength={cartLength} userId={userId} />
         </Box>
       </Flex>
     </>

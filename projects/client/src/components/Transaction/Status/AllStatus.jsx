@@ -55,12 +55,12 @@ const AllStatus = () => {
 
   return (
     <>
-      <Flex mb={4}>
-        <Box w={"20vw"}>
+      <Flex justifyContent={"space-between"} mb={4}>
+        <Box>
           <SearchBar onSearch={setSearchQuery} />
         </Box>
         &nbsp;&nbsp;
-        <Box w={"29vw"}>
+        <Box>
           <FilterBy
             onFilterChange={setFilterBy}
             onDateRangeFilter={handleDateRangeFilter}
@@ -73,7 +73,7 @@ const AllStatus = () => {
           mb={2}
           bg={"white"}
           p={4}
-          w={"50vw"}
+          w={"58vw"}
           color={"black"}
           cursor={"pointer"}
         >
