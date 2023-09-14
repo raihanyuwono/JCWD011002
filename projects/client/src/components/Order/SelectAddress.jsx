@@ -20,6 +20,7 @@ import AddAddress from "./AddAddress";
 import EditAddress from "./EditAddress";
 import { MdLocationOn } from "react-icons/md";
 import axios from "axios";
+import DeleteAddress from "../Profile/DeleteAddress";
 const API_URL = process.env.REACT_APP_API_BASE_URL;
 
 // const dummyAddress = [
@@ -128,6 +129,7 @@ const SelectAddress = () => {
         },
       });
       setDataAddress(response.data.data);
+      console.log(response.data.data);
     } catch (error) {
       console.log(error);
     }
@@ -168,7 +170,7 @@ const SelectAddress = () => {
           >
             <ModalOverlay />
             <ModalContent bgColor={"#233947"}>
-              <ModalHeader color={"white"}>Shipping to?</ModalHeader>
+              <ModalHeader color={"white"}>Shipping tojgjg?</ModalHeader>
               <ModalCloseButton color={"white"} />
               <ModalBody>
                 <Button
@@ -195,18 +197,21 @@ const SelectAddress = () => {
                         key={address.id}
                       >
                         <Flex flexDirection={"column"}>
-                          <Text
-                            px={3}
-                            py={2}
-                            fontSize={"md"}
-                            fontWeight={"bold"}
-                          >
-                            {address.name}
-                            &nbsp;
-                            {address.is_default && (
-                              <Badge colorScheme="green">Default</Badge>
-                            )}
-                          </Text>
+                          <Flex alignItems={"center"} justifyContent={"space-between"} mr={5}>
+                            <Text
+                              px={3}
+                              py={2}
+                              fontSize={"md"}
+                              fontWeight={"bold"}
+                            >
+                              {address.name}
+                              &nbsp;
+                              {address.is_default && (
+                                <Badge colorScheme="green">Default</Badge>
+                              )}
+                            </Text>
+                            <DeleteAddress addressData={address} />
+                          </Flex>
                           <Divider />
                           <Text
                             px={3}
@@ -214,8 +219,9 @@ const SelectAddress = () => {
                             fontSize={"lg"}
                             fontWeight={"bold"}
                           >
-                            {/* {address.id_user} */}
+                            {address.user.name}
                           </Text>
+                          <Text px={3} fontSize={"sm"}>{address.user.phone}</Text>
                           <Text px={3} fontSize={"sm"}>
                             {address.full_address}, {address.city_name},{" "}
                             {address.province}, {address.postal_code}
