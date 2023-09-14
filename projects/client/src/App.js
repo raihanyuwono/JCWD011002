@@ -12,7 +12,6 @@ import UserAddress from "./pages/UserAddress";
 import AdminDashboard from "./pages/AdminDashboard";
 import { getRole } from "./helpers/Roles";
 import { useEffect, useState } from "react";
-import SelectAddress from "./components/Order/SelectAddress";
 import UserProfile from "./components/Profile/UpdateProfile";
 import { getUser } from "./api/profile";
 import Transaction from "./components/Profile/Transaction";
@@ -78,7 +77,6 @@ function App() {
     return (
       <Flex {...mainContainerAttr}>
         <NavUser />
-        <SelectAddress />
         <Flex {...contentContainerAttr}>
           <Routes>
             <Route path="/" element={setPage()} />
