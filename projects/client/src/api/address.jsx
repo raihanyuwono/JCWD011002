@@ -49,6 +49,7 @@ const addAddress = async (formData, selectedProvinceName, toast, onAddAddress, s
     }, setHeaders());
     onAddAddress(formData);
     setFormData(initialFormData);
+    notification(toast, setToastParams(response));
     onClose();
   } catch (error) {
     console.log(error);
@@ -76,6 +77,7 @@ const updateAddressUser = async (addressData, formData, toast, onEditAddress, on
       province: selectedProvinceName,
     }, setHeaders());
     onEditAddress(formData);
+    notification(toast, setToastParams(response));
     onClose();
     console.log(response.data);
   } catch (error) {

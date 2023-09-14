@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import { Flex } from "@chakra-ui/react";
+import { Flex, useToast } from "@chakra-ui/react";
 import Registration from "./pages/Registration";
 import HomePage from "./pages/HomePage";
 import NavUser from "./components/Navbar/NavUser";
@@ -13,6 +13,9 @@ import AdminDashboard from "./pages/AdminDashboard";
 import { getRole } from "./helpers/Roles";
 import { useEffect, useState } from "react";
 import SelectAddress from "./components/Order/SelectAddress";
+import UserProfile from "./components/Profile/UpdateProfile";
+import { getUser } from "./api/profile";
+import Transaction from "./components/Profile/Transaction";
 
 const ADMIN_PATH = ["/", "/profile"];
 
@@ -49,20 +52,45 @@ function App() {
     }, 10);
   }, []);
 
+  const [userData, setUserData] = useState({
+    name: '',
+    username: '',
+    email: '',
+    phone: '',
+    is_verified: false,
+    role: '',
+    current_password: '',
+    new_password: '',
+    confirm_password: '',
+    avatar: '',
+  });
+  const toast = useToast()
+  const token = localStorage.getItem('token')
+  const fetchUserData = async () => {
+    await getUser(token, setUserData, toast);
+  };
+
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
   if (!isLoading)
     return (
       <Flex {...mainContainerAttr}>
         <NavUser />
-        {/* <SelectAddress /> */}
+        <SelectAddress />
         <Flex {...contentContainerAttr}>
           <Routes>
             <Route path="/" element={setPage()} />
             <Route path="/registration/:token" element={<Registration />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile" element={<Profile userData={userData} />}>
+              <Route path="" element={<UserProfile userData={userData} setUserData={setUserData} />} />
+              <Route path="address" element={<UserAddress />} />
+              <Route path="transaction" element={<Transaction />} />
+            </Route>
             <Route path="/reset/:token" element={<ResetPassword />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/checkout" element={<Checkout />} />
-            <Route path="/profile/address" element={<UserAddress />} />
           </Routes>
         </Flex>
         <Footer />

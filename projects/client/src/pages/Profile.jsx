@@ -23,10 +23,11 @@ import {
 import UserProfile from "../components/Profile/UpdateProfile"
 import { getUser } from "../api/profile"
 import UserAddress from "./UserAddress"
+import { Link, Outlet } from "react-router-dom"
 const LinkItems = [
-  { name: "Profile", icon: FiHome },
-  { name: "Address", icon: FiCompass },
-  { name: "Transaction", icon: FiTrendingUp },
+  { name: "Profile", icon: FiHome, url: "" },
+  { name: "Address", icon: FiCompass, url: "address" },
+  { name: "Transaction", icon: FiTrendingUp, url: "transaction" },
 ]
 
 export default function Profile() {
@@ -64,7 +65,7 @@ export default function Profile() {
         />
         <Box w={"full"} ml={{ base: 0, md: 60 }} p="4">
           {/* Content */}
-          <UserProfile userData={userData} setUserData={setUserData} />
+          <Outlet />
         </Box>
       </Flex>
       <Drawer
@@ -106,9 +107,11 @@ const SidebarContent = ({ userData, onClose, ...rest }) => {
         {userData?.name}
       </Text>
       {LinkItems.map(link => (
-        <NavItem key={link.name} icon={link.icon}>
-          {link.name}
-        </NavItem>
+        <Link to={link.url}>
+          <NavItem icon={link.icon}>
+            {link.name}
+          </NavItem>
+        </Link>
       ))}
     </Box>
   )

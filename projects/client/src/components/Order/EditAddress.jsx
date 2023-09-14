@@ -22,8 +22,6 @@ const EditAddress = ({ isOpen, onClose, onEditAddress, addressData }) => {
   const [province, setProvince] = useState([]);
   const [selectedProvinceId, setSelectedProvinceId] = useState("");
   const [selectedProvinceName, setSelectedProvinceName] = useState("");
-  console.log("slected address id", selectedProvinceId)
-  console.log("in addressData edit address", addressData)
   const fetchProvince = async () => {
     await getProvince(setProvince, toast)
   }
@@ -33,17 +31,34 @@ const EditAddress = ({ isOpen, onClose, onEditAddress, addressData }) => {
       await getCityByProvince(selectedProvinceId, setCity, toast)
     }
   }
+
   useEffect(() => {
     fetchProvince();
+  }, [])
+  useEffect(() => {
     fetchCity();
   }, [selectedProvinceId])
+
+  useEffect(() => {
+    if (addressData.province) {
+      const selectedProvince = province.find(
+        (p) => p.province === addressData.province
+      );
+
+      if (selectedProvince) {
+        setSelectedProvinceId(selectedProvince.province_id);
+        setSelectedProvinceName(selectedProvince.province);
+      }
+    }
+  }, [province, addressData]);
+
 
   const handleSelectProvince = (e) => {
     const selectedId = e.target.value;
     const selectedName = e.target.options[e.target.selectedIndex].text;
     setSelectedProvinceId(selectedId);
     setSelectedProvinceName(selectedName);
-    setCity([]);
+    // setCity([]);
   }
 
   const initialFormData = {
@@ -75,11 +90,11 @@ const EditAddress = ({ isOpen, onClose, onEditAddress, addressData }) => {
     });
   };
 
-
-
   const handleEditAddress = async () => {
     try {
       await updateAddressUser(addressData, formData, toast, onEditAddress, onClose, selectedProvinceName);
+      console.log("formdata", formData)
+      console.log('selecprovinceedit', selectedProvinceName)
     } catch (error) {
       console.error("Error editing address:", error);
     }
@@ -95,8 +110,6 @@ const EditAddress = ({ isOpen, onClose, onEditAddress, addressData }) => {
           <FormControl mb={2}>
             <FormLabel>Name</FormLabel>
             <Input
-              bg={"white"}
-              color={"#233947"}
               type="text"
               name="name"
               value={formData.name}
@@ -113,7 +126,7 @@ const EditAddress = ({ isOpen, onClose, onEditAddress, addressData }) => {
           </FormControl>
           <FormControl mb={2}>
             <FormLabel>City Name</FormLabel>
-            <Select placeholder={selectedProvinceId ? "select city" : formData.city_name} name="city_name" value={formData.city_name} onChange={handleChange} >
+            <Select isDisabled={!selectedProvinceId} placeholder={selectedProvinceId ? "select city" : formData.city_name} name="city_name" value={formData.city_name} onChange={handleChange} >
               {city.map((city) => (
                 <option style={{ color: "white" }} key={city.city_id} value={city.city_name}>{city.city_name}</option>
               ))}
@@ -123,8 +136,6 @@ const EditAddress = ({ isOpen, onClose, onEditAddress, addressData }) => {
             <FormLabel>Postal Code</FormLabel>
             <Input
               type="number"
-              bg={"white"}
-              color={"#233947"}
               name="postal_code"
               value={formData.postal_code}
               onChange={handleChange}
@@ -134,8 +145,6 @@ const EditAddress = ({ isOpen, onClose, onEditAddress, addressData }) => {
             <FormLabel>Full Address</FormLabel>
             <Input
               type="text"
-              bg={"white"}
-              color={"#233947"}
               name="full_address"
               value={formData.full_address}
               onChange={handleChange}

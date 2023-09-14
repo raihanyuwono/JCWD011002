@@ -98,6 +98,7 @@ const AddAddress = ({ isOpen, onClose, onAddAddress }) => {
               name="name"
               value={formData.name}
               onChange={handleChange}
+              placeholder="Home/Office/.."
             />
           </FormControl>
           <FormControl mb={2}>
@@ -110,7 +111,7 @@ const AddAddress = ({ isOpen, onClose, onAddAddress }) => {
           </FormControl>
           <FormControl mb={2}>
             <FormLabel>City Name</FormLabel>
-            <Select placeholder='Select City' name="city_name" value={formData.city_name} onChange={handleChange} >
+            <Select isDisabled={city.length === 0} placeholder='Select City' name="city_name" value={formData.city_name} onChange={handleChange} >
               {city.map((city) => (
                 <option style={{ color: "white" }} key={city.city_id} value={city.city_name}>{city.city_name}</option>
               ))}
@@ -123,6 +124,7 @@ const AddAddress = ({ isOpen, onClose, onAddAddress }) => {
               name="postal_code"
               value={formData.postal_code}
               onChange={handleChange}
+              placeholder="your postal code"
             />
           </FormControl>
           <FormControl>
@@ -132,6 +134,7 @@ const AddAddress = ({ isOpen, onClose, onAddAddress }) => {
               name="full_address"
               value={formData.full_address}
               onChange={handleChange}
+              placeholder="your full address"
             />
           </FormControl>
           <Checkbox mt={4} name="is_default" defaultChecked isChecked={formData.is_default} onChange={handleChange}>Default Address</Checkbox>

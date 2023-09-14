@@ -20,6 +20,7 @@ import AddAddress from "./AddAddress";
 import EditAddress from "./EditAddress";
 import { MdLocationOn } from "react-icons/md";
 import axios from "axios";
+import DeleteAddress from "../Profile/DeleteAddress";
 const API_URL = process.env.REACT_APP_API_BASE_URL;
 
 // const dummyAddress = [
@@ -179,7 +180,7 @@ const SelectAddress = () => {
                   _hover={{ bgColor: "white", color: "#34638A" }}
                   variant={"outline"}
                 >
-                  Add New Addresshhgjh
+                  Add New Address
                 </Button>
                 <Box>
                   {dataAddress.length === 0 ? (
@@ -196,18 +197,21 @@ const SelectAddress = () => {
                         key={address.id}
                       >
                         <Flex flexDirection={"column"}>
-                          <Text
-                            px={3}
-                            py={2}
-                            fontSize={"md"}
-                            fontWeight={"bold"}
-                          >
-                            {address.name}
-                            &nbsp;
-                            {address.is_default && (
-                              <Badge colorScheme="green">Default</Badge>
-                            )}
-                          </Text>
+                          <Flex alignItems={"center"} justifyContent={"space-between"} mr={5}>
+                            <Text
+                              px={3}
+                              py={2}
+                              fontSize={"md"}
+                              fontWeight={"bold"}
+                            >
+                              {address.name}
+                              &nbsp;
+                              {address.is_default && (
+                                <Badge colorScheme="green">Default</Badge>
+                              )}
+                            </Text>
+                            <DeleteAddress addressData={address} />
+                          </Flex>
                           <Divider />
                           <Text
                             px={3}
@@ -215,8 +219,9 @@ const SelectAddress = () => {
                             fontSize={"lg"}
                             fontWeight={"bold"}
                           >
-                            {/* {address.id_user} */}
+                            {address.user.name}
                           </Text>
+                          <Text px={3} fontSize={"sm"}>{address.user.phone}</Text>
                           <Text px={3} fontSize={"sm"}>
                             {address.full_address}, {address.city_name},{" "}
                             {address.province}, {address.postal_code}
@@ -265,7 +270,7 @@ const SelectAddress = () => {
           )}
         </Box>
         <Button size="md" mt={2} onClick={openSelectAddressModal}>
-          Select Address hgjhgj
+          Select Address
         </Button>
       </Flex>
       {/* {selectedAddress && (
