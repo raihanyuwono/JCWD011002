@@ -6,6 +6,9 @@ const { authRouter, userOrderRouter, rajaongkirRouter, userProfileRouter } = req
 const path = require("path");
 const { transactionRouter } = require("./routes");
 const { addressRouter } = require("./routes");
+const { cronJob } = require("./helpers");
+
+// cronJob.startCronJob();
 
 const PORT = process.env.PORT || 8000;
 const app = express();
@@ -13,7 +16,7 @@ app.use(
   cors({
     origin: [
       process.env.WHITELISTED_DOMAIN &&
-      process.env.WHITELISTED_DOMAIN.split(","),
+        process.env.WHITELISTED_DOMAIN.split(","),
     ],
   })
 );

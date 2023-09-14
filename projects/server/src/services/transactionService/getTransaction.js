@@ -75,6 +75,7 @@ const getTransaction = async (
         product_name: productName,
         product_image: productImage,
         numProducts,
+        created_at,
       };
     });
 

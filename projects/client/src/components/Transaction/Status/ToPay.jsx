@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import { Box, Divider, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Divider, Flex, Image, Text, Tooltip } from "@chakra-ui/react";
 import { Badge } from "@chakra-ui/react";
 import Pagination from "../Pagination";
 import SearchBar from "../SearchBar";
@@ -23,6 +23,7 @@ const ToPay = () => {
   const [endDate, setEndDate] = useState("");
   const [selectedTxn, setselectedTxn] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [remainingTime, setRemainingTime] = useState({});
 
   const fetchData = async () => {
     try {
@@ -36,14 +37,44 @@ const ToPay = () => {
     }
   };
 
+  // useEffect(() => {
+  //   fetchData();
+  // }, [currentPage, filterBy, searchQuery, startDate, endDate]);
+
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => {
+  //     fetchData();
+  //   }, 1500);
+  //   return () => clearInterval(intervalId);
+  // }, [currentPage, filterBy, searchQuery, startDate, endDate]);
+
   useEffect(() => {
-    fetchData();
-  }, [currentPage, filterBy, searchQuery, startDate, endDate]);
+    const intervalId = setInterval(() => {
+      fetchData();
+      data.forEach((item) => {
+        updateRemainingTime(item.transactionId, item.created_at);
+      });
+    }, 1000);
+    return () => clearInterval(intervalId);
+  }, [data]);
+
+  const updateRemainingTime = (transactionId, created_at) => {
+    const currentTime = new Date();
+    const expirationTime = new Date(created_at);
+    expirationTime.setMinutes(expirationTime.getMinutes() + 10); // 10 minutes
+    const timeDifference = expirationTime - currentTime;
+    const remainingSeconds = Math.max(0, Math.floor(timeDifference / 1000));
+    setRemainingTime((prevState) => ({
+      ...prevState,
+      [transactionId]: remainingSeconds,
+    }));
+  };
 
   const handleDateRangeFilter = (start, end) => {
     setStartDate(start);
     setEndDate(end);
   };
+
   const handleOpenModal = (transactionId) => {
     setselectedTxn(transactionId);
     setIsModalOpen(true);
@@ -87,6 +118,19 @@ const ToPay = () => {
               <Text>&nbsp;MWECG2/ID/TXN{item.transactionId}</Text>
             </Flex>
             <Flex>
+              <Tooltip
+                hasArrow
+                textAlign={"center"}
+                label="Please upload receipt before the time runs out, or your order will be cancelled automatically by the system"
+                bg="red.600"
+              >
+                <Text fontWeight={"bold"} mr={3}>
+                  {Math.floor(remainingTime[item.transactionId] / 60)}:
+                  {(remainingTime[item.transactionId] % 60)
+                    .toString()
+                    .padStart(2, "0")}
+                </Text>
+              </Tooltip>
               <ButtonUpload transactionId={item.transactionId} />
               &nbsp;
               <CancelOrder transactionId={item.transactionId} />
