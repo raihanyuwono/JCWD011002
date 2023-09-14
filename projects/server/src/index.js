@@ -6,8 +6,9 @@ const { authRouter, userOrderRouter, rajaongkirRouter, userProfileRouter } = req
 const path = require("path");
 const { transactionRouter } = require("./routes");
 const { addressRouter } = require("./routes");
-const { cronJob } = require("./helpers");
+const { productRouter } = require("./routes");
 
+const { cronJob } = require("./helpers");
 // cronJob.startCronJob();
 
 const PORT = process.env.PORT || 8000;
@@ -36,7 +37,7 @@ app.use("/api/user", userProfileRouter);
 app.use("/api/public", express.static(path.resolve(__dirname, "../public")));
 app.use("/api/transaction", transactionRouter);
 app.use("/api/address", addressRouter);
-
+app.use("/api/product", productRouter);
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`);
 });

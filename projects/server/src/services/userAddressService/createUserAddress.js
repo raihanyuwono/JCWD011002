@@ -1,12 +1,13 @@
-const axios = require('axios');
 const db = require('../../database/models');
 const UserAddress = db.user_address;
 const sequelize = db.sequelize;
 const { messages } = require('../../helpers');
 const getLatLongFromAddress = require('../../helpers/addressCoordinate');
+const defaultAddressUpdate = require('../../helpers/defaultAddressUpdate');
 
-const createUserAddress = async (id, body) => {
+const createUserAddress = async (id, body, id_user) => {
   try {
+    await defaultAddressUpdate(body, id_user);
     const { latitude, longitude } = await getLatLongFromAddress(body.province, body.city_name);
 
     return await sequelize.transaction(async (t) => {
