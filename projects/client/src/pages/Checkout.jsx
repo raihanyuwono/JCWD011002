@@ -98,7 +98,7 @@ const Checkout = () => {
       localStorage.removeItem("wh_city");
       setTotal(0);
       viewCart();
-      navigate("/");
+      navigate("/profile/transaction");
       setIsLoading(false);
     } catch (error) {
       toast({
@@ -213,7 +213,7 @@ const Checkout = () => {
           >
             <Flex justifyContent={"space-between"}>
               <SelectShipping />
-              <Box>
+              <Box align="right">
                 <Select
                   bgColor={"#EDF2F7"}
                   color={"black"}
@@ -232,8 +232,11 @@ const Checkout = () => {
                 </Select>
                 {selectedPayment && (
                   <Box key={selectedPayment.id}>
-                    <Text mt={2}>Payment: {selectedPayment.name}</Text>
-                    Please Transfer to: {selectedPayment.identifier}
+                    <Text align={"right"} mt={2}>
+                      {/* Payment: {selectedPayment.name} */}
+                    </Text>
+                    Please upload proof of payment <br /> on the transaction
+                    page
                   </Box>
                 )}
               </Box>

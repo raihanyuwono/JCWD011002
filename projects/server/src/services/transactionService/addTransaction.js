@@ -6,6 +6,7 @@ const {
   product,
 } = require("../../database");
 const handleStock = require("./handleStock");
+const { cronJob } = require("../../helpers");
 
 const addTransaction = async (
   userId,
@@ -68,6 +69,8 @@ const addTransaction = async (
       where: { id_cart: userId },
     });
 
+    cronJob.startCronJob(userId);
+    
     return {
       success: true,
       status: 200,
