@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import { Box, Divider, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Divider, Flex, Image, Popover, Text } from "@chakra-ui/react";
 import { Badge } from "@chakra-ui/react";
 import Pagination from "../Pagination";
 import SearchBar from "../SearchBar";
@@ -9,6 +9,7 @@ import FilterBy from "../FilterBy";
 import toRupiah from "@develoka/angka-rupiah-js";
 import SeeDetailTxn from "../SeeDetailTxn";
 import ViewReceipt from "../ViewReceipt";
+import { BsBoxArrowInUpRight } from "react-icons/bs";
 
 const AllStatus = () => {
   const API_URL = process.env.REACT_APP_API_BASE_URL;
@@ -71,14 +72,13 @@ const AllStatus = () => {
         <Box
           key={item.transactionId}
           mb={2}
-          bg={"white"}
+          bg={"bgSecondary"}
           p={4}
           w={"58vw"}
-          color={"black"}
-          cursor={"pointer"}
+          color={"white"}
         >
           <Flex justifyContent={"space-between"}>
-            <Flex onClick={() => handleOpenModal(item.transactionId)}>
+            <Flex>
               <Text fontWeight={"bold"}>{item.txn_date}&nbsp;</Text>
               {item.status === "Dibatalkan" ? (
                 <Badge alignSelf={"center"} colorScheme="red">
@@ -99,11 +99,7 @@ const AllStatus = () => {
             )}
           </Flex>
           <Divider mt={2} mb={2} />
-          <Flex
-            onClick={() => handleOpenModal(item.transactionId)}
-            align={"center"}
-            justifyContent={"space-between"}
-          >
+          <Flex align={"center"} justifyContent={"space-between"}>
             <Flex>
               <Image borderRadius={"5px"} src={item.product_image} />
               <Flex direction={"column"}>
@@ -119,20 +115,16 @@ const AllStatus = () => {
                 )}
               </Flex>
             </Flex>
-            <Flex direction={"column"}>
-              <Text fontSize={"sm"}>Total:</Text>
+            <Flex textAlign={"right"} direction={"column"}>
+              <Text fontSize={"sm"}>Total</Text>
               <Text fontWeight={"bold"} fontSize={"xl"}>
                 {toRupiah(item.total, { dot: ".", floatingPoint: 0 })}
               </Text>
+              <SeeDetailTxn transactionId={item.transactionId} />
             </Flex>
           </Flex>
         </Box>
       ))}
-      <SeeDetailTxn
-        transactionId={selectedTxn}
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-      />
       <Pagination
         totalItems={totalPages * 10}
         itemsPerPage={10}

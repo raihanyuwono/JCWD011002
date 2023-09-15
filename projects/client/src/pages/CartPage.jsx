@@ -33,13 +33,31 @@ const CartPage = () => {
   const [cartLength, setCartLength] = useState(0);
 
   const viewCart = async () => {
-    const response = await axios.get(`${API_URL}/order/cart/${userId}`);
-    setCart(response.data.data);
-    setCartLength(response.data.data.length);
+    try {
+      const response = await axios.get(`${API_URL}/order/cart/${userId}`);
+      setCart(response.data.data);
+      setCartLength(response.data.data.length);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const fetchDefault = async () => {
+    try {
+      const response = await axios.post(`${API_URL}/address/default`, {
+        userId: userId,
+      });
+      localStorage.setItem(
+        "selectedAddress",
+        JSON.stringify(response.data.data)
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
     viewCart();
+    fetchDefault();
   }, []);
 
   const handleDelete = async (productId) => {
@@ -111,17 +129,23 @@ const CartPage = () => {
             ml={2}
             mr={1}
             variant="simple"
-            color={"#34638a"}
+            color={"white"}
             w={"69vw"}
-            bgColor="white"
+            bgColor="bgSecondary"
           >
             <Thead>
               <Tr>
                 <Th></Th>
-                <Th>Product</Th>
-                <Th textAlign={"center"}>Price</Th>
-                <Th textAlign={"center"}>Quantity</Th>
-                <Th textAlign={"center"}>Subtotal</Th>
+                <Th color={"white"}>Product</Th>
+                <Th color={"white"} textAlign={"center"}>
+                  Price
+                </Th>
+                <Th color={"white"} textAlign={"center"}>
+                  Quantity
+                </Th>
+                <Th color={"white"} textAlign={"center"}>
+                  Subtotal
+                </Th>
                 <Th p={0}>
                   <ClearAlert coba={viewCart} userId={userId} />
                 </Th>
@@ -159,6 +183,7 @@ const CartPage = () => {
                           <HStack textAlign={"center"} maxW="220px">
                             <Button
                               border={"1px solid #2D2D2D"}
+                              borderRadius={"full"}
                               onClick={() =>
                                 handleSetQuantity(
                                   item.productId,
@@ -169,6 +194,7 @@ const CartPage = () => {
                               -
                             </Button>
                             <Input
+                              borderRadius={"full"}
                               textAlign={"center"}
                               type="number"
                               value={item.quantity}
@@ -179,6 +205,7 @@ const CartPage = () => {
                             />
                             <Button
                               border={"1px solid #2D2D2D"}
+                              borderRadius={"full"}
                               onClick={() =>
                                 handleSetQuantity(
                                   item.productId,

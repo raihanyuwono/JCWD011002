@@ -21,7 +21,7 @@ import AllStatus from "../components/Transaction/Status/AllStatus";
 const TransactionList = () => {
   return (
     <>
-      <Tabs w={"70vw"} isFitted variant="enclosed">
+      <Tabs isLazy w={"70vw"} isFitted variant="enclosed">
         <TabList color={"white"} h={"3em"} mb="1em">
           <Tab>All</Tab>
           <Tab>To Pay</Tab>

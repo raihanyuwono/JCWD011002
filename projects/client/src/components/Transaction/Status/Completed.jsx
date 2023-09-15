@@ -71,14 +71,13 @@ const Completed = () => {
         <Box
           key={item.transactionId}
           mb={2}
-          bg={"white"}
+          bg={"bgSecondary"}
           p={4}
           w={"58vw"}
-          color={"black"}
-          cursor={"pointer"}
+          color={"white"}
         >
           <Flex justifyContent={"space-between"}>
-            <Flex onClick={() => handleOpenModal(item.transactionId)}>
+            <Flex>
               <Text fontWeight={"bold"}>{item.txn_date}&nbsp;</Text>
               <Badge alignSelf={"center"} colorScheme="green">
                 {item.status}
@@ -91,11 +90,7 @@ const Completed = () => {
             </Button>
           </Flex>
           <Divider mt={2} mb={2} />
-          <Flex
-            onClick={() => handleOpenModal(item.transactionId)}
-            align={"center"}
-            justifyContent={"space-between"}
-          >
+          <Flex align={"center"} justifyContent={"space-between"}>
             <Flex>
               <Image borderRadius={"5px"} src={item.product_image} />
               <Flex direction={"column"}>
@@ -116,15 +111,11 @@ const Completed = () => {
               <Text fontWeight={"bold"} fontSize={"xl"}>
                 {toRupiah(item.total, { dot: ".", floatingPoint: 0 })}
               </Text>
+              <SeeDetailTxn transactionId={item.transactionId} />
             </Flex>
           </Flex>
         </Box>
       ))}
-      <SeeDetailTxn
-        transactionId={selectedTxn}
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-      />
       <Pagination
         totalItems={totalPages * 10}
         itemsPerPage={10}

@@ -42,6 +42,8 @@ const FilterBy = ({ onFilterChange, onDateRangeFilter }) => {
         <option value="asc">OLDEST</option>
       </Select>
       <Input
+        bg={"white"}
+        color={"black"}
         ml={2}
         mr={2}
         placeholder="Start Date"
@@ -51,6 +53,8 @@ const FilterBy = ({ onFilterChange, onDateRangeFilter }) => {
         onChange={handleStartDateChange}
       />
       <Input
+        bg={"white"}
+        color={"black"}
         size="md"
         type="datetime-local"
         value={endDate}
@@ -58,12 +62,13 @@ const FilterBy = ({ onFilterChange, onDateRangeFilter }) => {
       />
       <Button
         variant={"outline"}
-        color={"white"}
-        _hover={{ color: "black", bg: "white" }}
+        color={"black"}
+        bg={"white"}
+        _hover={{ color: "white", bg: "black" }}
         ml={2}
         onClick={handleApplyDateFilter}
       >
-        <MdSaveAs size={"80px"} />
+        <MdSaveAs size={"75px"} />
       </Button>
     </Flex>
   );

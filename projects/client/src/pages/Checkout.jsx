@@ -155,18 +155,30 @@ const Checkout = () => {
         <Text fontSize={"3xl"} mt={8} mb={4}>
           Checkout
         </Text>
-        <Box mb={2} w={"100vw"} px={6} py={6} bgColor={"secondary"}>
+        <Box mb={1} w={"100vw"} px={6} py={6} bgColor={"secondary"}>
           <SelectAddress />
         </Box>
         <TableContainer>
-          <Table variant="simple" color={"#34638a"} bg={"white"} w={"100vw"}>
+          <Table
+            variant="unstyled"
+            color={"white"}
+            bgColor={"bgSecondary"}
+            border={"1px solid gray"}
+            w={"100vw"}
+          >
             <Thead>
               <Tr>
                 <Th></Th>
-                <Th>Product</Th>
-                <Th textAlign={"center"}>Price</Th>
-                <Th textAlign={"center"}>Quantity</Th>
-                <Th textAlign={"center"}>Subtotal</Th>
+                <Th color={"white"}>Product</Th>
+                <Th color={"white"} textAlign={"center"}>
+                  Price
+                </Th>
+                <Th color={"white"} textAlign={"center"}>
+                  Quantity
+                </Th>
+                <Th color={"white"} textAlign={"center"}>
+                  Subtotal
+                </Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -205,11 +217,11 @@ const Checkout = () => {
           <Box
             px={6}
             py={6}
-            color={"#34638a"}
+            color={"white"}
             mt={1}
             // h={"15vh"}
             w={"70vw"}
-            bgColor="white"
+            bgColor="bgSecondary"
           >
             <Flex justifyContent={"space-between"}>
               <SelectShipping />
@@ -235,8 +247,7 @@ const Checkout = () => {
                     <Text align={"right"} mt={2}>
                       {/* Payment: {selectedPayment.name} */}
                     </Text>
-                    Please upload proof of payment <br /> on the transaction
-                    page
+                    Upload proof of payment <br /> on the transaction page
                   </Box>
                 )}
               </Box>
@@ -245,10 +256,11 @@ const Checkout = () => {
           <Box
             px={6}
             py={6}
-            color={"#34638a"}
+            color={"white"}
+            borderLeft={"1px solid gray"}
             mt={1}
             w={"30vw"}
-            bgColor="textSecondary"
+            bgColor="bgSecondary"
           >
             <Flex justifyContent={"space-between"}>
               <Text mt={1}>Subtotal Product:</Text>
