@@ -82,8 +82,13 @@ function App() {
         <Flex {...contentContainerAttr}>
           <Routes>
             <Route path="/" element={setPage()}>
-              <Route path="test" element={<ProductCategory />} />
-              <Route path="testing" element={<ProductList />} />
+              {/* <Route path="user" element={} /> */}
+              {/* <Route path="warehouse" element={} /> */}
+              <Route path="category" element={<ProductCategory />} />
+              <Route path="product" element={<ProductList />} />
+              {/* <Route path="stockmutation" element={} /> */}
+              {/* <Route path="order" element={} /> */}
+              {/* <Route path="report" element={} /> */}
             </Route>
             <Route path="/registration/:token" element={<Registration />} />
             <Route path="/profile" element={<Profile userData={userData} />}>

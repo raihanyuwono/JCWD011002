@@ -1,10 +1,11 @@
 import { Flex, Grid, GridItem, Text } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 
 const logoAttr = {
   justifyContent: "center",
 };
 
-function CardAdminMenu({ name, logo, selected = false, setSelected }) {
+function CardAdminMenu({ name, logo, selected = false, setSelected, url }) {
   const container = {
     templateColumns: "1fr 3fr",
     alignItems: "center",
@@ -27,7 +28,8 @@ function CardAdminMenu({ name, logo, selected = false, setSelected }) {
         <Flex {...logoAttr}>{logo}</Flex>
       </GridItem>
       <GridItem>
-        <Text>{name}</Text>
+        {/* <Text>{name}</Text> */}
+        <Link to={url}>{name}</Link>
       </GridItem>
     </Grid>
   );

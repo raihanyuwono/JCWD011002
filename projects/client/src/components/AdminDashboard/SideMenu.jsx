@@ -23,7 +23,7 @@ const menuAttr = {
   w: "full",
 };
 
-function SideMenu({selected, setSelected, menuList}) {
+function SideMenu({ selected, setSelected, menuList }) {
   const role = getRole();
   return (
     <Flex {...containerAttr}>

@@ -22,23 +22,20 @@ const container = {
   bgColor: "bgPrimary",
 };
 
-function createMenuSet(name, logo, access, page) {
-  return { name, logo, access, page };
+function createMenuSet(name, logo, access, url) {
+  return { name, logo, access, url };
 }
 
-function dummyPage(name) {
-  return <Text>{name}</Text>
-}
 
 const menuList = [
-  createMenuSet("Dashboard", <IcHome />, ACCESS_ALL_ADMIN, dummyPage("Dashboard")),
-  createMenuSet("Users", <IcUser />, ACCESS_ADMIN, dummyPage("Manage Users")),
-  createMenuSet("Warehouses", <IcWarehouse />, ACCESS_ADMIN, dummyPage("Manage Warehouses")),
-  createMenuSet("Categories", <IcCategory />, ACCESS_ADMIN, dummyPage("Manage Categories")),
-  createMenuSet("Products", <IcProduct />, ACCESS_ADMIN, dummyPage("Manage Products")),
-  createMenuSet("Mutations", <IcMutation />, ACCESS_ALL_ADMIN, dummyPage("Manage Mutation")),
-  createMenuSet("Orders", <IcOrder />, ACCESS_ADMIN, dummyPage("Manage Order")),
-  createMenuSet("Reports", <IcReport />, ACCESS_ALL_ADMIN, dummyPage("Reports")),
+  createMenuSet("Dashboard", <IcHome />, ACCESS_ALL_ADMIN, "/"),
+  createMenuSet("Users", <IcUser />, ACCESS_ADMIN, "/user"),
+  createMenuSet("Warehouses", <IcWarehouse />, ACCESS_ADMIN, "/warehouse"),
+  createMenuSet("Categories", <IcCategory />, ACCESS_ADMIN, "/category"),
+  createMenuSet("Products", <IcProduct />, ACCESS_ADMIN, "/product"),
+  createMenuSet("Mutations", <IcMutation />, ACCESS_ALL_ADMIN, "/stockmutation"),
+  createMenuSet("Orders", <IcOrder />, ACCESS_ADMIN, "/order"),
+  createMenuSet("Reports", <IcReport />, ACCESS_ALL_ADMIN, "/report"),
 ];
 
 function AdminDashboard() {
@@ -52,8 +49,6 @@ function AdminDashboard() {
     <Flex {...container}>
       <SideMenu {...sideMenuAttr} />
       {menuList[selected]["page"]}
-      <Link to="/test">Profile</Link>
-      <Link to="/testing">Transaction</Link>
       <Outlet />
     </Flex>
   );
