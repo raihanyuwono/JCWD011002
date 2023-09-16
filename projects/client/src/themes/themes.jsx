@@ -56,6 +56,7 @@ const themes = extendTheme({
     editPrimary: "#34638A",
     editSecondary: "#2C4E69",
     blueCold: "#9E9FA5",
+    darkBlue: "#34638A"
   },
   components: {
     Text: {
