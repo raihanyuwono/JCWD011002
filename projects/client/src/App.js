@@ -15,6 +15,8 @@ import { useEffect, useState } from "react";
 import UserProfile from "./components/Profile/UpdateProfile";
 import { getUser } from "./api/profile";
 import Transaction from "./components/Profile/Transaction";
+import ProductCategory from "./components/AdminDashboard/Menu/ProductCategory/ProductCategory";
+import ProductList from "./components/AdminDashboard/Menu/Product/ProductList";
 
 const ADMIN_PATH = ["/", "/profile"];
 
@@ -79,7 +81,10 @@ function App() {
         <NavUser />
         <Flex {...contentContainerAttr}>
           <Routes>
-            <Route path="/" element={setPage()} />
+            <Route path="/" element={setPage()}>
+              <Route path="test" element={<ProductCategory />} />
+              <Route path="testing" element={<ProductList />} />
+            </Route>
             <Route path="/registration/:token" element={<Registration />} />
             <Route path="/profile" element={<Profile userData={userData} />}>
               <Route path="" element={<UserProfile userData={userData} setUserData={setUserData} />} />
@@ -89,6 +94,7 @@ function App() {
             <Route path="/reset/:token" element={<ResetPassword />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/checkout" element={<Checkout />} />
+            <Route path="/category" element={<ProductCategory />} />
           </Routes>
         </Flex>
         <Footer />

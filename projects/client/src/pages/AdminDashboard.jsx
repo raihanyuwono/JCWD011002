@@ -13,6 +13,7 @@ import {
 } from "react-icons/pi";
 import { TbCategory as IcCategory } from "react-icons/tb";
 import { SlGraph as IcReport } from "react-icons/sl";
+import { Link, Outlet } from "react-router-dom";
 
 const ACCESS_ADMIN = ["admin"];
 const ACCESS_ALL_ADMIN = ["admin", "admin warehouse"];
@@ -51,6 +52,9 @@ function AdminDashboard() {
     <Flex {...container}>
       <SideMenu {...sideMenuAttr} />
       {menuList[selected]["page"]}
+      <Link to="/test">Profile</Link>
+      <Link to="/testing">Transaction</Link>
+      <Outlet />
     </Flex>
   );
 }
