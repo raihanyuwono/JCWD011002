@@ -46,11 +46,13 @@ function AdminDashboard() {
     menuList,
   };
   return (
-    <Flex {...container}>
-      <SideMenu {...sideMenuAttr} />
-      {menuList[selected]["page"]}
+    <>
+      <Flex {...container}>
+        <SideMenu {...sideMenuAttr} />
+        {menuList[selected]["page"]}
+      </Flex>
       <Outlet />
-    </Flex>
+    </>
   );
 }
 
