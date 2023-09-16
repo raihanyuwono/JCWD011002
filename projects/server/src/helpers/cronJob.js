@@ -1,6 +1,6 @@
 const cron = require("node-cron");
 const { transaction } = require("../database");
-
+const cancelOrder = require("../services/transactionService/cancelOrder");
 let scheduled;
 
 const cronJob = async (userId) => {
@@ -13,13 +13,12 @@ const cronJob = async (userId) => {
     });
 
     for (const txn of transactions) {
-      const expired = new Date(new Date() - 10 * 60 * 1000); // 10 minutes
+      const expired = new Date(new Date() - 10 * 60 * 1000); // 10 menit
 
       if (txn.created_at <= expired) {
-        await txn.update({ id_status: 6 });
+        // await txn.update({ id_status: 6 });
+        await cancelOrder(userId, txn.id);
         console.log(`Updated transaction ID ${txn.id}.`);
-        scheduled.stop();
-        console.log("Cron job stopped.");
       } else {
         console.log(
           `TXN ${txn.id} with User ${txn.id_user} is not yet eligible for update.`
@@ -28,7 +27,9 @@ const cronJob = async (userId) => {
     }
 
     if (transactions.length === 0) {
-      console.log("No transactions with id_status = 1 found, checking...");
+      console.log("No transactions with id_status = 1 found");
+      scheduled.stop();
+      console.log("Cron job stopped");
     }
   } catch (error) {
     console.error("Error updating transactions:", error);
@@ -37,7 +38,7 @@ const cronJob = async (userId) => {
 
 module.exports = {
   startCronJob: (userId) => {
-    scheduled = cron.schedule("*/30 * * * * *", () => {
+    scheduled = cron.schedule("* * * * * *", () => {
       cronJob(userId);
     });
     console.log("Cron job running");

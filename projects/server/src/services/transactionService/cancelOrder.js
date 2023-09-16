@@ -5,15 +5,11 @@ const {
   product_warehouse,
   sequelize,
 } = require("../../database");
-const { messages } = require("../../helpers");
 
 async function cancelOrder(userId, transactionId) {
-  const t = await sequelize.transaction();
-
   try {
     const transactionProducts = await transaction_product.findAll({
       where: { id_transaction: transactionId },
-      transaction: t,
     });
 
     for (const product of transactionProducts) {
@@ -22,22 +18,18 @@ async function cancelOrder(userId, transactionId) {
 
       const stockHistories = await stock_history.findAll({
         where: { id_transaction: transactionId, id_product: productId },
-        transaction: t,
       });
 
       for (const stockHistory of stockHistories) {
-        await stock_history.create(
-          {
-            id_user: userId,
-            id_warehouse_from: stockHistory.id_warehouse_from,
-            id_warehouse_to: stockHistory.id_warehouse_from,
-            id_product: productId,
-            id_transaction: transactionId,
-            qty: qty,
-            id_status: stockHistory.id_status,
-          },
-          { transaction: t }
-        );
+        await stock_history.create({
+          id_user: userId,
+          id_warehouse_from: stockHistory.id_warehouse_from,
+          id_warehouse_to: stockHistory.id_warehouse_from,
+          id_product: productId,
+          id_transaction: transactionId,
+          qty: qty,
+          id_status: stockHistory.id_status,
+        });
       }
 
       const productWarehouse = await product_warehouse.findOne({
@@ -45,27 +37,23 @@ async function cancelOrder(userId, transactionId) {
           id_warehouse: stockHistories[0].id_warehouse_from,
           id_product: productId,
         },
-        transaction: t,
       });
 
       if (productWarehouse) {
         productWarehouse.stock += qty;
-        await productWarehouse.save({ transaction: t });
+        await productWarehouse.save();
       }
     }
 
     await transaction.update(
       { id_status: 6 },
-      { where: { id: transactionId }, transaction: t }
+      { where: { id: transactionId } }
     );
 
-    await t.commit(); 
-
-    return messages.success("Order canceled successfully");
+    return "Order canceled";
   } catch (error) {
-    await t.rollback();
     console.error("Error canceling order:", error);
-    return messages.error(500, error.message || "Internal server error");
+    return "Internal server error";
   }
 }
 
