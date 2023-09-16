@@ -20,8 +20,6 @@ const ToConfirm = () => {
   const [filterBy, setFilterBy] = useState("asc");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [selectedTxn, setselectedTxn] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -42,15 +40,6 @@ const ToConfirm = () => {
   const handleDateRangeFilter = (start, end) => {
     setStartDate(start);
     setEndDate(end);
-  };
-  const handleOpenModal = (transactionId) => {
-    setselectedTxn(transactionId);
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setselectedTxn(null);
-    setIsModalOpen(false);
   };
 
   return (

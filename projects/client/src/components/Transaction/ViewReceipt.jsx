@@ -40,7 +40,7 @@ const ViewReceipt = ({ transactionId }) => {
   return (
     <Popover>
       <PopoverTrigger>
-        <Badge color={"black"} alignSelf={"center"}>
+        <Badge cursor={"pointer"} color={"black"} alignSelf={"center"}>
           RECEIPT
         </Badge>
       </PopoverTrigger>

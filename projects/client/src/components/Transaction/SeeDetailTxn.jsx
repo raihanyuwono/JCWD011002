@@ -105,7 +105,6 @@ const SeeDetailTxn = ({ transactionId }) => {
               <Text bg={"#3D3D3D"} h={2}>
                 <Divider />
               </Text>
-              {/* --------------------------------- */}
               <Flex mt={2} color={"white"} align={"center"}>
                 <TbListDetails size={20} />
                 <Text fontSize={"sm"} fontWeight={"bold"}>
@@ -140,7 +139,6 @@ const SeeDetailTxn = ({ transactionId }) => {
                   </Flex>
                 </Box>
               ))}
-              {/* --------------------------------- */}
               <Text mt={3} bg={"#3D3D3D"} h={2}>
                 <Divider />
               </Text>

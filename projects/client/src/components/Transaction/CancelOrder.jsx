@@ -46,6 +46,7 @@ function CancelOrder({ transactionId }) {
         onClick={onOpen}
         alignSelf={"center"}
         colorScheme="red"
+        cursor={"pointer"}
       >
         Cancel
       </Badge>
