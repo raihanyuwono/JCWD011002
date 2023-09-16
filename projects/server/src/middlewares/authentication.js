@@ -14,7 +14,7 @@ async function authentication(req, res, next) {
 
     token = token.split(" ")[1];
     if (!token || token == "null")
-      return res.status(400).json({ message: "Unauthorize Request" });
+      return res.status(401).json({ message: "Unauthorize Request" });
 
     const account = jwt.verify(token, JWT_KEY);
     if (!account)

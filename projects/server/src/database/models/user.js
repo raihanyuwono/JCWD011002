@@ -9,12 +9,16 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.user_address, {
         foreignKey: "id_user",
       });
-      this.hasOne(models.warehouse_admin, {
+      this.hasMany(models.warehouse_admin, {
         foreignKey: "id_user",
       });
       this.hasMany(models.stock_history, { foreignKey: "id_user" });
       this.hasOne(models.cart, { foreignKey: "id_user" });
       this.hasMany(models.transaction, { foreignKey: "id_user" });
+      this.belongsToMany(models.warehouse, {
+        through: models.warehouse_admin,
+        foreignKey: "id_user",
+      });
     }
   }
   user.init(
@@ -42,6 +46,10 @@ module.exports = (sequelize, DataTypes) => {
         unique: true,
       },
       id_role: DataTypes.INTEGER,
+      is_active: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
     },
     {
       sequelize,

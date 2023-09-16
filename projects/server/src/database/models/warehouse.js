@@ -7,6 +7,10 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.warehouse_admin, { foreignKey: "id_warehouse" });
       this.hasMany(models.stock_history, { foreignKey: "id_warehouse_from" });
       this.hasMany(models.stock_history, { foreignKey: "id_warehouse_to" });
+      this.belongsToMany(models.user, {
+        through: models.warehouse_admin,
+        foreignKey: "id_warehouse",
+      });
     }
   }
   warehouse.init(

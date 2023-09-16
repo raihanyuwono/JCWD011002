@@ -21,6 +21,14 @@ const errorScheme = {
   },
 };
 
+const editScheme = {
+  ...buttonDark,
+  bgColor: "editPrimary",
+  _hover: {
+    bgColor: "editSecondary",
+  },
+};
+
 const themes = extendTheme({
   styles: {
     global: {
@@ -45,7 +53,9 @@ const themes = extendTheme({
     errorSecondary: "#EF5350",
     warningPrimary: "#ED6C02",
     warningSecondary: "#FF9800",
-    blueCold: "#9E9FA5"
+    editPrimary: "#34638A",
+    editSecondary: "#2C4E69",
+    blueCold: "#9E9FA5",
   },
   components: {
     Text: {
@@ -63,6 +73,7 @@ const themes = extendTheme({
       variants: {
         success: successScheme,
         error: errorScheme,
+        edit: editScheme,
         capsuleSuccess: {
           borderRadius: "3rem",
           ...successScheme,
@@ -70,6 +81,15 @@ const themes = extendTheme({
         capsuleError: {
           borderRadius: "3rem",
           ...errorScheme,
+        },
+      },
+    },
+    Table: {
+      parts: ["Thead"],
+      Thead: {
+        baseStyle: {
+          color: "red",
+          bgColor: "yellow",
         },
       },
     },

@@ -27,14 +27,14 @@ const contentContainerAttr = {
 };
 
 function setPage() {
-  if (getRole() === "admin") return <AdminDashboard />;
+  if (getRole() !== "user") return <AdminDashboard />;
   return <HomePage />;
 }
 
 function adminPath() {
   const role = getRole();
   const currentPath = document.location.pathname;
-  if (role === "admin" && !ADMIN_PATH.includes(currentPath))
+  if (role !== "user" && !ADMIN_PATH.includes(currentPath))
     document.location.href = "/";
 }
 

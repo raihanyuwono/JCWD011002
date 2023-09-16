@@ -2,7 +2,13 @@ require("dotenv/config");
 const express = require("express");
 const cors = require("cors");
 const { join } = require("path");
-const { authRouter, userOrderRouter, rajaongkirRouter, userProfileRouter } = require("./routes");
+const {
+  authRouter,
+  userOrderRouter,
+  rajaongkirRouter,
+  userProfileRouter,
+  adminRouter,
+} = require("./routes");
 const path = require("path");
 const { transactionRouter } = require("./routes");
 const { addressRouter } = require("./routes");
@@ -13,13 +19,13 @@ app.use(
   cors({
     origin: [
       process.env.WHITELISTED_DOMAIN &&
-      process.env.WHITELISTED_DOMAIN.split(","),
+        process.env.WHITELISTED_DOMAIN.split(","),
     ],
   })
 );
 
 app.use(express.json());
-// const db = require("./database/models");
+// const db = require("./database");
 // db.sequelize.sync({ alter: true });
 
 //#region API ROUTES

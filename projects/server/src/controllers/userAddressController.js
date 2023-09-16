@@ -1,6 +1,6 @@
 const { messages } = require('../helpers')
 const { userAddressService } = require('../services')
-console.log(userAddressService);
+
 const getUserAddress = async (req, res) => {
   try {
     const { id } = req.account
@@ -40,7 +40,6 @@ const createUserAddress = async (req, res) => {
 const updateUserAddress = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log('id', id)
     const { name, province, city_name, postal_code, full_address, is_default } = req.body;
     const body = { name, province, city_name, postal_code, full_address, is_default };
     const result = await userAddressService.updateUserAddress(id, body);
