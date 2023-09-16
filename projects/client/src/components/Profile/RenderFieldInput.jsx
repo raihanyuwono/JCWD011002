@@ -1,4 +1,3 @@
-// RenderFieldInput.js
 import React from 'react';
 import { FormControl, FormLabel, Input, Text, Flex, Button } from '@chakra-ui/react';
 import { FaRegEdit, FaRegSave } from 'react-icons/fa';
@@ -7,7 +6,7 @@ import { MdOutlineCancelPresentation } from 'react-icons/md';
 function RenderFieldInput({ handleEditPasswordClick, fieldName, label, type, fieldValue, isEditing, onEditClick, onSaveClick, onCancelClick, onChange }) {
 
   return (
-    <Flex align="center" justify="space-between">
+    <Flex align="center" justify="space-between" w={'100%'}>
       <FormControl m={4}>
         <Flex alignItems={isEditing[fieldName] ? 'center' : ''}>
           <FormLabel>{label}: </FormLabel>

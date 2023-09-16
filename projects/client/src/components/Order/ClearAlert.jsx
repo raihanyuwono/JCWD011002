@@ -31,7 +31,7 @@ const ClearAlert = ({ coba, userId }) => {
     <>
       <Popover isLazy>
         <PopoverTrigger>
-          <Button borderRadius={"none"} variant={"error"}>
+          <Button borderRadius={"none"} w={"full"} variant={"error"}>
             Clear
           </Button>
         </PopoverTrigger>
@@ -39,15 +39,23 @@ const ClearAlert = ({ coba, userId }) => {
           <PopoverHeader
             bg={"textSecondary"}
             color={"primary"}
-            fontWeight="semibold"
+            fontWeight="bold"
           >
             Clear Cart
           </PopoverHeader>
           <PopoverArrow />
           <PopoverCloseButton />
           <PopoverBody bgColor={"textSecondary"} color={"primary"}>
-            <Text>Are you sure want to clear your cart?</Text>
-            <Button mt={2} mb={1} variant={"error"} onClick={clearCart}>
+            <Text fontWeight={"semibold"}>
+              Are you sure want to clear your cart?
+            </Text>
+            <Button
+              mt={2}
+              mb={1}
+              variant={"error"}
+              size="sm"
+              onClick={clearCart}
+            >
               Clear
             </Button>
           </PopoverBody>

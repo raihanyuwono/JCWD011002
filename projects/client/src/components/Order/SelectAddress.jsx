@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Box,
@@ -19,45 +19,48 @@ import { FiEdit } from "react-icons/fi";
 import AddAddress from "./AddAddress";
 import EditAddress from "./EditAddress";
 import { MdLocationOn } from "react-icons/md";
+import axios from "axios";
+import DeleteAddress from "../Profile/DeleteAddress";
+const API_URL = process.env.REACT_APP_API_BASE_URL;
 
-const dummyAddress = [
-  {
-    id: 1,
-    name: "Rumah",
-    id_user: "Febry Dharmawan",
-    province: "Jawa Timur",
-    city_name: "Sidoarjo",
-    postal_code: 61252,
-    full_address: "Jl Sesama No 22 Sidoarjo",
-    is_default: true,
-    latitude: -7.417166656128915,
-    longitude: 112.75669259021905,
-  },
-  {
-    id: 2,
-    name: "Kantor",
-    id_user: "Andre Djawa",
-    province: "Nusa Tenggara Timur (NTT)",
-    city_name: "Alor",
-    postal_code: 85811,
-    full_address: "Jl Laksda Adisucipto No 1 Alor",
-    is_default: false,
-    latitude: -8.696554473073343,
-    longitude: 121.2176540613792,
-  },
-  {
-    id: 3,
-    name: "Kantor",
-    id_user: "Rizky Freon",
-    province: "Kalimantan Timur",
-    city_name: "Balikpapan",
-    postal_code: 76111,
-    full_address: "Jl Balik Papan No 90 Balikpapan",
-    is_default: false,
-    latitude: -1.696554473073343,
-    longitude: 116.696554473073343,
-  },
-];
+// const dummyAddress = [
+//   {
+//     id: 1,
+//     name: "Rumah",
+//     id_user: "Febry Dharmawan",
+//     province: "Jawa Timur",
+//     city_name: "Sidoarjo",
+//     postal_code: 61252,
+//     full_address: "Jl Sesama No 22 Sidoarjo",
+//     is_default: true,
+//     latitude: -7.417166656128915,
+//     longitude: 112.75669259021905,
+//   },
+//   {
+//     id: 2,
+//     name: "Kantor",
+//     id_user: "Andre Djawa",
+//     province: "Nusa Tenggara Timur (NTT)",
+//     city_name: "Alor",
+//     postal_code: 85811,
+//     full_address: "Jl Laksda Adisucipto No 1 Alor",
+//     is_default: false,
+//     latitude: -8.696554473073343,
+//     longitude: 121.2176540613792,
+//   },
+//   {
+//     id: 3,
+//     name: "Kantor",
+//     id_user: "Rizky Freon",
+//     province: "Kalimantan Timur",
+//     city_name: "Balikpapan",
+//     postal_code: 76111,
+//     full_address: "Jl Balik Papan No 90 Balikpapan",
+//     is_default: false,
+//     latitude: -1.696554473073343,
+//     longitude: 116.696554473073343,
+//   },
+// ];
 
 const SelectAddress = () => {
   const [isSelectAddressModalOpen, setIsSelectAddressModalOpen] =
@@ -67,6 +70,8 @@ const SelectAddress = () => {
   const [isEditAddressModalOpen, setIsEditAddressModalOpen] = useState(false);
   const [editAddressData, setEditAddressData] = useState(null);
   const selectAddress = JSON.parse(localStorage.getItem("selectedAddress"));
+  const token = localStorage.getItem("token");
+  const [dataAddress, setDataAddress] = useState([]);
 
   const openSelectAddressModal = () => {
     setIsSelectAddressModalOpen(true);
@@ -115,6 +120,24 @@ const SelectAddress = () => {
     console.log("Editing address:", formData);
     closeEditAddressModal();
   };
+
+  const fetchAddress = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/address`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setDataAddress(response.data.data);
+      console.log(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchAddress();
+  }, []);
+
   return (
     <Box>
       <Flex>
@@ -147,7 +170,7 @@ const SelectAddress = () => {
           >
             <ModalOverlay />
             <ModalContent bgColor={"#233947"}>
-              <ModalHeader color={"white"}>Shipping to?</ModalHeader>
+              <ModalHeader color={"white"}>Shipping tojgjg?</ModalHeader>
               <ModalCloseButton color={"white"} />
               <ModalBody>
                 <Button
@@ -160,12 +183,12 @@ const SelectAddress = () => {
                   Add New Address
                 </Button>
                 <Box>
-                  {dummyAddress.length === 0 ? (
+                  {dataAddress.length === 0 ? (
                     <Text align={"center"} color={"white"}>
                       No Address Found!
                     </Text>
                   ) : (
-                    dummyAddress.map((address) => (
+                    dataAddress.map((address) => (
                       <Text
                         bgColor={"white"}
                         boxShadow={"xl"}
@@ -174,18 +197,21 @@ const SelectAddress = () => {
                         key={address.id}
                       >
                         <Flex flexDirection={"column"}>
-                          <Text
-                            px={3}
-                            py={2}
-                            fontSize={"md"}
-                            fontWeight={"bold"}
-                          >
-                            {address.name}
-                            &nbsp;
-                            {address.is_default && (
-                              <Badge colorScheme="green">Default</Badge>
-                            )}
-                          </Text>
+                          <Flex alignItems={"center"} justifyContent={"space-between"} mr={5}>
+                            <Text
+                              px={3}
+                              py={2}
+                              fontSize={"md"}
+                              fontWeight={"bold"}
+                            >
+                              {address.name}
+                              &nbsp;
+                              {address.is_default && (
+                                <Badge colorScheme="green">Default</Badge>
+                              )}
+                            </Text>
+                            <DeleteAddress addressData={address} />
+                          </Flex>
                           <Divider />
                           <Text
                             px={3}
@@ -193,8 +219,9 @@ const SelectAddress = () => {
                             fontSize={"lg"}
                             fontWeight={"bold"}
                           >
-                            {address.id_user}
+                            {address.user.name}
                           </Text>
+                          <Text px={3} fontSize={"sm"}>{address.user.phone}</Text>
                           <Text px={3} fontSize={"sm"}>
                             {address.full_address}, {address.city_name},{" "}
                             {address.province}, {address.postal_code}
@@ -234,9 +261,7 @@ const SelectAddress = () => {
           </Modal>
           {selectAddress && (
             <Box key={selectAddress.id}>
-              <Text fontWeight={"bold"}>
-                {selectAddress.id_user} ({selectAddress.name})
-              </Text>
+              <Text fontWeight={"bold"}>{selectAddress.name}</Text>
               <Text>
                 {selectAddress.full_address}, {selectAddress.city_name},{" "}
                 {selectAddress.province}, {selectAddress.postal_code}

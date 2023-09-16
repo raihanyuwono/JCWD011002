@@ -40,7 +40,6 @@ const SelectShipping = () => {
 
     if (selectedCourierJSON) {
       const selectedCourier = JSON.parse(selectedCourierJSON);
-      console.log("Selected Courier:", selectedCourier);
       setCourier(selectedCourier);
     }
   }, [selectedService]);

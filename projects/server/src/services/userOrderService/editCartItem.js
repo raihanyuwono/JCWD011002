@@ -1,45 +1,57 @@
-const { cart_product, product, product_warehouse } = require("../../database");
+const {
+  cart_product,
+  product,
+  product_warehouse,
+  sequelize,
+} = require("../../database");
 const { messages } = require("../../helpers");
 
 const editCartItem = async (userId, productId, quantity) => {
   try {
-    const cartItem = await cart_product.findOne({
-      where: { id_cart: userId, id_product: productId },
+    const result = await sequelize.transaction(async (t) => {
+      const cartItem = await cart_product.findOne({
+        where: { id_cart: userId, id_product: productId },
+        transaction: t,
+      });
+
+      if (!cartItem) {
+        throw new Error("Cart item not found.");
+      }
+
+      const existingQuantity = cartItem.qty;
+
+      // Check if new qty exceeds the stock
+      const isStockSufficient = await checkStock(
+        productId,
+        existingQuantity + quantity,
+        t
+      );
+
+      if (!isStockSufficient) {
+        throw new Error("Insufficient stock for this product.");
+      }
+
+      cartItem.qty += quantity;
+
+      if (cartItem.qty <= 0) {
+        // If quantity zero or negative, remove
+        await cartItem.destroy({ transaction: t });
+        return "Cart item removed from the cart.";
+      }
+
+      await cartItem.save({ transaction: t });
+      return "Cart item updated successfully";
     });
 
-    if (!cartItem) {
-      return messages.error(404, "Cart item not found.");
-    }
-
-    const existingQuantity = cartItem.qty;
-
-    // Check if new qty exceeds the stock
-    const isStockSufficient = await checkStock(
-      productId,
-      existingQuantity + quantity
-    );
-
-    if (!isStockSufficient) {
-      return messages.error(400, "Insufficient stock for this product.");
-    }
-    cartItem.qty += quantity;
-
-    if (cartItem.qty <= 0) {
-      // If quantity zero or negative, remove
-      await cartItem.destroy();
-      return messages.success("Cart item removed from the cart.");
-    }
-
-    await cartItem.save();
-    return messages.success("Cart item updated successfully");
+    return messages.success(result);
   } catch (error) {
     console.error("Error editing cart item:", error);
     return messages.error(500, error.message || "Internal server error");
   }
 };
 
-const checkStock = async (productId, requestedQuantity) => {
-  const productInfo = await getProductInfo(productId);
+const checkStock = async (productId, requestedQuantity, t) => {
+  const productInfo = await getProductInfo(productId, t);
 
   if (!productInfo) {
     return false;
@@ -53,10 +65,11 @@ const checkStock = async (productId, requestedQuantity) => {
   return totalStock >= requestedQuantity;
 };
 
-const getProductInfo = async (productId) => {
+const getProductInfo = async (productId, t) => {
   return product.findOne({
     where: { id: productId },
     include: [{ model: product_warehouse, as: "product_warehouses" }],
+    transaction: t,
   });
 };
 
