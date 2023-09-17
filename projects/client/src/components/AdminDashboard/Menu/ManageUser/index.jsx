@@ -2,6 +2,7 @@ import {
   Grid,
   Table,
   TableContainer,
+  Tbody,
   Th,
   Thead,
   Tr,
@@ -29,7 +30,8 @@ function ManageUsers() {
 
   async function fetchUsers() {
     const { data } = await getUsers(toast);
-    setUsers(data);
+    const { users: userList, pages } = data;
+    setUsers(userList);
   }
 
   const userListAttr = {
@@ -40,21 +42,33 @@ function ManageUsers() {
     fetchUsers();
   }, []);
 
+  const containerAttr = {
+    w: "full",
+  };
+
+  const thAttr = {
+    color: "textPrimary",
+    textAlign: "center",
+  };
+
   return (
-    <TableContainer>
-      <Table >
-        <Thead >
+    <TableContainer {...containerAttr}>
+      <Table>
+        <Thead>
           <Tr>
-            <Th>No</Th>
-            <Th>Name</Th>
-            <Th>Warehouse</Th>
-            <Th>Email</Th>
-            <Th>Phone</Th>
-            <Th>Role</Th>
-            <Th>Status</Th>
+            <Th {...thAttr}>No</Th>
+            <Th {...thAttr}>Name</Th>
+            <Th {...thAttr}>Role</Th>
+            <Th {...thAttr}>Warehouse</Th>
+            <Th {...thAttr}>Email</Th>
+            <Th {...thAttr}>Phone</Th>
+            <Th {...thAttr}>Status</Th>
+            <Th></Th>
           </Tr>
         </Thead>
-        {/* <UserList /> */}
+        <Tbody>
+          <UserList {...userListAttr} />
+        </Tbody>
       </Table>
     </TableContainer>
     // <Grid {...mainContainer}>

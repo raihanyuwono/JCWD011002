@@ -30,7 +30,8 @@ const buttonContainer = {
   gap: "8px",
 };
 
-function DrawerEditUser({ user, isOpen, onClose }) {
+function DrawerEditUser({ admin, isOpen, onClose }) {
+  const { user, warehouse } = admin;;
   const drawerAttr = {
     isOpen,
     onClose,
@@ -59,10 +60,10 @@ function DrawerEditUser({ user, isOpen, onClose }) {
     <Drawer {...drawerAttr}>
       <DrawerOverlay />
       <DrawerContent {...drawerContentAttr}>
-        <DrawerHeader {...drawerHeaderAttr}>{user["name"]}</DrawerHeader>
+        <DrawerHeader {...drawerHeaderAttr}>{user?.name}</DrawerHeader>
         <DrawerCloseButton />
         <DrawerBody>
-          {user.email}
+          {user?.email}
           <EditableCustom />
         </DrawerBody>
         <DrawerFooter {...drawerFooterAttr}>
