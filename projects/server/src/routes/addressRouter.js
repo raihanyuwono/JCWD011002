@@ -1,4 +1,4 @@
-const { getUserAddress, createUserAddress, updateUserAddress, deleteUserAddress, getUserAddressById } = require("../controllers/userAddressController");
+const { getUserAddress, createUserAddress, updateUserAddress, deleteUserAddress, getUserAddressById, getDefault } = require("../controllers/userAddressController");
 const authentication = require("../middlewares/authentication");
 const router = require("express").Router();
 
@@ -7,4 +7,5 @@ router.get("/", authentication, getUserAddress)
 router.get("/:id", authentication, getUserAddressById);
 router.patch("/:id", authentication, updateUserAddress);
 router.delete("/:id", authentication, deleteUserAddress);
+router.post("/default", getDefault);
 module.exports = router

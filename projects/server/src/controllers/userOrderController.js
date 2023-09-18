@@ -168,9 +168,9 @@ async function addTransaction(req, res) {
   }
 }
 
-async function getPayment(req, res) {
+async function getListPayment(req, res) {
   try {
-    const result = await transactionService.getPayment();
+    const result = await transactionService.getListPayment();
     return res.status(200).json(messages.response(result));
   } catch (error) {
     console.error("Error getting payment:", error);
@@ -198,8 +198,15 @@ async function getDistance(req, res) {
 async function getTransaction(req, res) {
   try {
     const userId = req.params.userId;
-    const { searchProductName, sortBy, page, pageSize, filterStatus } =
-      req.query;
+    const {
+      searchProductName,
+      sortBy,
+      page,
+      pageSize,
+      filterStatus,
+      startDate,
+      endDate,
+    } = req.query;
 
     const result = await transactionService.getTransaction(
       userId,
@@ -207,10 +214,11 @@ async function getTransaction(req, res) {
       sortBy,
       page,
       pageSize,
-      filterStatus
+      filterStatus,
+      startDate,
+      endDate
     );
-
-    return res.status(200).json(messages.response(result));
+    return res.status(200).json(result);
   } catch (error) {
     console.error("Error getting transaction:", error);
     return res.status(500).json(messages.error(500, error.message));
@@ -224,9 +232,32 @@ async function getDetailTransaction(req, res) {
       userId,
       transactionId
     );
-    return res.status(200).json(messages.response(result));
+    return res.status(200).json(result);
   } catch (error) {
     console.error("Error getting detail transaction:", error);
+    return res.status(500).json(messages.error(500, error.message));
+  }
+}
+
+async function getPayment(req, res) {
+  try {
+    const userId = req.params.id;
+    const { transactionId } = req.body;
+    const result = await transactionService.getPayment(userId, transactionId);
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error("Error getting payment:", error);
+    return res.status(500).json(messages.error(500, error.message));
+  }
+}
+
+async function cancelOrder(req, res) {
+  try {
+    const { userId, transactionId } = req.body;
+    const result = await transactionService.cancelOrder(userId, transactionId);
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error("Error canceling order:", error);
     return res.status(500).json(messages.error(500, error.message));
   }
 }
@@ -247,6 +278,16 @@ async function UploadReceipt(req, res) {
   }
 }
 
+async function getReceipt(req, res) {
+  try {
+    const transactionId = req.params.transactionId;
+    const result = await transactionService.getReceipt(transactionId);
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+}
+
 module.exports = {
   addToCart,
   removeFromCart,
@@ -256,9 +297,12 @@ module.exports = {
   viewCart,
   setQty,
   addTransaction,
-  getPayment,
+  getListPayment,
   getDistance,
   UploadReceipt,
   getTransaction,
   getDetailTransaction,
+  getPayment,
+  getReceipt,
+  cancelOrder,
 };

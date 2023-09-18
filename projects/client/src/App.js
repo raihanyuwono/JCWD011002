@@ -18,6 +18,7 @@ import Transaction from "./components/Profile/Transaction";
 import ProductCategory from "./components/AdminDashboard/Menu/ProductCategory/ProductCategory";
 import ProductList from "./components/AdminDashboard/Menu/Product/ProductList";
 
+
 const ADMIN_PATH = ["/", "/profile"];
 
 const mainContainerAttr = {
