@@ -7,6 +7,7 @@ const {
   userOrderRouter,
   rajaongkirRouter,
   userProfileRouter,
+  reportRouter,
 } = require("./routes");
 const path = require("path");
 const { transactionRouter } = require("./routes");
@@ -40,6 +41,8 @@ app.use("/api/public", express.static(path.resolve(__dirname, "../public")));
 app.use("/api/transaction", transactionRouter);
 app.use("/api/address", addressRouter);
 app.use("/api/product", productRouter);
+app.use("/api/report", reportRouter);
+
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`);
 });
