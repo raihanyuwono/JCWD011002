@@ -41,9 +41,10 @@ const getDetailTransaction = async (userId, transactionId) => {
       where: { id_transaction: txn.id },
       include: { model: status, attributes: ["name"] },
     });
+    const options = { year: "numeric", month: "long", day: "numeric" };
     const transactionData = {
       transactionId: txn.id,
-      created_at: txn.created_at,
+      created_at: txn.created_at.toLocaleDateString("id-ID", options),
       total: txn.total,
       //   id_status: txn.id_status,
       status: txn.status.name,

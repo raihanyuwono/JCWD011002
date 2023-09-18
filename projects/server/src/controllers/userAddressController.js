@@ -62,10 +62,22 @@ const deleteUserAddress = async (req, res) => {
   }
 };
 
+async function getDefault(req, res) {
+  try {
+    const { userId } = req.body;
+    const result = await userAddressService.getDefault(userId);
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error("Error getting default:", error);
+    return res.status(500).json(messages.error(500, error.message));
+  }
+}
+
 module.exports = {
   getUserAddress,
   createUserAddress,
   updateUserAddress,
   deleteUserAddress,
-  getUserAddressById
+  getUserAddressById,
+  getDefault
 }
