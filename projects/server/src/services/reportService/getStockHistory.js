@@ -7,6 +7,8 @@ async function getStockHistory({
   transactionId,
   startDate,
   endDate,
+  searchProduct,
+  productId,
   page = 1,
   pageSize = 10,
   orderBy = "asc",
@@ -19,6 +21,10 @@ async function getStockHistory({
     const sequelize = db.sequelize;
 
     const whereConditions = {};
+
+    if (productId) {
+      whereConditions["$product.id$"] = productId;
+    }
 
     if (warehouseFrom) {
       whereConditions.id_warehouse_from = warehouseFrom;
@@ -40,8 +46,28 @@ async function getStockHistory({
       };
     }
 
+    if (searchProduct) {
+      // Add a condition to filter by product name
+      whereConditions["$product.name$"] = {
+        [Op.like]: `%${searchProduct}%`,
+      };
+    }
+
     const totalItems = await stock_history.count({
       where: whereConditions,
+      include: [
+        {
+          model: product,
+          attributes: [], // We don't need product details for counting
+          where: searchProduct
+            ? {
+                name: {
+                  [Op.like]: `%${searchProduct}%`,
+                },
+              }
+            : {},
+        },
+      ],
     });
 
     const totalPages = Math.ceil(totalItems / pageSize);
@@ -60,6 +86,13 @@ async function getStockHistory({
         {
           model: product,
           attributes: ["name"],
+          where: searchProduct
+            ? {
+                name: {
+                  [Op.like]: `%${searchProduct}%`,
+                },
+              }
+            : {},
         },
         {
           model: status,
