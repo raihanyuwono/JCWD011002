@@ -4,6 +4,7 @@ import notification, { setToastParams } from "../helpers/Notification";
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const USER_URL = `${BASE_URL}/user`;
 const AUTH_URL = `${BASE_URL}/auth`;
+const ADMIN_URL = `${BASE_URL}/admin`;
 
 function getToken() {
   return localStorage.getItem("token");
@@ -20,6 +21,16 @@ function setHeaders(token) {
 async function getUsers(toast) {
   try {
     const response = await axios.get(`${USER_URL}`, setHeaders());
+    return response.data;
+  } catch (error) {
+    const { response } = error;
+    notification(toast, setToastParams(response.status ? response : error));
+  }
+}
+
+async function getRoles(toast) {
+  try {
+    const response = await axios.get(`${ADMIN_URL}/roles`, setHeaders());
     console.log(response.data);
     return response.data;
   } catch (error) {
@@ -38,4 +49,4 @@ async function register(toast, attributes) {
   }
 }
 
-export { getUsers, register };
+export { getUsers, getRoles, register };

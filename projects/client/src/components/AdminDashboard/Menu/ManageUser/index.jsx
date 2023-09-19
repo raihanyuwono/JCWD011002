@@ -13,17 +13,6 @@ import { getUsers } from "../../../../api/admin";
 import { useEffect, useState } from "react";
 import AddButton from "../AddButton";
 
-const mainContainer = {
-  w: "full",
-  gap: "12px",
-  templateColumns: {
-    sm: "repeat(2, 1fr)",
-    md: "repeat(3, 1fr)",
-    lg: "repeat(5, 1fr)",
-    xl: "repeat(6, 1fr)",
-  },
-};
-
 function ManageUsers() {
   const [users, setUsers] = useState([]);
   const toast = useToast();
@@ -44,6 +33,7 @@ function ManageUsers() {
 
   const containerAttr = {
     w: "full",
+    overflowX: "hidden",
   };
 
   const thAttr = {
@@ -60,8 +50,6 @@ function ManageUsers() {
             <Th {...thAttr}>Name</Th>
             <Th {...thAttr}>Role</Th>
             <Th {...thAttr}>Warehouse</Th>
-            <Th {...thAttr}>Email</Th>
-            <Th {...thAttr}>Phone</Th>
             <Th {...thAttr}>Status</Th>
             <Th></Th>
           </Tr>
@@ -71,10 +59,6 @@ function ManageUsers() {
         </Tbody>
       </Table>
     </TableContainer>
-    // <Grid {...mainContainer}>
-    //   <AddButton />
-    //   <UserList {...userListAttr} />
-    // </Grid>
   );
 }
 

@@ -3,16 +3,17 @@ const express = require("express");
 const cors = require("cors");
 const { join } = require("path");
 const {
+  adminRouter,
   authRouter,
   userOrderRouter,
   rajaongkirRouter,
   userProfileRouter,
-  adminRouter,
+  warehouseRouter,
+  transactionRouter,
+  addressRouter,
+  productRouter,
 } = require("./routes");
 const path = require("path");
-const { transactionRouter } = require("./routes");
-const { addressRouter } = require("./routes");
-const { productRouter } = require("./routes");
 const PORT = process.env.PORT || 8000;
 const app = express();
 app.use(
@@ -40,6 +41,8 @@ app.use("/api/public", express.static(path.resolve(__dirname, "../public")));
 app.use("/api/transaction", transactionRouter);
 app.use("/api/address", addressRouter);
 app.use("/api/product", productRouter);
+app.use("/api/warehouse", warehouseRouter);
+app.use("/api/admin", adminRouter);
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`);
 });

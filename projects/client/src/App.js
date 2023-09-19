@@ -51,6 +51,7 @@ function App() {
     }, 10);
   }, []);
 
+  // Bisa taruh di redux
   const [userData, setUserData] = useState({
     name: '',
     username: '',

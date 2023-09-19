@@ -1,5 +1,5 @@
 import { Box, Button, Td, Tr, useDisclosure } from "@chakra-ui/react";
-import DrawerEditUser from "./DrawerEditUser";
+import DrawerUser from "./DrawerUser";
 
 const tdAttr = {
   textTransform: "capitalize",
@@ -32,16 +32,12 @@ function DataUser({ admin, num }) {
       <Td {...tdAttr}>
         {warehouse && warehouse !== "" ? warehouse?.name : "-"}
       </Td>
-      <Td {...tdAttr} textTransform={"none"}>
-        {user?.email}
-      </Td>
-      <Td {...tdAttr}>{user?.phone}</Td>
       <Td {...tdAttr}>
         <Box {...statusAttr} />
       </Td>
       <Td>
         <Button {...buttonAttr}>Detail</Button>
-        <DrawerEditUser {...drawerDetailAttr} />
+        <DrawerUser {...drawerDetailAttr} />
       </Td>
     </Tr>
   );

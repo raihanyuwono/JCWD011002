@@ -1,6 +1,6 @@
 import { Flex, GridItem, Image, Text, useDisclosure } from "@chakra-ui/react";
 import getImage from "../../../../api/GetImage";
-import DrawerEditUser from "./DrawerEditUser";
+import DrawerEditUser from "./DrawerUser";
 
 const cardContainer = {
   h: { sm: "128px", md: "256px", lg: "280px" },
