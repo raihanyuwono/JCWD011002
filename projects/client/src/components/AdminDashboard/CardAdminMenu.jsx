@@ -4,8 +4,9 @@ const logoAttr = {
   justifyContent: "center",
 };
 
-function CardAdminMenu({ name, logo, selected = false, setSelected }) {
+function CardAdminMenu({ name, logo, selected = false, setSelected, display }) {
   const container = {
+    display,
     templateColumns: "1fr 3fr",
     alignItems: "center",
     gap: "8px",

@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.user_address, {
         foreignKey: "id_user",
       });
-      this.hasOne(models.warehouse_admin, {
+      this.hasOne(models.admin, {
         foreignKey: "id_user",
       });
       this.hasMany(models.stock_history, { foreignKey: "id_user" });
@@ -42,6 +42,10 @@ module.exports = (sequelize, DataTypes) => {
         unique: true,
       },
       id_role: DataTypes.INTEGER,
+      is_active: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
     },
     {
       sequelize,

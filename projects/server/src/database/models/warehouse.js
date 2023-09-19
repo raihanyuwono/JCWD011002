@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
   class warehouse extends Model {
     static associate(models) {
       this.hasMany(models.product_warehouse, { foreignKey: "id_warehouse" });
-      this.hasMany(models.warehouse_admin, { foreignKey: "id_warehouse" });
+      this.hasMany(models.admin, { foreignKey: "id_warehouse" });
       this.hasMany(models.stock_history, { foreignKey: "id_warehouse_from" });
       this.hasMany(models.stock_history, { foreignKey: "id_warehouse_to" });
     }

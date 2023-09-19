@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class warehouse_admin extends Model {
+  class admin extends Model {
     static associate(models) {
       this.belongsTo(models.user, {
         foreignKey: 'id_user'
@@ -13,15 +13,15 @@ module.exports = (sequelize, DataTypes) => {
       })
     }
   }
-  warehouse_admin.init({
+  admin.init({
     id_user: DataTypes.INTEGER,
     id_warehouse: DataTypes.INTEGER
   }, {
     sequelize,
-    modelName: 'warehouse_admin',
+    modelName: 'admin',
     underscored: true,
     createdAt: "created_at",
     updatedAt: "updated_at",
   });
-  return warehouse_admin;
+  return admin;
 };

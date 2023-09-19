@@ -17,6 +17,7 @@ async function registration(id, attributes) {
   // Hashing Password
   attributes["password"] = await hashPassword(attributes["password"]);
   attributes["is_verified"] = true;
+  attributes["is_active"] = true;
 
   // Update user data
   return await db.sequelize.transaction(async function (t) {
