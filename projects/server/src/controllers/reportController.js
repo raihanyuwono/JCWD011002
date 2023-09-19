@@ -33,6 +33,23 @@ const getStockHistory = async (req, res) => {
   }
 };
 
+const getAllStockHistory = async (req, res) => {
+  try {
+    const { filterByMonth, filterByYear, page, pageSize, orderBy } = req.query;
+    const result = await reportService.getAllStockHistory(
+      filterByMonth,
+      filterByYear,
+      page,
+      pageSize,
+      orderBy
+    );
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+};
+
 module.exports = {
   getStockHistory,
+  getAllStockHistory,
 };

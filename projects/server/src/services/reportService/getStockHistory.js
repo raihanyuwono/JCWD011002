@@ -1,5 +1,7 @@
 const { Op, Sequelize } = require("sequelize");
 const db = require("../../database");
+const { stock_history, user, product, status, transaction } = db;
+const sequelize = db.sequelize;
 
 async function getStockHistory({
   warehouseFrom,
@@ -16,9 +18,6 @@ async function getStockHistory({
   try {
     page = parseInt(page, 10);
     pageSize = parseInt(pageSize, 10);
-
-    const { stock_history, user, product, status, transaction } = db;
-    const sequelize = db.sequelize;
 
     const whereConditions = {};
 
@@ -47,7 +46,6 @@ async function getStockHistory({
     }
 
     if (searchProduct) {
-      // Add a condition to filter by product name
       whereConditions["$product.name$"] = {
         [Op.like]: `%${searchProduct}%`,
       };
@@ -58,7 +56,7 @@ async function getStockHistory({
       include: [
         {
           model: product,
-          attributes: [], // We don't need product details for counting
+          attributes: [],
           where: searchProduct
             ? {
                 name: {
