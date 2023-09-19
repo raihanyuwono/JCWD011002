@@ -21,48 +21,11 @@ import EditAddress from "./EditAddress";
 import { MdLocationOn } from "react-icons/md";
 import axios from "axios";
 import DeleteAddress from "../Profile/DeleteAddress";
-const API_URL = process.env.REACT_APP_API_BASE_URL;
-
-// const dummyAddress = [
-//   {
-//     id: 1,
-//     name: "Rumah",
-//     id_user: "Febry Dharmawan",
-//     province: "Jawa Timur",
-//     city_name: "Sidoarjo",
-//     postal_code: 61252,
-//     full_address: "Jl Sesama No 22 Sidoarjo",
-//     is_default: true,
-//     latitude: -7.417166656128915,
-//     longitude: 112.75669259021905,
-//   },
-//   {
-//     id: 2,
-//     name: "Kantor",
-//     id_user: "Andre Djawa",
-//     province: "Nusa Tenggara Timur (NTT)",
-//     city_name: "Alor",
-//     postal_code: 85811,
-//     full_address: "Jl Laksda Adisucipto No 1 Alor",
-//     is_default: false,
-//     latitude: -8.696554473073343,
-//     longitude: 121.2176540613792,
-//   },
-//   {
-//     id: 3,
-//     name: "Kantor",
-//     id_user: "Rizky Freon",
-//     province: "Kalimantan Timur",
-//     city_name: "Balikpapan",
-//     postal_code: 76111,
-//     full_address: "Jl Balik Papan No 90 Balikpapan",
-//     is_default: false,
-//     latitude: -1.696554473073343,
-//     longitude: 116.696554473073343,
-//   },
-// ];
+import jwtDecode from "jwt-decode";
 
 const SelectAddress = () => {
+  const API_URL = process.env.REACT_APP_API_BASE_URL;
+  const userId = jwtDecode(localStorage.getItem("token")).id;
   const [isSelectAddressModalOpen, setIsSelectAddressModalOpen] =
     useState(false);
   const [isAddAddressModalOpen, setIsAddAddressModalOpen] = useState(false);
@@ -129,13 +92,28 @@ const SelectAddress = () => {
         },
       });
       setDataAddress(response.data.data);
-      console.log(response.data.data);
     } catch (error) {
       console.log(error);
     }
   };
+
+  const fetchDefault = async () => {
+    try {
+      const response = await axios.post(`${API_URL}/address/default`, {
+        userId: userId,
+      });
+      localStorage.setItem(
+        "selectedAddress",
+        JSON.stringify(response.data.data)
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     fetchAddress();
+    fetchDefault();
   }, []);
 
   return (
@@ -197,7 +175,11 @@ const SelectAddress = () => {
                         key={address.id}
                       >
                         <Flex flexDirection={"column"}>
-                          <Flex alignItems={"center"} justifyContent={"space-between"} mr={5}>
+                          <Flex
+                            alignItems={"center"}
+                            justifyContent={"space-between"}
+                            mr={5}
+                          >
                             <Text
                               px={3}
                               py={2}
@@ -221,7 +203,9 @@ const SelectAddress = () => {
                           >
                             {address.user.name}
                           </Text>
-                          <Text px={3} fontSize={"sm"}>{address.user.phone}</Text>
+                          <Text px={3} fontSize={"sm"}>
+                            {address.user.phone}
+                          </Text>
                           <Text px={3} fontSize={"sm"}>
                             {address.full_address}, {address.city_name},{" "}
                             {address.province}, {address.postal_code}
@@ -273,16 +257,6 @@ const SelectAddress = () => {
           Select Address
         </Button>
       </Flex>
-      {/* {selectedAddress && (
-        <Box mt={4}>
-          <Text>Selected Address:</Text>
-          <Text>
-            {selectedAddress.name}, {selectedAddress.full_address},{" "}
-            {selectedAddress.city_name}, {selectedAddress.province},{" "}
-            {selectedAddress.postal_code}
-          </Text>
-        </Box>
-      )} */}
     </Box>
   );
 };

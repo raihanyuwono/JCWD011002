@@ -2,16 +2,22 @@ const router = require("express").Router();
 const { userOrderController } = require("../controllers");
 const { multer } = require("../middlewares");
 
-//get payment methods
-router.get("/", userOrderController.getPayment);
+//get list payment methods
+router.get("/", userOrderController.getListPayment);
 // create transactiong
 router.post("/", userOrderController.addTransaction);
-// get distance
-router.post("/distance", userOrderController.getDistance);
-// get transaction by user
-router.get("/:userId", userOrderController.getTransaction);
 // get detail transaction
 router.post("/detail", userOrderController.getDetailTransaction);
+//cancel
+router.post("/cancel", userOrderController.cancelOrder);
+// get distance
+router.post("/distance", userOrderController.getDistance);
+// get receipt by transaction
+router.get("/receipt/:transactionId", userOrderController.getReceipt);
+// get transaction by user
+router.get("/:userId", userOrderController.getTransaction);
+// get what payment method each transaction
+router.post("/:id", userOrderController.getPayment);
 
 //upload receipt
 router.post(

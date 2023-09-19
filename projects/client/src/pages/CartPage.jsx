@@ -33,13 +33,31 @@ const CartPage = () => {
   const [cartLength, setCartLength] = useState(0);
 
   const viewCart = async () => {
-    const response = await axios.get(`${API_URL}/order/cart/${userId}`);
-    setCart(response.data.data);
-    setCartLength(response.data.data.length);
+    try {
+      const response = await axios.get(`${API_URL}/order/cart/${userId}`);
+      setCart(response.data.data);
+      setCartLength(response.data.data.length);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const fetchDefault = async () => {
+    try {
+      const response = await axios.post(`${API_URL}/address/default`, {
+        userId: userId,
+      });
+      localStorage.setItem(
+        "selectedAddress",
+        JSON.stringify(response.data.data)
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
     viewCart();
+    fetchDefault();
   }, []);
 
   const handleDelete = async (productId) => {
@@ -50,6 +68,15 @@ const CartPage = () => {
       });
       if (response.status === 200) {
         viewCart();
+        if (!toast.isActive("success")) {
+          toast({
+            id: "success",
+            description: "Product removed!",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
       } else {
         console.error("Failed to delete from cart.");
       }
@@ -74,13 +101,15 @@ const CartPage = () => {
       }
       viewCart();
     } catch (error) {
-      toast({
-        title: "Oh no:(",
-        description: error.response.data.message,
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
+      if (!toast.isActive("error-toast")) {
+        toast({
+          id: "error-toast",
+          description: error.response.data.message,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
       console.error("Error updating item quantity:", error);
     }
   };
@@ -93,17 +122,30 @@ const CartPage = () => {
           borderTopLeftRadius={"10px"}
           borderLeftRadius={"10px"}
         >
-          <Text textAlign={"center"} fontSize={"3xl"} mt={4} mb={4}>
+          <Text ml={2} fontSize={"3xl"} mt={4} mb={4}>
             SHOPPING CART
           </Text>
-          <Table variant="simple" color={"#34638a"} w={"70vw"} bgColor="white">
+          <Table
+            ml={2}
+            mr={1}
+            variant="simple"
+            color={"white"}
+            w={"69vw"}
+            bgColor="bgSecondary"
+          >
             <Thead>
               <Tr>
                 <Th></Th>
-                <Th>Product</Th>
-                <Th textAlign={"center"}>Price</Th>
-                <Th textAlign={"center"}>Quantity</Th>
-                <Th textAlign={"center"}>Subtotal</Th>
+                <Th color={"white"}>Product</Th>
+                <Th color={"white"} textAlign={"center"}>
+                  Price
+                </Th>
+                <Th color={"white"} textAlign={"center"}>
+                  Quantity
+                </Th>
+                <Th color={"white"} textAlign={"center"}>
+                  Subtotal
+                </Th>
                 <Th p={0}>
                   <ClearAlert coba={viewCart} userId={userId} />
                 </Th>
@@ -141,6 +183,7 @@ const CartPage = () => {
                           <HStack textAlign={"center"} maxW="220px">
                             <Button
                               border={"1px solid #2D2D2D"}
+                              borderRadius={"full"}
                               onClick={() =>
                                 handleSetQuantity(
                                   item.productId,
@@ -151,6 +194,7 @@ const CartPage = () => {
                               -
                             </Button>
                             <Input
+                              borderRadius={"full"}
                               textAlign={"center"}
                               type="number"
                               value={item.quantity}
@@ -161,6 +205,7 @@ const CartPage = () => {
                             />
                             <Button
                               border={"1px solid #2D2D2D"}
+                              borderRadius={"full"}
                               onClick={() =>
                                 handleSetQuantity(
                                   item.productId,
@@ -198,30 +243,33 @@ const CartPage = () => {
           </Table>
         </TableContainer>
         <Box mt={"77px"}>
+          <OrderSummary cartLength={cartLength} userId={userId} />
           {/* <ClearAlert coba={viewCart} userId={userId} /> */}
           {cart.length === 0 ? (
             <Button
+              mt={1}
               as={Link}
+              h={"50px"}
               display={"none"}
               to={"/checkout"}
               borderRadius={"none"}
               colorScheme="green"
-              borderTopRightRadius={"10px"}
             >
               Checkout
             </Button>
           ) : (
             <Button
               as={Link}
+              mt={1}
+              h={"50px"}
+              w={"100%"}
               to={"/checkout"}
               borderRadius={"none"}
               colorScheme="green"
-              borderTopRightRadius={"10px"}
             >
               Checkout
             </Button>
           )}
-          <OrderSummary cartLength={cartLength} userId={userId} />
         </Box>
       </Flex>
     </>

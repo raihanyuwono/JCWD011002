@@ -6,6 +6,7 @@ const {
   product,
 } = require("../../database");
 const handleStock = require("./handleStock");
+const { cronJob } = require("../../helpers");
 
 const addTransaction = async (
   userId,
@@ -17,8 +18,6 @@ const addTransaction = async (
   shipping_cost,
   shipping_address
 ) => {
-  // const myLatitude = -7.417166656128915;
-  // const myLongitude = 112.75669259021905;
   try {
     const cartProduct = await cart_product.findAll({
       where: { id_cart: userId },
@@ -70,6 +69,8 @@ const addTransaction = async (
       where: { id_cart: userId },
     });
 
+    cronJob.startCronJob(userId);
+    
     return {
       success: true,
       status: 200,
