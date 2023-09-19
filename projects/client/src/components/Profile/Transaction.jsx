@@ -1,9 +1,12 @@
-import React from 'react'
-
+import React from "react";
+import TransactionList from "../../pages/TransactionList";
+import { Box } from "@chakra-ui/react";
 const Transaction = () => {
   return (
-    <div>Transaction</div>
-  )
-}
+    <Box justifyContent={"center"} display={"flex"} alignItems={"center"}>
+      <TransactionList />
+    </Box>
+  );
+};
 
-export default Transaction
+export default Transaction;

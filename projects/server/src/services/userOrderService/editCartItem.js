@@ -20,7 +20,6 @@ const editCartItem = async (userId, productId, quantity) => {
 
       const existingQuantity = cartItem.qty;
 
-      // Check if new qty exceeds the stock
       const isStockSufficient = await checkStock(
         productId,
         existingQuantity + quantity,
@@ -34,7 +33,6 @@ const editCartItem = async (userId, productId, quantity) => {
       cartItem.qty += quantity;
 
       if (cartItem.qty <= 0) {
-        // If quantity zero or negative, remove
         await cartItem.destroy({ transaction: t });
         return "Cart item removed from the cart.";
       }

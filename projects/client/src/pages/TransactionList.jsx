@@ -1,44 +1,66 @@
-import { Box, TabList, TabPanel, Tab, Tabs, TabPanels } from "@chakra-ui/react";
+import {
+  Box,
+  TabList,
+  TabPanel,
+  Tab,
+  Tabs,
+  TabPanels,
+  Text,
+  Flex,
+} from "@chakra-ui/react";
 import React from "react";
+import Pagination from "../components/Transaction/Pagination";
+import ToPay from "../components/Transaction/Status/ToPay";
+import ToConfirm from "../components/Transaction/Status/ToConfirm";
+import Processed from "../components/Transaction/Status/Processed";
+import Shipped from "../components/Transaction/Status/Shipped";
+import Completed from "../components/Transaction/Status/Completed";
+import Cancelled from "../components/Transaction/Status/Cancelled";
+import AllStatus from "../components/Transaction/Status/AllStatus";
 
 const TransactionList = () => {
   return (
-    <Box mt={20}>
-      <Tabs isFitted variant="enclosed">
-        <TabList mb="1em">
+    <>
+      <Tabs isLazy w={"70vw"} isFitted variant="enclosed">
+        <TabList color={"white"} h={"3em"} mb="1em">
           <Tab>All</Tab>
           <Tab>To Pay</Tab>
-          <Tab>Waiting Confirmation</Tab>
+          <Tab>To Confirm</Tab>
           <Tab>Processed</Tab>
           <Tab>Shipped</Tab>
           <Tab>Completed</Tab>
           <Tab>Cancelled</Tab>
         </TabList>
-        <TabPanels>
+        <TabPanels
+          justifyContent={"center"}
+          display={"flex"}
+          alignItems={"center"}
+        >
           <TabPanel>
-            <p>Semua!</p>
+            <AllStatus />
           </TabPanel>
           <TabPanel>
-            <p>Menunggu Pembayaran!</p>
+            <ToPay />
           </TabPanel>
           <TabPanel>
-            <p>Menunggu Konfirmasi Pembayaran!</p>
+            <ToConfirm />
           </TabPanel>
           <TabPanel>
-            <p>Diproses!</p>
+            <Processed />
           </TabPanel>
           <TabPanel>
-            <p>Dikirim</p>
+            <Shipped />
           </TabPanel>
           <TabPanel>
-            <p>Pesanan Dikonfirmasi</p>
+            <Completed />
           </TabPanel>
           <TabPanel>
-            <p>Dibatalkan!</p>
+            <Cancelled />
           </TabPanel>
         </TabPanels>
       </Tabs>
-    </Box>
+      <Pagination />
+    </>
   );
 };
 

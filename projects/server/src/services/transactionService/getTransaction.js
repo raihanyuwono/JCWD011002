@@ -12,7 +12,9 @@ const getTransaction = async (
   sortBy,
   page,
   pageSize,
-  filterStatus
+  filterStatus,
+  startDate,
+  endDate
 ) => {
   try {
     const pageNumber = parseInt(page, 10) || 1;
@@ -24,6 +26,14 @@ const getTransaction = async (
     if (filterStatus) {
       whereConditions.id_status = filterStatus;
     }
+
+    if (startDate && endDate) {
+      whereConditions.created_at = {
+        [Op.between]: [startDate, endDate],
+      };
+    }
+
+    const totalCount = await transaction.count({ where: whereConditions });
 
     const transactions = await transaction.findAll({
       where: whereConditions,
@@ -65,10 +75,19 @@ const getTransaction = async (
         product_name: productName,
         product_image: productImage,
         numProducts,
+        created_at,
       };
     });
 
-    return { status: 200, data: transactionData };
+    const totalPages = Math.ceil(totalCount / limit);
+    const currentPage = pageNumber;
+
+    return {
+      total_page: totalPages,
+      total_item: totalCount,
+      current_page: currentPage,
+      data: transactionData,
+    };
   } catch (error) {
     console.error("Error getting transactions:", error);
     return { status: 500, message: error.message };

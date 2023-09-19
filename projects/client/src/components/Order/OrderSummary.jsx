@@ -25,8 +25,8 @@ const OrderSummary = ({ userId, cartLength }) => {
         display={"flex"}
         direction={"column"}
         alignSelf={"flex-end"}
-        bgColor={"white"}
-        color={"#34638a"}
+        bgColor={"bgSecondary"}
+        color={"white"}
         px={6}
         py={6}
         w={"30vw"}

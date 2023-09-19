@@ -16,6 +16,7 @@ import UserProfile from "./components/Profile/UpdateProfile";
 import { getUser } from "./api/profile";
 import Transaction from "./components/Profile/Transaction";
 
+
 const ADMIN_PATH = ["/", "/profile"];
 
 const mainContainerAttr = {
