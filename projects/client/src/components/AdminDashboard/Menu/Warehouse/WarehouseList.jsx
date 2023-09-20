@@ -25,6 +25,8 @@ import {
   Select,
   Box,
   Flex,
+  FormLabel,
+  FormControl,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { getWarehouses } from "../../../../api/warehouse";
@@ -213,9 +215,9 @@ const WarehouseList = () => {
   return (
     <>
       {/* Table content */}
-      <Flex flexDirection={"column"}>
+      <Flex flexDirection={"column"} w={"full"} mt={4}>
         <Box>
-          <Button bg={"darkBlue"} color={"white"} onClick={handleDrawerCreateOpen}>Create Warehouse</Button>
+          <Button bg={"darkBlue"} mb={4} color={"white"} onClick={handleDrawerCreateOpen}>Create Warehouse</Button>
         </Box>
 
         <TableContainer>
@@ -333,7 +335,7 @@ const WarehouseList = () => {
       {/* Create Warehouse Drawer */}
       <Drawer isOpen={isDrawerCreateOpen} onClose={() => setIsDrawerCreateOpen(false)}>
         <DrawerOverlay>
-          <DrawerContent>
+          <DrawerContent bg={"darkBlue"} color={"white"}>
             <DrawerCloseButton />
             <DrawerHeader>Create Warehouse</DrawerHeader>
             <DrawerBody>
@@ -344,78 +346,96 @@ const WarehouseList = () => {
                   handleCreateWarehouse(editedWarehouse);
                 }}
               >
-                <Input
-                  placeholder="Name"
-                  value={editedWarehouse.name}
-                  onChange={(e) =>
-                    setEditedWarehouse({
-                      ...editedWarehouse,
-                      name: e.target.value,
-                    })
-                  }
-                />
-                <Input
-                  placeholder="Address"
-                  value={editedWarehouse.address}
-                  onChange={(e) =>
-                    setEditedWarehouse({
-                      ...editedWarehouse,
-                      address: e.target.value,
-                    })
-                  }
-                />
-                <Select
-                  placeholder={selectedProvinceId ? "Select Province" : "Province"}
-                  name="province"
-                  value={selectedProvinceId}
-                  onChange={handleSelectProvince}
-                >
-                  {province.map((province) => (
-                    <option
-                      key={province.province_id}
-                      value={province.province_id}
-                    >
-                      {province.province}
-                    </option>
-                  ))}
-                </Select>
-                <Select
-                  isDisabled={!selectedProvinceId}
-                  placeholder={
-                    selectedProvinceId
-                      ? "Select City"
-                      : "City"
-                  }
-                  name="city_name"
-                  value={editedWarehouse.city_name}
-                  onChange={(e) =>
-                    setEditedWarehouse({
-                      ...editedWarehouse,
-                      city_name: e.target.value,
-                    })
-                  }
-                >
-                  {city.map((city) => (
-                    <option
-                      key={city.city_id}
-                      value={city.city_name}
-                    >
-                      {city.city_name}
-                    </option>
-                  ))}
-                </Select>
-                <Input
-                  placeholder="Postal Code"
-                  value={editedWarehouse.postal_code}
-                  onChange={(e) =>
-                    setEditedWarehouse({
-                      ...editedWarehouse,
-                      postal_code: e.target.value,
-                    })
-                  }
-                />
-                <Button type="submit">Create</Button>
-                <Button onClick={() => setIsDrawerCreateOpen(false)}>Cancel</Button>
+                <FormControl mb={2}>
+                  <FormLabel>Name :</FormLabel>
+                  <Input
+                    placeholder="Name"
+                    value={editedWarehouse.name}
+                    onChange={(e) =>
+                      setEditedWarehouse({
+                        ...editedWarehouse,
+                        name: e.target.value,
+                      })
+                    }
+                  />
+                </FormControl>
+                <FormControl mb={2}>
+                  <FormLabel>Full Address :</FormLabel>
+                  <Input
+                    placeholder="Address"
+                    value={editedWarehouse.address}
+                    onChange={(e) =>
+                      setEditedWarehouse({
+                        ...editedWarehouse,
+                        address: e.target.value,
+                      })
+                    }
+                  />
+                </FormControl>
+                <FormControl mb={2}>
+                  <FormLabel>Province :</FormLabel>
+                  <Select
+                    placeholder={selectedProvinceId ? "Select Province" : "Province"}
+                    name="province"
+                    value={selectedProvinceId}
+                    onChange={handleSelectProvince}
+                  >
+                    {province.map((province) => (
+                      <option
+                        key={province.province_id}
+                        value={province.province_id}
+                      >
+                        {province.province}
+                      </option>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControl mb={2}>
+                  <FormLabel>City :</FormLabel>
+                  <Select
+                    isDisabled={!selectedProvinceId}
+                    placeholder={
+                      selectedProvinceId
+                        ? "Select City"
+                        : "City"
+                    }
+                    name="city_name"
+                    value={editedWarehouse.city_name}
+                    onChange={(e) =>
+                      setEditedWarehouse({
+                        ...editedWarehouse,
+                        city_name: e.target.value,
+                      })
+                    }
+                  >
+                    {city.map((city) => (
+                      <option
+                        key={city.city_id}
+                        value={city.city_name}
+                      >
+                        {city.city_name}
+                      </option>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControl mb={4}>
+                  <FormLabel>Postal Code :</FormLabel>
+                  <Input
+                    placeholder="Postal Code"
+                    value={editedWarehouse.postal_code}
+                    onChange={(e) =>
+                      setEditedWarehouse({
+                        ...editedWarehouse,
+                        postal_code: e.target.value,
+                      })
+                    }
+                  />
+                </FormControl>
+                <Box w={"85%"} position={"absolute"} bottom={5}>
+                  <Button w={"full"} mb={2} colorScheme="green" type="submit">Create</Button>
+                  <br />
+                  <Button w={"full"} onClick={() => setIsDrawerCreateOpen(false)}>Cancel</Button>
+                </Box>
               </form>
             </DrawerBody>
           </DrawerContent>
