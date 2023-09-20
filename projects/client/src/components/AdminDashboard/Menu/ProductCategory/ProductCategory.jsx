@@ -190,7 +190,7 @@ const ProductCategory = () => {
 
   return (
     <Flex w={"full"} flexWrap={"wrap"} direction={"column"} justifyContent={"center"} alignItems={"center"}>
-      <Box p={4} w={["100%", "50%"]} bg={"bgSecondary"} borderRadius={"8px"}>
+      <Box p={4} w={["100%", "50%"]} borderRadius={"8px"}>
         <Flex justifyContent="flex-end" mb={4} m={4}>
           <Button bg={"primary"} color={"white"} leftIcon={<AddIcon />} onClick={onOpen}>
             Create Category

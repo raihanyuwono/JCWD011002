@@ -19,7 +19,7 @@ import ProductCategory from "./components/AdminDashboard/Menu/ProductCategory/Pr
 import ProductList from "./components/AdminDashboard/Menu/Product/ProductList";
 
 
-const ADMIN_PATH = ["/", "/profile"];
+const ADMIN_PATH = ["/", "/category", "/profile"];
 
 const mainContainerAttr = {
   w: "100vw",
