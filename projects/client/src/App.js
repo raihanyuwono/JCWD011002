@@ -17,6 +17,8 @@ import { getUser } from "./api/profile";
 import Transaction from "./components/Profile/Transaction";
 import ProductCategory from "./components/AdminDashboard/Menu/ProductCategory/ProductCategory";
 import ProductList from "./components/AdminDashboard/Menu/Product/ProductList";
+import ManageUsers from "./components/AdminDashboard/Menu/ManageUser";
+import WarehouseList from "./components/AdminDashboard/Menu/Warehouse/WarehouseList";
 
 
 const ADMIN_PATH = ["/", "/category", "/profile"];
@@ -84,8 +86,8 @@ function App() {
         <Flex {...contentContainerAttr}>
           <Routes>
             <Route path="/" element={setPage()}>
-              {/* <Route path="user" element={} /> */}
-              {/* <Route path="warehouse" element={} /> */}
+              <Route path="user" element={<ManageUsers />} />
+              <Route path="warehouse" element={<WarehouseList />} />
               <Route path="category" element={<ProductCategory />} />
               <Route path="product" element={<ProductList />} />
               {/* <Route path="stockmutation" element={} /> */}
