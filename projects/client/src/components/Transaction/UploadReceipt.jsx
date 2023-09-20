@@ -24,6 +24,7 @@ const UploadReceipt = ({ isOpen, onClose, onSave, txnid }) => {
   const [identifier, setIdentifier] = useState("");
   const toast = useToast();
   const userId = jwt_decode(localStorage.getItem("token")).id;
+  const API_URL = process.env.REACT_APP_API_BASE_URL;
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -38,10 +39,7 @@ const UploadReceipt = ({ isOpen, onClose, onSave, txnid }) => {
     const formData = new FormData();
     formData.append("receipt", receipt);
     try {
-      await axios.post(
-        `http://localhost:8000/api/transaction/receipt/${txnid}`,
-        formData
-      );
+      await axios.post(`${API_URL}/transaction/receipt/${txnid}`, formData);
       toast({
         title: "Successfully upload receipt!",
         status: "success",
@@ -64,12 +62,9 @@ const UploadReceipt = ({ isOpen, onClose, onSave, txnid }) => {
 
   const fetchPayment = async () => {
     try {
-      const response = await axios.post(
-        `http://localhost:8000/api/transaction/${userId}`,
-        {
-          transactionId: txnid,
-        }
-      );
+      const response = await axios.post(`${API_URL}/transaction/${userId}`, {
+        transactionId: txnid,
+      });
       setPayment(response.data.data.payment_method);
       setIdentifier(response.data.data.identifier);
     } catch (error) {

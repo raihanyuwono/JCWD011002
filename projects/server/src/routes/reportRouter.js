@@ -1,7 +1,11 @@
 const router = require("express").Router();
 const { reportController } = require("../controllers");
 
-router.get("/", reportController.getStockHistory);
-router.get("/all", reportController.getAllStockHistory);
+router.get("/stock", reportController.getStockHistory);
+router.get("/stock/summary", reportController.getAllStockHistory);
+
+router.get("/sales", reportController.getSalesReport);
+router.get("/sales/product", reportController.getSalesProduct);
+router.get("/sales/category", reportController.getSalesCategory);
 
 module.exports = router;

@@ -49,7 +49,62 @@ const getAllStockHistory = async (req, res) => {
   }
 };
 
+const getSalesReport = async (req, res) => {
+  try {
+    const { page, pageSize, filterByMonth, filterByYear, orderBy } = req.query;
+    const result = await reportService.getSalesReport(
+      page,
+      pageSize,
+      filterByMonth,
+      filterByYear,
+      orderBy
+    );
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+};
+
+const getSalesProduct = async (req, res) => {
+  try {
+    const { page, pageSize, productId, filterByMonth, filterByYear, orderBy } =
+      req.query;
+    const result = await reportService.getSalesProduct(
+      page,
+      pageSize,
+      productId,
+      filterByMonth,
+      filterByYear,
+      orderBy
+    );
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+};
+
+const getSalesCategory = async (req, res) => {
+  try {
+    const { page, pageSize, categoryId, filterByMonth, filterByYear, orderBy } =
+      req.query;
+    const result = await reportService.getSalesCategory(
+      page,
+      pageSize,
+      categoryId,
+      filterByMonth,
+      filterByYear,
+      orderBy
+    );
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+};
+
 module.exports = {
   getStockHistory,
   getAllStockHistory,
+  getSalesReport,
+  getSalesProduct,
+  getSalesCategory,
 };
