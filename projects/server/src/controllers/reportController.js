@@ -67,12 +67,20 @@ const getSalesReport = async (req, res) => {
 
 const getSalesProduct = async (req, res) => {
   try {
-    const { page, pageSize, productId, filterByMonth, filterByYear, orderBy } =
-      req.query;
+    const {
+      page,
+      pageSize,
+      productId,
+      warehouseId,
+      filterByMonth,
+      filterByYear,
+      orderBy,
+    } = req.query;
     const result = await reportService.getSalesProduct(
       page,
       pageSize,
       productId,
+      warehouseId,
       filterByMonth,
       filterByYear,
       orderBy
@@ -85,12 +93,20 @@ const getSalesProduct = async (req, res) => {
 
 const getSalesCategory = async (req, res) => {
   try {
-    const { page, pageSize, categoryId, filterByMonth, filterByYear, orderBy } =
-      req.query;
+    const {
+      page,
+      pageSize,
+      categoryId,
+      warehouseId,
+      filterByMonth,
+      filterByYear,
+      orderBy,
+    } = req.query;
     const result = await reportService.getSalesCategory(
       page,
       pageSize,
       categoryId,
+      warehouseId,
       filterByMonth,
       filterByYear,
       orderBy

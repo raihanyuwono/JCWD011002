@@ -3,6 +3,7 @@ const {
   transaction_product,
   product,
   category,
+  product_warehouse,
   sequelize,
 } = require("../../database");
 
@@ -10,6 +11,7 @@ const getSalesCategory = async (
   page = 1,
   pageSize = 10,
   categoryId,
+  warehouseId,
   filterByMonth,
   filterByYear,
   orderBy
@@ -51,6 +53,16 @@ const getSalesCategory = async (
       ];
     }
 
+    if (warehouseId) {
+      where[Op.and] = [
+        ...(where[Op.and] || []),
+        sequelize.where(
+          sequelize.col("productWarehouse.id_warehouse"),
+          warehouseId
+        ),
+      ];
+    }
+
     const salesData = await transaction_product.findAll({
       where,
       attributes: [
@@ -69,6 +81,12 @@ const getSalesCategory = async (
           "total_price_sold",
         ],
         [sequelize.col("product.category.name"), "category_name"],
+        [
+          sequelize.literal(
+            "GROUP_CONCAT(DISTINCT productWarehouse.id_warehouse)"
+          ),
+          "warehouse_ids",
+        ],
       ],
       include: [
         {
@@ -80,6 +98,11 @@ const getSalesCategory = async (
               attributes: [],
             },
           ],
+        },
+        {
+          model: product_warehouse,
+          as: "productWarehouse",
+          attributes: [],
         },
       ],
       group: ["month_year", "product.id_category"],
@@ -97,6 +120,7 @@ const getSalesCategory = async (
       total_qty_sold: sales.getDataValue("total_qty_sold"),
       total_sales: sales.getDataValue("total_price_sold"),
       month_year: sales.getDataValue("month_year"),
+      warehouse_id: sales.getDataValue("warehouse_ids").split(","),
     }));
 
     const total_count = categories.length;
