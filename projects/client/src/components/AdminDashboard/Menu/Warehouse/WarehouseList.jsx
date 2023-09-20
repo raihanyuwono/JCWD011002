@@ -26,13 +26,14 @@ import {
   Box,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { getWarehouses, updateWarehouse } from "../../../../api/warehouse";
+import { getWarehouses } from "../../../../api/warehouse";
 import axios from "axios";
 import { getCityByProvince, getProvince } from "../../../../api/address";
 
 const WarehouseList = () => {
   const [warehouses, setWarehouses] = useState([]);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isDrawerCreateOpen, setIsDrawerCreateOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedWarehouse, setSelectedWarehouse] = useState(null);
   const [editedWarehouse, setEditedWarehouse] = useState({
@@ -75,7 +76,7 @@ const WarehouseList = () => {
         setSelectedProvinceName(selectedProvince.province);
       }
     }
-  }, [province, editedWarehouse]);
+  }, [province, editedWarehouse, selectedWarehouse]);
 
 
   const handleSelectProvince = (e) => {
@@ -84,6 +85,11 @@ const WarehouseList = () => {
     setSelectedProvinceId(selectedId);
     setSelectedProvinceName(selectedName);
     // setCity([]);
+    setEditedWarehouse({
+      ...editedWarehouse,
+      province: selectedName, // Update the province value in editedWarehouse
+      city_name: "",
+    });
   }
 
   const fetchWarehouses = async () => {
@@ -172,9 +178,41 @@ const WarehouseList = () => {
     }
   }
 
+  const handleDrawerCreateOpen = () => {
+    setEditedWarehouse({
+      name: "",
+      address: "",
+      province: "",
+      city_name: "",
+      postal_code: "",
+    })
+    setIsDrawerCreateOpen(true);
+  }
+
+  const handleCreateWarehouse = async () => {
+    try {
+      const createData = {
+        ...editedWarehouse,
+        province: selectedProvinceName,
+      }
+      await axios.post(
+        `${process.env.REACT_APP_API_BASE_URL}/warehouse`, createData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        }
+      }
+      )
+      fetchWarehouses();
+      setIsDrawerCreateOpen(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <>
       {/* Table content */}
+      <Button onClick={handleDrawerCreateOpen}>Create Warehouse</Button>
       <TableContainer>
         <Table>
           <Thead>
@@ -196,8 +234,8 @@ const WarehouseList = () => {
                 <Td>{warehouse.city_name}</Td>
                 <Td>{warehouse.postal_code}</Td>
                 <Td>
-                  <Button onClick={() => openEditDrawer(warehouse)}>Edit</Button>
-                  <Button onClick={() => openDeleteModal(warehouse)}>delete</Button>
+                  <Button mr={2} bg={"darkBlue"} color={"white"} onClick={() => openEditDrawer(warehouse)}>Edit</Button>
+                  <Button bg={"red"} color={"white"} onClick={() => openDeleteModal(warehouse)}>delete</Button>
                 </Td>
               </Tr>
             ))}
@@ -267,11 +305,11 @@ const WarehouseList = () => {
             </DrawerBody>
           </DrawerContent>
         </DrawerOverlay>
-      </Drawer >
+      </Drawer>
       {/* Delete Modal */}
-      < Modal isOpen={isDeleteModalOpen} onClose={closeDeleteModal} >
+      <Modal isOpen={isDeleteModalOpen} onClose={closeDeleteModal} >
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent bg={"darkBlue"} color={"white"}>
           <ModalHeader>Delete Warehouse</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
@@ -281,12 +319,104 @@ const WarehouseList = () => {
             <Button colorScheme="red" mr={3} onClick={handleDeleteWarehouse}>
               Delete
             </Button>
-            <Button variant="ghost" onClick={closeDeleteModal}>
+            <Button onClick={closeDeleteModal}>
               Cancel
             </Button>
           </ModalFooter>
         </ModalContent>
-      </Modal >
+      </Modal>
+      {/* Create Warehouse Drawer */}
+      <Drawer isOpen={isDrawerCreateOpen} onClose={() => setIsDrawerCreateOpen(false)}>
+        <DrawerOverlay>
+          <DrawerContent>
+            <DrawerCloseButton />
+            <DrawerHeader>Create Warehouse</DrawerHeader>
+            <DrawerBody>
+              {/* Isi form untuk membuat gudang baru di sini */}
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleCreateWarehouse(editedWarehouse);
+                }}
+              >
+                <Input
+                  placeholder="Name"
+                  value={editedWarehouse.name}
+                  onChange={(e) =>
+                    setEditedWarehouse({
+                      ...editedWarehouse,
+                      name: e.target.value,
+                    })
+                  }
+                />
+                <Input
+                  placeholder="Address"
+                  value={editedWarehouse.address}
+                  onChange={(e) =>
+                    setEditedWarehouse({
+                      ...editedWarehouse,
+                      address: e.target.value,
+                    })
+                  }
+                />
+                <Select
+                  placeholder={selectedProvinceId ? "Select Province" : "Province"}
+                  name="province"
+                  value={selectedProvinceId}
+                  onChange={handleSelectProvince}
+                >
+                  {province.map((province) => (
+                    <option
+                      key={province.province_id}
+                      value={province.province_id}
+                    >
+                      {province.province}
+                    </option>
+                  ))}
+                </Select>
+                <Select
+                  isDisabled={!selectedProvinceId}
+                  placeholder={
+                    selectedProvinceId
+                      ? "Select City"
+                      : "City"
+                  }
+                  name="city_name"
+                  value={editedWarehouse.city_name}
+                  onChange={(e) =>
+                    setEditedWarehouse({
+                      ...editedWarehouse,
+                      city_name: e.target.value,
+                    })
+                  }
+                >
+                  {city.map((city) => (
+                    <option
+                      key={city.city_id}
+                      value={city.city_name}
+                    >
+                      {city.city_name}
+                    </option>
+                  ))}
+                </Select>
+                <Input
+                  placeholder="Postal Code"
+                  value={editedWarehouse.postal_code}
+                  onChange={(e) =>
+                    setEditedWarehouse({
+                      ...editedWarehouse,
+                      postal_code: e.target.value,
+                    })
+                  }
+                />
+                <Button type="submit">Create</Button>
+                <Button onClick={() => setIsDrawerCreateOpen(false)}>Cancel</Button>
+              </form>
+            </DrawerBody>
+          </DrawerContent>
+        </DrawerOverlay>
+      </Drawer>
+
     </>
   );
 };
