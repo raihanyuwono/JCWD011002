@@ -24,6 +24,7 @@ import {
   ModalFooter,
   Select,
   Box,
+  Flex,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { getWarehouses } from "../../../../api/warehouse";
@@ -212,37 +213,41 @@ const WarehouseList = () => {
   return (
     <>
       {/* Table content */}
-      <Button onClick={handleDrawerCreateOpen}>Create Warehouse</Button>
-      <TableContainer>
-        <Table>
-          <Thead>
-            <Tr>
-              <Th color={"white"}>Warehouse</Th>
-              <Th color={"white"}>Address</Th>
-              <Th color={"white"}>Province</Th>
-              <Th color={"white"}>City</Th>
-              <Th color={"white"}>Postal Code</Th>
-              <Th color={"white"}>Action</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {warehouses.map((warehouse) => (
-              <Tr key={warehouse.id}>
-                <Td>{warehouse.name}</Td>
-                <Td>{warehouse.address}</Td>
-                <Td>{warehouse.province}</Td>
-                <Td>{warehouse.city_name}</Td>
-                <Td>{warehouse.postal_code}</Td>
-                <Td>
-                  <Button mr={2} bg={"darkBlue"} color={"white"} onClick={() => openEditDrawer(warehouse)}>Edit</Button>
-                  <Button bg={"red"} color={"white"} onClick={() => openDeleteModal(warehouse)}>delete</Button>
-                </Td>
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      </TableContainer>
+      <Flex flexDirection={"column"}>
+        <Box>
+          <Button bg={"darkBlue"} color={"white"} onClick={handleDrawerCreateOpen}>Create Warehouse</Button>
+        </Box>
 
+        <TableContainer>
+          <Table>
+            <Thead>
+              <Tr>
+                <Th color={"white"}>Warehouse</Th>
+                <Th color={"white"}>Address</Th>
+                <Th color={"white"}>Province</Th>
+                <Th color={"white"}>City</Th>
+                <Th color={"white"}>Postal Code</Th>
+                <Th color={"white"}>Action</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {warehouses.map((warehouse) => (
+                <Tr key={warehouse.id}>
+                  <Td>{warehouse.name}</Td>
+                  <Td>{warehouse.address}</Td>
+                  <Td>{warehouse.province}</Td>
+                  <Td>{warehouse.city_name}</Td>
+                  <Td>{warehouse.postal_code}</Td>
+                  <Td>
+                    <Button mr={2} bg={"darkBlue"} color={"white"} onClick={() => openEditDrawer(warehouse)}>Edit</Button>
+                    <Button bg={"red"} color={"white"} onClick={() => openDeleteModal(warehouse)}>delete</Button>
+                  </Td>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        </TableContainer>
+      </Flex>
       {/* Edit Drawer */}
       <Drawer isOpen={isDrawerOpen} onClose={closeEditDrawer}>
         <DrawerOverlay>
