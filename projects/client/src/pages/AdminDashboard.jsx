@@ -3,7 +3,6 @@ import SideMenu from "../components/AdminDashboard/SideMenu";
 import { useState } from "react";
 import {
   BiHomeAlt2 as IcHome,
-  BiUser as IcUser,
   BiGitPullRequest as IcMutation,
   BiCartAlt as IcOrder,
 } from "react-icons/bi";
@@ -11,15 +10,24 @@ import {
   PiWarehouse as IcWarehouse,
   PiBagSimple as IcProduct,
 } from "react-icons/pi";
-import { TbCategory as IcCategory } from "react-icons/tb";
+import { TbCategory as IcCategory, TbUsers as IcUser } from "react-icons/tb";
 import { SlGraph as IcReport } from "react-icons/sl";
 import { Link, Outlet } from "react-router-dom";
+import Dashboard from "../components/AdminDashboard/Menu/Dashboard";
+import ManageUsers from "../components/AdminDashboard/Menu/ManageUser";
 
 const ACCESS_ADMIN = ["admin"];
 const ACCESS_ALL_ADMIN = ["admin", "admin warehouse"];
 
 const container = {
+  w: "full",
+  p: "12px",
+  gap: "12px",
   bgColor: "bgPrimary",
+  warp: "wrap"
+};
+const contentContainer = {
+  flexGrow: 1,
 };
 
 function createMenuSet(name, logo, access, url) {
@@ -49,9 +57,9 @@ function AdminDashboard() {
     <>
       <Flex {...container}>
         <SideMenu {...sideMenuAttr} />
-        {menuList[selected]["page"]}
+        {/* <Flex {...contentContainer}>{menuList[selected]["page"]}</Flex> */}
+        <Outlet />
       </Flex>
-      <Outlet />
     </>
   );
 }

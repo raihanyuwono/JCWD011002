@@ -4,9 +4,9 @@ import { getRole } from "../../helpers/Roles";
 
 const containerAttr = {
   direction: "column",
-  gap: "12px",
-  w: "200px",
-  m: "12px",
+  gap: "32px",
+  basis: { sm: "200px", md: "256px", lg: "320px" },
+  shrink: 0,
   px: "8px",
   pt: "16px",
   pb: "8px",
@@ -29,16 +29,15 @@ function SideMenu({ selected, setSelected, menuList }) {
     <Flex {...containerAttr}>
       <Text {...logoAttr}>LOGO</Text>
       <Flex {...menuAttr}>
-        {menuList
-          .filter((menu) => menu["access"].includes(role))
-          .map((menu, index) => (
-            <CardAdminMenu
-              {...menu}
-              selected={index === selected ? true : false}
-              setSelected={() => setSelected(index)}
-              key={index}
-            />
-          ))}
+        {menuList.map((menu, index) => (
+          <CardAdminMenu
+            {...menu}
+            display={menu["access"].includes(role) ? "grid" : "none"}
+            selected={index === selected ? true : false}
+            setSelected={() => setSelected(index)}
+            key={index}
+          />
+        ))}
       </Flex>
     </Flex>
   );

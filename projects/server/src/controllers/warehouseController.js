@@ -1,5 +1,6 @@
 const { messages } = require("../helpers")
 const { warehouseService } = require("../services")
+const { adminService } = require("../services");
 
 const createWarehouse = async (req, res) => {
   try {
@@ -44,4 +45,14 @@ const getWarehouse = async (req, res) => {
   }
 }
 
-module.exports = { createWarehouse, updateWarehouse, deleteWarehouse, getWarehouse }
+
+async function getWarehouses(req, res) {
+  try {
+    const result = await adminService.getWarehouses();
+    res.status(result.status).json(messages.response(result));
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+module.exports = { createWarehouse, updateWarehouse, deleteWarehouse, getWarehouses }
