@@ -14,6 +14,7 @@ import { TbCategory as IcCategory, TbUsers as IcUser } from "react-icons/tb";
 import { SlGraph as IcReport } from "react-icons/sl";
 import Dashboard from "../components/AdminDashboard/Menu/Dashboard";
 import ManageUsers from "../components/AdminDashboard/Menu/ManageUser";
+import Report from "../pages/Report";
 
 const ACCESS_ADMIN = ["admin"];
 const ACCESS_ALL_ADMIN = ["admin", "admin warehouse"];
@@ -65,12 +66,7 @@ const menuList = [
     dummyPage("Manage Mutation")
   ),
   createMenuSet("Orders", <IcOrder />, ACCESS_ADMIN, dummyPage("Manage Order")),
-  createMenuSet(
-    "Reports",
-    <IcReport />,
-    ACCESS_ALL_ADMIN,
-    dummyPage("aaa") // --------------- sini
-  ),
+  createMenuSet("Reports", <IcReport />, ACCESS_ALL_ADMIN, <Report />),
 ];
 
 function AdminDashboard() {

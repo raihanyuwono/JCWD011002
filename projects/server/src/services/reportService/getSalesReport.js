@@ -57,7 +57,7 @@ const getSalesReport = async (
     }
 
     const transactions = await db.transaction.findAll({
-      where: filterCriteria, 
+      where: filterCriteria,
       include: [
         {
           model: db.user,
@@ -97,6 +97,11 @@ const getSalesReport = async (
       order,
     });
 
+    const totalItems = await db.transaction.count({
+      where: filterCriteria,
+    });
+
+    const totalPages = Math.ceil(totalItems / validPageSize);
     const result = [];
 
     for (const transaction of transactions) {
@@ -117,7 +122,7 @@ const getSalesReport = async (
       result.push({
         transactionId: transaction.id,
         user_name: transaction.user.name,
-        created_at: transaction.created_at.toDateString(), 
+        created_at: transaction.created_at.toLocaleDateString("id"),
         total: transaction.total,
         status: transaction.status.name,
         is_confirm: transaction.is_confirm,
@@ -142,7 +147,13 @@ const getSalesReport = async (
       });
     }
 
-    return result;
+    return {
+      totalItems,
+      pageSize,
+      currentPage: validPage,
+      totalPages,
+      data: result,
+    };
   } catch (error) {
     console.error(error);
     throw error;

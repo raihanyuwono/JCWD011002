@@ -1,4 +1,4 @@
-const { Op, Sequelize } = require("sequelize");
+const { Op, Sequelize, literal } = require("sequelize");
 const {
   transaction_product,
   product,
