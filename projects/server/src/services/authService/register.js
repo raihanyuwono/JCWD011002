@@ -30,7 +30,20 @@ async function createCart(user, t) {
     await carts.create({ id_user: user["id"] }, { transaction: t });
 }
 
-async function register(email, id_role = 1) {
+async function register(email, id_role = 1, id = null) {
+  // Check if id is admin - to add new admin
+  if (id) {
+    const isAdmin = await users.findOne({
+      include: {
+        model: roles,
+        attribute: ["name"],
+      },
+      where: { id },
+    });
+    console.log("Register - Admin : ", isAdmin);
+    if (isAdmin["role"]["name"] !== "admin")
+      return messages.error(401, "Unautorized request");
+  }
   // Check if email is exsist
   const isExist = await users.findOne({ where: { email } });
   if (isExist) return messages.error(500, "Email is already exist");

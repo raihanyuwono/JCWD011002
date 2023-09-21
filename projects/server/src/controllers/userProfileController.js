@@ -1,5 +1,5 @@
 const { messages } = require('../helpers')
-const { userProfileService } = require('../services')
+const { userProfileService, adminService } = require('../services')
 
 const getUser = async (req, res) => {
   try {
@@ -35,8 +35,19 @@ const changePassword = async (req, res) => {
   }
 }
 
+async function getUsers(req, res) {
+  try {
+    const { access, query } = req;
+    const result = await adminService.getUsers(access, query);
+    res.status(result.status).json(messages.response(result));
+  } catch (error) {
+    res.status(500).json({ message: error.messsage });
+  }
+}
+
 module.exports = {
   getUser,
+  getUsers,
   updateProfile,
   changePassword
 }
