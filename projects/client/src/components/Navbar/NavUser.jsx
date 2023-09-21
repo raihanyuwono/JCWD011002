@@ -13,16 +13,18 @@ import {
   MenuDivider,
   useDisclosure,
   useColorModeValue,
-  Stack,
-  Text,
   Input,
   InputGroup,
   InputLeftElement,
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon, SearchIcon } from "@chakra-ui/icons";
-import { BsHandbag } from "react-icons/bs";
+import { RiShoppingCartLine } from "react-icons/ri";
 import Login from "../Login";
-
+import { useNavigate } from "react-router-dom";
+import "../../App.css";
+import CartHover from "./CartHover";
+import axios from "axios";
+import jwt_decode from "jwt-decode";
 const Links = ["ini apa", "ini juga", "apalagi?"];
 
 const NavLink = (props) => {
@@ -46,8 +48,24 @@ const NavLink = (props) => {
 };
 
 export default function Simple() {
+  const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isCartOpen, setCartOpen] = useState(false);
+
+  const [cartLength, setCartLength] = useState(0);
+  const API_URL = process.env.REACT_APP_API_BASE_URL;
+  const userId = jwt_decode(localStorage.getItem("token")).id;
+  const viewCart = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/order/cart/${userId}`);
+      setCartLength(response.data.data.length);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    viewCart();
+  });
 
   const handleCartHover = () => {
     setCartOpen(true);
@@ -57,11 +75,24 @@ export default function Simple() {
     setCartOpen(false);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  };
+
   const isLogin = localStorage.getItem("token");
 
   return (
     <>
-      <Box bg={'primary'} boxShadow={"lg"} px={4} pos={"fixed"} top={0} w={"full"} zIndex={100}>
+      <Box
+        bg={"primary"}
+        boxShadow={"lg"}
+        px={4}
+        pos={"fixed"}
+        top={0}
+        w={"full"}
+        zIndex={100}
+      >
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <IconButton
             size={"md"}
@@ -91,13 +122,21 @@ export default function Simple() {
           </InputGroup>
           <Flex alignItems={"center"}>
             <Button
+              onClick={() => navigate("/cart")}
               mr={4}
               bg={"transparent"}
               _hover={{ bg: "transparent" }}
               onMouseEnter={handleCartHover}
               onMouseLeave={handleCartLeave}
             >
-              <BsHandbag />
+              <Box>
+                <div class="cart">
+                  <span class="count">{cartLength}</span>
+                  <i class="material-icons">
+                    <RiShoppingCartLine />
+                  </i>
+                </div>
+              </Box>
             </Button>
             {isLogin ? (
               <Menu>
@@ -110,33 +149,50 @@ export default function Simple() {
                 >
                   <Avatar size={"sm"} />
                 </MenuButton>
-                <MenuList>
-                  <MenuItem>Link 1</MenuItem>
-                  <MenuItem>Link 2</MenuItem>
+                <MenuList
+                  border={"0.5px solid gray"}
+                  borderRadius={"none"}
+                  bgColor={"bgSecondary"}
+                  color={"white"}
+                >
+                  <MenuItem
+                    bgColor={"bgSecondary"}
+                    color={"white"}
+                    onClick={() => navigate("/profile")}
+                  >
+                    Profile
+                  </MenuItem>
                   <MenuDivider />
-                  <MenuItem>Link 3</MenuItem>
+                  <MenuItem
+                    bgColor={"bgSecondary"}
+                    color={"white"}
+                    onClick={handleLogout}
+                  >
+                    Log Out
+                  </MenuItem>
                 </MenuList>
               </Menu>
             ) : (
               <Login />
             )}
-
           </Flex>
         </Flex>
 
         {isCartOpen && (
           <Box
             position="absolute"
+            border={"0.5px solid gray"}
             top="50"
             right="0"
-            bg="white"
+            bg="bgSecondary"
+            color={"white"}
             boxShadow="lg"
             p={4}
             zIndex={999}
             onMouseEnter={handleCartHover}
             onMouseLeave={handleCartLeave}
           >
-            <Text>cart detail order</Text>
+            <CartHover />
           </Box>
         )}
       </Box>

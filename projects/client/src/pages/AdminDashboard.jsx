@@ -23,7 +23,7 @@ const container = {
   p: "12px",
   gap: "12px",
   bgColor: "bgPrimary",
-  warp: "wrap"
+  warp: "wrap",
 };
 const contentContainer = {
   flexGrow: 1,
@@ -69,7 +69,7 @@ const menuList = [
     "Reports",
     <IcReport />,
     ACCESS_ALL_ADMIN,
-    dummyPage("Reports")
+    dummyPage("aaa") // --------------- sini
   ),
 ];
 
