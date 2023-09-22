@@ -18,6 +18,7 @@ import Pagination from "../../Pagination";
 import FilterBy from "../../FilterBy";
 import OrderBy from "./OrderBy";
 import toRupiah from "@develoka/angka-rupiah-js";
+import SeeDetail from "./SeeDetail";
 
 const Summary = () => {
   const [sales, setSales] = useState([]);
@@ -151,9 +152,7 @@ const Summary = () => {
                   {toRupiah(sale.total, { dot: ".", floatingPoint: 0 })}
                 </Td>
                 <Td>
-                  <Button bgColor={"primary"} color={"white"} size="sm">
-                    Detail
-                  </Button>
+                  <SeeDetail transactionId={sale.transactionId} />
                 </Td>
               </Tr>
             ))}

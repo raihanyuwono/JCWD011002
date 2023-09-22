@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Flex, Select } from "@chakra-ui/react";
+import axios from "axios";
 
 const OrderBy = ({
   orderBy,
@@ -9,6 +10,10 @@ const OrderBy = ({
   warehouseId,
   setWarehouseId,
 }) => {
+  const API_URL = process.env.REACT_APP_API_BASE_URL;
+  const [dataWarehouse, setDataWarehouse] = useState([]);
+  const [dataProduct, setDataProduct] = useState([]);
+
   const handleOrderChange = (e) => {
     setOrderBy(e.target.value);
   };
@@ -21,6 +26,23 @@ const OrderBy = ({
     setProductId(e.target.value);
   };
 
+  const fetchWarehouse = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/warehouse`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setDataWarehouse(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchWarehouse();
+  }, []);
+
   return (
     <>
       <Select
@@ -32,9 +54,11 @@ const OrderBy = ({
         value={warehouseId}
         onChange={handleWarehouseChange}
       >
-        <option value="1">Warehouse Medan</option>
-        <option value="2">Warehouse Bandung</option>
-        <option value="3">Warehouse Makassar</option>
+        {dataWarehouse.map((warehouse) => (
+          <option key={warehouse.id} value={warehouse.id}>
+            {warehouse.name}
+          </option>
+        ))}
       </Select>
       <Select
         ml={2}
@@ -48,14 +72,14 @@ const OrderBy = ({
         <option value="1">Seagate 1TB</option>
         <option value="2">RTX 3090</option>
         <option value="3">Samsung Curve Monitor</option>
-        <option value="3">AMD Radeon Supra X</option>
+        <option value="4">AMD Radeon Supra X</option>
       </Select>
       <Select
         ml={2}
         w={"20vw"}
         color={"black"}
         bg={"white"}
-        placeholder="Order By"
+        placeholder="Sort By"
         value={orderBy}
         onChange={handleOrderChange}
       >

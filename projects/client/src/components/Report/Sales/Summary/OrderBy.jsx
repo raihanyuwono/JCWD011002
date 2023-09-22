@@ -56,7 +56,7 @@ const OrderBy = ({
         w={"15vw"}
         color={"black"}
         bg={"white"}
-        placeholder="Order By"
+        placeholder="Sort By"
         value={orderBy}
         onChange={handleOrderChange}
       >

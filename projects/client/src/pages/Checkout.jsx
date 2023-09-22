@@ -15,6 +15,14 @@ import {
   Flex,
   useToast,
   Select,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+  AlertDialogCloseButton,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { AiOutlineCaretDown } from "react-icons/ai";
 import jwt_decode from "jwt-decode";
@@ -24,6 +32,8 @@ import toRupiah from "@develoka/angka-rupiah-js";
 import { useNavigate } from "react-router-dom";
 
 const Checkout = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const cancelRef = React.useRef();
   const API_URL = process.env.REACT_APP_API_BASE_URL;
   const navigate = useNavigate();
   const toast = useToast();
@@ -148,6 +158,10 @@ const Checkout = () => {
     getTotal();
     getPayment();
   }, []);
+
+  const handleExplore = () => {
+    navigate("/");
+  };
 
   return (
     <>
@@ -294,17 +308,48 @@ const Checkout = () => {
             bgColor="textSecondary"
           >
             <Button
-              onClick={handleCheckout}
+              onClick={onOpen}
               w={"100%"}
               h={"50px"}
               borderRadius={"none"}
               variant={"success"}
-              isLoading={isLoading}
+              // isLoading={isLoading}
             >
-              Checkout
+              Place Order
             </Button>
           </Box>
         </Flex>
+        <>
+          <AlertDialog
+            motionPreset="slideInBottom"
+            leastDestructiveRef={cancelRef}
+            onClose={onClose}
+            isOpen={isOpen}
+            isCentered
+          >
+            <AlertDialogOverlay />
+
+            <AlertDialogContent>
+              <AlertDialogHeader>Place Order?</AlertDialogHeader>
+              <AlertDialogCloseButton />
+              <AlertDialogBody>
+                Are you sure you want to place an order? or explore more
+                incredible items that could be yours today?
+              </AlertDialogBody>
+              <AlertDialogFooter>
+                <Button onClick={handleExplore}>Explore</Button>
+                <Button
+                  isLoading={isLoading}
+                  onClick={handleCheckout}
+                  colorScheme="green"
+                  ml={3}
+                >
+                  Place Order
+                </Button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </>
       </Flex>
     </>
   );

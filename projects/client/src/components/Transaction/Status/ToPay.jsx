@@ -18,7 +18,7 @@ const ToPay = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filterBy, setFilterBy] = useState("asc");
+  const [filterBy, setFilterBy] = useState("desc");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [remainingTime, setRemainingTime] = useState({});
@@ -76,11 +76,10 @@ const ToPay = () => {
   return (
     <>
       <Flex justifyContent={"space-between"} mb={4}>
-        <Box>
+        <Box w={"30vw"}>
           <SearchBar onSearch={setSearchQuery} />
         </Box>
-        &nbsp;&nbsp;
-        <Box>
+        <Box ml={2}>
           <FilterBy
             onFilterChange={setFilterBy}
             onDateRangeFilter={handleDateRangeFilter}
@@ -93,7 +92,7 @@ const ToPay = () => {
           mb={2}
           bg={"bgSecondary"}
           p={4}
-          w={"58vw"}
+          w={"70vw"}
           color={"white"}
         >
           <Flex justifyContent={"space-between"}>

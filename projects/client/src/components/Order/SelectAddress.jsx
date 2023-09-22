@@ -168,7 +168,9 @@ const SelectAddress = () => {
                   ) : (
                     dataAddress.map((address) => (
                       <Text
-                        bgColor={"white"}
+                        bgColor="white"
+                        border={"4px"}
+                        borderColor={address.is_default ? "#C6F7D4" : "white"}
                         boxShadow={"xl"}
                         borderRadius={"5px"}
                         mt={3}
@@ -178,7 +180,7 @@ const SelectAddress = () => {
                           <Flex
                             alignItems={"center"}
                             justifyContent={"space-between"}
-                            mr={5}
+                            mr={4}
                           >
                             <Text
                               px={3}

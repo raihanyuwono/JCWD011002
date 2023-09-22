@@ -16,15 +16,18 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  Text,
 } from "@chakra-ui/react";
-import { HamburgerIcon, CloseIcon, SearchIcon } from "@chakra-ui/icons";
+import { SearchIcon } from "@chakra-ui/icons";
 import { RiShoppingCartLine } from "react-icons/ri";
+import { CgProfile } from "react-icons/cg";
 import Login from "../Login";
 import { useNavigate } from "react-router-dom";
 import "../../App.css";
 import CartHover from "./CartHover";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
+import LogoutAlert from "./LogoutAlert";
 const Links = ["ini apa", "ini juga", "apalagi?"];
 
 const NavLink = (props) => {
@@ -73,11 +76,6 @@ export default function Simple() {
 
   const handleCartLeave = () => {
     setCartOpen(false);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/");
   };
 
   const isLogin = localStorage.getItem("token");
@@ -160,16 +158,19 @@ export default function Simple() {
                     color={"white"}
                     onClick={() => navigate("/profile")}
                   >
-                    Profile
+                    <CgProfile size={20} />
+                    <Text mt={0.5}>&nbsp;Profile</Text>
                   </MenuItem>
                   <MenuDivider />
-                  <MenuItem
+                  {/* <MenuItem
                     bgColor={"bgSecondary"}
                     color={"white"}
                     onClick={handleLogout}
                   >
-                    Log Out
-                  </MenuItem>
+                    <RiLogoutCircleLine size={20} />
+                    <Text mt={0.5}>&nbsp;Log Out</Text>
+                  </MenuItem> */}
+                  <LogoutAlert />
                 </MenuList>
               </Menu>
             ) : (

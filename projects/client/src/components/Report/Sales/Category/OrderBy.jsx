@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Flex, Select } from "@chakra-ui/react";
+import axios from "axios";
 
 const OrderBy = ({
   orderBy,
@@ -9,6 +10,9 @@ const OrderBy = ({
   categoryId,
   setCategoryId,
 }) => {
+  const API_URL = process.env.REACT_APP_API_BASE_URL;
+  const [dataWarehouse, setDataWarehouse] = useState([]);
+  const [dataCategory, setDataCategory] = useState([]);
   const handleOrderChange = (e) => {
     setOrderBy(e.target.value);
   };
@@ -18,6 +22,37 @@ const OrderBy = ({
   const handleCategoryChange = (e) => {
     setCategoryId(e.target.value);
   };
+
+  const fetchWarehouse = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/warehouse`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setDataWarehouse(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchCategory = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/product/category`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setDataCategory(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchWarehouse();
+    fetchCategory();
+  }, []);
 
   return (
     <>
@@ -30,9 +65,11 @@ const OrderBy = ({
         value={warehouseId}
         onChange={handleWarehouseChange}
       >
-        <option value="1">Warehouse Medan</option>
-        <option value="2">Warehouse Bandung</option>
-        <option value="3">Warehouse Makassar</option>
+        {dataWarehouse.map((warehouse) => (
+          <option key={warehouse.id} value={warehouse.id}>
+            {warehouse.name}
+          </option>
+        ))}
       </Select>
       <Select
         ml={2}
@@ -43,9 +80,11 @@ const OrderBy = ({
         value={categoryId}
         onChange={handleCategoryChange}
       >
-        <option value="1">SSD</option>
-        <option value="2">VGA</option>
-        <option value="3">Monitor</option>
+        {dataCategory.map((category) => (
+          <option key={category.id} value={category.id}>
+            {category.name}
+          </option>
+        ))}
       </Select>
       <Select
         ml={2}
