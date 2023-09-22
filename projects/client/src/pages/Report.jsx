@@ -8,6 +8,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import Sales from "../components/Report/Sales/Sales";
+import Stock from "../components/Report/Stock/Stock";
 const Report = () => {
   return (
     <>
@@ -21,7 +22,7 @@ const Report = () => {
             <Sales />
           </TabPanel>
           <TabPanel>
-            <p>Stock</p>
+            <Stock />
           </TabPanel>
         </TabPanels>
       </Tabs>

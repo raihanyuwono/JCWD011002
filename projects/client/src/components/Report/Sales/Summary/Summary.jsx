@@ -146,7 +146,6 @@ const Summary = () => {
                 <Td textAlign="center">{sale.payment_method}</Td>
                 <Td textAlign="center">{sale.payment_status}</Td>
                 <Td textAlign="center">{sale.shipping_method}</Td>
-                {/* <Td>Rp45.000</Td> */}
                 <Td textAlign="center">{sale.is_confirm ? "Yes" : "No"}</Td>
                 <Td isNumeric>
                   {toRupiah(sale.total, { dot: ".", floatingPoint: 0 })}

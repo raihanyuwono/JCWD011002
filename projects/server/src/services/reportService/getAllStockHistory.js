@@ -171,7 +171,10 @@ const getAllStockHistory = async (
       total_page: totalPage,
       current_page: currentPage,
       total_items: totalItems,
-      data: paginatedResult,
+      data: paginatedResult.map((item, index) => ({
+        data_id: index + 1,
+        ...item,
+      })),
     };
 
     return resultData;
