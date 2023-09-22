@@ -128,7 +128,7 @@ const getSalesCategory = async (
 
     return {
       status: 200,
-      page: Number(page),
+      currentPage: Number(page),
       page_size: Number(page_size),
       total_data: categories.length,
       totalPages,

@@ -26,6 +26,8 @@ const Summary = () => {
   const [orderBy, setOrderBy] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [categoryId, setCategoryId] = useState("");
+  const [productId, setProductId] = useState("");
 
   const API_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -38,6 +40,8 @@ const Summary = () => {
           orderBy,
           filterByMonth,
           filterByYear,
+          categoryId,
+          productId,
         },
       });
       setSales(response.data.data);
@@ -49,7 +53,14 @@ const Summary = () => {
 
   useEffect(() => {
     fetchSales();
-  }, [filterByMonth, filterByYear, orderBy, currentPage]);
+  }, [
+    filterByMonth,
+    filterByYear,
+    orderBy,
+    currentPage,
+    categoryId,
+    productId,
+  ]);
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
@@ -63,7 +74,14 @@ const Summary = () => {
           filterByYear={filterByYear}
           setFilterByYear={setFilterByYear}
         />
-        <OrderBy orderBy={orderBy} setOrderBy={setOrderBy} />
+        <OrderBy
+          orderBy={orderBy}
+          setOrderBy={setOrderBy}
+          categoryId={categoryId}
+          setCategoryId={setCategoryId}
+          productId={productId}
+          setProductId={setProductId}
+        />
       </Flex>
       <TableContainer mt={4}>
         <Table
@@ -71,7 +89,7 @@ const Summary = () => {
           bgColor={"bgSecondary"}
           colorScheme="whiteAlpha"
         >
-          <Thead>
+          <Thead bgColor={"primary"}>
             <Tr>
               <Th textAlign="center" color={"white"}>
                 TXN ID
@@ -92,7 +110,6 @@ const Summary = () => {
                 PAY. STATUS
               </Th>
               <Th color={"white"}>SHIP. METHOD</Th>
-              {/* <Th color={"white"}>SHIP. COST</Th> */}
               <Th textAlign="center" color={"white"}>
                 IS CONFIRM
               </Th>

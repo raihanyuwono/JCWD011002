@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import Summary from "./Summary/Summary";
 import Product from "./Product/Product";
+import Category from "./Category/Category";
 const Sales = () => {
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -45,7 +46,7 @@ const Sales = () => {
             <Product />
           </TabPanel>
           <TabPanel>
-            <p>category</p>
+            <Category />
           </TabPanel>
         </TabPanels>
       </Tabs>

@@ -16,10 +16,10 @@ const FilterBy = ({
   return (
     <Flex gap={2}>
       <Select
-        w={"25vw"}
+        w={"15vw"}
         color={"black"}
         bg={"white"}
-        placeholder="Select Month"
+        placeholder="All Month"
         value={filterByMonth}
         onChange={handleMonthChange}
       >
@@ -37,10 +37,10 @@ const FilterBy = ({
         <option value="12">December</option>
       </Select>
       <Select
-        w={"25vw"}
+        w={"15vw"}
         color={"black"}
         bg={"white"}
-        placeholder="Select Year"
+        placeholder="All Year"
         value={filterByYear}
         onChange={handleYearChange}
       >

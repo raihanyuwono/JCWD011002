@@ -16,22 +16,22 @@ import FilterBy from "../../FilterBy";
 import OrderBy from "./OrderBy";
 import toRupiah from "@develoka/angka-rupiah-js";
 
-const Product = () => {
-  const [product, setProduct] = useState([]);
+const Category = () => {
+  const [category, setCategory] = useState([]);
   const [filterByMonth, setFilterByMonth] = useState("");
   const [filterByYear, setFilterByYear] = useState("");
   const [orderBy, setOrderBy] = useState("month_year DESC");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [warehouseId, setWarehouseId] = useState("");
-  const [productId, setProductId] = useState("");
+  const [categoryId, setCategoryId] = useState("");
 
   const API_URL = process.env.REACT_APP_API_BASE_URL;
 
   const fetchSales = async () => {
     try {
-      setProduct([]);
-      const response = await axios.get(`${API_URL}/report/sales/product`, {
+      setCategory([]);
+      const response = await axios.get(`${API_URL}/report/sales/category`, {
         params: {
           page: currentPage,
           pageSize: 10,
@@ -39,10 +39,10 @@ const Product = () => {
           filterByMonth,
           filterByYear,
           warehouseId,
-          productId,
+          categoryId,
         },
       });
-      setProduct(response.data.products);
+      setCategory(response.data.categories);
       setTotalPages(response.data.totalPages);
     } catch (error) {
       console.log(error);
@@ -57,7 +57,7 @@ const Product = () => {
     orderBy,
     currentPage,
     warehouseId,
-    productId,
+    categoryId,
   ]);
 
   const handlePageChange = (newPage) => {
@@ -77,8 +77,8 @@ const Product = () => {
           setOrderBy={setOrderBy}
           warehouseId={warehouseId}
           setWarehouseId={setWarehouseId}
-          productId={productId}
-          setProductId={setProductId}
+          categoryId={categoryId}
+          setCategoryId={setCategoryId}
         />
       </Flex>
       <TableContainer mt={4}>
@@ -90,18 +90,9 @@ const Product = () => {
           <Thead bgColor={"primary"}>
             <Tr>
               <Th textAlign="center" color={"white"}>
-                PRODUCT ID
+                CATEGORY ID
               </Th>
-              <Th color={"white"}>IMAGE</Th>
-              <Th textAlign="center" color={"white"}>
-                NAME
-              </Th>
-              <Th textAlign="center" color={"white"}>
-                CATEGORY
-              </Th>
-              <Th textAlign="center" color={"white"}>
-                PRICE
-              </Th>
+              <Th color={"white"}>CATEGORY NAME</Th>
               <Th textAlign="center" color={"white"}>
                 QTY SOLD
               </Th>
@@ -109,22 +100,15 @@ const Product = () => {
                 TOTAL SALES
               </Th>
               <Th textAlign="center" color={"white"}>
-                YEAR-MONTH
+                MONTH-YEAR
               </Th>
             </Tr>
           </Thead>
           <Tbody>
-            {product.map((sale) => (
-              <Tr key={sale.id_product}>
-                <Td textAlign="center">{sale.id_product}</Td>
-                <Td textAlign="center">
-                  <Image width="50px" src={sale.image} alt={sale.name} />
-                </Td>
-                <Td>{sale.name}</Td>
-                <Td textAlign="center">{sale.category}</Td>
-                <Td textAlign="center">
-                  {toRupiah(sale.price, { dot: ".", floatingPoint: 0 })}
-                </Td>
+            {category.map((sale) => (
+              <Tr key={sale.id_category}>
+                <Td textAlign="center">{sale.id_category}</Td>
+                <Td>{sale.category_name}</Td>
                 <Td textAlign="center">{sale.total_qty_sold}</Td>
                 <Td textAlign="center">
                   {toRupiah(sale.total_sales, { dot: ".", floatingPoint: 0 })}
@@ -135,9 +119,9 @@ const Product = () => {
           </Tbody>
         </Table>
       </TableContainer>
-      {product.length >= 10 ? (
+      {category.length >= 10 ? (
         <Pagination
-          totalItems={product.length}
+          totalItems={category.length}
           itemsPerPage={10}
           onPageChange={handlePageChange}
           currentPage={currentPage}
@@ -150,4 +134,4 @@ const Product = () => {
   );
 };
 
-export default Product;
+export default Category;

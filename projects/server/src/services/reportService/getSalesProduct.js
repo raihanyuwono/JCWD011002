@@ -106,7 +106,8 @@ const getSalesProduct = async (
       group: ["month_year", "id_product"],
       order: [
         [sequelize.literal(orderBy || "total_qty_sold DESC")],
-        [sequelize.literal("month_year DESC")],
+        [sequelize.literal(orderBy || "month_year DESC")],
+        // [sequelize.literal("month_year desc")],
       ],
       offset: (page - 1) * page_size,
       limit: page_size,

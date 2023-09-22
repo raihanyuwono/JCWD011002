@@ -4,21 +4,19 @@ import { Flex, Select } from "@chakra-ui/react";
 const OrderBy = ({
   orderBy,
   setOrderBy,
-  productId,
-  setProductId,
   warehouseId,
   setWarehouseId,
+  categoryId,
+  setCategoryId,
 }) => {
   const handleOrderChange = (e) => {
     setOrderBy(e.target.value);
   };
-
   const handleWarehouseChange = (e) => {
     setWarehouseId(e.target.value);
   };
-
-  const handleProductChange = (e) => {
-    setProductId(e.target.value);
+  const handleCategoryChange = (e) => {
+    setCategoryId(e.target.value);
   };
 
   return (
@@ -41,21 +39,20 @@ const OrderBy = ({
         w={"20vw"}
         color={"black"}
         bg={"white"}
-        placeholder="All Product"
-        value={productId}
-        onChange={handleProductChange}
+        placeholder="All Categories"
+        value={categoryId}
+        onChange={handleCategoryChange}
       >
-        <option value="1">Seagate 1TB</option>
-        <option value="2">RTX 3090</option>
-        <option value="3">Samsung Curve Monitor</option>
-        <option value="3">AMD Radeon Supra X</option>
+        <option value="1">SSD</option>
+        <option value="2">VGA</option>
+        <option value="3">Monitor</option>
       </Select>
       <Select
         ml={2}
         w={"20vw"}
         color={"black"}
         bg={"white"}
-        placeholder="Order By"
+        placeholder="Sort By"
         value={orderBy}
         onChange={handleOrderChange}
       >
