@@ -12,7 +12,6 @@ const OrderBy = ({
 }) => {
   const API_URL = process.env.REACT_APP_API_BASE_URL;
   const [dataWarehouse, setDataWarehouse] = useState([]);
-  const [dataProduct, setDataProduct] = useState([]);
 
   const handleOrderChange = (e) => {
     setOrderBy(e.target.value);

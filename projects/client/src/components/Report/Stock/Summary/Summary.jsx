@@ -36,7 +36,7 @@ const Summary = () => {
         },
       });
       setStock(response.data.data);
-      setTotalPages(response.data.total_page);
+      setTotalPages(response.data.totalPages);
     } catch (error) {
       console.log(error);
     }

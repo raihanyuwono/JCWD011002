@@ -13,7 +13,7 @@ async function getStockHistory({
   productId,
   page = 1,
   pageSize = 10,
-  orderBy = "asc",
+  orderBy = "desc",
 }) {
   try {
     page = parseInt(page, 10);

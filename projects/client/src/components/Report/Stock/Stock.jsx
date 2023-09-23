@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import Summary from "./Summary/Summary";
+import Detail from "./Detail/Detail";
 
 const Stock = () => {
   const [tabIndex, setTabIndex] = useState(0);
@@ -40,7 +41,9 @@ const Stock = () => {
           <TabPanel>
             <Summary />
           </TabPanel>
-          <TabPanel>Detail</TabPanel>
+          <TabPanel>
+            <Detail />
+          </TabPanel>
         </TabPanels>
       </Tabs>
     </>
