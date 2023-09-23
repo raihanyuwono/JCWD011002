@@ -1,4 +1,4 @@
-import { FiSave as IcSave} from "react-icons/fi";
+import { FiSave as IcSave } from "react-icons/fi";
 import { GiCancel as IcCancel } from "react-icons/gi";
 import { Button, Flex } from "@chakra-ui/react";
 
@@ -8,11 +8,11 @@ const buttonContainer = {
   gap: "8px",
 };
 
-function DrawerEditButtonGroup({editToggle}) {
+function DrawerEditButtonGroup({ editToggle }) {
   const saveButtonAttr = {
-    type: "submit",
     variant: "success",
     leftIcon: <IcSave />,
+    onClick: () => document.getElementById("save-button").click(),
   };
   const cancelButtonAttr = {
     variant: "error",

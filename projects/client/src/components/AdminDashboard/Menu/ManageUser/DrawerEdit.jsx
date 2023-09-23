@@ -1,4 +1,4 @@
-import { Flex, Select, Text, useToast } from "@chakra-ui/react";
+import { Button, Flex, Select, Text, useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { getRoles } from "../../../../api/admin";
 import { getWarehouses } from "../../../../api/warehouse";
@@ -21,29 +21,56 @@ function setDefaultValue(items, value) {
   return items[idx]?.id;
 }
 
-function handleChange(event, setter) {
-  const { value } = event.target;
-  setter(value);
+function setOption(item) {
+  return {
+    value: item?.id,
+    key: item?.id,
+    children: item?.name,
+    style: {
+      textTransform: "capitalize",
+      backgroundColor: "#233947",
+    },
+  };
 }
 
-function DrawerEdit({ data }) {
+function DrawerEdit({ data, formik }) {
   const { user, warehouse: defaultWarehouse } = data;
   const [roles, setRoles] = useState([]);
   const [warehouses, setWarehouses] = useState([]);
-  const [selectedRole, setSelectedRole] = useState(0);
-  const [selectedWarehouse, setSelectedWarehouse] = useState(0);
   const toast = useToast();
 
   async function fetchRoles() {
     const { data } = await getRoles(toast);
     setRoles(data);
-    setSelectedRole(setDefaultValue(data, user?.role?.name));
+    const value = setDefaultValue(data, user?.role?.name);
+    formik.setFieldValue("role", value);
+    if (user?.role?.name === "admin") formik.setFieldValue("warehouse", 0);
   }
 
   async function fetchWarehouses() {
     const { data } = await getWarehouses(toast);
     setWarehouses(data);
-    setSelectedWarehouse(setDefaultValue(data, defaultWarehouse?.name));
+    const value = setDefaultValue(data, defaultWarehouse?.name);
+    formik.setFieldValue("warehouse", value);
+  }
+
+  function getRoleAdmin() {
+    const adminIdx = getIndexValue(roles, "admin");
+    const adminId = roles[adminIdx]?.id;
+    return adminId;
+  }
+
+  function setContentWarehouse() {
+    const adminId = getRoleAdmin();
+    return formik?.values?.role !== 0 && formik?.values?.role !== adminId;
+  }
+
+  function handleChange(event, field) {
+    const value = parseInt(event.target.value);
+    formik.setFieldValue(field, value);
+    if (field === "role") {
+      if (value === getRoleAdmin()) formik.setFieldValue("warehouse", 0);
+    }
   }
 
   useEffect(() => {
@@ -53,49 +80,47 @@ function DrawerEdit({ data }) {
 
   const selectRolesAttr = {
     textTransform: "capitalize",
-    value: selectedRole,
-    onChange: (e) => handleChange(e, setSelectedRole),
+    value: formik?.values?.role,
+    cursor: "pointer",
+    onChange: (e) => handleChange(e, "role"),
   };
   const selectWarehousesAttr = {
     textTransform: "capitalize",
-    value: selectedWarehouse,
-    onChange: (e) => handleChange(e, setSelectedWarehouse),
+    value: formik?.values?.warehouse,
+    placeholder: "Select Warehouse",
+    cursor: "pointer",
+    onChange: (e) => handleChange(e, "warehouse"),
   };
 
   return (
-    <Flex {...mainContainer}>
-      <Flex {...container}>
-        <Text>Role</Text>
-        <Select {...selectRolesAttr}>
-          {roles.map((role) => (
-            <option
-              key={role?.id}
-              value={role?.id}
-              style={{ color: "black", textTransform: "capitalize" }}
-            >
-              {role?.name}
-            </option>
-          ))}
-        </Select>
-      </Flex>
-      {selectedRole !== 0 &&
-        selectedRole !== roles[getIndexValue(roles, "admin")]?.id && (
+    <form onSubmit={formik.handleSubmit}>
+      <Flex {...mainContainer}>
+        <Flex {...container}>
+          <Text fontWeight={"semibold"}>Role</Text>
+          <Select {...selectRolesAttr}>
+            {roles.map((role) => (
+              <option {...setOption(role)}/>
+            ))}
+          </Select>
+        </Flex>
+        {setContentWarehouse() && (
           <Flex {...container}>
-            <Text>Warehouse</Text>
-            <Select {...selectWarehousesAttr}>
+            <Text fontWeight={"semibold"}>Warehouse</Text>
+            <Select
+              {...selectWarehousesAttr}
+              required={true}
+              _placeholder={{ hidden: true }}
+            >
+              {/* <option value="" disabled selected hidden={true}>Select </option> */}
               {warehouses.map((warehouse) => (
-                <option
-                  key={warehouse?.id}
-                  value={warehouse?.id}
-                  style={{ color: "black", textTransform: "capitalize" }}
-                >
-                  {warehouse?.name}
-                </option>
+                <option {...setOption(warehouse)}/>
               ))}
             </Select>
           </Flex>
         )}
-    </Flex>
+        <Button id="save-button" type="submit" display="none" />
+      </Flex>
+    </form>
   );
 }
 

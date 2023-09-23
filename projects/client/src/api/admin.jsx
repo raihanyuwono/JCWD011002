@@ -31,7 +31,6 @@ async function getUsers(toast) {
 async function getRoles(toast) {
   try {
     const response = await axios.get(`${ADMIN_URL}/roles`, setHeaders());
-    console.log(response.data);
     return response.data;
   } catch (error) {
     const { response } = error;
@@ -49,4 +48,18 @@ async function register(toast, attributes) {
   }
 }
 
-export { getUsers, getRoles, register };
+async function updateAdmin(toast, id, attributes) {
+  try {
+    const response = await axios.patch(
+      `${ADMIN_URL}/user/${id}`,
+      attributes,
+      setHeaders()
+    );
+    notification(toast, setToastParams(response));
+  } catch (error) {
+    const { response } = error;
+    notification(toast, setToastParams(response.status ? response : error));
+  }
+}
+
+export { getUsers, getRoles, register, updateAdmin };

@@ -2,7 +2,7 @@ const router = require("express").Router();
 const { authentication, validation } = require("../middlewares");
 const { authController } = require("../controllers");
 
-// Register - for member and admin
+// Register - for member
 router.post(
   "/user",
   validation.register,

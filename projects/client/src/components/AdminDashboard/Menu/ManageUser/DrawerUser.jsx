@@ -7,15 +7,18 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  Flex,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
-import { FiTrash2 as IcDelete, FiEdit as IcEdit } from "react-icons/fi";
 import DrawerInfo from "./DrawerInfo";
 import DrawerEdit from "./DrawerEdit";
 import { useState } from "react";
 import DrawerBaseButtonGroup from "./DrawerBaseButtonGroup";
 import DrawerEditButtonGroup from "./DrawerEditButtonGroup";
+import { useFormik } from "formik";
+import { updateAdmin } from "../../../../api/admin";
+import { useDispatch } from "react-redux";
+import { setUserTrigger } from "../../../../storage/TriggerReducer";
 
 const drawerContentAttr = {
   bgColor: "secondary",
@@ -28,15 +31,29 @@ const drawerFooterAttr = {
   borderTopWidth: "1px",
 };
 
-const buttonContainer = {
-  direction: "column",
-  w: "full",
-  gap: "8px",
-};
-
 function DrawerUser({ admin, isOpen, onClose }) {
   const [isEdit, setIsEdit] = useState(false);
   const { user } = admin;
+  const dispatch = useDispatch();
+  const toast = useToast();
+
+  const initialValues = {
+    role: 0,
+    warehouse: 1,
+  };
+
+  async function handleSubmit(attributes) {
+    // Update Data
+    console.log(attributes);
+    await updateAdmin(toast, user?.id, attributes);
+    dispatch(setUserTrigger());
+    onClose();
+  }
+
+  const formik = useFormik({
+    initialValues,
+    onSubmit: (values) => handleSubmit(values),
+  });
 
   const drawerAttr = {
     isOpen,
@@ -45,6 +62,11 @@ function DrawerUser({ admin, isOpen, onClose }) {
       setIsEdit(false);
     },
     placement: "right",
+  };
+
+  const editButtonAttr = {
+    editToggle: setIsEdit,
+    user,
   };
 
   const {
@@ -58,14 +80,18 @@ function DrawerUser({ admin, isOpen, onClose }) {
   }
 
   function setDrawerContent() {
-    return isEdit ? <DrawerEdit data={admin} /> : <DrawerInfo data={admin} />;
+    return isEdit ? (
+      <DrawerEdit data={admin} formik={formik} />
+    ) : (
+      <DrawerInfo data={admin} />
+    );
   }
 
   function setDrawerButton() {
     return isEdit ? (
-      <DrawerEditButtonGroup editToggle={setIsEdit} />
+      <DrawerEditButtonGroup {...editButtonAttr} />
     ) : (
-      <DrawerBaseButtonGroup editToggle={setIsEdit} />
+      <DrawerBaseButtonGroup {...editButtonAttr} onClose={onClose}/>
     );
   }
 
@@ -74,7 +100,7 @@ function DrawerUser({ admin, isOpen, onClose }) {
       <DrawerOverlay />
       <DrawerContent {...drawerContentAttr}>
         <DrawerHeader {...drawerHeaderAttr}>
-          {isEdit ? user?.username : "Information"}
+          {isEdit ? user?.name : "Information"}
         </DrawerHeader>
         <DrawerCloseButton />
         <DrawerBody py="20px">{setDrawerContent()}</DrawerBody>

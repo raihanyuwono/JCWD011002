@@ -7,7 +7,13 @@ const users = db["user"];
 const roles = db["role"];
 const warehouses = db["warehouse"];
 
-const exclude = ["password", "is_verified", "id_role", "created_at", "updated_at"];
+const exclude = [
+  "password",
+  "is_verified",
+  "id_role",
+  "created_at",
+  "updated_at",
+];
 
 const include = [
   {
@@ -21,7 +27,7 @@ const include = [
   { model: warehouses, attributes: ["name"] },
 ];
 
-async function getUsers(access, query) {
+async function getUsers(access, id, query) {
   const { name, role, page = 1, limit = 10 } = query;
   // Check if access only for admin
   if (access !== "admin") return messages.error(401, "Unauthorized access");
@@ -35,6 +41,7 @@ async function getUsers(access, query) {
     attributes: [],
     include,
     order: [[users, roles, "name", "ASC"]],
+    where: { id_user: { [Op.not]: id } },
     ...pages,
   });
   const payload = {
