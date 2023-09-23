@@ -135,7 +135,7 @@ async function getStockHistory({
           product: history.product.name,
           qty: history.qty,
           status: history.status.name,
-          txn_date: history.created_at.toLocaleString("ID-id") || null,
+          txn_date: history.created_at.toLocaleDateString("ID-id") || null,
           txn_id: history.transaction ? history.transaction.id : null,
         };
       })

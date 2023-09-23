@@ -22,6 +22,9 @@ const Detail = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [productId, setProductId] = useState("");
+  const [transactionId, setTransactionId] = useState("");
+  const [warehouseFrom, setWarehouseFrom] = useState("");
+  const [warehouseTo, setWarehouseTo] = useState("");
 
   const fetchDetail = async () => {
     try {
@@ -31,6 +34,9 @@ const Detail = () => {
           pageSize: 10,
           orderBy,
           productId,
+          transactionId,
+          warehouseFrom,
+          warehouseTo,
         },
       });
       setData(response.data.data);
@@ -42,7 +48,14 @@ const Detail = () => {
 
   useEffect(() => {
     fetchDetail();
-  }, [orderBy, currentPage, productId]);
+  }, [
+    orderBy,
+    currentPage,
+    productId,
+    transactionId,
+    warehouseFrom,
+    warehouseTo,
+  ]);
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
@@ -56,6 +69,12 @@ const Detail = () => {
           setOrderBy={setOrderBy}
           productId={productId}
           setProductId={setProductId}
+          transactionId={transactionId}
+          setTransactionId={setTransactionId}
+          warehouseFrom={warehouseFrom}
+          setWarehouseFrom={setWarehouseFrom}
+          warehouseTo={warehouseTo}
+          setWarehouseTo={setWarehouseTo}
         />
       </Flex>
       <TableContainer mt={4}>
