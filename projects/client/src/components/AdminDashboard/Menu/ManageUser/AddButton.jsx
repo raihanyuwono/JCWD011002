@@ -10,7 +10,7 @@ function buttonChildren() {
   return (
     <Flex {...container}>
       <IcAddUser fontSize={"18px"} />
-      <Text>Add Admin</Text>
+      <Text>New Admin</Text>
     </Flex>
   );
 }
@@ -29,10 +29,10 @@ function AddButton() {
 
   const drawerAttr = { isOpen, onClose };
   return (
-    <>
+    <Flex>
       <Button {...addAttr} />
       <DrawerAddAdmin {...drawerAttr} />
-    </>
+    </Flex>
   );
 }
 

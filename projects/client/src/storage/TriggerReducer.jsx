@@ -15,7 +15,5 @@ export const TriggerReducer = createSlice({
     },
 });
 
-const { setUserTrigger } = TriggerReducer.actions;
-
-export { setUserTrigger };
+export const { setUserTrigger } = TriggerReducer.actions;
 export default TriggerReducer.reducer;

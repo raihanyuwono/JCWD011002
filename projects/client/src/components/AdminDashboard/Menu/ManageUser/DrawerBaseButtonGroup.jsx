@@ -1,5 +1,5 @@
 import { FiEdit as IcEdit } from "react-icons/fi";
-import { Button, Flex, useToast } from "@chakra-ui/react";
+import { Button, Flex, useToast, useDisclosure } from "@chakra-ui/react";
 import { updateAdmin } from "../../../../api/admin";
 import { useDispatch } from "react-redux";
 import { setUserTrigger } from "../../../../storage/TriggerReducer";
@@ -12,6 +12,11 @@ const buttonContainer = {
 };
 
 function DrawerBaseButtonGroup({ editToggle, user, onClose }) {
+  const {
+    isOpen: popIsOpen,
+    onOpen: popOpen,
+    onClose: popClose,
+  } = useDisclosure();
   const toast = useToast();
   const dispatch = useDispatch();
   const { id, is_active } = user;
@@ -29,19 +34,21 @@ function DrawerBaseButtonGroup({ editToggle, user, onClose }) {
   };
   const activationButtonAttr = {
     variant: is_active ? "error" : "success",
-    onClick: () => handleActivation(),
+    onClick: popOpen,
     children: is_active ? "Deactivate" : "Activate",
   };
 
   const confirmation = {
-    trigger: <Button>LOL</Button>,
-    confirm: () => console.log("CONFIRM"),
+    trigger: <Button {...activationButtonAttr} />,
+    confirm: handleActivation,
+    isOpen: popIsOpen,
+    onClose: popClose,
   };
+
   return (
     <Flex {...buttonContainer}>
       <Button {...editButtonAttr}>Edit</Button>
       <PopoverConfirmation {...confirmation} />
-      <Button {...activationButtonAttr} />
     </Flex>
   );
 }

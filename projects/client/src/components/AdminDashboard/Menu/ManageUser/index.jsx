@@ -1,6 +1,6 @@
 import {
   Flex,
-  Grid,
+  Spacer,
   Table,
   TableContainer,
   Tbody,
@@ -14,15 +14,29 @@ import { getUsers } from "../../../../api/admin";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import AddButton from "./AddButton";
+import Searchbar from "./Searchbar";
+import Pagination from "./Pagination";
+
+const utilityContainer = {
+  direction: "row",
+};
 
 function ManageUsers() {
   const [users, setUsers] = useState([]);
+  const [maxPage, setMaxpage] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const toast = useToast();
   const triggerUpdate = useSelector((state) => state.trigger.listUser);
+  const search = useSelector((state) => state.search.users);
 
   async function fetchUsers() {
-    const { data } = await getUsers(toast);
+    const attributes = {
+      search,
+      page: currentPage,
+    };
+    const { data } = await getUsers(toast, attributes);
     const { users: userList, pages } = data;
+    setMaxpage(pages);
     setUsers(userList);
   }
 
@@ -30,14 +44,21 @@ function ManageUsers() {
     users,
   };
 
+  const paginationAttr = {
+    maxPage,
+    currentPage,
+    setCurrentPage,
+  };
+
   useEffect(() => {
     fetchUsers();
-  }, [triggerUpdate]);
+  }, [search, currentPage, triggerUpdate]);
 
   const mainContainer = {
     w: "full",
     direction: "column",
     pos: "relative",
+    gap: "16px",
   };
 
   const containerAttr = {
@@ -52,7 +73,11 @@ function ManageUsers() {
 
   return (
     <Flex {...mainContainer}>
-      <AddButton />
+      <Flex {...utilityContainer}>
+        <AddButton />
+        <Spacer />
+        <Searchbar />
+      </Flex>
       <TableContainer {...containerAttr}>
         <Table>
           <Thead>
@@ -70,6 +95,7 @@ function ManageUsers() {
           </Tbody>
         </Table>
       </TableContainer>
+      <Pagination {...paginationAttr} />
     </Flex>
   );
 }

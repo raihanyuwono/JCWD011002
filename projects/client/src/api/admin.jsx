@@ -1,5 +1,6 @@
 import axios from "axios";
 import notification, { setToastParams } from "../helpers/Notification";
+import { getQueries } from "../helpers/api";
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const USER_URL = `${BASE_URL}/user`;
@@ -18,13 +19,14 @@ function setHeaders(token) {
   };
 }
 
-async function getUsers(toast) {
+async function getUsers(toast, attributes) {
   try {
-    const response = await axios.get(`${USER_URL}`, setHeaders());
+    const queries = getQueries(attributes);
+    const response = await axios.get(`${USER_URL}?${queries}`, setHeaders());
     return response.data;
   } catch (error) {
     const { response } = error;
-    notification(toast, setToastParams(response.status ? response : error));
+    notification(toast, setToastParams(response?.status ? response : error));
   }
 }
 
