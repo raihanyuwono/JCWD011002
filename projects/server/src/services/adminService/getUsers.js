@@ -33,6 +33,7 @@ function setInclude(search = "") {
 }
 
 async function getUsers(access, id, query) {
+  console.log(">> SINI KAN <<", id, query);
   const { search, role, page = 1, limit = 10 } = query;
   // Check if access only for admin
   if (access !== "admin") return messages.error(401, "Unauthorized access");
@@ -51,7 +52,7 @@ async function getUsers(access, id, query) {
       [users, roles, "name", "ASC"],
       [warehouses, "name", "ASC"],
     ],
-    where: { id_user: { [Op.not]: id } }
+    where: { id_user: { [Op.not]: id } },
     ...pages,
   });
   const payload = {
