@@ -17,6 +17,10 @@ const buttonAttr = {
   display: "none",
 };
 
+function getIndexValue(items, value) {
+  return items.findIndex((item) => item?.name === value);
+}
+
 function setOption(item) {
   return {
     value: item?.id,
@@ -39,28 +43,30 @@ function DrawerAddForm({ formik }) {
   const toast = useToast();
 
   function handleChange(event, field) {
-    const value = parseInt(event.target.value);
+    let { value } = event.target;
+    if (field !== "email") value = parseInt(value);
     formik.setFieldValue(field, value);
   }
 
   const inputEmail = {
     placeholder: "Input Email",
     value: formik?.value?.email,
+    onChange: (e) => handleChange(e, "email"),
     required: true,
   };
   const inputRole = {
     placeholder: "Select Role",
     textTransform: "capitalize",
-    value: formik?.value?.role,
-    onChange: (e) => handleChange(e, "role"),
+    value: formik?.value?.id_role,
+    onChange: (e) => handleChange(e, "id_role"),
     children: renderOption(roles),
     required: true,
   };
   const inputWarehouse = {
     placeholder: "Select Warehouse",
     textTransform: "capitalize",
-    value: formik?.value?.warehouse,
-    onChange: (e) => handleChange(e, "warehouse"),
+    value: formik?.value?.id_warehouse,
+    onChange: (e) => handleChange(e, "id_warehouse"),
     children: renderOption(warehouses),
     required: true,
   };
@@ -73,6 +79,17 @@ function DrawerAddForm({ formik }) {
   async function fetchWarehouse() {
     const { data } = await getWarehouses(toast);
     setWarehouses(data);
+  }
+
+  function getRoleAdminWarehouse() {
+    const adminIdx = getIndexValue(roles, "admin warehouse");
+    const adminId = roles[adminIdx]?.id;
+    return adminId;
+  }
+
+  function setContentWarehouse() {
+    const adminId = getRoleAdminWarehouse();
+    return formik?.values?.id_role !== 0 && formik?.values?.id_role === adminId;
   }
 
   useEffect(() => {
@@ -91,10 +108,12 @@ function DrawerAddForm({ formik }) {
           <Text>Role</Text>
           <Select {...inputRole} />
         </Flex>
-        <Flex {...container}>
-          <Text>Warehouse</Text>
-          <Select {...inputWarehouse} />
-        </Flex>
+        {setContentWarehouse() && (
+          <Flex {...container}>
+            <Text>Warehouse</Text>
+            <Select {...inputWarehouse} />
+          </Flex>
+        )}
         <Button {...buttonAttr} />
       </Flex>
     </form>

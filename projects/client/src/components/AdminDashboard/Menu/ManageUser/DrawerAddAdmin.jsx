@@ -6,10 +6,13 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
+  useToast,
 } from "@chakra-ui/react";
 import DrawerAddForm from "./DrawerAddForm";
 import { useFormik } from "formik";
 import DrawerAddButton from "./DrawerAddButton";
+import { useState } from "react";
+import { register } from "../../../../api/admin";
 
 const drawerContentAttr = {
   bgColor: "secondary",
@@ -25,11 +28,14 @@ const drawerFooterAttr = {
   borderTopWidth: "1px",
 };
 const initialValues = {
-  role: 0,
-  warehouse: 0,
+  email: "",
+  id_role: 0,
+  id_warehouse: 0,
 };
 
 function DrawerAddAdmin({ isOpen, onClose }) {
+  const [isLoading, setIsLoading] = useState(false);
+  const toast = useToast();
   const drawerAttr = {
     isOpen,
     onClose,
@@ -38,7 +44,9 @@ function DrawerAddAdmin({ isOpen, onClose }) {
 
   async function handleSubmit(attributes) {
     // Send Data
-    console.log("NEW ADMIN", attributes)
+    setIsLoading(true);
+    await register(toast, attributes);
+    setIsLoading(false);
   }
 
   const formik = useFormik({
@@ -48,6 +56,10 @@ function DrawerAddAdmin({ isOpen, onClose }) {
 
   const addFormAttr = {
     formik,
+  };
+
+  const addButtonAttr = {
+    isLoading,
   };
 
   return (
@@ -60,7 +72,7 @@ function DrawerAddAdmin({ isOpen, onClose }) {
           <DrawerAddForm {...addFormAttr} />
         </DrawerBody>
         <DrawerFooter {...drawerFooterAttr}>
-          <DrawerAddButton />
+          <DrawerAddButton {...addButtonAttr} />
         </DrawerFooter>
       </DrawerContent>
     </Drawer>

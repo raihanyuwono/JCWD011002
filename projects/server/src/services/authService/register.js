@@ -33,6 +33,7 @@ async function createCart({ user, id_warehouse = null }, t) {
   if (role["name"] == "user")
     await carts.create(attributes, { transaction: t });
   else {
+    if(role["name"] == "admin") attributes.id_warehouse = null;
     await admins.create(attributes, { transaction: t });
   }
 }

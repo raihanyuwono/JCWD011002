@@ -43,7 +43,7 @@ async function getRoles(toast) {
 
 async function register(toast, attributes) {
   try {
-    const response = await axios.post(`${AUTH_URL}/user`, attributes);
+    const response = await axios.post(`${ADMIN_URL}/user`, attributes, setHeaders());
     notification(toast, setToastParams(response));
   } catch (error) {
     const { response } = error;
