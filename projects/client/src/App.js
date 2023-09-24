@@ -16,7 +16,7 @@ import UserProfile from "./components/Profile/UpdateProfile";
 import { getUser } from "./api/profile";
 import Transaction from "./components/Profile/Transaction";
 
-
+const ADMIN = ["admin", "admin warehouse"];
 const ADMIN_PATH = ["/", "/profile"];
 
 const mainContainerAttr = {
@@ -32,14 +32,14 @@ const contentContainerAttr = {
 };
 
 function setPage() {
-  if (getRole() !== "user") return <AdminDashboard />;
+  if (ADMIN.includes(getRole())) return <AdminDashboard />;
   return <HomePage />;
 }
 
 function adminPath() {
   const role = getRole();
   const currentPath = document.location.pathname;
-  if (role !== "user" && !ADMIN_PATH.includes(currentPath))
+  if (ADMIN.includes(role) && !ADMIN_PATH.includes(currentPath))
     document.location.href = "/";
 }
 
@@ -68,7 +68,7 @@ function App() {
   const toast = useToast()
   const token = localStorage.getItem('token')
   const fetchUserData = async () => {
-    await getUser(token, setUserData, toast);
+    if(token) await getUser(token, setUserData, toast);
   };
 
   useEffect(() => {

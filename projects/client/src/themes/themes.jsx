@@ -56,7 +56,7 @@ const themes = extendTheme({
     editPrimary: "#34638A",
     editSecondary: "#2C4E69",
     blueCold: "#9E9FA5",
-    darkBlue: "#34638A"
+    darkBlue: "#34638A",
   },
   components: {
     Text: {
@@ -82,6 +82,13 @@ const themes = extendTheme({
         capsuleError: {
           borderRadius: "3rem",
           ...errorScheme,
+        },
+        iconCircleSuccess: {
+          borderRadius: "50%",
+          w: "60px",
+          h: "60px",
+          fontSize:"28px",
+          ...successScheme,
         },
       },
     },
