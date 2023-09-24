@@ -25,6 +25,8 @@ const Detail = () => {
   const [transactionId, setTransactionId] = useState("");
   const [warehouseFrom, setWarehouseFrom] = useState("");
   const [warehouseTo, setWarehouseTo] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   const fetchDetail = async () => {
     try {
@@ -37,6 +39,8 @@ const Detail = () => {
           transactionId,
           warehouseFrom,
           warehouseTo,
+          startDate,
+          endDate,
         },
       });
       setData(response.data.data);
@@ -55,10 +59,16 @@ const Detail = () => {
     transactionId,
     warehouseFrom,
     warehouseTo,
+    startDate,
+    endDate,
   ]);
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
+  };
+  const handleDateRangeFilter = (start, end) => {
+    setStartDate(start);
+    setEndDate(end);
   };
 
   return (
@@ -75,6 +85,7 @@ const Detail = () => {
           setWarehouseFrom={setWarehouseFrom}
           warehouseTo={warehouseTo}
           setWarehouseTo={setWarehouseTo}
+          onDateRangeFilter={handleDateRangeFilter}
         />
       </Flex>
       <TableContainer mt={4}>

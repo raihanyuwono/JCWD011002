@@ -7,12 +7,10 @@ const Pagination = ({
   itemsPerPage,
   onPageChange,
   currentPage,
-  totalPages, // New prop to determine the total number of pages
+  totalPages,
 }) => {
-  // Calculate the total number of pages based on total items and items per page
+  
   const calculatedTotalPages = Math.ceil(totalItems / itemsPerPage);
-
-  // Determine the total pages to be used in the pagination
   const pagesToDisplay = totalPages || calculatedTotalPages;
 
   const handlePageClick = (page) => {
