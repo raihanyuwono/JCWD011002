@@ -67,7 +67,6 @@ function DrawerUser({ admin, isOpen, onClose }) {
     editToggle: setIsEdit,
     user,
   };
-
   const {
     isOpen: confirmOpen,
     onClose: confirmColse,

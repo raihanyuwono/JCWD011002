@@ -51,7 +51,7 @@ async function getUsers(access, id, query) {
       [users, roles, "name", "ASC"],
       [warehouses, "name", "ASC"],
     ],
-    where: { id_user: { [Op.not]: id } },
+    where: { id_user: { [Op.not]: id } }
     ...pages,
   });
   const payload = {

@@ -66,6 +66,16 @@ async function getUsers(req, res) {
   }
 }
 
+async function getUsers(req, res) {
+  try {
+    const { access, query } = req;
+    const result = await adminService.getUsers(access, query);
+    res.status(result.status).json(messages.response(result));
+  } catch (error) {
+    res.status(500).json({ message: error.messsage });
+  }
+}
+
 module.exports = {
   getUser,
   getUsers,

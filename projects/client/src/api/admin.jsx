@@ -27,6 +27,7 @@ async function getUsers(toast, attributes) {
   } catch (error) {
     const { response } = error;
     notification(toast, setToastParams(response?.status ? response : error));
+
   }
 }
 
