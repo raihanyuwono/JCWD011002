@@ -86,7 +86,7 @@ const ProductList = () => {
             </Tbody>
           </Table>
         </TableContainer>
-        <DetailProduct isOpen={isDetailOpen} onClose={handleCloseDetail} product={selectedProduct} />
+        <DetailProduct isOpen={isDetailOpen} onClose={handleCloseDetail} product={selectedProduct} fetchProduct={fetchProducts} />
         <CreateProduct isOpen={isDrawerCreateOpen} onClose={handleCloseCreate} fetchProducts={fetchProducts} />
       </Flex>
     </>

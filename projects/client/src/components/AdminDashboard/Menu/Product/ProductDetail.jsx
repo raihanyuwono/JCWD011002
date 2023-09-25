@@ -1,58 +1,353 @@
-import React from 'react';
-import { Drawer, DrawerOverlay, DrawerContent, DrawerHeader, DrawerBody, DrawerCloseButton, Box, Image, Text, Accordion, AccordionItem, AccordionButton, AccordionIcon, AccordionPanel, Button, Tr, Td, Table } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
+import {
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerHeader,
+  DrawerBody,
+  DrawerCloseButton,
+  Box,
+  Image,
+  Text,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionIcon,
+  AccordionPanel,
+  Button,
+  Divider,
+  Input,
+  Textarea,
+  Select,
+  useToast,
+} from '@chakra-ui/react';
+import axios from 'axios';
 
-const DetailProduct = ({ isOpen, onClose, product }) => {
-  console.log("product detail", product?.name);
+const { HiOutlinePencilAlt } = require('react-icons/hi');
+
+const DetailProduct = ({ isOpen, onClose, product, fetchProduct }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedProduct, setEditedProduct] = useState({
+    name: '',
+    description: '',
+    id_category: '',
+    is_active: '',
+    price: '',
+    image: null,
+  });
+  const [imagePreview, setImagePreview] = useState(null);
+  const [imageValidationError, setImageValidationError] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const toast = useToast();
+
+  const fetchCategories = async () => {
+    try {
+      const { data } = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/product/category`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setCategories(data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const handleEditChange = (e) => {
+    const { name, value, type } = e.target;
+
+    // Jika input adalah tipe file (gambar), simpan file yang dipilih
+    if (type === 'file') {
+      const file = e.target.files[0];
+
+      // Validasi tipe gambar dan ukuran
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+      const maxSize = 1024 * 1024; // 1MB
+
+      if (allowedTypes.includes(file.type) && file.size <= maxSize) {
+        setEditedProduct({
+          ...editedProduct,
+          [name]: file,
+        });
+
+        const reader = new FileReader();
+        reader.onload = () => {
+          setImagePreview(reader.result);
+          setImageValidationError(null);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        setImagePreview(null);
+        setImageValidationError('Invalid file type or size (max 1MB).');
+        toast({
+          title: "Invalid file type",
+          description: "Please select a JPG, JPEG, or PNG file (max 1MB).",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        })
+        setEditedProduct({
+          ...editedProduct,
+          [name]: null,
+        });
+      }
+    } else {
+      setEditedProduct({
+        ...editedProduct,
+        [name]: value,
+      });
+    }
+  };
+
+  const startEditing = () => {
+    setIsEditing(true);
+    // Set nilai awal hanya ketika memulai mode pengeditan
+    setEditedProduct({
+      name: product?.name,
+      description: product?.description,
+      id_category: product?.id_category,
+      is_active: product?.is_active,
+      price: product?.price,
+      image: null,
+    });
+    setImagePreview(null);
+    setImageValidationError(null);
+  };
+
+  const saveChanges = async () => {
+    try {
+      const formData = new FormData();
+      formData.append('name', editedProduct.name);
+      formData.append('description', editedProduct.description);
+      formData.append('id_category', editedProduct.id_category);
+      formData.append('is_active', editedProduct.is_active);
+      formData.append('price', editedProduct.price);
+      formData.append('image', editedProduct.image);
+
+      // Kirim permintaan PATCH ke API untuk memperbarui produk dengan ID tertentu
+      await axios.patch(
+        `${process.env.REACT_APP_API_BASE_URL}/product/${product?.id}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
+
+      // Keluar dari mode pengeditan dan muat ulang data produk (jika diperlukan)
+      fetchProduct();
+      toast({
+        title: "Product Updated",
+        description: "Product data has been updated successfully.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      })
+      setIsEditing(false);
+      onClose();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
       <DrawerOverlay />
-      <DrawerContent bg={"darkBlue"} color={"white"}>
+      <DrawerContent bg={'darkBlue'} color={'white'}>
         <DrawerCloseButton />
         <DrawerHeader>Product Details</DrawerHeader>
         <DrawerBody>
           <Box>
-            <Image src={`${process.env.REACT_APP_API_BASE_URL}/${product?.image}`} boxSize="150px" objectFit="cover" borderRadius="5px" />
+            {isEditing ? (
+              <>
+                <Input
+                  type="file"
+                  name="image"
+                  accept="image/jpeg, image/png, image/jpg"
+                  onChange={handleEditChange}
+                />
+                {imagePreview && (
+                  <Image
+                    src={imagePreview}
+                    boxSize="150px"
+                    objectFit="cover"
+                    borderRadius="5px"
+                    mt={2}
+                  />
+                )}
+                {imageValidationError && (
+                  <Text color="red">{imageValidationError}</Text>
+                )}
+              </>
+            ) : (
+              <Image
+                src={`${process.env.REACT_APP_API_BASE_URL}/${product?.image}`}
+                boxSize="150px"
+                objectFit="cover"
+                borderRadius="5px"
+              />
+            )}
           </Box>
           <Box mt={4}>
-            <Text>Name: {product?.name}</Text>
-            <Text>Description: {product?.description}</Text>
-            <Text>Category: {product?.category.name}</Text>
-            <Text>Status: {product?.is_active ? "Active" : "Inactive"}</Text>
-            <Text>Price: {product?.price}</Text>
-            <Text>Total Stock: {product?.product_warehouses.map((warehouse) => warehouse?.stock).reduce((a, b) => a + b, 0)}</Text>
-            <Accordion allowToggle mt={2} mb={20}>
-              <AccordionItem>
-                <h2>
-                  <AccordionButton>
-                    <Box flex="1" textAlign="left">
-                      Stock Details
-                    </Box>
-                    <AccordionIcon />
-                  </AccordionButton>
-                </h2>
-                <AccordionPanel pb={4}>
-                  {product?.product_warehouses.map((warehouse) => {
-                    return <Box key={warehouse.id}>
-                      <Text>{warehouse?.warehouse?.name}</Text>
-                      <Text>{warehouse?.stock}</Text>
-                    </Box>
-                  })}
-                  <Button mt={2} mb={4} colorScheme='blue'>update stock</Button>
-                </AccordionPanel>
-              </AccordionItem>
-            </Accordion>
-            {/* <Text>Detail Stock: {product.product_warehouses.map((warehouse) => {
-              return <Box key={warehouse.id}>
-                <Text>{warehouse?.warehouse?.name}</Text>
-                <Text>{warehouse?.stock}</Text>
-              </Box>
-            })}</Text> */}
-            {/* Add more details as needed */}
+            <Box mb={2}>
+              <Text>Name :</Text>
+              {isEditing ? (
+                <Input
+                  name="name"
+                  value={editedProduct.name}
+                  onChange={handleEditChange}
+                />
+              ) : (
+                <Text>{product?.name}</Text>
+              )}
+              <Divider mt={2} />
+            </Box>
+            <Box mb={2}>
+              <Text>Description :</Text>
+              {isEditing ? (
+                <Textarea
+                  name="description"
+                  value={editedProduct.description}
+                  onChange={handleEditChange}
+                />
+              ) : (
+                <Text>{product?.description}</Text>
+              )}
+              <Divider mt={2} />
+            </Box>
+            <Box mb={2}>
+              <Text>Category :</Text>
+              {isEditing ? (
+                <Select
+                  name="id_category"
+                  placeholder='Select Category'
+                  value={editedProduct.id_category}
+                  onChange={handleEditChange}
+                >
+                  {categories.map((category) => (
+                    <option key={category?.id} value={category?.id}>
+                      {category?.name}
+                    </option>
+                  ))}
+                </Select>
+              ) : (
+                <Text>{product?.category?.name}</Text>
+              )}
+              <Divider mt={2} />
+            </Box>
+            <Box mb={2}>
+              <Text>Status :</Text>
+              {isEditing ? (
+                <Select
+                  placeholder="Select Status"
+                  name="is_active"
+                  value={editedProduct.is_active}
+                  onChange={handleEditChange}
+                >
+                  <option value="true">Active</option>
+                  <option value="false">Inactive</option>
+                </Select>
+              ) : (
+                <Text>{product?.is_active ? 'Active' : 'Inactive'}</Text>
+              )}
+              <Divider mt={2} />
+            </Box>
+            <Box mb={2}>
+              <Text>Price :</Text>
+              {isEditing ? (
+                <Input
+                  type="number"
+                  name="price"
+                  value={editedProduct.price}
+                  onChange={handleEditChange}
+                />
+              ) : (
+                <Text>{product?.price}</Text>
+              )}
+              <Divider mt={2} />
+            </Box>
+            <Box mb={2}>
+              {isEditing ? (
+                null
+              ) : (
+                <>
+                  <Text>Total Stock : </Text>
+                  <Text>
+                    {product?.product_warehouses
+                      ?.map((warehouse) => warehouse?.stock)
+                      .reduce((a, b) => a + b, 0)}{' '}
+                    Pcs
+                  </Text>
+                  <Divider mt={2} />
+                </>
+              )}
+            </Box>
+            <Box w={'full'} bg={'darkBlue'} color={'white'} py={4}>
+              {isEditing ? (
+                <>
+                  <Button
+                    w={'full'}
+                    mb={2}
+                    colorScheme="green"
+                    onClick={saveChanges}
+                  >
+                    Save
+                  </Button>
+                  <Button w={'full'} mb={2} onClick={() => setIsEditing(false)}>
+                    Cancel
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  w={'full'}
+                  mb={2}
+                  colorScheme="green"
+                  onClick={startEditing}
+                >
+                  Edit
+                </Button>
+              )}
+            </Box>
           </Box>
-          <Box w={"85%"} position={"fixed"} bottom={0} bg={"darkBlue"} color={"white"} py={4}>
-            <Button w={"full"} mb={2} colorScheme='green'>Edit</Button>
-            <Button w={"full"} colorScheme='red' onClick={onClose}>Cancel</Button>
-          </Box>
+          <Accordion allowToggle mt={2} mb={20}>
+            <AccordionItem>
+              <h2>
+                <AccordionButton>
+                  <Box flex="1" textAlign="left">
+                    Stock Details
+                  </Box>
+                  <AccordionIcon />
+                </AccordionButton>
+              </h2>
+              <AccordionPanel pb={4}>
+                {product?.product_warehouses.map((warehouse) => {
+                  return (
+                    <Box
+                      key={warehouse.id}
+                      display="flex"
+                      justifyContent={"space-between"}
+                      alignItems="center"
+                      mb={2}
+                    >
+                      <Box>
+                        <Text>{warehouse?.warehouse?.name}</Text>
+                        <Text>{warehouse?.stock} pcs</Text>
+                      </Box>
+                      <Box>
+                        <Button colorScheme='green'><HiOutlinePencilAlt /></Button>
+                      </Box>
+                    </Box>
+                  );
+                })}
+              </AccordionPanel>
+            </AccordionItem>
+          </Accordion>
         </DrawerBody>
       </DrawerContent>
     </Drawer>
