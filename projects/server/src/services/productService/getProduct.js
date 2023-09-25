@@ -43,7 +43,7 @@ const getProductList = async (req, res) => {
     const productList = await Product.findAll({
       where: whereCondition,
       order: orderCriteria,
-      include: [{ model: Category, attributes: ["name"] }, { model: db.product_warehouse, attributes:  ["stock"], include: { model: db.warehouse, attributes: ["name"] } }],
+      include: [{ model: Category, attributes: ["name"] }, { model: db.product_warehouse, attributes: ["stock"], include: { model: db.warehouse, attributes: ["name"] } }],
       offset: (currentPage - 1) * itemsPerPage,
       limit: itemsPerPage,
     });
@@ -54,7 +54,7 @@ const getProductList = async (req, res) => {
       totalPages: totalPages,
       currentPage: currentPage,
       itemsPerPage: itemsPerPage,
-      products: productList,
+      data: productList,
     });
   } catch (error) {
     console.log(error);
