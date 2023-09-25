@@ -57,7 +57,17 @@ export default function Simple() {
 
   const [cartLength, setCartLength] = useState(0);
   const API_URL = process.env.REACT_APP_API_BASE_URL;
-  const userId = jwt_decode(localStorage.getItem("token")).id;
+
+  useEffect(() => {
+    viewCart();
+  });
+
+  const token = localStorage.getItem("token");
+  let userId = "";
+  if (token) {
+    userId = jwt_decode(localStorage.getItem("token")).id;
+  }
+
   const viewCart = async () => {
     try {
       const response = await axios.get(`${API_URL}/order/cart/${userId}`);
@@ -66,9 +76,6 @@ export default function Simple() {
       console.log(error);
     }
   };
-  useEffect(() => {
-    viewCart();
-  });
 
   const handleCartHover = () => {
     setCartOpen(true);
@@ -119,60 +126,54 @@ export default function Simple() {
             <Input type="text" placeholder="Search" />
           </InputGroup>
           <Flex alignItems={"center"}>
-            <Button
-              onClick={() => navigate("/cart")}
-              mr={4}
-              bg={"transparent"}
-              _hover={{ bg: "transparent" }}
-              onMouseEnter={handleCartHover}
-              onMouseLeave={handleCartLeave}
-            >
-              <Box>
-                <div class="cart">
-                  <span class="count">{cartLength}</span>
-                  <i class="material-icons">
-                    <RiShoppingCartLine />
-                  </i>
-                </div>
-              </Box>
-            </Button>
             {isLogin ? (
-              <Menu>
-                <MenuButton
-                  as={Button}
-                  rounded={"full"}
-                  variant={"link"}
-                  cursor={"pointer"}
-                  minW={0}
+              <>
+                <Button
+                  onClick={() => navigate("/cart")}
+                  mr={4}
+                  bg={"transparent"}
+                  _hover={{ bg: "transparent" }}
+                  onMouseEnter={handleCartHover}
+                  onMouseLeave={handleCartLeave}
                 >
-                  <Avatar size={"sm"} />
-                </MenuButton>
-                <MenuList
-                  border={"0.5px solid gray"}
-                  borderRadius={"none"}
-                  bgColor={"bgSecondary"}
-                  color={"white"}
-                >
-                  <MenuItem
+                  <Box>
+                    <div class="cart">
+                      <span class="count">{cartLength}</span>
+                      <i class="material-icons">
+                        <RiShoppingCartLine />
+                      </i>
+                    </div>
+                  </Box>
+                </Button>
+                <Menu>
+                  <MenuButton
+                    as={Button}
+                    rounded={"full"}
+                    variant={"link"}
+                    cursor={"pointer"}
+                    minW={0}
+                  >
+                    <Avatar size={"sm"} />
+                  </MenuButton>
+                  <MenuList
+                    border={"0.5px solid gray"}
+                    borderRadius={"none"}
                     bgColor={"bgSecondary"}
                     color={"white"}
-                    onClick={() => navigate("/profile")}
                   >
-                    <CgProfile size={20} />
-                    <Text mt={0.5}>&nbsp;Profile</Text>
-                  </MenuItem>
-                  <MenuDivider />
-                  {/* <MenuItem
-                    bgColor={"bgSecondary"}
-                    color={"white"}
-                    onClick={handleLogout}
-                  >
-                    <RiLogoutCircleLine size={20} />
-                    <Text mt={0.5}>&nbsp;Log Out</Text>
-                  </MenuItem> */}
-                  <LogoutAlert />
-                </MenuList>
-              </Menu>
+                    <MenuItem
+                      bgColor={"bgSecondary"}
+                      color={"white"}
+                      onClick={() => navigate("/profile")}
+                    >
+                      <CgProfile size={20} />
+                      <Text mt={0.5}>&nbsp;Profile</Text>
+                    </MenuItem>
+                    <MenuDivider />
+                    <LogoutAlert />
+                  </MenuList>
+                </Menu>
+              </>
             ) : (
               <Login />
             )}

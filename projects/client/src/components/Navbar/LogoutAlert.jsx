@@ -18,11 +18,10 @@ import { useNavigate } from "react-router-dom";
 const LogoutAlert = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef();
-  const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate("/");
+    document.location.href = "/";
   };
 
   return (

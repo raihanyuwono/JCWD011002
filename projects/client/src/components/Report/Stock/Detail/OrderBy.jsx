@@ -15,11 +15,6 @@ import {
   PopoverFooter,
   PopoverArrow,
   PopoverCloseButton,
-  PopoverAnchor,
-  HStack,
-  Tag,
-  TagLabel,
-  TagRightIcon,
   ButtonGroup,
   Button,
   IconButton,
@@ -27,7 +22,7 @@ import {
 } from "@chakra-ui/react";
 import { Search2Icon, CalendarIcon } from "@chakra-ui/icons";
 import axios from "axios";
-import { MdSettings } from "react-icons/md";
+import jwt_decode from "jwt-decode";
 
 const OrderBy = ({
   orderBy,
@@ -46,6 +41,9 @@ const OrderBy = ({
   const [dataWarehouse, setDataWarehouse] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const decode = jwt_decode(localStorage.getItem("token"));
+  const role = decode.role;
+  const [wh, setWh] = useState("");
 
   const handleOrderChange = (e) => {
     setOrderBy(e.target.value);
@@ -83,6 +81,29 @@ const OrderBy = ({
     onDateRangeFilter(formattedStartDate, formattedEndDate);
   };
 
+  const fetchWHAdmin = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/admin/roles/warehouse`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setWh(response.data.data);
+      console.log(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchWHAdmin();
+    if (role === "admin warehouse" && wh.id_warehouse) {
+      setWarehouseFrom(wh.id_warehouse);
+    } else {
+      setWarehouseFrom("");
+    }
+  }, [role, wh, setWarehouseFrom]);
+
   const fetchWarehouse = async () => {
     try {
       const response = await axios.get(`${API_URL}/warehouse`, {
@@ -118,7 +139,7 @@ const OrderBy = ({
           </InputGroup>
         </Stack>
       </Box>
-      <Select
+      {/* <Select
         ml={2}
         w={"15vw"}
         color={"black"}
@@ -132,7 +153,36 @@ const OrderBy = ({
             {warehouse.name}
           </option>
         ))}
-      </Select>
+      </Select> */}
+      {role === "admin warehouse" ? (
+        <Select
+          ml={2}
+          w={"15vw"}
+          color={"black"}
+          bg={"white"}
+          value={warehouseFrom}
+          onChange={handleWarehouseFrom}
+          disabled={true}
+        >
+          <option value={wh.id_warehouse}>{wh.warehouse_name}</option>
+        </Select>
+      ) : (
+        <Select
+          ml={2}
+          w={"15vw"}
+          color={"black"}
+          bg={"white"}
+          placeholder="All Warehouse"
+          value={warehouseFrom}
+          onChange={handleWarehouseFrom}
+        >
+          {dataWarehouse.map((warehouse) => (
+            <option key={warehouse.id} value={warehouse.id}>
+              {warehouse.name}
+            </option>
+          ))}
+        </Select>
+      )}
       <Select
         ml={2}
         w={"15vw"}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Flex, Select } from "@chakra-ui/react";
 import axios from "axios";
+import jwt_decode from "jwt-decode";
 
 const OrderBy = ({
   orderBy,
@@ -13,6 +14,10 @@ const OrderBy = ({
   const API_URL = process.env.REACT_APP_API_BASE_URL;
   const [dataWarehouse, setDataWarehouse] = useState([]);
   const [dataCategory, setDataCategory] = useState([]);
+  const decode = jwt_decode(localStorage.getItem("token"));
+  const role = decode.role;
+  const [wh, setWh] = useState("");
+
   const handleOrderChange = (e) => {
     setOrderBy(e.target.value);
   };
@@ -49,6 +54,29 @@ const OrderBy = ({
     }
   };
 
+  const fetchWHAdmin = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/admin/roles/warehouse`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setWh(response.data.data);
+      console.log(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchWHAdmin();
+    if (role === "admin warehouse" && wh.id_warehouse) {
+      setWarehouseId(wh.id_warehouse);
+    } else {
+      setWarehouseId("");
+    }
+  }, [role, wh, setWarehouseId]);
+
   useEffect(() => {
     fetchWarehouse();
     fetchCategory();
@@ -56,21 +84,35 @@ const OrderBy = ({
 
   return (
     <>
-      <Select
-        ml={2}
-        w={"20vw"}
-        color={"black"}
-        bg={"white"}
-        placeholder="All Warehouse"
-        value={warehouseId}
-        onChange={handleWarehouseChange}
-      >
-        {dataWarehouse.map((warehouse) => (
-          <option key={warehouse.id} value={warehouse.id}>
-            {warehouse.name}
-          </option>
-        ))}
-      </Select>
+      {role === "admin warehouse" ? (
+        <Select
+          ml={2}
+          w={"20vw"}
+          color={"black"}
+          bg={"white"}
+          value={warehouseId}
+          onChange={handleWarehouseChange}
+          disabled={true}
+        >
+          <option value={wh.id_warehouse}>{wh.warehouse_name}</option>
+        </Select>
+      ) : (
+        <Select
+          ml={2}
+          w={"20vw"}
+          color={"black"}
+          bg={"white"}
+          placeholder="All Warehouse"
+          value={warehouseId}
+          onChange={handleWarehouseChange}
+        >
+          {dataWarehouse.map((warehouse) => (
+            <option key={warehouse.id} value={warehouse.id}>
+              {warehouse.name}
+            </option>
+          ))}
+        </Select>
+      )}
       <Select
         ml={2}
         w={"20vw"}
