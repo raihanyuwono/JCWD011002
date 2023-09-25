@@ -1,8 +1,17 @@
 import React, { useState } from "react";
-import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
+import {
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+  Box,
+  Divider,
+} from "@chakra-ui/react";
 import Summary from "./Summary/Summary";
 import Product from "./Product/Product";
 import Category from "./Category/Category";
+import Chart from "./Chart";
 const Sales = () => {
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -16,6 +25,8 @@ const Sales = () => {
 
   return (
     <>
+      <Chart />
+      <Divider mt={4} mb={4} />
       <input
         style={{
           border: "10px solid white",

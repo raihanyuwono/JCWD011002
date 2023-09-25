@@ -117,10 +117,21 @@ const getSalesCategory = async (req, res) => {
   }
 };
 
+const getMonthlySales = async (req, res) => {
+  try {
+    const { page, pageSize } = req.query;
+    const result = await reportService.getMonthlySales(page, pageSize);
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+};
+
 module.exports = {
   getStockHistory,
   getAllStockHistory,
   getSalesReport,
   getSalesProduct,
   getSalesCategory,
+  getMonthlySales,
 };
