@@ -1,5 +1,6 @@
 import {
-  Grid,
+  Flex,
+  Spacer,
   Table,
   TableContainer,
   Tbody,
@@ -11,15 +12,31 @@ import {
 import UserList from "./UsersList";
 import { getUsers } from "../../../../api/admin";
 import { useEffect, useState } from "react";
-import AddButton from "../AddButton";
+import { useSelector } from "react-redux";
+import AddButton from "./AddButton";
+import Searchbar from "./Searchbar";
+import Pagination from "./Pagination";
+
+const utilityContainer = {
+  direction: "row",
+};
 
 function ManageUsers() {
   const [users, setUsers] = useState([]);
+  const [maxPage, setMaxpage] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const toast = useToast();
+  const triggerUpdate = useSelector((state) => state.trigger.listUser);
+  const search = useSelector((state) => state.search.users);
 
   async function fetchUsers() {
-    const { data } = await getUsers(toast);
+    const attributes = {
+      search,
+      page: currentPage,
+    };
+    const { data } = await getUsers(toast, attributes);
     const { users: userList, pages } = data;
+    setMaxpage(pages);
     setUsers(userList);
   }
 
@@ -27,9 +44,22 @@ function ManageUsers() {
     users,
   };
 
+  const paginationAttr = {
+    maxPage,
+    currentPage,
+    setCurrentPage,
+  };
+
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [search, currentPage, triggerUpdate]);
+
+  const mainContainer = {
+    w: "full",
+    direction: "column",
+    pos: "relative",
+    gap: "16px",
+  };
 
   const containerAttr = {
     w: "full",
@@ -42,23 +72,31 @@ function ManageUsers() {
   };
 
   return (
-    <TableContainer {...containerAttr}>
-      <Table>
-        <Thead>
-          <Tr>
-            <Th {...thAttr}>No</Th>
-            <Th {...thAttr}>Name</Th>
-            <Th {...thAttr}>Role</Th>
-            <Th {...thAttr}>Warehouse</Th>
-            <Th {...thAttr}>Status</Th>
-            <Th></Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          <UserList {...userListAttr} />
-        </Tbody>
-      </Table>
-    </TableContainer>
+    <Flex {...mainContainer}>
+      <Flex {...utilityContainer}>
+        <AddButton />
+        <Spacer />
+        <Searchbar />
+      </Flex>
+      <TableContainer {...containerAttr}>
+        <Table>
+          <Thead>
+            <Tr>
+              <Th {...thAttr}>No</Th>
+              <Th {...thAttr}>Name</Th>
+              <Th {...thAttr}>Role</Th>
+              <Th {...thAttr}>Warehouse</Th>
+              <Th {...thAttr}>Status</Th>
+              <Th></Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            <UserList {...userListAttr} />
+          </Tbody>
+        </Table>
+      </TableContainer>
+      <Pagination {...paginationAttr} />
+    </Flex>
   );
 }
 

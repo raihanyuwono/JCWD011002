@@ -1,8 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
+import TriggerReducer from "./TriggerReducer";
+import SearchReducer from "./SearchReducer";
 
 const reducer = {
   // Add Reducer Here 
-  // ex -> report: ReportReducer
+  trigger: TriggerReducer,
+  search: SearchReducer
 };
 
 const Storage = configureStore({ reducer });

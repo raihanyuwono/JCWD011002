@@ -1,6 +1,7 @@
-import { FiSave as IcSave} from "react-icons/fi";
+import { FiSave as IcSave } from "react-icons/fi";
 import { GiCancel as IcCancel } from "react-icons/gi";
-import { Button, Flex } from "@chakra-ui/react";
+import { Button, Flex, useDisclosure } from "@chakra-ui/react";
+import PopoverConfirmation from "./PopoverConfirmation";
 
 const buttonContainer = {
   direction: "column",
@@ -8,21 +9,40 @@ const buttonContainer = {
   gap: "8px",
 };
 
-function DrawerEditButtonGroup({editToggle}) {
+function DrawerEditButtonGroup({ editToggle }) {
+  const {
+    isOpen: popIsOpen,
+    onOpen: popOpen,
+    onClose: popClose,
+  } = useDisclosure();
+
   const saveButtonAttr = {
-    type: "submit",
+    children: "Save",
     variant: "success",
     leftIcon: <IcSave />,
+    onClick: popOpen,
   };
   const cancelButtonAttr = {
+    children: "Cancel",
     variant: "error",
     leftIcon: <IcCancel />,
     onClick: () => editToggle(false),
   };
+
+  const confirmation = {
+    trigger: <Button {...saveButtonAttr} />,
+    confirm: () => {
+      document.getElementById("save-button").click();
+      editToggle(false);
+    },
+    isOpen: popIsOpen,
+    onClose: popClose,
+  };
+
   return (
     <Flex {...buttonContainer}>
-      <Button {...saveButtonAttr}>Save</Button>
-      <Button {...cancelButtonAttr}>Cancel</Button>
+      <PopoverConfirmation {...confirmation} />
+      <Button {...cancelButtonAttr} />
     </Flex>
   );
 }

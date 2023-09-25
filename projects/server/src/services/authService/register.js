@@ -12,6 +12,7 @@ const JWT_KEY = process.env.JWT_KEY;
 const users = db["user"];
 const carts = db["cart"];
 const roles = db["role"];
+const admins = db["admin"];
 
 const MESSAGE_SUCCESS = "Please check your email to complete the registration";
 
@@ -24,34 +25,30 @@ async function sendMail(email, payload) {
   await mailer.send("registration", email, subject, { redirect });
 }
 
-async function createCart(user, t) {
+async function createCart({ user, id_warehouse = null }, t) {
+  // console.log(user);
   const role = await roles.findOne({ where: { id: user["id_role"] } });
+  const attributes = { id_user: user["id"] };
+  if (id_warehouse) attributes.id_warehouse = id_warehouse;
   if (role["name"] == "user")
-    await carts.create({ id_user: user["id"] }, { transaction: t });
+    await carts.create(attributes, { transaction: t });
+  else {
+    if(role["name"] == "admin") attributes.id_warehouse = null;
+    await admins.create(attributes, { transaction: t });
+  }
 }
 
-async function register(email, id_role = 1, id = null) {
-  // Check if id is admin - to add new admin
-  if (id) {
-    const isAdmin = await users.findOne({
-      include: {
-        model: roles,
-        attribute: ["name"],
-      },
-      where: { id },
-    });
-    console.log("Register - Admin : ", isAdmin);
-    if (isAdmin["role"]["name"] !== "admin")
-      return messages.error(401, "Unautorized request");
-  }
+async function register(attributes) {
+  const { email, id_warehouse } = attributes;
+  delete attributes.id_warehouse;
   // Check if email is exsist
   const isExist = await users.findOne({ where: { email } });
   if (isExist) return messages.error(500, "Email is already exist");
   // Create new user
   return await db.sequelize.transaction(async function (t) {
-    const user = await users.create({ email, id_role }, { transaction: t });
+    const user = await users.create(attributes, { transaction: t });
     // Create cart, if member
-    await createCart(user, t);
+    await createCart({ user, id_warehouse }, t);
     // Send email to verify
     await sendMail(email, { id: user["id"] });
     // Send response after finsihed register
