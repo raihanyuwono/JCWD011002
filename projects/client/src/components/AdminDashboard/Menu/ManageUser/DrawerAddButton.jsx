@@ -4,14 +4,15 @@ const container = {
   w: "full",
 };
 
-const addButtonAttr = {
-  children: "Create New Admin",
-  variant: "success",
-  w: "full",
-  onClick: () => document.getElementById("add-admin-button").click(),
-};
-
-function DrawerAddButton() {
+function DrawerAddButton({ isLoading = false }) {
+  const addButtonAttr = {
+    children: "Create New Admin",
+    variant: "success",
+    w: "full",
+    isLoading,
+    onClick: () => document.getElementById("add-admin-button").click(),
+  };
+  
   return (
     <Flex {...container}>
       <Button {...addButtonAttr} />
