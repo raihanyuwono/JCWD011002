@@ -1,8 +1,8 @@
 const db = require("../../database/models");
 const Product = db.product;
 const Category = db.category;
-const {messages} = require("../../helpers");
-const {Op} = require('sequelize')
+const { messages } = require("../../helpers");
+const { Op } = require('sequelize')
 
 const getProductList = async (req, res) => {
   try {
@@ -12,7 +12,7 @@ const getProductList = async (req, res) => {
     };
     const currentPage = parseInt(page) || 1;
     const itemsPerPage = parseInt(limit) || 10;
-  
+
     let orderCriteria = [];
     if (sort) {
       orderCriteria.push(orderBy("created_at", sort));
@@ -23,31 +23,31 @@ const getProductList = async (req, res) => {
     } else {
       orderCriteria.push(orderBy("created_at", "desc"));
     }
-  
+
     const whereCondition = {};
-  
+
     if (search) {
       whereCondition.name = {
         [Op.like]: `%${search}%`,
       };
     }
-  
+
     if (id_category) whereCondition.id_category = id_category;
-  
+
     const totalCount = await Product.count({
       where: whereCondition,
     });
-  
+
     const totalPages = Math.ceil(totalCount / itemsPerPage);
-  
+
     const productList = await Product.findAll({
       where: whereCondition,
       order: orderCriteria,
-      include: [{ model: Category }],
+      include: [{ model: Category, attributes: ["name"] }, { model: db.product_warehouse, attributes:  ["stock"], include: { model: db.warehouse, attributes: ["name"] } }],
       offset: (currentPage - 1) * itemsPerPage,
       limit: itemsPerPage,
     });
-  
+
     return res.status(200).json({
       message: "Product list retrieved successfully",
       totalRows: totalCount,
