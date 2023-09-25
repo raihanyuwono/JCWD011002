@@ -2,6 +2,7 @@ const db = require('../../database/models')
 const Product = db.product
 const Warehouse = db.warehouse
 const ProductWarehouse = db.product_warehouse
+const Category = db.category
 const { messages } = require('../../helpers')
 const { Op } = require('sequelize')
 
@@ -10,6 +11,10 @@ const getProductById = async (req, res) => {
     const { id } = req.params
     const product = await Product.findOne({
       where: { id }, include: [
+        {
+          model: Category,
+          attributes: ["name"]
+        },
         {
           model: ProductWarehouse,
           attributes: ["stock"],

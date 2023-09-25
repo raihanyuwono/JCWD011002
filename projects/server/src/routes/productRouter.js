@@ -22,4 +22,4 @@ router.post("/", authentication, multer.multerUpload("image"), createProduct)
 router.patch("/:id", authentication, multer.multerUpload("image"), updateProduct)
 router.patch("/:id", authentication, disableProduct)
 
-module.exports = router
+module.exports = router 
