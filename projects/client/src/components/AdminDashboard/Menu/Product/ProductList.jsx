@@ -139,7 +139,10 @@ const ProductList = () => {
         </TableContainer>
         <DetailProduct isOpen={isDetailOpen} onClose={handleCloseDetail} product={selectedProduct} fetchProduct={fetchProducts} />
         <CreateProduct isOpen={isDrawerCreateOpen} onClose={handleCloseCreate} fetchProducts={fetchProducts} />
-        <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} />
+        {products.length > 0 ? (
+          <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} />
+        ) : null}
+
       </Flex>
 
     </>
