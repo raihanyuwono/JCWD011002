@@ -39,6 +39,12 @@ const DetailProduct = ({ isOpen, onClose, product, fetchProduct }) => {
   const [imageValidationError, setImageValidationError] = useState(null);
   const [categories, setCategories] = useState([]);
   const toast = useToast();
+  const [currentProductImage, setCurrentProductImage] = useState(''); // Menyimpan URL gambar produk saat ini
+
+  useEffect(() => {
+    // Ketika komponen dimuat, set URL gambar produk saat ini
+    setCurrentProductImage(`${process.env.REACT_APP_API_BASE_URL}/${product?.image}`);
+  }, [product]);
 
   const fetchCategories = async () => {
     try {
@@ -59,15 +65,10 @@ const DetailProduct = ({ isOpen, onClose, product, fetchProduct }) => {
 
   const handleEditChange = (e) => {
     const { name, value, type } = e.target;
-
-    // Jika input adalah tipe file (gambar), simpan file yang dipilih
     if (type === 'file') {
       const file = e.target.files[0];
-
-      // Validasi tipe gambar dan ukuran
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-      const maxSize = 1024 * 1024; // 1MB
-
+      const maxSize = 1024 * 1024;
       if (allowedTypes.includes(file.type) && file.size <= maxSize) {
         setEditedProduct({
           ...editedProduct,
@@ -78,6 +79,7 @@ const DetailProduct = ({ isOpen, onClose, product, fetchProduct }) => {
         reader.onload = () => {
           setImagePreview(reader.result);
           setImageValidationError(null);
+          setCurrentProductImage(null);
         };
         reader.readAsDataURL(file);
       } else {
@@ -105,14 +107,13 @@ const DetailProduct = ({ isOpen, onClose, product, fetchProduct }) => {
 
   const startEditing = () => {
     setIsEditing(true);
-    // Set nilai awal hanya ketika memulai mode pengeditan
     setEditedProduct({
       name: product?.name,
       description: product?.description,
       id_category: product?.id_category,
       is_active: product?.is_active,
       price: product?.price,
-      image: null,
+      image: product?.image,
     });
     setImagePreview(null);
     setImageValidationError(null);
@@ -128,7 +129,6 @@ const DetailProduct = ({ isOpen, onClose, product, fetchProduct }) => {
       formData.append('price', editedProduct.price);
       formData.append('image', editedProduct.image);
 
-      // Kirim permintaan PATCH ke API untuk memperbarui produk dengan ID tertentu
       await axios.patch(
         `${process.env.REACT_APP_API_BASE_URL}/product/${product?.id}`,
         formData,
@@ -140,7 +140,6 @@ const DetailProduct = ({ isOpen, onClose, product, fetchProduct }) => {
         }
       );
 
-      // Keluar dari mode pengeditan dan muat ulang data produk (jika diperlukan)
       fetchProduct();
       toast({
         title: "Product Updated",
@@ -166,12 +165,16 @@ const DetailProduct = ({ isOpen, onClose, product, fetchProduct }) => {
           <Box>
             {isEditing ? (
               <>
-                <Input
-                  type="file"
-                  name="image"
-                  accept="image/jpeg, image/png, image/jpg"
-                  onChange={handleEditChange}
-                />
+                {editedProduct.image && !imagePreview && (
+                  <Image
+                    src={`${process.env.REACT_APP_API_BASE_URL}/${editedProduct.image}`}
+                    boxSize="150px"
+                    objectFit="cover"
+                    borderRadius="5px"
+                    mt={2}
+                  />
+                )}
+
                 {imagePreview && (
                   <Image
                     src={imagePreview}
@@ -181,6 +184,13 @@ const DetailProduct = ({ isOpen, onClose, product, fetchProduct }) => {
                     mt={2}
                   />
                 )}
+
+                <Input
+                  type="file"
+                  name="image"
+                  accept="image/jpeg, image/png, image/jpg"
+                  onChange={handleEditChange}
+                />
                 {imageValidationError && (
                   <Text color="red">{imageValidationError}</Text>
                 )}
@@ -326,10 +336,10 @@ const DetailProduct = ({ isOpen, onClose, product, fetchProduct }) => {
                 </AccordionButton>
               </h2>
               <AccordionPanel pb={4}>
-                {product?.product_warehouses.map((warehouse) => {
+                {product?.product_warehouses.map((warehouse, index) => {
                   return (
                     <Box
-                      key={warehouse.id}
+                      key={warehouse.id || index}
                       display="flex"
                       justifyContent={"space-between"}
                       alignItems="center"

@@ -6,7 +6,7 @@ const { Op } = require('sequelize')
 
 const getProductList = async (req, res) => {
   try {
-    const { sort, price, name, id_category, search, page, limit } = req.query;
+    const { sort, price, name, id_category, search, page, limit, status } = req.query;
     const orderBy = (field, order) => {
       return order === "desc" ? [field, "DESC"] : [field, "ASC"];
     };
@@ -33,7 +33,7 @@ const getProductList = async (req, res) => {
     }
 
     if (id_category) whereCondition.id_category = id_category;
-
+    if (status) whereCondition.is_active = status;
     const totalCount = await Product.count({
       where: whereCondition,
     });
