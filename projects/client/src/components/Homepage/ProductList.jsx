@@ -1,5 +1,8 @@
-import { Grid } from "@chakra-ui/react";
+import { Grid, useToast } from "@chakra-ui/react";
 import ProductCard from "./ProductCard";
+import { getProducts } from "../../api/product";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 const dummy = [
   {
@@ -31,20 +34,32 @@ const dummy = [
 ];
 
 const container = {
-  templateColumns: [
-    "repeat(1, 1fr)",
-    "repeat(2, 1fr)",
-    "repeat(4, 1fr)",
-    "repeat(5, 1fr)",
-  ],
-  px: ["8px", "16px", "32px"],
+  templateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
+  px: ["16px", "8px", "16px", "32px"],
   gap: "16px",
 };
 
 function ProductList() {
+  const [products, setProducts] = useState([]);
+  const search = useSelector((state) => state.search.products);
+  const toast = useToast();
+
+  async function fetchProducts() {
+    const attributes = {
+      search,
+    };
+    // console.log("search", attributes);
+    const { data } = await getProducts(toast, attributes);
+    setProducts(data);
+  }
+
+  useEffect(() => {
+    fetchProducts();
+  }, [search]);
+
   return (
     <Grid {...container}>
-      {dummy.map((product, index) => (
+      {products.map((product, index) => (
         <ProductCard product={product} key={index} />
       ))}
     </Grid>

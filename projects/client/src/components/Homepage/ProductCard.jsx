@@ -1,12 +1,16 @@
-import { Box, Flex, GridItem, Icon, Image, Text } from "@chakra-ui/react";
+import {
+  Button,
+  Flex,
+  GridItem,
+  Image,
+  Text,
+} from "@chakra-ui/react";
 import { TbShoppingCartPlus as IcAddToCart } from "react-icons/tb";
 import GetImage from "../../api/GetImage";
 import { formaterPrice } from "../../helpers/formater";
 
 const container = {
   direction: "column",
-  overflow: "hidden",
-  borderRadius: "8px",
   w: "full",
   bgColor: "white",
   color: "textReversePrimary",
@@ -16,10 +20,10 @@ const container = {
 const detailAttr = {
   direction: "column",
   p: "8px",
-  gap: "4px",
 };
 
 const addCartPos = {
+  base: "4px",
   sm: "0px",
   md: "4px",
   lg: "8px",
@@ -27,23 +31,31 @@ const addCartPos = {
 
 const nameAttr = {
   fontWeight: "semibold",
-  noOfLines: 2,
+  noOfLines: 1,
   fontSize: "lg",
   //   fontFamily: "Fira Sans",
 };
 
 const categoryAttr = {
-  borderRadius: "4px",
+  borderRadius: "8px",
   noOfLines: 1,
   bgColor: "bgSecondary",
+  opacity: "0.8",
   w: "fit-content",
   p: "4px 8px",
   fontSize: "sm",
+  fontWeight: "semibold",
   color: "textPrimary",
+  border: "1px solid",
+  borderColor: "textSecondary",
+  pos: "absolute",
+  right: "8px",
+  bottom: "8px",
 };
 
 const priceAttr = {
-  fontWeight: "semibold",
+  // fontWeight: "semibold",
+  fontFamily: "Fira Sans",
 };
 
 function ProductCard({ product }) {
@@ -52,14 +64,16 @@ function ProductCard({ product }) {
     onClick: () => console.log(product?.id),
     cursor: "pointer",
     transitionDuration: ".3s",
+    borderRadius: "8px",
+    overflow: "hidden",
     _hover: {
       transform: "translateY(-12px)",
     },
   };
 
   const imageAttr = {
-    // src: GetImage(product?.image),
-    src: product?.image,
+    src: GetImage(product?.image),
+    // src: product?.image,
     objectFit: "cover",
   };
 
@@ -72,11 +86,7 @@ function ProductCard({ product }) {
     borderRadius: "8px",
     bgColor: "#FFFFFF66",
     color: "textReverseSecondary",
-    fontSize: {
-      sm: "20px",
-      md: "24px",
-      lg: "36px",
-    },
+    fontSize: ["28px", "28px", "24px", "28px", "36px"],
     transition: ".4s",
     _hover: {
       color: "textPrimary",
@@ -84,15 +94,29 @@ function ProductCard({ product }) {
     },
   };
 
+  const imageSectionAttr = {
+    pos: "relative",
+  };
+
+  const addToCartAttr = {
+    children: "Add to cart",
+    fontFamily: "Fira Code",
+    variant: "edit",
+    mt: "8px",
+  };
+
   return (
     <GridItem {...mainContainer}>
       <Flex {...container}>
-        <Box {...addCartAttr} />
-        <Image {...imageAttr} />
+        {/* <Box {...addCartAttr} /> */}
+        <Flex {...imageSectionAttr}>
+          <Image {...imageAttr} />
+          <Text {...categoryAttr}>{product?.category}</Text>
+        </Flex>
         <Flex {...detailAttr}>
           <Text {...nameAttr}>{product?.name}</Text>
-          <Text {...categoryAttr}>{product?.category?.name}</Text>
           <Text {...priceAttr}>Rp {formaterPrice(product?.price)}</Text>
+          <Button {...addToCartAttr} />
         </Flex>
       </Flex>
     </GridItem>

@@ -22,6 +22,7 @@ import {
 import { HamburgerIcon, CloseIcon, SearchIcon } from "@chakra-ui/icons";
 import { BsHandbag } from "react-icons/bs";
 import Login from "../Login";
+import Searchbar from "./Searchbar";
 
 const Links = ["ini apa", "ini juga", "apalagi?"];
 
@@ -72,23 +73,15 @@ export default function Simple() {
           />
           <HStack spacing={8} alignItems={"center"}>
             <Box>Logo</Box>
-            {/* <HStack
-              as={"nav"}
-              spacing={4}
-              display={{ base: "none", md: "flex" }}
-            >
-              {Links.map((link) => (
-                <NavLink key={link}>{link}</NavLink>
-              ))}
-            </HStack> */}
           </HStack>
-          <InputGroup maxW={"300px"} display={{ base: "none", md: "block" }}>
+          {/* <InputGroup maxW={"300px"} display={{ base: "none", md: "block" }}>
             <InputLeftElement
               pointerEvents="none"
               children={<SearchIcon color="gray.300" />}
             />
             <Input type="text" placeholder="Search" />
-          </InputGroup>
+          </InputGroup> */}
+          <Searchbar />
           <Flex alignItems={"center"}>
             <Button
               mr={4}
