@@ -15,7 +15,7 @@ const leftElementAttr = {
 
 function Searchbar() {
   const [searchParams, setSearchParams] = useSearchParams({ q: "" });
-  const q = searchParams.get("q");
+  const query = searchParams.get("q");
   const dispatch = useDispatch();
 
   function onChange(event) {
@@ -31,13 +31,13 @@ function Searchbar() {
 
   const inputAttr = {
     placeholder: "Search Product...",
-    value: q,
+    value: query,
     onChange,
   };
 
   useDebounce(() => {
-    dispatch(searchProduct(q));
-  }, [q]);
+    dispatch(searchProduct(query));
+  }, [query]);
 
   return (
     <InputGroup {...container}>

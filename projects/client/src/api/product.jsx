@@ -21,7 +21,6 @@ async function getProducts(toast, attributes) {
   try {
     const queries = getQueries(attributes);
     const response = await axios.get(`${PRODUCT_URL}?${queries}`, setHeaders());
-    console.log(response.data);
     return response.data;
   } catch (error) {
     const { response } = error;

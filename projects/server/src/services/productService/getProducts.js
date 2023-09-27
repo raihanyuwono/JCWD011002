@@ -1,6 +1,6 @@
 const { col, fn, cast, Op } = require("sequelize");
 const db = require("../../database");
-const { messages } = require("../../helpers");
+const { messages, pagination } = require("../../helpers");
 
 const products = db["product"];
 const categories = db["category"];
@@ -18,9 +18,16 @@ const include = [
   },
 ];
 
-async function getProducts(attributes) {
-  const { search = "" } = attributes;
-  const result = await products.findAll({
+async function getProducts(query) {
+  const { search = "", page = 1, limit = 10 } = query;
+  const where = {
+    name: { [Op.like]: `%${search}%` },
+  };
+
+  // Pagination
+  const pages = pagination.setPagination(page, limit);
+
+  const { count, rows: result } = await products.findAndCountAll({
     include,
     attributes: {
       include: [
@@ -29,12 +36,18 @@ async function getProducts(attributes) {
       ],
       exclude: ["id_category"],
     },
-    group: ["id_product"],
-    where: {
-      name: { [Op.like]: `%${search}%` },
-    },
+    group: ["product_warehouses.id_product"],
+    where,
+    subQuery: false,
+    ...pages,
   });
-  return messages.success("", result);
+
+  const payload = {
+    pages: Math.ceil(count.length / limit),
+    products: result,
+  };
+
+  return messages.success("", payload);
 }
 
 module.exports = getProducts;

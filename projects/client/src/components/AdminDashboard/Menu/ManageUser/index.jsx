@@ -15,7 +15,8 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import AddButton from "./AddButton";
 import Searchbar from "./Searchbar";
-import Pagination from "./Pagination";
+import Pagination from "../../../Utility/Pagination";
+import { useSearchParams } from "react-router-dom";
 
 const utilityContainer = {
   direction: "row",
@@ -23,11 +24,12 @@ const utilityContainer = {
 
 function ManageUsers() {
   const [users, setUsers] = useState([]);
-  const [maxPage, setMaxpage] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [maxPage, setMaxpage] = useState(1);
+  const [searchPageParams, setCurrentPage] = useSearchParams({ page: 1 });
   const toast = useToast();
   const triggerUpdate = useSelector((state) => state.trigger.listUser);
   const search = useSelector((state) => state.search.users);
+  const currentPage = searchPageParams.get("page");
 
   async function fetchUsers() {
     const attributes = {
@@ -95,6 +97,7 @@ function ManageUsers() {
           </Tbody>
         </Table>
       </TableContainer>
+      <Spacer />
       <Pagination {...paginationAttr} />
     </Flex>
   );

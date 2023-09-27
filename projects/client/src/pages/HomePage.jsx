@@ -1,19 +1,28 @@
 import React from "react";
 import ProductCard from "../components/Card/ProductCard";
 import CategoryCard from "../components/Card/CategoryCard";
-import { Box } from "@chakra-ui/react";
+import { Flex, Spacer } from "@chakra-ui/react";
 import LineBreak from "../components/Custom/LineBreak";
 import ProductList from "../components/Homepage/ProductList";
 
+const container = {
+  direction: "column",
+  w: "full",
+  pos: "relative",
+  gap: "16px",
+  py: "16px",
+};
+
 const HomePage = () => {
   return (
-    <Box w={"full"}>
-      <LineBreak data="Category" mt={10} mb={10} />
+    <Flex {...container}>
+      <LineBreak data="Category" />
       <CategoryCard />
-      <LineBreak data="Product" mt={20} mb={10} />
+      <LineBreak data="Product" />
       {/* <ProductCard /> */}
       <ProductList />
-    </Box>
+      {/* <Spacer /> */}
+    </Flex>
   );
 };
 
