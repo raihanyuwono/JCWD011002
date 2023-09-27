@@ -54,7 +54,6 @@ const categoryAttr = {
 };
 
 const priceAttr = {
-  // fontWeight: "semibold",
   fontFamily: "Fira Sans",
 };
 
@@ -73,7 +72,6 @@ function ProductCard({ product }) {
 
   const imageAttr = {
     src: GetImage(product?.image),
-    // src: product?.image,
     objectFit: "cover",
   };
 
@@ -108,7 +106,6 @@ function ProductCard({ product }) {
   return (
     <GridItem {...mainContainer}>
       <Flex {...container}>
-        {/* <Box {...addCartAttr} /> */}
         <Flex {...imageSectionAttr}>
           <Image {...imageAttr} />
           <Text {...categoryAttr}>{product?.category}</Text>

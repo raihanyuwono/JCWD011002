@@ -1,7 +1,6 @@
 import React from "react";
-import ProductCard from "../components/Card/ProductCard";
 import CategoryCard from "../components/Card/CategoryCard";
-import { Flex, Spacer } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import LineBreak from "../components/Custom/LineBreak";
 import ProductList from "../components/Homepage/ProductList";
 
@@ -19,9 +18,7 @@ const HomePage = () => {
       <LineBreak data="Category" />
       <CategoryCard />
       <LineBreak data="Product" />
-      {/* <ProductCard /> */}
       <ProductList />
-      {/* <Spacer /> */}
     </Flex>
   );
 };

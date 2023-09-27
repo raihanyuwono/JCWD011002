@@ -4,8 +4,6 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 const mainContainer = {
   w: "full",
   justifyContent: "center",
-  // pos: "absolute",
-  // bottom: 0,
 };
 
 const container = {

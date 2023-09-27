@@ -6,7 +6,11 @@ import { searchProduct } from "../../storage/SearchReducer";
 import useDebounce from "../../helpers/useDebounce";
 
 const container = {
-  w: "40%",
+  w: "300px",
+  display: {
+    base: "none",
+    md: "block",
+  },
 };
 
 const leftElementAttr = {
