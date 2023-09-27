@@ -29,6 +29,7 @@ async function cancelOrder(userId, transactionId) {
           id_transaction: transactionId,
           qty: qty,
           id_status: stockHistory.id_status,
+          last_stock: stockHistory.last_stock + qty,
         });
       }
 

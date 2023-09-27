@@ -8,6 +8,7 @@ const {
   userOrderRouter,
   rajaongkirRouter,
   userProfileRouter,
+  reportRouter,
   warehouseRouter,
   transactionRouter,
   addressRouter,
@@ -41,8 +42,10 @@ app.use("/api/public", express.static(path.resolve(__dirname, "../public")));
 app.use("/api/transaction", transactionRouter);
 app.use("/api/address", addressRouter);
 app.use("/api/product", productRouter);
+app.use("/api/report", reportRouter);
 app.use("/api/warehouse", warehouseRouter);
 app.use("/api/admin", adminRouter);
+
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`);
 });

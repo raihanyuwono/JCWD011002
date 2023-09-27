@@ -138,9 +138,10 @@ const SelectShipping = () => {
           {Object.entries(groupService()).map(
             ([courier, methods], index, array) => (
               <React.Fragment key={courier}>
-                <MenuGroup title={courier.toUpperCase()}>
+                <MenuGroup color={"black"} title={courier.toUpperCase()}>
                   {methods.map((method) => (
                     <MenuItem
+                    color={"black"}
                       ml={1}
                       key={method.service}
                       onClick={() => handleMenuItemSelect(method.service)}
