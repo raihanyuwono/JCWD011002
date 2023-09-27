@@ -69,6 +69,7 @@ const handleStock = async (
                 id_transaction: transactionId,
                 qty: qtyToReduce,
                 id_status: 8,
+                last_stock: productWarehouse.stock,
               });
 
               qtyToReduce = 0;
@@ -81,6 +82,7 @@ const handleStock = async (
                 id_transaction: transactionId,
                 qty: productWarehouse.stock,
                 id_status: 8,
+                last_stock: productWarehouse.stock,
               });
 
               qtyToReduce -= productWarehouse.stock;

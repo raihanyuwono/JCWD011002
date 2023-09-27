@@ -7,6 +7,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "id_transaction",
       });
       this.belongsTo(models["product"], { foreignKey: "id_product" });
+      this.belongsTo(models["product_warehouse"], {
+        foreignKey: "id_product",
+        targetKey: "id_product",
+        as: "productWarehouse",
+      });
     }
   }
   transaction_product.init(

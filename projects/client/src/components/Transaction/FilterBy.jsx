@@ -3,7 +3,7 @@ import { Flex, Input, Select, Button } from "@chakra-ui/react";
 import { MdSaveAs } from "react-icons/md";
 
 const FilterBy = ({ onFilterChange, onDateRangeFilter }) => {
-  const [filterValue, setFilterValue] = useState("asc");
+  const [filterValue, setFilterValue] = useState("desc");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
@@ -38,8 +38,8 @@ const FilterBy = ({ onFilterChange, onDateRangeFilter }) => {
         onChange={handleFilterChange}
         value={filterValue}
       >
-        <option value="desc">NEWEST</option>
-        <option value="asc">OLDEST</option>
+        <option value="desc">DATE : NEWEST</option>
+        <option value="asc">DATE : OLDEST</option>
       </Select>
       <Input
         bg={"white"}
@@ -57,18 +57,21 @@ const FilterBy = ({ onFilterChange, onDateRangeFilter }) => {
         color={"black"}
         size="md"
         type="datetime-local"
+        placeholder="End Date"
         value={endDate}
         onChange={handleEndDateChange}
       />
       <Button
         variant={"outline"}
         color={"black"}
+        fontSize={"md"}
         bg={"white"}
         _hover={{ color: "white", bg: "black" }}
         ml={2}
+        w={"7vw"}
         onClick={handleApplyDateFilter}
       >
-        <MdSaveAs size={"75px"} />
+        Apply
       </Button>
     </Flex>
   );

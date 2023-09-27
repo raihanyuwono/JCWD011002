@@ -34,7 +34,7 @@ const TransactionList = () => {
         <TabPanels
           justifyContent={"center"}
           display={"flex"}
-          alignItems={"center"}
+          alignItems={"center"} 
         >
           <TabPanel>
             <AllStatus />
