@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Flex, Box, Button, Table, TableContainer, Thead, Th, Tbody, Tr, Td, Img, Text, } from '@chakra-ui/react'
+import { Flex, Box, Button, Table, TableContainer, Thead, Th, Tbody, Tr, Td, Img, Text, Center, } from '@chakra-ui/react'
 import axios from 'axios'
 import DetailProduct from './ProductDetail'
 import CreateProduct from './CreateProduct'
@@ -131,12 +131,14 @@ const ProductList = () => {
                 </Tr>
 
               ))}
-              {products.length === 0 && (
-                <Text>No data</Text>
-              )}
             </Tbody>
           </Table>
         </TableContainer>
+        {products.length === 0 && (
+          <Center mt={10}>
+            <Text>Product not found</Text>
+          </Center>
+        )}
         <DetailProduct isOpen={isDetailOpen} onClose={handleCloseDetail} product={selectedProduct} fetchProduct={fetchProducts} />
         <CreateProduct isOpen={isDrawerCreateOpen} onClose={handleCloseCreate} fetchProducts={fetchProducts} />
         {products.length > 0 ? (
