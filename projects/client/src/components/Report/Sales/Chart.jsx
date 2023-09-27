@@ -46,6 +46,7 @@ const Charts = () => {
           ],
         },
         options: {
+          responsive: true,
           scales: {
             y: {
               beginAtZero: true,
