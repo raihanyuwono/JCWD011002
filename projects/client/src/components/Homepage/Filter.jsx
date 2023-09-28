@@ -9,6 +9,7 @@ const container = {
   direction: "row",
   mt: "-16px",
   alignItems: "center",
+  justifyContent: "flex-end",
   gap: "8px",
 };
 
