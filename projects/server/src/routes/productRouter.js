@@ -10,7 +10,7 @@ const authentication = require("../middlewares/authentication");
 const router = require("express").Router();
 
 // category routes
-router.get("/category", authentication, getAllCategory);
+router.get("/category", getAllCategory);
 router.post("/category", authentication, createProductCategory);
 router.patch("/category/:id", authentication, updateProductCategory);
 router.delete("/category/:id", authentication, deleteProductCategory);

@@ -3,6 +3,7 @@ import CategoryCard from "../components/Card/CategoryCard";
 import { Flex } from "@chakra-ui/react";
 import LineBreak from "../components/Custom/LineBreak";
 import ProductList from "../components/Homepage/ProductList";
+import CategoryList from "../components/Homepage/CategoryList";
 
 const container = {
   direction: "column",
@@ -16,7 +17,8 @@ const HomePage = () => {
   return (
     <Flex {...container}>
       <LineBreak data="Category" />
-      <CategoryCard />
+      {/* <CategoryCard /> */}
+      <CategoryList />
       <LineBreak data="Product" />
       <ProductList />
     </Flex>
