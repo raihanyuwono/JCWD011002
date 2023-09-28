@@ -8,26 +8,31 @@ import { useSearchParams } from "react-router-dom";
 
 const container = {
   templateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
-  px: ["16px", "8px", "16px", "32px"],
+  // px: ["16px", "8px", "16px", "32px"],
   gap: "16px",
 };
 
 function ProductList() {
   const [products, setProducts] = useState([]);
   const [maxPage, setMaxPage] = useState(1);
-  const [searchPageParams, setCurrentPage] = useSearchParams({
+  const [searchParams, setSearchParams] = useSearchParams({
     page: 1,
     category: 0,
+    order: "name",
+    sort: "ASC",
   });
   const search = useSelector((state) => state.search.products);
   const toast = useToast();
-  const currentPage = searchPageParams.get("page");
-  const currentCategory = searchPageParams.get("category");
+
+  const currentPage = searchParams.get("page");
+  const currentCategory = searchParams.get("category");
+  const currentOrder = searchParams.get("order");
+  const currentSort = searchParams.get("sort");
 
   const paginationAttr = {
     maxPage,
     currentPage,
-    setCurrentPage,
+    setCurrentPage: setSearchParams,
   };
 
   async function fetchProducts() {
@@ -35,7 +40,8 @@ function ProductList() {
       search,
       page: currentPage,
       category: currentCategory,
-      limit: 1
+      order: currentOrder,
+      sort: currentSort,
     };
     const { data } = await getProducts(toast, attributes);
     const { products: productList, pages } = data;
@@ -45,14 +51,14 @@ function ProductList() {
 
   useEffect(() => {
     fetchProducts();
-  }, [search, currentPage, currentCategory]);
+  }, [search, currentPage, currentCategory, currentOrder, currentSort]);
 
   useEffect(() => {
-    setCurrentPage((prev) => {
+    setSearchParams((prev) => {
       prev.set("page", 1);
       return prev;
     });
-  }, [search, currentCategory]);
+  }, [search, currentCategory, currentOrder, currentSort]);
 
   return (
     <>

@@ -29,9 +29,11 @@ function CategoryCard({ category, selected = false, onClick }) {
     overflow: "hidden",
     border: !selected ? "none" : "3px solid",
     borderColor: "textPrimary",
+    filter: `grayscale(${selected ? 0 : 0.8})`,
     _hover: {
       border: "3px solid",
       borderColor: "successSecondary",
+      filter: "none",
     },
   };
 

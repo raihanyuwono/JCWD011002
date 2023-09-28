@@ -19,7 +19,15 @@ const include = [
 ];
 
 async function getProducts(query) {
-  let { search = "", category = 0, page = 1, limit = 10 } = query;
+  console.log("QUERY >>",query);
+  let {
+    search = "",
+    category = 0,
+    page = 1,
+    limit = 10,
+    order = "name",
+    sort = "ASC",
+  } = query;
   category = parseInt(category);
   const where = {
     name: { [Op.like]: `%${search}%` },
@@ -40,6 +48,7 @@ async function getProducts(query) {
       exclude: ["id_category"],
     },
     group: ["product_warehouses.id_product"],
+    order: [[order, sort]],
     where,
     subQuery: false,
     ...pages,
