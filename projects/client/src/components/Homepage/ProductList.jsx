@@ -15,10 +15,14 @@ const container = {
 function ProductList() {
   const [products, setProducts] = useState([]);
   const [maxPage, setMaxPage] = useState(1);
-  const [searchPageParams, setCurrentPage] = useSearchParams({ page: 1 });
+  const [searchPageParams, setCurrentPage] = useSearchParams({
+    page: 1,
+    category: 0,
+  });
   const search = useSelector((state) => state.search.products);
   const toast = useToast();
   const currentPage = searchPageParams.get("page");
+  const currentCategory = searchPageParams.get("category");
 
   const paginationAttr = {
     maxPage,
@@ -30,6 +34,8 @@ function ProductList() {
     const attributes = {
       search,
       page: currentPage,
+      category: currentCategory,
+      limit: 1
     };
     const { data } = await getProducts(toast, attributes);
     const { products: productList, pages } = data;
@@ -39,14 +45,14 @@ function ProductList() {
 
   useEffect(() => {
     fetchProducts();
-  }, [search, currentPage]);
+  }, [search, currentPage, currentCategory]);
 
   useEffect(() => {
     setCurrentPage((prev) => {
       prev.set("page", 1);
       return prev;
     });
-  }, [search]);
+  }, [search, currentCategory]);
 
   return (
     <>

@@ -9,16 +9,21 @@ const backdrop = {
   backdropFilter: "blur(2px)",
 };
 
-function CategoryCard({ category, selected = false }) {
+const tittleAttr = {
+  fontSize: "2xl",
+  fontWeight: "semibold",
+};
+
+function CategoryCard({ category, selected = false, onClick }) {
   const mainContainer = {
-    onClick: () => console.log(category?.id),
+    onClick,
     bgColor: "green",
     bgImage:
       "https://images.unsplash.com/photo-1542435503-956c469947f6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80",
     bgPos: "center",
     bgSize: "cover",
     w: "full",
-    h: "150px",
+    h: "120px",
     cursor: "pointer",
     borderRadius: "8px",
     overflow: "hidden",
@@ -28,12 +33,6 @@ function CategoryCard({ category, selected = false }) {
       border: "3px solid",
       borderColor: "successSecondary",
     },
-  };
-
-  const tittleAttr = {
-    fontSize: "2xl",
-    fontWeight: "semibold",
-    // textTransform: "uppercase"
   };
 
   return (

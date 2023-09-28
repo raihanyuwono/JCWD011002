@@ -19,10 +19,13 @@ const include = [
 ];
 
 async function getProducts(query) {
-  const { search = "", page = 1, limit = 10 } = query;
+  let { search = "", category = 0, page = 1, limit = 10 } = query;
+  category = parseInt(category);
   const where = {
     name: { [Op.like]: `%${search}%` },
+    id_category: category,
   };
+  if (category === 0) delete where.id_category;
 
   // Pagination
   const pages = pagination.setPagination(page, limit);
