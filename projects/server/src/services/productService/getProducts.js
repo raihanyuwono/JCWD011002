@@ -19,7 +19,6 @@ const include = [
 ];
 
 async function getProducts(query) {
-  console.log("QUERY >>",query);
   let {
     search = "",
     category = 0,
