@@ -73,6 +73,12 @@ function ManageUsers() {
     textAlign: "center",
   };
 
+  const tableAttr = {
+    variant: "striped",
+    bgColor: "bgSecondary",
+    colorScheme: "whiteAlpha"
+  };
+
   return (
     <Flex {...mainContainer}>
       <Flex {...utilityContainer}>
@@ -81,8 +87,8 @@ function ManageUsers() {
         <Searchbar />
       </Flex>
       <TableContainer {...containerAttr}>
-        <Table>
-          <Thead>
+        <Table {...tableAttr}>
+          <Thead bgColor={"primary"}>
             <Tr>
               <Th {...thAttr}>No</Th>
               <Th {...thAttr}>Name</Th>

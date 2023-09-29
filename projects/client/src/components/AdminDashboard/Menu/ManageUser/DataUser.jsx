@@ -11,12 +11,9 @@ function DataUser({ admin, num }) {
   const { user, warehouse } = admin;
 
   const statusAttr = {
-    borderRadius: "50%",
-    bgColor: user?.is_active ? "successSecondary" : "errorPrimary",
-    w: "20px",
-    h: "20px",
-    m: "auto",
+    children: user?.is_active ? "Active" : "Inactive",
   };
+
   const buttonAttr = {
     variant: "edit",
     onClick: onOpen,

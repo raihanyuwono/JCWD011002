@@ -25,7 +25,7 @@ function PopoverConfirmation({ trigger, confirm, isOpen, onClose }) {
   // const {onOpen, onClose} = useDisclosure();
 
   const popoverAttr = {
-    placement: "top-end",
+    placement: "top",
     isOpen,
     closeOnBlur: true,
   };
