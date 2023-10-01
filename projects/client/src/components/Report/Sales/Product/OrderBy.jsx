@@ -1,7 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { Flex, Select } from "@chakra-ui/react";
+import {
+  Input,
+  Select,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuItemOption,
+  MenuGroup,
+  MenuOptionGroup,
+  MenuDivider,
+  Button,
+  Stack,
+  InputGroup,
+  InputRightElement,
+  Box,
+  Flex,
+} from "@chakra-ui/react";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
+import { Search2Icon, ChevronDownIcon } from "@chakra-ui/icons";
 
 const OrderBy = ({
   orderBy,
@@ -13,20 +31,80 @@ const OrderBy = ({
 }) => {
   const API_URL = process.env.REACT_APP_API_BASE_URL;
   const [dataWarehouse, setDataWarehouse] = useState([]);
+  console.log(dataWarehouse);
   const decode = jwt_decode(localStorage.getItem("token"));
   const role = decode.role;
   const [wh, setWh] = useState("");
+
+  const initialItems = [
+    { name: "Seagate 1TB", value: "1" },
+    { name: "RTX 3090", value: "2" },
+    { name: "Samsung Curve Monitor", value: "3" },
+    { name: "AMD Radeon Supra X", value: "4" },
+    { name: "LG Monitor", value: "5" },
+    { name: "AMD", value: "6" },
+    { name: "BBBBBBBBB", value: "7" },
+    { name: "CCCCCCCCC", value: "8" },
+    { name: "DDDDDDDDDDD", value: "9" },
+    { name: "CCCCCCCCCCCCC", value: "10" },
+    { name: "DDDDDDDDDDDDC", value: "11" },
+    { name: "AEEEEEEEEEEEEEEE", value: "12" },
+    { name: "FFFFFFFFFFFF", value: "13" },
+  ];
+
+  const [items, setItems] = useState(initialItems.slice(0, 5));
+  const [filteredItems, setFilteredItems] = useState(initialItems);
+  const [showLoadMore, setShowLoadMore] = useState(initialItems.length > 5);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+
+    const filtered = initialItems.filter((item) =>
+      item.name.toLowerCase().includes(query.toLowerCase())
+    );
+
+    setFilteredItems(filtered);
+    setItems(filtered.slice(0, 5)); 
+    setShowLoadMore(filtered.length > 5);
+  };
+
+  const handleLoadMore = () => {
+    const remainingItems = filteredItems.slice(items.length, items.length + 5);
+    setItems([...items, ...remainingItems]);
+    setShowLoadMore(remainingItems.length > 0); 
+  };
+  const handleClearSearch = () => {
+    setSearchQuery("");
+    setFilteredItems(initialItems);
+    setItems(initialItems.slice(0, 5));
+    setShowLoadMore(initialItems.length > 5);
+    setProductId("");
+  };
 
   const handleOrderChange = (e) => {
     setOrderBy(e.target.value);
   };
 
   const handleWarehouseChange = (e) => {
-    setWarehouseId(e.target.value);
+    const selectedValue = e.target.value;
+    if (selectedValue === "all") {
+      setWarehouseId("");
+    } else {
+      setWarehouseId(selectedValue);
+    }
   };
 
+  useEffect(() => {
+    if (!warehouseId && dataWarehouse.length > 0) {
+      setWarehouseId(dataWarehouse[0].id);
+    }
+  }, [dataWarehouse, setWarehouseId]);
+
   const handleProductChange = (e) => {
-    setProductId(e.target.value);
+    const selectedProductId = e.target.value;
+    setProductId(selectedProductId);
   };
 
   const fetchWarehouse = async () => {
@@ -74,6 +152,7 @@ const OrderBy = ({
       {role === "admin warehouse" ? (
         <Select
           ml={2}
+          mr={2}
           w={"20vw"}
           color={"black"}
           bg={"white"}
@@ -86,13 +165,14 @@ const OrderBy = ({
       ) : (
         <Select
           ml={2}
+          mr={2}
           w={"20vw"}
           color={"black"}
           bg={"white"}
-          placeholder="All Warehouse"
-          value={warehouseId}
+          value={warehouseId || "all"}
           onChange={handleWarehouseChange}
         >
+          <option value="all">All Warehouse</option>
           {dataWarehouse.map((warehouse) => (
             <option key={warehouse.id} value={warehouse.id}>
               {warehouse.name}
@@ -100,20 +180,67 @@ const OrderBy = ({
           ))}
         </Select>
       )}
-      <Select
-        ml={2}
-        w={"20vw"}
-        color={"black"}
-        bg={"white"}
-        placeholder="All Product"
-        value={productId}
-        onChange={handleProductChange}
-      >
-        <option value="1">Seagate 1TB</option>
-        <option value="2">RTX 3090</option>
-        <option value="3">Samsung Curve Monitor</option>
-        <option value="4">AMD Radeon Supra X</option>
-      </Select>
+
+      <Menu closeOnBlur={true} closeOnSelect={false}>
+        <MenuButton
+          w={"20vw"}
+          fontWeight={"medium"}
+          bg={"white"}
+          as={Button}
+          rightIcon={<ChevronDownIcon />}
+        >
+          Search Product
+        </MenuButton>
+        <MenuList
+          w={"17vw"}
+          position="absolute"
+          top="0"
+          left="0"
+          right="0"
+          color={"black"}
+        >
+          <Flex>
+            <Stack>
+              <InputGroup>
+                <Input
+                  color={"black"}
+                  bg={"white"}
+                  ml={3}
+                  placeholder="Search Product"
+                  value={searchQuery}
+                  onChange={handleSearch}
+                />
+                <InputRightElement>
+                  <Search2Icon color="primary" />
+                </InputRightElement>
+              </InputGroup>
+            </Stack>
+            <Button ml={2} mr={3} onClick={handleClearSearch}>
+              Clear
+            </Button>
+          </Flex>
+          {items.map((item) => (
+            <MenuItem
+              key={item.value}
+              value={item.value}
+              onClick={handleProductChange}
+            >
+              {item.name}
+            </MenuItem>
+          ))}
+
+          {showLoadMore && (
+            <MenuItem
+              textDecor={"underline"}
+              align={"center"}
+              onClick={handleLoadMore}
+            >
+              Load More...
+            </MenuItem>
+          )}
+        </MenuList>
+      </Menu>
+
       <Select
         ml={2}
         w={"20vw"}

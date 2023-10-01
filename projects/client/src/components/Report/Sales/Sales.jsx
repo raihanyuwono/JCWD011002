@@ -15,10 +15,6 @@ import Chart from "./Chart";
 const Sales = () => {
   const [tabIndex, setTabIndex] = useState(0);
 
-  const handleSliderChange = (event) => {
-    setTabIndex(parseInt(event.target.value, 10));
-  };
-
   const handleTabsChange = (index) => {
     setTabIndex(index);
   };
@@ -27,32 +23,23 @@ const Sales = () => {
     <>
       <Chart />
       <Divider mt={4} mb={4} />
-      <input
-        style={{
-          border: "10px solid white",
-        }}
-        type="range"
-        min="0"
-        max="2"
-        value={tabIndex}
-        onChange={handleSliderChange}
-      />
-
       <Tabs
         defaultIndex={1}
         isLazy
         index={tabIndex}
         onChange={handleTabsChange}
+        colorScheme="white"
+        variant="enclosed"
       >
         <TabList>
-          <Tab>Summary</Tab>
+          {/* <Tab>Summary</Tab> */}
           <Tab>Product Sales</Tab>
           <Tab>Category Sales</Tab>
         </TabList>
-        <TabPanels>
-          <TabPanel>
+        <TabPanels color={"white"}>
+          {/* <TabPanel>
             <Summary />
-          </TabPanel>
+          </TabPanel> */}
           <TabPanel>
             <Product />
           </TabPanel>

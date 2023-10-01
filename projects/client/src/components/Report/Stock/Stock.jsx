@@ -6,32 +6,19 @@ import Detail from "./Detail/Detail";
 const Stock = () => {
   const [tabIndex, setTabIndex] = useState(0);
 
-  const handleSliderChange = (event) => {
-    setTabIndex(parseInt(event.target.value, 10));
-  };
-
   const handleTabsChange = (index) => {
     setTabIndex(index);
   };
 
   return (
     <>
-      <input
-        style={{
-          border: "10px solid white",
-        }}
-        type="range"
-        min="0"
-        max="1"
-        value={tabIndex}
-        onChange={handleSliderChange}
-      />
-
       <Tabs
         defaultIndex={1}
         isLazy
         index={tabIndex}
         onChange={handleTabsChange}
+        colorScheme="white"
+        variant="enclosed"
       >
         <TabList>
           <Tab>Summary</Tab>

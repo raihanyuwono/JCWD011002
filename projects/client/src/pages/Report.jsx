@@ -12,7 +12,7 @@ import Stock from "../components/Report/Stock/Stock";
 const Report = () => {
   return (
     <>
-      <Tabs isLazy isFitted w={"82vw"} variant="enclosed">
+      <Tabs isLazy isFitted w={"82vw"} variant="enclosed" colorScheme="white">
         <TabList mb="1em">
           <Tab>Sales Report</Tab>
           <Tab>Stock History</Tab>
