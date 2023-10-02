@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import UserProfile from "./components/Profile/UpdateProfile";
 import { getUser } from "./api/profile";
 import Transaction from "./components/Profile/Transaction";
+import ProductDetail from "./pages/ProductDetail";
 
 const ADMIN = ["admin", "admin warehouse"];
 const ADMIN_PATH = ["/", "/profile"];
@@ -91,6 +92,7 @@ function App() {
             <Route path="/reset/:token" element={<ResetPassword />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/checkout" element={<Checkout />} />
+            <Route path="/product/:id" element={<ProductDetail />} />
           </Routes>
         </Flex>
         <Footer />

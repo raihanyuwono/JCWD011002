@@ -26,12 +26,11 @@ async function sendMail(email, payload) {
 }
 
 async function createCart({ user, id_warehouse = null }, t) {
-  // console.log(user);
   const role = await roles.findOne({ where: { id: user["id_role"] } });
   const attributes = { id_user: user["id"] };
   if (id_warehouse) attributes.id_warehouse = id_warehouse;
   if (role["name"] == "user")
-    await carts.create(attributes, { transaction: t });
+    await carts.create({id: user["id"], ...attributes}, { transaction: t });
   else {
     if(role["name"] == "admin") attributes.id_warehouse = null;
     await admins.create(attributes, { transaction: t });

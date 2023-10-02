@@ -39,4 +39,15 @@ async function getCategories(toast) {
   }
 }
 
-export { getProducts, getCategories };
+async function getProduct(toast, id) {
+  try {
+    const response = await axios.get(`${PRODUCT_URL}/${id}`);
+    console.log(response.data.data);
+    return response.data;
+  } catch (error) {
+    const { response } = error;
+    notification(toast, setToastParams(response?.status ? response : error));
+  }
+}
+
+export { getProducts, getCategories, getProduct };

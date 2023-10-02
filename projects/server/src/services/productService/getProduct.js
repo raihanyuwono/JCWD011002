@@ -30,7 +30,7 @@ async function getProduct(id) {
     },
     where: { id },
   });
-  if (!result) messages.error(404, "Product not found");
+  if (!result || !result?.id) return messages.error(404, "Product not found");
   return messages.success("", result);
 }
 
