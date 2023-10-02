@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -16,11 +16,37 @@ import {
   Th,
   Td,
   TableContainer,
+  Select,
+  Flex,
 } from "@chakra-ui/react";
+import axios from "axios";
 import toRupiah from "@develoka/angka-rupiah-js";
 
 const ModalDetail = ({ detail_product_sales, product_name }) => {
+  const API_URL = process.env.REACT_APP_API_BASE_URL;
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [dataWarehouse, setDataWarehouse] = useState([]);
+  const fetchWarehouse = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/warehouse`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setDataWarehouse(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchWarehouse();
+  }, []);
+
+  const getWarehouseName = (warehouseId) => {
+    const warehouse = dataWarehouse.find((item) => item.id === warehouseId);
+    return warehouse ? warehouse.name : "";
+  };
 
   return (
     <>
@@ -34,6 +60,32 @@ const ModalDetail = ({ detail_product_sales, product_name }) => {
           <ModalHeader color={"white"}>{product_name}</ModalHeader>
           <ModalCloseButton color={"white"} />
           <ModalBody>
+            <Flex>
+              <Select
+                bg={"white"}
+                color={"black"}
+                mb={2}
+                size={"sm"}
+                placeholder="All Warehouse"
+              >
+                {dataWarehouse.map((warehouse) => (
+                  <option key={warehouse.id} value={warehouse.id}>
+                    {warehouse.name}
+                  </option>
+                ))}
+              </Select>
+              <Select
+                bg={"white"}
+                color={"black"}
+                mb={2}
+                ml={2}
+                size={"sm"}
+                placeholder="Sort By"
+              >
+                <option>DATE : ASC</option>
+                <option>DATE : DESC</option>
+              </Select>
+            </Flex>
             <TableContainer>
               <Table
                 size={"sm"}
@@ -58,6 +110,9 @@ const ModalDetail = ({ detail_product_sales, product_name }) => {
                     <Th textAlign="center" color={"white"}>
                       SALE PRICE
                     </Th>
+                    <Th textAlign="center" color={"white"}>
+                      WH FROM
+                    </Th>
                   </Tr>
                 </Thead>
                 <Tbody>
@@ -80,6 +135,10 @@ const ModalDetail = ({ detail_product_sales, product_name }) => {
                           dot: ".",
                           floatingPoint: 0,
                         })}
+                      </Td>
+                      <Td textAlign="right" color={"white"}>
+                        {getWarehouseName(detailSale.warehouse_id)} (
+                        {detailSale.warehouse_id})
                       </Td>
                     </Tr>
                   ))}

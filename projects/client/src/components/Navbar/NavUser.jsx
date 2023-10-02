@@ -65,8 +65,10 @@ export default function Simple() {
 
   const token = localStorage.getItem("token");
   let userId = "";
+  let role = "";
   if (token) {
     userId = jwt_decode(localStorage.getItem("token")).id;
+    role = jwt_decode(localStorage.getItem("token")).role;
   }
 
   const viewCart = async () => {
@@ -129,14 +131,18 @@ export default function Simple() {
                   onMouseEnter={handleCartHover}
                   onMouseLeave={handleCartLeave}
                 >
-                  <Box>
-                    <div class="cart">
-                      <span class="count">{cartLength}</span>
-                      <i class="material-icons">
-                        <RiShoppingCartLine />
-                      </i>
-                    </div>
-                  </Box>
+                  {role === "user" ? (
+                    <Box>
+                      <div class="cart">
+                        <span class="count">{cartLength}</span>
+                        <i class="material-icons">
+                          <RiShoppingCartLine />
+                        </i>
+                      </div>
+                    </Box>
+                  ) : (
+                    <></>
+                  )}
                 </Button>
                 <Menu>
                   <MenuButton
@@ -175,6 +181,7 @@ export default function Simple() {
 
         {isCartOpen && (
           <Box
+            display={role === "user" ? "block" : "none"}
             position="absolute"
             border={"0.5px solid gray"}
             top="50"

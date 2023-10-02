@@ -207,7 +207,7 @@ const Checkout = () => {
                   item.quantity > 0 ? (
                     <Tr key={item.productId}>
                       <Td>
-                        <Image w={"50px"} src={item.image} />
+                        <Image w={"50px"} src={`${API_URL}/${item.image}`} />
                       </Td>
                       <Td>{item.name}</Td>
                       <Td textAlign={"center"}>

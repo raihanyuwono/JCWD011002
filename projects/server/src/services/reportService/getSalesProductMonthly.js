@@ -6,7 +6,8 @@ const getSalesProductMonthly = async (
   pageSize = 10,
   filterByMonth,
   filterByYear,
-  orderBy
+  orderBy,
+  warehouseId
 ) => {
   page = parseInt(page);
   pageSize = parseInt(pageSize);
@@ -37,8 +38,20 @@ const getSalesProductMonthly = async (
             {
               model: models.product,
               attributes: ["id", "name", "image"],
+              as: "product",
+              include: [
+                {
+                  model: models.category,
+                  attributes: ["name"],
+                  as: "_category",
+                },
+              ],
             },
           ],
+        },
+        {
+          model: models.stock_history,
+          attributes: ["id_warehouse_from"],
         },
       ],
       where: whereClause,
@@ -89,6 +102,7 @@ const getSalesProductMonthly = async (
                   transaction.created_at.toLocaleDateString("id"),
                 qty: productTransaction.qty,
                 price: productTransaction.price,
+                warehouse_id: transaction.stock_histories[0]?.id_warehouse_from,
               },
             ],
           });
@@ -102,6 +116,7 @@ const getSalesProductMonthly = async (
             transaction_date: transaction.created_at.toLocaleDateString("id"),
             qty: productTransaction.qty,
             price: productTransaction.price,
+            warehouse_id: transaction.stock_histories[0]?.id_warehouse_from,
           });
         }
 

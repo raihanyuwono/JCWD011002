@@ -194,7 +194,10 @@ const CartPage = () => {
                     item.quantity > 0 ? (
                       <Tr key={item.productId}>
                         <Td textAlign={"center"}>
-                          <Image w={isMd ? "400px" : "50px"} src={item.image} />
+                          <Image
+                            w={isMd ? "400px" : "50px"}
+                            src={`${API_URL}/${item.image}`}
+                          />
                         </Td>
                         <Td>{item.name}</Td>
                         <Td textAlign={"center"}>

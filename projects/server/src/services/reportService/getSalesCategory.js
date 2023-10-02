@@ -49,7 +49,7 @@ const getSalesCategory = async (
     if (categoryId) {
       where[Op.and] = [
         ...(where[Op.and] || []),
-        sequelize.where(sequelize.col("product.id_category"), categoryId),
+        sequelize.where(sequelize.col("product._category.id"), categoryId),
       ];
     }
 
@@ -74,13 +74,13 @@ const getSalesCategory = async (
           ),
           "month_year",
         ],
-        [sequelize.col("product.id_category"), "id_category"],
+        [sequelize.col("product._category.id"), "id_category"],
         [sequelize.fn("SUM", sequelize.col("qty")), "total_qty_sold"],
         [
           sequelize.fn("SUM", sequelize.literal("product.price * qty")),
           "total_price_sold",
         ],
-        [sequelize.col("product.category.name"), "category_name"],
+        [sequelize.col("product._category.name"), "category_name"],
         [
           sequelize.literal(
             "GROUP_CONCAT(DISTINCT productWarehouse.id_warehouse)"
@@ -96,6 +96,7 @@ const getSalesCategory = async (
             {
               model: category,
               attributes: [],
+              as: "_category",
             },
           ],
         },
@@ -105,7 +106,7 @@ const getSalesCategory = async (
           attributes: [],
         },
       ],
-      group: ["month_year", "product.id_category"],
+      group: ["month_year", "product._category.id"],
       order: [
         [sequelize.literal(orderBy || "total_qty_sold DESC")],
         [sequelize.literal("month_year DESC")],

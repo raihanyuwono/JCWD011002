@@ -20,6 +20,7 @@
               "transaction_id": 10,
               "transaction_date": "12/10/2022 from created_at",
               "qty": 1000,
+              "warehouse_from": "Warehouse Medan",
               "price": 1000
             },
             {
@@ -27,6 +28,7 @@
               "transaction_id": 12,
               "transaction_date": "12/10/2022 from created_at",
               "qty": 200,
+              "warehouse_from": "Warehouse Surabaya",
               "price": 100
             },
             {
@@ -34,6 +36,7 @@
               "transaction_id": 12,
               "transaction_date": "12/10/2022 from created_at",
               "qty": 200,
+              "warehouse_from": "Warehouse Badung",
               "price": 800
             }
           ]
@@ -49,6 +52,7 @@
               "transaction_id": 10,
               "transaction_date": "12/10/2022 from created_at",
               "qty": 1000,
+              "warehouse_from": "Warehouse Makassar",
               "price": 1000
             }
           ]
@@ -72,6 +76,7 @@
               "transaction_id": 10,
               "transaction_date": "12/10/2022 from created_at",
               "qty": 300,
+              "warehouse_from": "Warehouse Makassar",
               "price": 1000
             },
             {
@@ -79,6 +84,7 @@
               "transaction_id": 212,
               "transaction_date": "12/10/2022 from created_at",
               "qty": 3200,
+              "warehouse_from": "Warehouse Jakarta",
               "price": 100
             },
             {
@@ -86,6 +92,7 @@
               "transaction_id": 122,
               "transaction_date": "12/10/2022 from created_at",
               "qty": 1200,
+              "warehouse_from": "Warehouse jakarta",
               "price": 5800
             }
           ]
@@ -101,6 +108,7 @@
               "transaction_id": 10,
               "transaction_date": "12/10/2022 from created_at",
               "qty": 2000,
+              "warehouse_from": "Warehouse Medan",
               "price": 100
             }
           ]

@@ -133,7 +133,7 @@ const Product = () => {
                         <Td>
                           <Image
                             w={"35px"}
-                            src={monthSale.image}
+                            src={`${API_URL}/${monthSale.image}`}
                             alt={monthSale.product_name}
                           />
                         </Td>

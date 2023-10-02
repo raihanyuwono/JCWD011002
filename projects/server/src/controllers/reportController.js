@@ -129,13 +129,21 @@ const getMonthlySales = async (req, res) => {
 
 const getSalesProductMonthly = async (req, res) => {
   try {
-    const { page, pageSize, filterByMonth, filterByYear, orderBy } = req.query;
+    const {
+      page,
+      pageSize,
+      filterByMonth,
+      filterByYear,
+      orderBy,
+      warehouseId,
+    } = req.query;
     const result = await reportService.getSalesProductMonthly(
       page,
       pageSize,
       filterByMonth,
       filterByYear,
-      orderBy
+      orderBy,
+      warehouseId
     );
     return res.status(200).json(result);
   } catch (error) {
