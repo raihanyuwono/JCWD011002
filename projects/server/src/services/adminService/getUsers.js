@@ -11,7 +11,7 @@ const exclude = [
   "password",
   "is_verified",
   "id_role",
-  "created_at",
+  // "created_at",
   "updated_at",
 ];
 
@@ -33,7 +33,6 @@ function setInclude(search = "") {
 }
 
 async function getUsers(access, id, query) {
-  console.log(">> SINI KAN <<", id, query);
   const { search, role, page = 1, limit = 10 } = query;
   // Check if access only for admin
   if (access !== "admin") return messages.error(401, "Unauthorized access");

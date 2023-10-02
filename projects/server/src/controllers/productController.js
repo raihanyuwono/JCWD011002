@@ -59,10 +59,22 @@ async function getProducts(req, res) {
   }
 }
 
+async function getProduct(req, res) {
+  try {
+    const { id } = req.params;
+    const result = await productService.getProduct(id);
+    res.status(result.status).json(messages.response(result));
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: error.message });
+  }
+}
+
 module.exports = {
   createProductCategory,
   getAllCategory,
   updateProductCategory,
   deleteProductCategory,
   getProducts,
+  getProduct,
 };

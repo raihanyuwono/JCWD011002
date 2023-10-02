@@ -4,10 +4,14 @@ import {
   GridItem,
   Image,
   Text,
+  useToast,
 } from "@chakra-ui/react";
-import { TbShoppingCartPlus as IcAddToCart } from "react-icons/tb";
 import GetImage from "../../api/GetImage";
 import { formaterPrice } from "../../helpers/formater";
+import { useNavigate } from "react-router-dom";
+import { addToCart } from "../../api/cart";
+import Notification from "../../helpers/Notification";
+import jwt_decode from "jwt-decode";
 
 const container = {
   direction: "column",
@@ -57,10 +61,43 @@ const priceAttr = {
   fontFamily: "Fira Sans",
 };
 
+function isLogin() {
+  return localStorage.getItem("token");
+}
+
+function getUserId() {
+  const token = localStorage.getItem("token");
+  return jwt_decode(token)["id"];
+}
+
 function ProductCard({ product }) {
+  const toast = useToast();
+  const navigate = useNavigate();
+
+  function handleDetail() {
+    navigate(`/product/${product?.id}`);
+  }
+
+  async function handleAddToCart(event) {
+    event.stopPropagation();
+    if (!isLogin()) {
+      document.getElementById("btn-login-modal").click();
+      return Notification(toast, {
+        title: "You must login first",
+        status: "400",
+      });
+    }
+    const attributes = {
+      userId: getUserId(),
+      productId: product?.id,
+      quantity: 1,
+    };
+    await addToCart(toast, attributes);
+  }
+
   const mainContainer = {
     w: "full",
-    onClick: () => console.log(product?.id),
+    onClick: handleDetail,
     cursor: "pointer",
     transitionDuration: ".3s",
     borderRadius: "8px",
@@ -75,23 +112,6 @@ function ProductCard({ product }) {
     objectFit: "cover",
   };
 
-  const addCartAttr = {
-    children: <IcAddToCart />,
-    p: "4px",
-    pos: "absolute",
-    top: addCartPos,
-    right: addCartPos,
-    borderRadius: "8px",
-    bgColor: "#FFFFFF66",
-    color: "textReverseSecondary",
-    fontSize: ["28px", "28px", "24px", "28px", "36px"],
-    transition: ".4s",
-    _hover: {
-      color: "textPrimary",
-      bgColor: "#00000066",
-    },
-  };
-
   const imageSectionAttr = {
     pos: "relative",
   };
@@ -101,6 +121,7 @@ function ProductCard({ product }) {
     fontFamily: "Fira Code",
     variant: "edit",
     mt: "8px",
+    onClick: (e) => handleAddToCart(e),
   };
 
   return (
