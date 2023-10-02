@@ -6,6 +6,7 @@ function Login() {
 
   const modalPopupAttr = { isOpen, onClose };
   const buttonLoginAttr = {
+    id: "btn-login-modal",
     variant: "success",
     onClick: onOpen,
   };

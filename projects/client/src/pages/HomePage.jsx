@@ -1,18 +1,30 @@
-import React from 'react'
-import ProductCard from '../components/Card/ProductCard'
-import CategoryCard from '../components/Card/CategoryCard'
-import { Box } from '@chakra-ui/react'
-import LineBreak from '../components/Custom/LineBreak'
+import React from "react";
+import CategoryCard from "../components/Card/CategoryCard";
+import { Flex } from "@chakra-ui/react";
+import LineBreak from "../components/Custom/LineBreak";
+import ProductList from "../components/Homepage/ProductList";
+import CategoryList from "../components/Homepage/CategoryList";
+import Filter from "../components/Homepage/Filter";
+
+const container = {
+  direction: "column",
+  w: "full",
+  pos: "relative",
+  gap: "16px",
+  px: ["16px", "20px", "24px", "156px"],
+  py: "16px",
+};
 
 const HomePage = () => {
   return (
-    <Box>
-      <LineBreak data="Category" mt={10} mb={10} />
-      <CategoryCard />
-      <LineBreak data="Product" mt={20} mb={10} />
-      <ProductCard />
-    </Box>
-  )
-}
+    <Flex {...container}>
+      <LineBreak data="Category" />
+      <CategoryList />
+      <LineBreak data="Product" />
+      <Filter />
+      <ProductList />
+    </Flex>
+  );
+};
 
-export default HomePage
+export default HomePage;

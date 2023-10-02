@@ -1,4 +1,3 @@
-const { Op, col } = require("sequelize");
 const db = require("../../database");
 const { messages } = require("../../helpers");
 

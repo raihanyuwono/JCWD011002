@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "id_product",
       });
       this.hasMany(models.product_warehouse, { foreignKey: "id_product" });
-      this.belongsTo(models.category, { foreignKey: "id_category" });
+      this.belongsTo(models.category, {as: "_category" ,foreignKey: "id_category" });
     }
   }
   product.init(

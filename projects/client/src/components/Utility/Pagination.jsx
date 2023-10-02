@@ -4,8 +4,6 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 const mainContainer = {
   w: "full",
   justifyContent: "center",
-  pos: "absolute",
-  bottom: 0,
 };
 
 const container = {
@@ -14,24 +12,32 @@ const container = {
 };
 
 function Pagination({ maxPage, currentPage, setCurrentPage }) {
+
   function handlePageClick(page) {
-    setCurrentPage(page);
+    setCurrentPage((prev) => {
+      prev.set("page", page);
+      return prev;
+    });
   }
 
   function handlePrevClick() {
-    if (currentPage > 1) setCurrentPage(currentPage - 1);
+    if (currentPage > 1) handlePageClick(+currentPage - 1);
   }
 
   function handleNextClick() {
-    if (currentPage < maxPage) setCurrentPage(currentPage + 1);
+    if (currentPage < maxPage) handlePageClick(+currentPage + 1);
+  }
+
+  function isSelected(page) {
+    return page === parseInt(currentPage);
   }
 
   function setButtonNum(page) {
     return {
       children: page,
       onClick: () => handlePageClick(page),
-      color: page === currentPage ? "black" : "white",
-      variant: page === currentPage ? "solid" : "outline",
+      color: isSelected(page) ? "black" : "white",
+      variant: isSelected(page) ? "solid" : "outline",
       _hover: {
         color: "black",
         bgColor: "white",

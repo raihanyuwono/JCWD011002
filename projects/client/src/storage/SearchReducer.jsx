@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   users: "",
+  products: "",
 };
 
 export const SearchReducer = createSlice({
@@ -12,8 +13,12 @@ export const SearchReducer = createSlice({
       const keyword = action.payload;
       state.users = keyword;
     },
+    searchProduct: (state, action) => {
+      const keyword = action.payload;
+      state.products = keyword;
+    }
   },
 });
 
-export const { searchUser } = SearchReducer.actions;
+export const { searchUser, searchProduct } = SearchReducer.actions;
 export default SearchReducer.reducer;
