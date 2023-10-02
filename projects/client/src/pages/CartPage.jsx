@@ -35,6 +35,9 @@ const CartPage = () => {
   const toast = useToast();
   const [cart, setCart] = useState([]);
   const [cartLength, setCartLength] = useState(0);
+  localStorage.setItem("service", "none");
+  localStorage.setItem("selectedCourier", null);
+  localStorage.setItem("shipping", 0);
 
   const viewCart = async () => {
     try {

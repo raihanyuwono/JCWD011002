@@ -5,7 +5,7 @@ const getSalesProductMonthly = async (
   page = 1,
   pageSize = 10,
   filterByMonth,
-  filterByYear = new Date().getFullYear(),
+  filterByYear,
   orderBy
 ) => {
   page = parseInt(page);
@@ -56,12 +56,11 @@ const getSalesProductMonthly = async (
 
       if (!monthlySalesData[key]) {
         monthlySalesData[key] = {
-          id: idCounter,
+          month_id: idCounter,
           month,
           year,
           total_sales_monthly: 0,
           month_sales: [],
-        //   created_at: transaction.created_at,
         };
         idCounter++;
       }
@@ -80,9 +79,11 @@ const getSalesProductMonthly = async (
             product_name: productData.name,
             image: productData.image,
             total_qty_sold_product: productTransaction.qty,
+            total_sales_product:
+              productTransaction.price * productTransaction.qty,
             detail_product_sales: [
               {
-                data_id: transaction.id,
+                data_id: 1,
                 transaction_id: transaction.id,
                 transaction_date:
                   transaction.created_at.toLocaleDateString("id"),
@@ -93,8 +94,10 @@ const getSalesProductMonthly = async (
           });
         } else {
           existingProduct.total_qty_sold_product += productTransaction.qty;
+          existingProduct.total_sales_product +=
+            productTransaction.price * productTransaction.qty;
           existingProduct.detail_product_sales.push({
-            data_id: transaction.id,
+            data_id: existingProduct.detail_product_sales.length + 1,
             transaction_id: transaction.id,
             transaction_date: transaction.created_at.toLocaleDateString("id"),
             qty: productTransaction.qty,
@@ -104,6 +107,16 @@ const getSalesProductMonthly = async (
 
         monthSale.total_sales_monthly +=
           productTransaction.price * productTransaction.qty;
+      });
+    });
+
+    Object.values(monthlySalesData).forEach((monthSale) => {
+      monthSale.month_sales.forEach((productSale) => {
+        productSale.total_sales_product =
+          productSale.detail_product_sales.reduce(
+            (total, sale) => total + sale.qty * sale.price,
+            0
+          );
       });
     });
 

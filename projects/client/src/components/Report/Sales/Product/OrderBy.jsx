@@ -16,6 +16,7 @@ import {
   InputRightElement,
   Box,
   Flex,
+  Text,
 } from "@chakra-ui/react";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
@@ -31,7 +32,6 @@ const OrderBy = ({
 }) => {
   const API_URL = process.env.REACT_APP_API_BASE_URL;
   const [dataWarehouse, setDataWarehouse] = useState([]);
-  console.log(dataWarehouse);
   const decode = jwt_decode(localStorage.getItem("token"));
   const role = decode.role;
   const [wh, setWh] = useState("");
@@ -66,14 +66,14 @@ const OrderBy = ({
     );
 
     setFilteredItems(filtered);
-    setItems(filtered.slice(0, 5)); 
+    setItems(filtered.slice(0, 5));
     setShowLoadMore(filtered.length > 5);
   };
 
   const handleLoadMore = () => {
     const remainingItems = filteredItems.slice(items.length, items.length + 5);
     setItems([...items, ...remainingItems]);
-    setShowLoadMore(remainingItems.length > 0); 
+    setShowLoadMore(remainingItems.length > 0);
   };
   const handleClearSearch = () => {
     setSearchQuery("");
@@ -149,7 +149,7 @@ const OrderBy = ({
 
   return (
     <>
-      {role === "admin warehouse" ? (
+      {/* {role === "admin warehouse" ? (
         <Select
           ml={2}
           mr={2}
@@ -179,9 +179,9 @@ const OrderBy = ({
             </option>
           ))}
         </Select>
-      )}
+      )} */}
 
-      <Menu closeOnBlur={true} closeOnSelect={false}>
+      {/* <Menu closeOnBlur={true} closeOnSelect={false}>
         <MenuButton
           w={"20vw"}
           fontWeight={"medium"}
@@ -239,21 +239,62 @@ const OrderBy = ({
             </MenuItem>
           )}
         </MenuList>
-      </Menu>
-
+      </Menu> */}
+      {/* <Menu closeOnSelect={false}>
+        <MenuButton
+          w={"20vw"}
+          ml={2}
+          bgColor={"white"}
+          color={"black"}
+          borderRadius="md"
+          borderWidth="1px"
+        >
+          <Flex justifyContent={"space-between"}>
+            <Text ml={3}>Order By</Text>
+            <Text mr={3}>
+              <ChevronDownIcon />
+            </Text>
+          </Flex>
+        </MenuButton>
+        <MenuList color={"black"} minWidth="240px">
+          <MenuOptionGroup
+            value={orderBy}
+            onChange={handleOrderChange}
+            defaultValue="created_at desc"
+            title="Date"
+            type="radio"
+          >
+            <MenuItemOption value="created_at asc">Ascending</MenuItemOption>
+            <MenuItemOption value="created_at desc">Descending</MenuItemOption>
+          </MenuOptionGroup>
+          <MenuDivider />
+          <MenuOptionGroup
+            defaultValue="total_sales_monthly desc"
+            title="Monthly Sales"
+            type="radio"
+          >
+            <MenuItemOption value="total_sales_monthly asc">
+              Ascending
+            </MenuItemOption>
+            <MenuItemOption value="total_sales_monthly desc">
+              Descending
+            </MenuItemOption>
+          </MenuOptionGroup>
+        </MenuList>
+      </Menu> */}
       <Select
         ml={2}
-        w={"20vw"}
+        w={"15vw"}
         color={"black"}
         bg={"white"}
         placeholder="Sort By"
         value={orderBy}
         onChange={handleOrderChange}
       >
-        <option value="total_qty_sold asc">TOTAL : ASC</option>
-        <option value="total_qty_sold desc">TOTAL : DESC</option>
-        <option value="month_year asc">DATE : ASC</option>
-        <option value="month_year desc">DATE : DESC</option>
+        <option value="total_sales_monthly asc">TOTAL : ASC</option>
+        <option value="total_sales_monthly desc">TOTAL : DESC</option>
+        <option value="created_at asc">DATE : ASC</option>
+        <option value="created_at desc">DATE : DESC</option>
       </Select>
     </>
   );
