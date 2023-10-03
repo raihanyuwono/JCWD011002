@@ -21,13 +21,13 @@ const Stock = () => {
         variant="enclosed"
       >
         <TabList>
-          <Tab>Summary</Tab>
+          {/* <Tab>Summary</Tab> */}
           <Tab>Detail</Tab>
         </TabList>
         <TabPanels>
-          <TabPanel>
+          {/* <TabPanel>
             <Summary />
-          </TabPanel>
+          </TabPanel> */}
           <TabPanel>
             <Detail />
           </TabPanel>
