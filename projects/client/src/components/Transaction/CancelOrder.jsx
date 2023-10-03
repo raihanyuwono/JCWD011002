@@ -59,8 +59,8 @@ function CancelOrder({ transactionId }) {
       >
         <AlertDialogOverlay />
 
-        <AlertDialogContent>
-          <AlertDialogHeader>Cancel Order</AlertDialogHeader>
+        <AlertDialogContent bg={"bgSecondary"} color={"white"}>
+          <AlertDialogHeader bg={"primary"}>Cancel Order</AlertDialogHeader>
           <AlertDialogCloseButton />
           <AlertDialogBody>
             Are you sure you want to cancel this order?

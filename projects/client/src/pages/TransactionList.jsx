@@ -17,44 +17,68 @@ import Shipped from "../components/Transaction/Status/Shipped";
 import Completed from "../components/Transaction/Status/Completed";
 import Cancelled from "../components/Transaction/Status/Cancelled";
 import AllStatus from "../components/Transaction/Status/AllStatus";
+import { extendTheme, useMediaQuery } from "@chakra-ui/react";
 
 const TransactionList = () => {
+  const breakpoints = {
+    sm: "320px",
+    md: "768px",
+    lg: "960px",
+    xl: "1200px",
+    "2xl": "1536px",
+  };
+
+  const theme = extendTheme({ breakpoints });
+  const [isMd] = useMediaQuery("(max-width: " + theme.breakpoints.md + ")");
+
+  const tab = {
+    fontSize: isMd ? "sm" : "md",
+  };
+  const tabPanel = {
+    w: isMd ? "107vw" : "",
+  };
   return (
     <>
-      <Tabs isLazy w={"70vw"} isFitted variant="enclosed">
+      <Tabs
+        colorScheme="white"
+        isLazy
+        w={isMd ? "100vw" : "70vw"}
+        isFitted
+        variant="enclosed"
+      >
         <TabList color={"white"} h={"3em"} mb="1em">
-          <Tab>All</Tab>
-          <Tab>To Pay</Tab>
-          <Tab>To Confirm</Tab>
-          <Tab>Processed</Tab>
-          <Tab>Shipped</Tab>
-          <Tab>Completed</Tab>
-          <Tab>Cancelled</Tab>
+          <Tab {...tab}>All</Tab>
+          <Tab {...tab}>To Pay</Tab>
+          <Tab {...tab}>To Confirm</Tab>
+          <Tab {...tab}>Processed</Tab>
+          <Tab {...tab}>Shipped</Tab>
+          <Tab {...tab}>Completed</Tab>
+          <Tab {...tab}>Cancelled</Tab>
         </TabList>
         <TabPanels
           justifyContent={"center"}
           display={"flex"}
-          alignItems={"center"} 
+          alignItems={"center"}
         >
-          <TabPanel>
+          <TabPanel {...tabPanel}>
             <AllStatus />
           </TabPanel>
-          <TabPanel>
+          <TabPanel {...tabPanel}>
             <ToPay />
           </TabPanel>
-          <TabPanel>
+          <TabPanel {...tabPanel}>
             <ToConfirm />
           </TabPanel>
-          <TabPanel>
+          <TabPanel {...tabPanel}>
             <Processed />
           </TabPanel>
-          <TabPanel>
+          <TabPanel {...tabPanel}>
             <Shipped />
           </TabPanel>
-          <TabPanel>
+          <TabPanel {...tabPanel}>
             <Completed />
           </TabPanel>
-          <TabPanel>
+          <TabPanel {...tabPanel}>
             <Cancelled />
           </TabPanel>
         </TabPanels>

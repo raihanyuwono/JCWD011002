@@ -92,15 +92,15 @@ const UploadReceipt = ({ isOpen, onClose, onSave, txnid }) => {
       blockScrollOnMount={false}
     >
       <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>Upload Receipt</ModalHeader>
+      <ModalContent bg={"bgSecondary"} color={"white"}>
+        <ModalHeader bg={"primary"}>Upload Receipt</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <FormControl>
-            <Text mb={2} fontSize="xs">
+            <Text mb={2} fontSize="sm">
               MWECG2/ID/TXN{txnid}
             </Text>
-            <Text fontSize="xs">Method: {payment}</Text>
+            <Text fontSize="sm">Payment Method: {payment}</Text>
             <Text mb={2} fontSize="xs">
               1. Open your mobile banking app <br /> 2. Select the m-Transfer{" "}
               <br />
@@ -117,10 +117,13 @@ const UploadReceipt = ({ isOpen, onClose, onSave, txnid }) => {
                     initoast();
                   }}
                 />
+                <Text fontSize={"11px"} ml={2}>
+                  | PT. PURWADHIKA JAYAJAYAJAYA
+                </Text>
               </Flex>
               4. Input amount of the transfer <br /> 5. Make sure the
-              information is correct <br /> 6. Confirm the transfer <br /> 7.
-              Upload receipt here
+              recipient name is correct <br /> 6. Confirm the transfer <br />{" "}
+              7. Upload receipt here
             </Text>
             <Input
               mt={2}
@@ -138,7 +141,13 @@ const UploadReceipt = ({ isOpen, onClose, onSave, txnid }) => {
           )}
         </ModalBody>
         <ModalFooter>
-          <Button variant="ghost" mr={3} onClick={onClose}>
+          <Button
+            color={"white"}
+            _hover={{ color: "black", bg: "white" }}
+            variant="ghost"
+            mr={3}
+            onClick={onClose}
+          >
             Cancel
           </Button>
           <Button variant={"success"} onClick={handleSave} disabled={!receipt}>

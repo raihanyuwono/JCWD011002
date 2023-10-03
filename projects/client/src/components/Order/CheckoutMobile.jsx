@@ -1,13 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  TableContainer,
   Text,
   Image,
   Button,
@@ -24,6 +17,7 @@ import {
   AlertDialogCloseButton,
   useDisclosure,
   useMediaQuery,
+  Divider,
 } from "@chakra-ui/react";
 import { AiOutlineCaretDown } from "react-icons/ai";
 import jwt_decode from "jwt-decode";
@@ -179,68 +173,61 @@ const Checkout = () => {
   return (
     <>
       <Flex direction={"column"} alignItems={"center"}>
-        <Text fontSize={"3xl"} mt={8} mb={4}>
+        <Text fontSize={isMd ? "2xl" : "3xl"} mt={4} mb={4}>
           Checkout
         </Text>
         <Box mb={1} w={"100vw"} px={6} py={6} bgColor={"secondary"}>
           <SelectAddress />
         </Box>
-        {/* <TableContainer>
-          <Table
-            variant="unstyled"
-            color={"white"}
-            bgColor={"bgSecondary"}
-            border={"1px solid gray"}
-            w={"40vw"}
-          >
-            <Thead>
-              <Tr>
-                <Th></Th>
-                <Th color={"white"}>Product</Th>
-                <Th color={"white"} textAlign={"center"}>
-                  Price
-                </Th>
-                <Th color={"white"} textAlign={"center"}>
-                  Quantity
-                </Th>
-                <Th color={"white"} textAlign={"center"}>
-                  Subtotal
-                </Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {cart.length === 0 ? (
-                <Tr>
-                  <Td colSpan="6">
-                    <Text>No Product in the Cart!</Text>
-                  </Td>
-                </Tr>
-              ) : (
-                cart.map((item) =>
-                  item.quantity > 0 ? (
-                    <Tr key={item.productId}>
-                      <Td>
-                        <Image w={"50px"} src={`${API_URL}/${item.image}`} />
-                      </Td>
-                      <Td>{item.name}</Td>
-                      <Td textAlign={"center"}>
+
+        <Box w={"100vw"}>
+          {cart.map((item) => (
+            <>
+              <Box px={5} bg={"bgSecondary"} color={"white"}>
+                <Flex align={"center"} justifyContent={"space-between"}>
+                  <Flex>
+                    <Image
+                      h={"50px"}
+                      w={"50px"}
+                      mt={1}
+                      mb={1}
+                      ml={1}
+                      src={`${API_URL}/${item.image}`}
+                      alt="iamge"
+                    />
+                    <Flex direction={"column"} justifyContent={"center"}>
+                      <Text mt={1} fontSize={"sm"} fontWeight={"bold"} ml={3}>
+                        {item.name.length > 18
+                          ? `${item.name.slice(0, 30)}...`
+                          : item.name}
+                      </Text>
+                      <Text ml={3} fontSize={"xs"}>
+                        {item.quantity} x{" "}
                         {toRupiah(item.price, { dot: ".", floatingPoint: 0 })}
-                      </Td>
-                      <Td textAlign={"center"}>{item.quantity}</Td>
-                      <Td textAlign={"center"}>
-                        {toRupiah(item.subtotal, {
-                          dot: ".",
-                          floatingPoint: 0,
-                        })}
-                      </Td>
-                    </Tr>
-                  ) : null
-                )
-              )}
-            </Tbody>
-          </Table>
-        </TableContainer> */}
-        <Flex direction={"column"}>
+                      </Text>
+                      <Text ml={3} fontSize={"xs"}>
+                        {/* From: aaaaaaa */}
+                      </Text>
+                      <Box ml={3} mb={1} mt={1}></Box>
+                    </Flex>
+                  </Flex>
+                  <Flex direction={"column"}>
+                    <Text mr={2} align={"right"} fontSize={"sm"}>
+                      {toRupiah(item.subtotal, {
+                        dot: ".",
+                        floatingPoint: 0,
+                      })}
+                    </Text>
+                    {/* <Text align={"right"} fontWeight={"bold"} fontSize={"sm"}>
+            aaaaaaaa
+          </Text> */}
+                  </Flex>
+                </Flex>
+              </Box>
+            </>
+          ))}
+        </Box>
+        <Flex mt={1} direction={"column"}>
           <Box
             px={6}
             py={6}
@@ -252,8 +239,10 @@ const Checkout = () => {
           >
             <Flex direction={"column"} justifyContent={"space-between"}>
               <SelectShipping />
+              <Divider mb={2} mt={2} />
               <Box>
                 <Select
+                  size={"sm"}
                   bgColor={"#EDF2F7"}
                   color={"black"}
                   fontWeight={"bold"}
@@ -269,9 +258,9 @@ const Checkout = () => {
                   ))}
                 </Select>
                 {selectedPayment && (
-                  <Box align={"right"} fontSize={"sm"} key={selectedPayment.id}>
+                  <Box align={"left"} fontSize={"sm"} key={selectedPayment.id}>
                     <Text mt={2}>{/* Payment: {selectedPayment.name} */}</Text>
-                    Upload proof of payment <br /> on the transaction page
+                    Upload proof of payment on the transaction page
                   </Box>
                 )}
               </Box>
@@ -281,6 +270,7 @@ const Checkout = () => {
             px={6}
             py={6}
             color={"white"}
+            fontSize={"sm"}
             mt={1}
             w={"100vw"}
             bgColor="bgSecondary"
@@ -298,10 +288,10 @@ const Checkout = () => {
               <Text>Rp0</Text>
             </Flex>
             <Flex justifyContent={"space-between"}>
-              <Text fontWeight={"bold"} fontSize={"xl"} mt={4}>
+              <Text fontWeight={"bold"} fontSize={"lg"} mt={4}>
                 Grand Total:
               </Text>
-              <Text fontWeight={"bold"} fontSize={"xl"} mt={4}>
+              <Text fontWeight={"bold"} fontSize={"lg"} mt={4}>
                 {toRupiah(grand, { dot: ".", floatingPoint: 0 })}
               </Text>
             </Flex>
@@ -331,16 +321,27 @@ const Checkout = () => {
           >
             <AlertDialogOverlay />
 
-            <AlertDialogContent>
-              <AlertDialogHeader>Place Order?</AlertDialogHeader>
+            <AlertDialogContent bg={"bgSecondary"} color={"white"}>
+              <AlertDialogHeader
+                bg={"primary"}
+                border={"none"}
+                color={"white"}
+                fontSize={"md"}
+              >
+                Place Order?
+              </AlertDialogHeader>
               <AlertDialogCloseButton />
-              <AlertDialogBody>
+              <AlertDialogBody fontSize={"sm"}>
                 Are you sure you want to place an order? or explore more
                 incredible items that could be yours today?
               </AlertDialogBody>
               <AlertDialogFooter>
-                <Button onClick={handleExplore}>Explore</Button>
+                <Button size={"sm"} onClick={handleExplore}>
+                  Explore
+                </Button>
                 <Button
+                  size={"sm"}
+                  ml={2}
                   isLoading={isLoading}
                   onClick={handleCheckout}
                   colorScheme="green"

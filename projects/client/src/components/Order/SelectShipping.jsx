@@ -11,6 +11,8 @@ import {
   Button,
   Flex,
   useMediaQuery,
+  Divider,
+  
 } from "@chakra-ui/react";
 import { AiOutlineCaretDown } from "react-icons/ai";
 import axios from "axios";
@@ -145,18 +147,31 @@ const SelectShipping = () => {
     <Flex direction={"column"}>
       <CalcDistance />
       <Menu>
-        <MenuButton w={"210px"} as={Button} rightIcon={<AiOutlineCaretDown />}>
+        <MenuButton
+          w={isMd ? "" : "210px"}
+          size={isMd ? "sm" : "md"}
+          as={Button}
+          textAlign={"left"}
+          borderRadius={isMd ? "2px" : "5px"}
+          rightIcon={<AiOutlineCaretDown size={"20px"} />}
+        >
           Shipping Methods
         </MenuButton>
         <MenuList>
           {Object.entries(groupService()).map(
             ([courier, methods], index, array) => (
               <React.Fragment key={courier}>
-                <MenuGroup color={"black"} title={courier.toUpperCase()}>
+                <MenuGroup
+                  w={isMd ? "81vw" : ""}
+                  color={"black"}
+                  title={courier.toUpperCase()}
+                >
                   {methods.map((method) => (
                     <MenuItem
+                      px={isMd ? 4 : 4}
+                      py={isMd ? 1 : 1}
                       color={"black"}
-                      ml={1}
+                      fontSize={isMd ? "sm" : "md"}
                       key={method.service}
                       onClick={() => handleMenuItemSelect(method.service)}
                     >
@@ -171,34 +186,83 @@ const SelectShipping = () => {
           )}
         </MenuList>
       </Menu>
-      <Box fontSize={isMd ? "sm" : ""} mt={2}>
-        {selectedService ? (
-          <>
-            <Text fontWeight={"bold"}>
-              {selectedService.code.toUpperCase()}
-            </Text>
-            <Text>
-              {selectedService.description}:{" "}
-              {toRupiah(selectedService.cost[0].value, {
-                dot: ".",
-                floatingPoint: 0,
-              })}
-            </Text>
-            <Text>{selectedService.cost[0].etd} Day Estimated Delivery</Text>
-          </>
-        ) : courier ? (
-          <>
-            <Text fontWeight={"bold"}>{courier.code.toUpperCase()}</Text>
-            <Text>
-              {courier.description}:{" "}
-              {toRupiah(courier.cost[0].value, { dot: ".", floatingPoint: 0 })}
-            </Text>{" "}
-            <Text>{courier.cost[0].etd} Day Estimated Delivery</Text>
-          </>
-        ) : (
-          <Text></Text>
-        )}
-      </Box>
+      {isMd ? (
+        <Flex
+          justifyContent={"space-evenly"}
+          fontSize={isMd ? "xs" : ""}
+          mt={2}
+        >
+          {selectedService ? (
+            <Flex alignItems={"center"} justifyContent={"space-between"}>
+              <Text align fontSize={"md"} fontWeight={"bold"}>
+                {selectedService.code.toUpperCase()}
+              </Text>
+              &nbsp;&nbsp;&nbsp;&nbsp;{"=>"}&nbsp;&nbsp;&nbsp;&nbsp;
+              <Text>
+                {selectedService.description}:{" "}
+                {toRupiah(selectedService.cost[0].value, {
+                  dot: ".",
+                  floatingPoint: 0,
+                })}
+              </Text>
+              &nbsp;&nbsp;&nbsp;{"=>"}&nbsp;&nbsp;&nbsp;
+              <Text>{selectedService.cost[0].etd} Day Estd Delivery</Text>
+            </Flex>
+          ) : courier ? (
+            <Flex alignItems={"center"} justifyContent={"space-between"}>
+              <Text align fontSize={"md"} fontWeight={"bold"}>
+                {courier.code.toUpperCase()}
+              </Text>
+              &nbsp;&nbsp;&nbsp;&nbsp;{"=>"}&nbsp;&nbsp;&nbsp;&nbsp;
+              <Text>
+                {courier.description}:{" "}
+                {toRupiah(courier.cost[0].value, {
+                  dot: ".",
+                  floatingPoint: 0,
+                })}
+              </Text>
+              &nbsp;&nbsp;&nbsp;{"=>"}&nbsp;&nbsp;&nbsp;
+              <Text>{courier.cost[0].etd} Day Estd Delivery</Text>
+            </Flex>
+          ) : (
+            <Text></Text>
+          )}
+        </Flex>
+      ) : (
+        <Box fontSize={isMd ? "sm" : ""} mt={2}>
+          {selectedService ? (
+            <>
+              <Text fontWeight={"bold"}>
+                {selectedService.code.toUpperCase()}
+              </Text>
+              <Text>
+                {selectedService.description}:{" "}
+                {toRupiah(selectedService.cost[0].value, {
+                  dot: ".",
+                  floatingPoint: 0,
+                })}
+              </Text>
+              <Text mb={2}>
+                {selectedService.cost[0].etd} Day Estimated Delivery
+              </Text>
+            </>
+          ) : courier ? (
+            <>
+              <Text fontWeight={"bold"}>{courier.code.toUpperCase()}</Text>
+              <Text>
+                {courier.description}:{" "}
+                {toRupiah(courier.cost[0].value, {
+                  dot: ".",
+                  floatingPoint: 0,
+                })}
+              </Text>{" "}
+              <Text mb={2}>{courier.cost[0].etd} Day Estimated Delivery</Text>
+            </>
+          ) : (
+            <Text></Text>
+          )}
+        </Box>
+      )}
     </Flex>
   );
 };

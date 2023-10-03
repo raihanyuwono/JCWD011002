@@ -348,8 +348,14 @@ const Checkout = () => {
             >
               <AlertDialogOverlay />
 
-              <AlertDialogContent>
-                <AlertDialogHeader>Place Order?</AlertDialogHeader>
+              <AlertDialogContent bg={"bgSecondary"} color={"white"}>
+                <AlertDialogHeader
+                  bg={"primary"}
+                  border={"none"}
+                  color={"white"}
+                >
+                  Place Order?
+                </AlertDialogHeader>
                 <AlertDialogCloseButton />
                 <AlertDialogBody>
                   Are you sure you want to place an order? or explore more
@@ -358,10 +364,10 @@ const Checkout = () => {
                 <AlertDialogFooter>
                   <Button onClick={handleExplore}>Explore</Button>
                   <Button
+                    ml={2}
                     isLoading={isLoading}
                     onClick={handleCheckout}
                     colorScheme="green"
-                    ml={3}
                   >
                     Place Order
                   </Button>
