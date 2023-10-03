@@ -26,7 +26,7 @@ const CreateProduct = ({ isOpen, onClose, fetchProducts }) => {
     price: '',
     description: '',
     id_category: '',
-    is_active: false,
+    is_active: true,
   });
   const [imagePreview, setImagePreview] = useState(null); // Store the image preview URL
   const toast = useToast();
@@ -125,7 +125,7 @@ const CreateProduct = ({ isOpen, onClose, fetchProducts }) => {
         price: '',
         description: '',
         id_category: '',
-        is_active: false,
+        is_active: true,
       })
       setImagePreview(null);
     } catch (error) {

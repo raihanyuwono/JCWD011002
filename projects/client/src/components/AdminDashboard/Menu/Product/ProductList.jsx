@@ -5,6 +5,7 @@ import DetailProduct from './ProductDetail'
 import CreateProduct from './CreateProduct'
 import FilterProducts from './FilterProduct'
 import Pagination from './Pagination'
+import EditStockDrawer from './StockDetail'
 const ProductList = () => {
   const [products, setProducts] = useState([])
   const [search, setSearch] = useState('');
@@ -18,9 +19,11 @@ const ProductList = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [limit, setLimit] = useState(5);
   const [isDetailOpen, setIsDetailOpen] = useState(false)
+  const [isDetailStockOpen, setIsDetailStockOpen] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState(null)
   const [isDrawerCreateOpen, setIsDrawerCreateOpen] = useState(false)
 
+  console.log("selected product", selectedProduct)
   console.log("ini status", typeof (status))
   const handleCreateClick = () => {
     setIsDrawerCreateOpen(true)
@@ -65,7 +68,11 @@ const ProductList = () => {
         }
       })
       setSelectedProduct(data.data)
-      setIsDetailOpen(true)
+      if (isDetailStockOpen === true) {
+        setIsDetailOpen(false)
+      } else {
+        setIsDetailOpen(true)
+      }
     } catch (error) {
       console.log(error)
     }
@@ -78,6 +85,24 @@ const ProductList = () => {
   const handleCloseDetail = () => {
     setIsDetailOpen(false)
   }
+
+  const handleDetailStock = async (id) => {
+    try {
+      // Ambil data stok terbaru
+      const { data } = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/product/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      setSelectedProduct(data.data);
+      setIsDetailStockOpen(true);
+      fetchProducts();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <Flex flexDirection={"column"} w={"full"} mt={4}>
@@ -126,7 +151,9 @@ const ProductList = () => {
                   <Td>{product?.name}</Td>
                   <Td>{product?.category?.name}</Td>
                   <Td>{product?.is_active ? "Active" : "Inactive"}</Td>
-                  <Td>{product?.product_warehouses?.map((warehouse) => warehouse?.stock).reduce((a, b) => a + b, 0)}</Td>
+                  <Td>{product?.product_warehouses?.map((warehouse) => warehouse?.stock).reduce((a, b) => a + b, 0)}
+                    <Button ml={4} bg={"darkBlue"} color={"white"} onClick={() => handleDetailStock(product.id)}>edit stock</Button>
+                  </Td>
                   <Td><Button bg={"darkBlue"} color={"white"} onClick={() => handleDetailClick(product.id)}>Detail</Button></Td>
                 </Tr>
 
@@ -141,6 +168,7 @@ const ProductList = () => {
         )}
         <DetailProduct isOpen={isDetailOpen} onClose={handleCloseDetail} product={selectedProduct} fetchProduct={fetchProducts} />
         <CreateProduct isOpen={isDrawerCreateOpen} onClose={handleCloseCreate} fetchProducts={fetchProducts} />
+        <EditStockDrawer isOpen={isDetailStockOpen} onClose={() => setIsDetailStockOpen(false)} products={selectedProduct} fetchProducts={fetchProducts} fetchDetailStock={handleDetailStock} />
         {products.length > 0 ? (
           <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} />
         ) : null}

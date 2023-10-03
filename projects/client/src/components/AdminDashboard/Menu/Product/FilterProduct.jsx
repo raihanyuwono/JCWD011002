@@ -62,9 +62,17 @@ const FilterProducts = ({
     setSearch(searchInput)
   }
 
+  const handleEnterKey = (e) => {
+    console.log("key yang ditekan", e.key)
+    if (e.key === "Enter") {
+      handleSearch()
+    }
+  }
+
   if (searchInput.length <= 0) {
     setSearch(null)
   }
+
 
   useEffect(() => {
     categories();
@@ -79,6 +87,7 @@ const FilterProducts = ({
           placeholder="Search products..."
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
+          onKeyDown={handleEnterKey}
         // mb={{ base: '2', md: '0' }}
         // mr={{ base: '0', md: '2' }}
         />

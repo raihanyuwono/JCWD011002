@@ -17,10 +17,10 @@ const getProductById = async (req, res) => {
         },
         {
           model: ProductWarehouse,
-          attributes: ["stock"],
+          attributes: ["id_warehouse", "id_product", "stock"],
           include: {
             model: Warehouse,
-            attributes: ["name"]
+            attributes: ["id", "name"]
           }
         }
       ]

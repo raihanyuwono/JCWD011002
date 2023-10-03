@@ -325,7 +325,7 @@ const DetailProduct = ({ isOpen, onClose, product, fetchProduct }) => {
               )}
             </Box>
           </Box>
-          <Accordion allowToggle mt={2} mb={20}>
+          {/* <Accordion allowToggle mt={2} mb={20}>
             <AccordionItem>
               <h2>
                 <AccordionButton>
@@ -357,7 +357,7 @@ const DetailProduct = ({ isOpen, onClose, product, fetchProduct }) => {
                 })}
               </AccordionPanel>
             </AccordionItem>
-          </Accordion>
+          </Accordion> */}
         </DrawerBody>
       </DrawerContent>
     </Drawer>

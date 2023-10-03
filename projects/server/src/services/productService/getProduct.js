@@ -1,12 +1,21 @@
 const db = require("../../database/models");
 const Product = db.product;
 const Category = db.category;
+const ProductWarehouse = db.product_warehouse;
+const Warehouse = db.warehouse;
+const Admin = db.admin;
 const { messages } = require("../../helpers");
 const { Op } = require('sequelize')
 
 const getProductList = async (req, res) => {
   try {
+    const { id, role } = req.account
     const { sort, price, name, id_category, search, page, limit, status } = req.query;
+    const admin = await Admin.findOne({
+      where: {
+        id_user: id,
+      },
+    })
     const orderBy = (field, order) => {
       return order === "desc" ? [field, "DESC"] : [field, "ASC"];
     };
@@ -34,6 +43,7 @@ const getProductList = async (req, res) => {
 
     if (id_category) whereCondition.id_category = id_category;
     if (status) whereCondition.is_active = status;
+
     const totalCount = await Product.count({
       where: whereCondition,
     });
@@ -43,7 +53,9 @@ const getProductList = async (req, res) => {
     const productList = await Product.findAll({
       where: whereCondition,
       order: orderCriteria,
-      include: [{ model: Category, attributes: ["name"] }, { model: db.product_warehouse, attributes: ["stock"], include: { model: db.warehouse, attributes: ["name"] } }],
+      include: [{ model: Category, attributes: ["name"] }, {
+        model: ProductWarehouse, where: { id_warehouse: role === "admin warehouse" ? admin.id_warehouse : { [Op.not]: null } }, attributes: ["id_warehouse", "id_product", "stock"], include: { model: Warehouse, attributes: ["id", "name"] }
+      }],
       offset: (currentPage - 1) * itemsPerPage,
       limit: itemsPerPage,
     });
