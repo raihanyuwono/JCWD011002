@@ -1,8 +1,9 @@
 const router = require("express").Router();
 const { userOrderController } = require("../controllers");
+const { authentication, authorization } = require("../middlewares");
 
 //add to cart
-router.post("/", userOrderController.addToCart);
+router.post("/", authentication, userOrderController.addToCart);
 //remove product from cart
 router.post("/remove", userOrderController.removeFromCart);
 //subtract and addition product

@@ -24,7 +24,7 @@ async function getProduct(id) {
     attributes: {
       include: [
         [col("_category.name"), "category"],
-        [cast(fn("sum", col("product_warehouses.stock")), "int"), "stock"],
+        [fn("sum", col("product_warehouses.stock")), "stock"],
       ],
       exclude: ["id_category"],
     },

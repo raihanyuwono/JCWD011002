@@ -21,9 +21,22 @@ const OrderBy = ({
   const handleOrderChange = (e) => {
     setOrderBy(e.target.value);
   };
+
   const handleWarehouseChange = (e) => {
-    setWarehouseId(e.target.value);
+    const selectedValue = e.target.value;
+    if (selectedValue === "all") {
+      setWarehouseId("");
+    } else {
+      setWarehouseId(selectedValue);
+    }
   };
+
+  useEffect(() => {
+    if (!warehouseId && dataWarehouse.length > 0) {
+      setWarehouseId(dataWarehouse[0].id);
+    }
+  }, [dataWarehouse, setWarehouseId]);
+
   const handleCategoryChange = (e) => {
     setCategoryId(e.target.value);
   };
@@ -62,7 +75,6 @@ const OrderBy = ({
         },
       });
       setWh(response.data.data);
-      console.log(response.data.data);
     } catch (error) {
       console.log(error);
     }
@@ -103,7 +115,7 @@ const OrderBy = ({
           color={"black"}
           bg={"white"}
           placeholder="All Warehouse"
-          value={warehouseId}
+          value={warehouseId || "all"}
           onChange={handleWarehouseChange}
         >
           {dataWarehouse.map((warehouse) => (

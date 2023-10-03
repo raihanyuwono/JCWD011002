@@ -50,6 +50,15 @@ const Summary = () => {
     setCurrentPage(newPage);
   };
 
+  function getMonthName(month) {
+    const monthNames = [
+      "January", "February", "March", "April",
+      "May", "June", "July", "August",
+      "September", "October", "November", "December"
+    ];
+    return monthNames[month - 1] || '';
+  }
+
   return (
     <>
       <Flex>
@@ -91,7 +100,7 @@ const Summary = () => {
             {stock.map((item) => (
               <Tr key={item.data_id}>
                 <Td textAlign="center">{item.data_id}</Td>
-                <Td textAlign="center">{item.month}</Td>
+                <Td textAlign="center">{getMonthName(item.month)}</Td>
                 <Td textAlign="center">{item.year}</Td>
                 <Td textAlign="center">{item.subtraction_qty}</Td>
                 <Td textAlign="center">{item.addition_qty}</Td>

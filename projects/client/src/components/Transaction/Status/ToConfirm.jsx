@@ -77,7 +77,8 @@ const ToConfirm = () => {
           <Divider mt={2} mb={2} />
           <Flex align={"center"} justifyContent={"space-between"}>
             <Flex>
-              <Image borderRadius={"5px"} src={item.product_image} />
+              <Image borderRadius={"5px"} w={"75px"}
+                src={`${API_URL}/${item.product_image}`}/>
               <Flex direction={"column"}>
                 <Text ml={4} fontWeight={"bold"}>
                   {item.product_name}

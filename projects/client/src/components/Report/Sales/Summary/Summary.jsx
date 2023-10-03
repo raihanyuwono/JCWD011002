@@ -93,10 +93,10 @@ const Summary = () => {
           <Thead bgColor={"primary"}>
             <Tr>
               <Th textAlign="center" color={"white"}>
-                TXN ID
+                INVOICE
               </Th>
               <Th textAlign="center" color={"white"}>
-                TXN DATE
+                INVO. DATE
               </Th>
               <Th textAlign="center" color={"white"}>
                 STATUS

@@ -97,13 +97,13 @@ const Detail = () => {
           <Thead bgColor={"primary"}>
             <Tr>
               <Th color={"white"}>NO</Th>
-              <Th color={"white"}>WH FROM</Th>
-              <Th color={"white"}>WH TO</Th>
-              <Th color={"white"}>PRODUCT</Th>
-              <Th color={"white"}>QTY</Th>
-              <Th color={"white"}>STATUS</Th>
-              <Th color={"white"}>TXN ID</Th>
-              <Th color={"white"}>TXN DATE</Th>
+              <Th textAlign={"center"} color={"white"}>WH FROM</Th>
+              <Th textAlign={"center"} color={"white"}>WH TO</Th>
+              <Th textAlign={"center"} color={"white"}>PRODUCT</Th>
+              <Th textAlign={"center"} color={"white"}>QTY</Th>
+              <Th textAlign={"center"} color={"white"}>STATUS</Th>
+              <Th textAlign={"center"} color={"white"}>INVOICE</Th>
+              <Th textAlign={"center"} color={"white"}>INVOICE DATE</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -113,10 +113,10 @@ const Detail = () => {
                 <Td>{item.wh_from}</Td>
                 <Td>{item.wh_to}</Td>
                 <Td>{item.product}</Td>
-                <Td>{item.qty}</Td>
-                <Td>{item.status}</Td>
-                <Td>MWECG2/ID/TXN{item.txn_id}</Td>
-                <Td>{item.txn_date}</Td>
+                <Td textAlign={"center"}>{item.qty}</Td>
+                <Td textAlign={"center"}>{item.status}</Td>
+                <Td textAlign={"center"}>MWECG2/ID/TXN{item.txn_id}</Td>
+                <Td textAlign={"center"}>{item.txn_date}</Td>
               </Tr>
             ))}
           </Tbody>
