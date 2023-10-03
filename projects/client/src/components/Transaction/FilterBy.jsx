@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Flex, Input, Select, Button } from "@chakra-ui/react";
 import { MdSaveAs } from "react-icons/md";
+import { extendTheme, useMediaQuery } from "@chakra-ui/react";
 
 const FilterBy = ({ onFilterChange, onDateRangeFilter }) => {
   const [filterValue, setFilterValue] = useState("desc");
@@ -29,8 +30,20 @@ const FilterBy = ({ onFilterChange, onDateRangeFilter }) => {
     onDateRangeFilter(formattedStartDate, formattedEndDate);
   };
 
+  const breakpoints = {
+    sm: "320px",
+    md: "768px",
+    lg: "960px",
+    xl: "1200px",
+    "2xl": "1536px",
+  };
+
+  const theme = extendTheme({ breakpoints });
+  const [isMd] = useMediaQuery("(max-width: " + theme.breakpoints.md + ")");
+
+
   return (
-    <Flex>
+    <Flex px={isMd ? 2 : 0} ml={isMd ? 0 : 2}>
       <Select
         color={"black"}
         bg={"white"}

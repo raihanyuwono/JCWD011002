@@ -56,16 +56,16 @@ const AllStatus = () => {
 
   return (
     <>
-      <Flex justifyContent={"space-between"} mb={4}>
-        <Box w={"30vw"}>
-          <SearchBar onSearch={setSearchQuery} />
-        </Box>
-        <Box ml={2}>
-          <FilterBy
-            onFilterChange={setFilterBy}
-            onDateRangeFilter={handleDateRangeFilter}
-          />
-        </Box>
+      <Flex
+        direction={isMd ? "column" : "row"}
+        justifyContent={"space-between"}
+        mb={2}
+      >
+        <SearchBar onSearch={setSearchQuery} />
+        <FilterBy
+          onFilterChange={setFilterBy}
+          onDateRangeFilter={handleDateRangeFilter}
+        />
       </Flex>
       {data.map((item) => (
         <Box
@@ -88,7 +88,6 @@ const AllStatus = () => {
                 </Badge>
               ) : (
                 <Badge alignSelf={"center"} colorScheme="green">
-                  {/* {item.status} */}
                   {item.status === "Menunggu Pembayaran" ? (
                     <Text>To Pay</Text>
                   ) : item.status === "Menunggu Konfirmasi Pembayaran" ? (
