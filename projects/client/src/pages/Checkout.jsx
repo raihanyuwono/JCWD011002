@@ -23,6 +23,7 @@ import {
   AlertDialogOverlay,
   AlertDialogCloseButton,
   useDisclosure,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import { AiOutlineCaretDown } from "react-icons/ai";
 import jwt_decode from "jwt-decode";
@@ -30,6 +31,8 @@ import SelectAddress from "../components/Order/SelectAddress";
 import SelectShipping from "../components/Order/SelectShipping";
 import toRupiah from "@develoka/angka-rupiah-js";
 import { useNavigate } from "react-router-dom";
+import { extendTheme } from "@chakra-ui/react";
+import CheckoutMobile from "../components/Order/CheckoutMobile";
 
 const Checkout = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -163,194 +166,211 @@ const Checkout = () => {
     navigate("/");
   };
 
+  const breakpoints = {
+    sm: "320px",
+    md: "768px",
+    lg: "960px",
+    xl: "1200px",
+    "2xl": "1536px",
+  };
+
+  const theme = extendTheme({ breakpoints });
+  const [isMd] = useMediaQuery("(max-width: " + theme.breakpoints.md + ")");
+
   return (
     <>
-      <Flex direction={"column"} alignItems={"center"}>
-        <Text fontSize={"3xl"} mt={8} mb={4}>
-          Checkout
-        </Text>
-        <Box mb={1} w={"100vw"} px={6} py={6} bgColor={"secondary"}>
-          <SelectAddress />
-        </Box>
-        <TableContainer>
-          <Table
-            variant="unstyled"
-            color={"white"}
-            bgColor={"bgSecondary"}
-            border={"1px solid gray"}
-            w={"100vw"}
-          >
-            <Thead>
-              <Tr>
-                <Th></Th>
-                <Th color={"white"}>Product</Th>
-                <Th color={"white"} textAlign={"center"}>
-                  Price
-                </Th>
-                <Th color={"white"} textAlign={"center"}>
-                  Quantity
-                </Th>
-                <Th color={"white"} textAlign={"center"}>
-                  Subtotal
-                </Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {cart.length === 0 ? (
-                <Tr>
-                  <Td colSpan="6">
-                    <Text>No Product in the Cart!</Text>
-                  </Td>
-                </Tr>
-              ) : (
-                cart.map((item) =>
-                  item.quantity > 0 ? (
-                    <Tr key={item.productId}>
-                      <Td>
-                        <Image w={"50px"} src={`${API_URL}/${item.image}`} />
-                      </Td>
-                      <Td>{item.name}</Td>
-                      <Td textAlign={"center"}>
-                        {toRupiah(item.price, { dot: ".", floatingPoint: 0 })}
-                      </Td>
-                      <Td textAlign={"center"}>{item.quantity}</Td>
-                      <Td textAlign={"center"}>
-                        {toRupiah(item.subtotal, {
-                          dot: ".",
-                          floatingPoint: 0,
-                        })}
-                      </Td>
-                    </Tr>
-                  ) : null
-                )
-              )}
-            </Tbody>
-          </Table>
-        </TableContainer>
-        <Flex>
-          <Box
-            px={6}
-            py={6}
-            color={"white"}
-            mt={1}
-            // h={"15vh"}
-            w={"70vw"}
-            bgColor="bgSecondary"
-          >
-            <Flex justifyContent={"space-between"}>
-              <SelectShipping />
-              <Box align="right">
-                <Select
-                  bgColor={"#EDF2F7"}
-                  color={"black"}
-                  fontWeight={"bold"}
-                  w={"210px"}
-                  icon={<AiOutlineCaretDown />}
-                  placeholder="Payment Methods"
-                  onChange={handlePaymentMethodChange}
-                  value={selectedPayment ? selectedPayment.id : ""}
-                >
-                  {payment.map((item) => (
-                    <option key={item.id} value={item.id}>
-                      {item.name}
-                    </option>
-                  ))}
-                </Select>
-                {selectedPayment && (
-                  <Box key={selectedPayment.id}>
-                    <Text align={"right"} mt={2}>
-                      {/* Payment: {selectedPayment.name} */}
-                    </Text>
-                    Upload proof of payment <br /> on the transaction page
-                  </Box>
-                )}
-              </Box>
-            </Flex>
+      {isMd ? (
+        <CheckoutMobile />
+      ) : (
+        <Flex direction={"column"} alignItems={"center"}>
+          <Text fontSize={"3xl"} mt={8} mb={4}>
+            Checkout
+          </Text>
+          <Box mb={1} w={"100vw"} px={6} py={6} bgColor={"secondary"}>
+            <SelectAddress />
           </Box>
-          <Box
-            px={6}
-            py={6}
-            color={"white"}
-            borderLeft={"1px solid gray"}
-            mt={1}
-            w={"30vw"}
-            bgColor="bgSecondary"
-          >
-            <Flex justifyContent={"space-between"}>
-              <Text mt={1}>Subtotal Product:</Text>
-              <Text>{toRupiah(total, { dot: ".", floatingPoint: 0 })}</Text>
-            </Flex>
-            <Flex justifyContent={"space-between"}>
-              <Text mt={1}>Shipping Cost:</Text>
-              <Text>{toRupiah(shipping, { dot: ".", floatingPoint: 0 })}</Text>
-            </Flex>
-            <Flex justifyContent={"space-between"}>
-              <Text mt={1}>Tax:</Text>
-              <Text>Rp0</Text>
-            </Flex>
-            <Flex justifyContent={"space-between"}>
-              <Text fontWeight={"bold"} fontSize={"xl"} mt={4}>
-                Grand Total:
-              </Text>
-              <Text fontWeight={"bold"} fontSize={"xl"} mt={4}>
-                {toRupiah(grand, { dot: ".", floatingPoint: 0 })}
-              </Text>
-            </Flex>
-          </Box>
-        </Flex>
-        <Flex>
-          <Box mt={1} w={"70vw"}></Box>
-          <Box
-            color={"#34638a"}
-            mt={1}
-            mb={8}
-            w={"30vw"}
-            bgColor="textSecondary"
-          >
-            <Button
-              onClick={onOpen}
-              w={"100%"}
-              h={"50px"}
-              borderRadius={"none"}
-              variant={"success"}
-              // isLoading={isLoading}
+          <TableContainer>
+            <Table
+              variant="unstyled"
+              color={"white"}
+              bgColor={"bgSecondary"}
+              border={"1px solid gray"}
+              w={"100vw"}
             >
-              Place Order
-            </Button>
-          </Box>
-        </Flex>
-        <>
-          <AlertDialog
-            motionPreset="slideInBottom"
-            leastDestructiveRef={cancelRef}
-            onClose={onClose}
-            isOpen={isOpen}
-            isCentered
-          >
-            <AlertDialogOverlay />
+              <Thead>
+                <Tr>
+                  <Th></Th>
+                  <Th color={"white"}>Product</Th>
+                  <Th color={"white"} textAlign={"center"}>
+                    Price
+                  </Th>
+                  <Th color={"white"} textAlign={"center"}>
+                    Quantity
+                  </Th>
+                  <Th color={"white"} textAlign={"center"}>
+                    Subtotal
+                  </Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {cart.length === 0 ? (
+                  <Tr>
+                    <Td colSpan="6">
+                      <Text>No Product in the Cart!</Text>
+                    </Td>
+                  </Tr>
+                ) : (
+                  cart.map((item) =>
+                    item.quantity > 0 ? (
+                      <Tr key={item.productId}>
+                        <Td>
+                          <Image w={"50px"} src={`${API_URL}/${item.image}`} />
+                        </Td>
+                        <Td>{item.name}</Td>
+                        <Td textAlign={"center"}>
+                          {toRupiah(item.price, { dot: ".", floatingPoint: 0 })}
+                        </Td>
+                        <Td textAlign={"center"}>{item.quantity}</Td>
+                        <Td textAlign={"center"}>
+                          {toRupiah(item.subtotal, {
+                            dot: ".",
+                            floatingPoint: 0,
+                          })}
+                        </Td>
+                      </Tr>
+                    ) : null
+                  )
+                )}
+              </Tbody>
+            </Table>
+          </TableContainer>
+          <Flex>
+            <Box
+              px={6}
+              py={6}
+              color={"white"}
+              mt={1}
+              // h={"15vh"}
+              w={"70vw"}
+              bgColor="bgSecondary"
+            >
+              <Flex justifyContent={"space-between"}>
+                <SelectShipping />
+                <Box align="right">
+                  <Select
+                    bgColor={"#EDF2F7"}
+                    color={"black"}
+                    fontWeight={"bold"}
+                    w={"210px"}
+                    icon={<AiOutlineCaretDown />}
+                    placeholder="Payment Methods"
+                    onChange={handlePaymentMethodChange}
+                    value={selectedPayment ? selectedPayment.id : ""}
+                  >
+                    {payment.map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.name}
+                      </option>
+                    ))}
+                  </Select>
+                  {selectedPayment && (
+                    <Box key={selectedPayment.id}>
+                      <Text align={"right"} mt={2}>
+                        {/* Payment: {selectedPayment.name} */}
+                      </Text>
+                      Upload proof of payment <br /> on the transaction page
+                    </Box>
+                  )}
+                </Box>
+              </Flex>
+            </Box>
+            <Box
+              px={6}
+              py={6}
+              color={"white"}
+              borderLeft={"1px solid gray"}
+              mt={1}
+              w={"30vw"}
+              bgColor="bgSecondary"
+            >
+              <Flex justifyContent={"space-between"}>
+                <Text mt={1}>Subtotal Product:</Text>
+                <Text>{toRupiah(total, { dot: ".", floatingPoint: 0 })}</Text>
+              </Flex>
+              <Flex justifyContent={"space-between"}>
+                <Text mt={1}>Shipping Cost:</Text>
+                <Text>
+                  {toRupiah(shipping, { dot: ".", floatingPoint: 0 })}
+                </Text>
+              </Flex>
+              <Flex justifyContent={"space-between"}>
+                <Text mt={1}>Tax:</Text>
+                <Text>Rp0</Text>
+              </Flex>
+              <Flex justifyContent={"space-between"}>
+                <Text fontWeight={"bold"} fontSize={"xl"} mt={4}>
+                  Grand Total:
+                </Text>
+                <Text fontWeight={"bold"} fontSize={"xl"} mt={4}>
+                  {toRupiah(grand, { dot: ".", floatingPoint: 0 })}
+                </Text>
+              </Flex>
+            </Box>
+          </Flex>
+          <Flex>
+            <Box mt={1} w={"70vw"}></Box>
+            <Box
+              color={"#34638a"}
+              mt={1}
+              mb={8}
+              w={"30vw"}
+              bgColor="textSecondary"
+            >
+              <Button
+                onClick={onOpen}
+                w={"100%"}
+                h={"50px"}
+                borderRadius={"none"}
+                variant={"success"}
+                // isLoading={isLoading}
+              >
+                Place Order
+              </Button>
+            </Box>
+          </Flex>
+          <>
+            <AlertDialog
+              motionPreset="slideInBottom"
+              leastDestructiveRef={cancelRef}
+              onClose={onClose}
+              isOpen={isOpen}
+              isCentered
+            >
+              <AlertDialogOverlay />
 
-            <AlertDialogContent>
-              <AlertDialogHeader>Place Order?</AlertDialogHeader>
-              <AlertDialogCloseButton />
-              <AlertDialogBody>
-                Are you sure you want to place an order? or explore more
-                incredible items that could be yours today?
-              </AlertDialogBody>
-              <AlertDialogFooter>
-                <Button onClick={handleExplore}>Explore</Button>
-                <Button
-                  isLoading={isLoading}
-                  onClick={handleCheckout}
-                  colorScheme="green"
-                  ml={3}
-                >
-                  Place Order
-                </Button>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        </>
-      </Flex>
+              <AlertDialogContent>
+                <AlertDialogHeader>Place Order?</AlertDialogHeader>
+                <AlertDialogCloseButton />
+                <AlertDialogBody>
+                  Are you sure you want to place an order? or explore more
+                  incredible items that could be yours today?
+                </AlertDialogBody>
+                <AlertDialogFooter>
+                  <Button onClick={handleExplore}>Explore</Button>
+                  <Button
+                    isLoading={isLoading}
+                    onClick={handleCheckout}
+                    colorScheme="green"
+                    ml={3}
+                  >
+                    Place Order
+                  </Button>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </>
+        </Flex>
+      )}
     </>
   );
 };

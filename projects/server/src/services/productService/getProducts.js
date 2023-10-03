@@ -42,11 +42,11 @@ async function getProducts(query) {
     attributes: {
       include: [
         [col("_category.name"), "category"],
-        [cast(fn("sum", col("product_warehouses.stock")), "int"), "stock"],
+        [fn("sum", col("product_warehouses.stock")), "stock"],
       ],
       exclude: ["id_category"],
     },
-    group: ["product_warehouses.id_product"],
+    group: [col("product_warehouses.id_product")],
     order: [[order, sort]],
     where,
     subQuery: false,

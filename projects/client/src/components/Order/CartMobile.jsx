@@ -119,7 +119,13 @@ const CartMobile = () => {
           <Box ml={2} mt={2} bg={"bgSecondary"} color={"white"}>
             <Flex align={"center"} justifyContent={"space-between"}>
               <Flex>
-                <Image h={"70px"} mt={1} ml={1} src={item.image} alt="iamge" />
+                <Image
+                  w={"75px"}
+                  mt={1}
+                  ml={1}
+                  src={`${API_URL}/${item.image}`}
+                  alt="iamge"
+                />
                 <Flex direction={"column"} justifyContent={"center"}>
                   <Text mt={1} fontSize={"sm"} fontWeight={"bold"} ml={3}>
                     {item.name.length > 18

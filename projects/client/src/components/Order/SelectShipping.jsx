@@ -10,11 +10,14 @@ import {
   Text,
   Button,
   Flex,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import { AiOutlineCaretDown } from "react-icons/ai";
 import axios from "axios";
 import CalcDistance from "./CalcDistance";
 import toRupiah from "@develoka/angka-rupiah-js";
+import { extendTheme } from "@chakra-ui/react";
+
 const SelectShipping = () => {
   const API_URL = process.env.REACT_APP_API_BASE_URL;
   const [courierData, setCourierData] = useState([]);
@@ -127,6 +130,17 @@ const SelectShipping = () => {
     setSelectedService(selected);
   };
 
+  const breakpoints = {
+    sm: "320px",
+    md: "768px",
+    lg: "960px",
+    xl: "1200px",
+    "2xl": "1536px",
+  };
+
+  const theme = extendTheme({ breakpoints });
+  const [isMd] = useMediaQuery("(max-width: " + theme.breakpoints.md + ")");
+
   return (
     <Flex direction={"column"}>
       <CalcDistance />
@@ -141,7 +155,7 @@ const SelectShipping = () => {
                 <MenuGroup color={"black"} title={courier.toUpperCase()}>
                   {methods.map((method) => (
                     <MenuItem
-                    color={"black"}
+                      color={"black"}
                       ml={1}
                       key={method.service}
                       onClick={() => handleMenuItemSelect(method.service)}
@@ -157,7 +171,7 @@ const SelectShipping = () => {
           )}
         </MenuList>
       </Menu>
-      <Box mt={2}>
+      <Box fontSize={isMd ? "sm" : ""} mt={2}>
         {selectedService ? (
           <>
             <Text fontWeight={"bold"}>
