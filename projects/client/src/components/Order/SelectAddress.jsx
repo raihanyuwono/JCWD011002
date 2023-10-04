@@ -264,20 +264,21 @@ const SelectAddress = () => {
                 {selectAddress.name}
               </Text>
               <Text fontSize={isMd ? "sm" : ""}>
-                {selectAddress.full_address}, {selectAddress.city_name},{" "}
-                {selectAddress.province}, {selectAddress.postal_code}
+                {selectAddress.full_address}, {selectAddress.city_name}{" "}
+                {selectAddress.province} {selectAddress.postal_code}
               </Text>
             </Box>
           )}
         </Box>
         <Button
-          ml={1}
+          ml={2}
+          p={4}
           size={isMd ? "sm" : "md"}
           fontSize={isMd ? "sm" : ""}
           mt={2}
           onClick={openSelectAddressModal}
         >
-          Change
+          Select
         </Button>
       </Flex>
     </Box>

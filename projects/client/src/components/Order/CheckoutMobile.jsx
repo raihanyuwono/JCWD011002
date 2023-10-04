@@ -27,7 +27,7 @@ import toRupiah from "@develoka/angka-rupiah-js";
 import { useNavigate } from "react-router-dom";
 import { extendTheme } from "@chakra-ui/react";
 
-const Checkout = () => {
+const CheckoutMobile = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef();
   const API_URL = process.env.REACT_APP_API_BASE_URL;
@@ -47,6 +47,8 @@ const Checkout = () => {
   const [payment, setPayment] = useState([]);
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [dataAddress, setDataAddress] = useState([]);
+
   const handlePaymentMethodChange = (event) => {
     const selectedMethodId = event.target.value;
     const selectedMethod = payment.find(
@@ -66,6 +68,26 @@ const Checkout = () => {
     };
   }, []);
 
+  useEffect(() => {
+    viewCart();
+    getTotal();
+    fetchAddress();
+    getPayment();
+  }, []);
+
+  const fetchAddress = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/address`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setDataAddress(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const viewCart = async () => {
     const response = await axios.get(`${API_URL}/order/cart/${userId}`);
     setCart(response.data.data);
@@ -74,6 +96,30 @@ const Checkout = () => {
     const response = await axios.get(`${API_URL}/order/${userId}`);
     setTotal(response.data.data.total);
   };
+  const emptyAddress = `{
+    "name": "",
+    "province": "",
+    "city_name": "Please Add New Address!",
+    "postal_code": "",
+    "full_address": "Address Not Found"
+  }`;
+
+  const noDefault = `{
+    "name": "",
+    "province": "",
+    "city_name": "Please Select Address!",
+    "postal_code": "",
+    "full_address": "No Default"
+  }`;
+
+  let add = localStorage.getItem("selectedAddress");
+  if (dataAddress.length === 0) {
+    localStorage.setItem("selectedAddress", emptyAddress);
+  } else if (add === "undefined") {
+    localStorage.setItem("selectedAddress", noDefault);
+  } else {
+    localStorage.getItem("selectedAddress");
+  }
 
   const address = JSON.parse(localStorage.getItem("selectedAddress"));
   const { province, city_name, full_address, postal_code } = address;
@@ -218,9 +264,6 @@ const Checkout = () => {
                         floatingPoint: 0,
                       })}
                     </Text>
-                    {/* <Text align={"right"} fontWeight={"bold"} fontSize={"sm"}>
-            aaaaaaaa
-          </Text> */}
                   </Flex>
                 </Flex>
               </Box>
@@ -357,4 +400,4 @@ const Checkout = () => {
   );
 };
 
-export default Checkout;
+export default CheckoutMobile;

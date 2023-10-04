@@ -12,7 +12,6 @@ import {
   Flex,
   useMediaQuery,
   Divider,
-  
 } from "@chakra-ui/react";
 import { AiOutlineCaretDown } from "react-icons/ai";
 import axios from "axios";
