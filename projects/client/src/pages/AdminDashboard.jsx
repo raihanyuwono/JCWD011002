@@ -40,7 +40,7 @@ const menuList = [
   createMenuSet("Users", <IcUser />, ACCESS_ADMIN, "/user"),
   createMenuSet("Warehouses", <IcWarehouse />, ACCESS_ADMIN, "/warehouse"),
   createMenuSet("Categories", <IcCategory />, ACCESS_ADMIN, "/category"),
-  createMenuSet("Products", <IcProduct />, ACCESS_ADMIN, "/product"),
+  createMenuSet("Products", <IcProduct />, ACCESS_ALL_ADMIN, "/product"),
   createMenuSet("Mutations", <IcMutation />, ACCESS_ALL_ADMIN, "/stockmutation"),
   createMenuSet("Orders", <IcOrder />, ACCESS_ADMIN, "/order"),
   createMenuSet("Reports", <IcReport />, ACCESS_ALL_ADMIN, "/report"),

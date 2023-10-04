@@ -9,11 +9,6 @@ import {
   Box,
   Image,
   Text,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionIcon,
-  AccordionPanel,
   Button,
   Divider,
   Input,
@@ -22,9 +17,7 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import axios from 'axios';
-
-const { HiOutlinePencilAlt } = require('react-icons/hi');
-
+import jwtDecode from 'jwt-decode';
 const DetailProduct = ({ isOpen, onClose, product, fetchProduct }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedProduct, setEditedProduct] = useState({
@@ -40,6 +33,9 @@ const DetailProduct = ({ isOpen, onClose, product, fetchProduct }) => {
   const [categories, setCategories] = useState([]);
   const toast = useToast();
   const [currentProductImage, setCurrentProductImage] = useState(''); // Menyimpan URL gambar produk saat ini
+  const token = localStorage.getItem('token');
+  const decodedToken = jwtDecode(token);
+  console.log("ini decoded token", decodedToken)
 
   useEffect(() => {
     // Ketika komponen dimuat, set URL gambar produk saat ini
@@ -298,66 +294,36 @@ const DetailProduct = ({ isOpen, onClose, product, fetchProduct }) => {
                 </>
               )}
             </Box>
-            <Box w={'full'} bg={'darkBlue'} color={'white'} py={4}>
-              {isEditing ? (
-                <>
+            {decodedToken.role === 'admin' && (
+              <Box w={'full'} bg={'darkBlue'} color={'white'} py={4}>
+                {isEditing ? (
+                  <>
+                    <Button
+                      w={'full'}
+                      mb={2}
+                      colorScheme="green"
+                      onClick={saveChanges}
+                    >
+                      Save
+                    </Button>
+                    <Button w={'full'} mb={2} onClick={() => setIsEditing(false)}>
+                      Cancel
+                    </Button>
+                  </>
+                ) : (
                   <Button
                     w={'full'}
                     mb={2}
                     colorScheme="green"
-                    onClick={saveChanges}
+                    onClick={startEditing}
                   >
-                    Save
+                    Edit
                   </Button>
-                  <Button w={'full'} mb={2} onClick={() => setIsEditing(false)}>
-                    Cancel
-                  </Button>
-                </>
-              ) : (
-                <Button
-                  w={'full'}
-                  mb={2}
-                  colorScheme="green"
-                  onClick={startEditing}
-                >
-                  Edit
-                </Button>
-              )}
-            </Box>
+                )}
+              </Box>
+            )}
+
           </Box>
-          {/* <Accordion allowToggle mt={2} mb={20}>
-            <AccordionItem>
-              <h2>
-                <AccordionButton>
-                  <Box flex="1" textAlign="left">
-                    Stock Details
-                  </Box>
-                  <AccordionIcon />
-                </AccordionButton>
-              </h2>
-              <AccordionPanel pb={4}>
-                {product?.product_warehouses.map((warehouse, index) => {
-                  return (
-                    <Box
-                      key={warehouse.id || index}
-                      display="flex"
-                      justifyContent={"space-between"}
-                      alignItems="center"
-                      mb={2}
-                    >
-                      <Box>
-                        <Text>{warehouse?.warehouse?.name}</Text>
-                        <Text>{warehouse?.stock} pcs</Text>
-                      </Box>
-                      <Box>
-                        <Button colorScheme='green'><HiOutlinePencilAlt /></Button>
-                      </Box>
-                    </Box>
-                  );
-                })}
-              </AccordionPanel>
-            </AccordionItem>
-          </Accordion> */}
         </DrawerBody>
       </DrawerContent>
     </Drawer>

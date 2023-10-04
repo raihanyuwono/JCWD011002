@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios'; // Import axios untuk membuat permintaan HTTP
+import axios from 'axios';
 import {
   Drawer,
   DrawerOverlay,
@@ -18,67 +18,60 @@ import {
   AccordionButton,
   AccordionIcon,
   AccordionPanel,
-  DrawerFooter,
   HStack,
   useToast,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter
+  Flex,
 } from '@chakra-ui/react';
-import { ChevronUpIcon, EditIcon } from '@chakra-ui/icons';
+import AddStockConfirm from './AddStockConfirm';
+import ReduceStockConfirm from './ReduceStockConfirm';
 
 const EditStockDrawer = ({ isOpen, onClose, products, fetchProducts, fetchDetailStock }) => {
-  const [quantityToAdd, setQuantityToAdd] = useState(null); // State untuk jumlah yang ingin ditambahkan
-  const [selectedWarehouse, setSelectedWarehouse] = useState(null); // State untuk warehouse yang dipilih
-  const [selectedProduct, setSelectedProduct] = useState(null); // State untuk produk yang dipilih
-  const [stockProduct, setStockProduct] = useState(null); // State untuk stok produk
+  const [quantityToAdd, setQuantityToAdd] = useState(null);
+  const [selectedWarehouse, setSelectedWarehouse] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const [isReducing, setIsReducing] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isReduceModalOpen, setIsReduceModalOpen] = useState(false);
-  const handleAddModalOpen = (warehouseId, productId, stock) => {
-    setIsAddModalOpen(true);
-    setSelectedWarehouse(warehouseId);
-
-  }
-  console.log("selected warehouse", selectedWarehouse)
   const quantityToAddAsInt = parseInt(quantityToAdd, 10);
+
   const toast = useToast();
-  // Fungsi untuk mengirim permintaan ke backend
+
+  const validateAndOpenModal = (warehouse, stock, isReducing) => {
+
+    if (isReducing && quantityToAddAsInt > stock) {
+      toast({
+        title: 'stock not enough',
+        status: 'error',
+        duration: 3000,
+        isClosable: true
+      })
+      return;
+    }
+
+    setSelectedProduct(warehouse?.id_product);
+    setSelectedWarehouse(warehouse?.warehouse);
+    setIsReducing(isReducing);
+    isReducing ? setIsReduceModalOpen(true) : setIsAddModalOpen(true);
+  };
+
+
   const updateStock = async () => {
     try {
-      if (isReducing && quantityToAddAsInt > stockProduct) {
-        toast({
-          title: 'Failed to reduce stock',
-          description: 'The quantity to reduce exceeds the available stock.',
-          status: 'error',
-          duration: 3000,
-          isClosable: true,
-        });
-        return; // Hentikan eksekusi jika input melebihi stok
-      }
-      // Buat objek data yang berisi informasi yang diperlukan
+
       const data = {
         productId: selectedProduct,
-        warehouseId: selectedWarehouse,
+        warehouseId: selectedWarehouse?.id,
         addition: isReducing ? null : quantityToAddAsInt,
         subtraction: isReducing ? quantityToAddAsInt : null,
       };
-
-      // Kirim permintaan ke backend
       const response = await axios.patch('http://localhost:8000/api/product/stock', data, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         }
       });
 
-      // Tambahkan pemrosesan respons sesuai kebutuhan Anda, misalnya memperbarui tampilan stok produk
-      console.log('Respon dari server:', response.data);
       if (response.status === 200) {
-        setQuantityToAdd("");
+        setQuantityToAdd(null || "");
         fetchProducts();
         fetchDetailStock(products.id);
         toast({
@@ -106,7 +99,7 @@ const EditStockDrawer = ({ isOpen, onClose, products, fetchProducts, fetchDetail
       onClose={onClose}
     >
       <DrawerOverlay />
-      <DrawerContent bg={"darkBlue"}>
+      <DrawerContent bg={"darkBlue"} color={"white"}>
         <DrawerCloseButton />
         <DrawerHeader>{products?.name}</DrawerHeader>
 
@@ -119,14 +112,14 @@ const EditStockDrawer = ({ isOpen, onClose, products, fetchProducts, fetchDetail
                   <h2>
                     <AccordionButton>
                       <Box flex='1' textAlign='left'>
-                        <Table>
-                          <Td>{warehouse?.warehouse?.name}</Td>
-                          <Td>{warehouse?.stock} pcs</Td>
-                        </Table>
+                        <Flex justifyContent={"space-between"}>
+                          <Box>{warehouse?.warehouse?.name}</Box>
+                          <Box mr={4}>{warehouse?.stock} pcs</Box>
+                        </Flex>
                       </Box>
-                      <Button color={"white"}>
-                        <AccordionIcon />
-                      </Button>
+
+                      <AccordionIcon />
+
                     </AccordionButton>
                   </h2>
                   <AccordionPanel>
@@ -139,101 +132,37 @@ const EditStockDrawer = ({ isOpen, onClose, products, fetchProducts, fetchDetail
                           value={quantityToAdd}
                           onChange={(e) => setQuantityToAdd(e.target.value)}
                         />
-                        <Input
-                          type='number'
-                          value={warehouse?.id_warehouse}
-                          style={{ display: 'none' }}
-                        />
-                        <Input
-                          type='number'
-                          value={warehouse?.id_product}
-                          style={{ display: 'none' }}
-                        />
+
                       </Box>
                       <HStack mt={2}>
                         <Button w={"100%"}
+                          isDisabled={!quantityToAdd || quantityToAdd === null}
                           colorScheme='red'
-                          // onClick={() => {
-                          //   // Panggil fungsi updateStock saat pengguna mengklik tombol "reduce"
-                          //   const warehouseId = warehouse?.id_warehouse;
-                          //   const productId = warehouse?.id_product;
-                          //   const stock = warehouse?.stock;
-                          //   updateStock(productId, warehouseId, quantityToAdd, true, stock);
-                          // }}
                           onClick={() => {
-                            setIsReduceModalOpen(true);
+                            validateAndOpenModal(warehouse, warehouse?.stock, true)
                           }}
                         >
                           reduce
                         </Button>
                         <Button w={"100%"}
+                          isDisabled={!quantityToAdd || quantityToAdd === null}
                           colorScheme='green'
-                          // onClick={() => {
-                          //   // Panggil fungsi updateStock saat pengguna mengklik tombol "add"
-                          //   const warehouseId = warehouse?.id_warehouse;
-                          //   const productId = warehouse?.id_product;
-                          //   const stock = warehouse?.stock;
-                          //   updateStock(productId, warehouseId, quantityToAdd, false, stock);
-                          // }}
                           onClick={() => {
-                            setSelectedProduct(warehouse?.id_product);
-                            setStockProduct(warehouse?.stock);
-                            setSelectedWarehouse(warehouse?.id_warehouse);
-                            setIsReducing(false)
-                            setIsAddModalOpen(true);
+                            validateAndOpenModal(warehouse, warehouse?.stock, false)
                           }}
                         >
                           add
                         </Button>
                       </HStack>
                     </form>
-                    <Modal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)}>
-
-                      <ModalOverlay />
-                      <ModalContent>
-                        <ModalHeader>Modal title</ModalHeader>
-                        <ModalCloseButton />
-                        <ModalBody>
-                          <Text>Modal body text goes here.</Text>
-                        </ModalBody>
-                        <ModalFooter>
-                          <Button colorScheme='blue' mr={3} onClick={() => setIsAddModalOpen(false)}>
-                            Cancel
-                          </Button>
-                          <Button variant='ghost'
-                            onClick={() => {
-                              updateStock();
-                              setIsAddModalOpen(false);
-                            }}>Yes</Button>
-                        </ModalFooter>
-                      </ModalContent>
-                    </Modal>
+                    <AddStockConfirm isAddModalOpen={isAddModalOpen} setIsAddModalOpen={setIsAddModalOpen} products={products} quantityToAdd={quantityToAdd} selectedWarehouse={selectedWarehouse} setQuantityToAdd={setQuantityToAdd} updateStock={updateStock} />
+                    <ReduceStockConfirm isReduceModalOpen={isReduceModalOpen} setIsReduceModalOpen={setIsReduceModalOpen} products={products} quantityToAdd={quantityToAdd} selectedWarehouse={selectedWarehouse} setQuantityToAdd={setQuantityToAdd} updateStock={updateStock} />
                   </AccordionPanel>
                 </AccordionItem>
               );
             })}
           </Accordion>
         </DrawerBody>
-
-
-
-        {/* <DrawerFooter>
-          <Button
-            variant='outline'
-            mr={3}
-            onClick={onClose}
-          >
-            Cancel
-          </Button>
-          <Button
-            colorScheme='blue'
-            onClick={() => {
-              // Panggil fungsi updateStock di sini jika Anda ingin menyimpan perubahan stok secara keseluruhan
-            }}
-          >
-            Save
-          </Button>
-        </DrawerFooter> */}
       </DrawerContent>
     </Drawer>
   );

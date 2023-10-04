@@ -3,12 +3,23 @@ const Product = db.product
 const Warehouse = db.warehouse
 const ProductWarehouse = db.product_warehouse
 const Category = db.category
+const Admin = db.admin
 const { messages } = require('../../helpers')
 const { Op } = require('sequelize')
 
 const getProductById = async (req, res) => {
   try {
+    const id_admin = req.account.id
+    const role = req.account.role
+    console.log("ini id dan role", id_admin, role)
     const { id } = req.params
+
+    const admin = await Admin.findOne({
+      where: {
+        id_user: id_admin,
+      },
+    })
+    console.log("ini admin", admin)
     const product = await Product.findOne({
       where: { id }, include: [
         {
@@ -16,7 +27,9 @@ const getProductById = async (req, res) => {
           attributes: ["name"]
         },
         {
-          model: ProductWarehouse,
+          model: ProductWarehouse, where: {
+            id_warehouse: role === "admin warehouse" ? admin.id_warehouse : { [Op.not]: null },
+          },
           attributes: ["id_warehouse", "id_product", "stock"],
           include: {
             model: Warehouse,

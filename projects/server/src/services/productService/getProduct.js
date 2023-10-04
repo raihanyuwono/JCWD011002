@@ -10,6 +10,7 @@ const { Op } = require('sequelize')
 const getProductList = async (req, res) => {
   try {
     const { id, role } = req.account
+    console.log("ini id dan role", id, role)
     const { sort, price, name, id_category, search, page, limit, status } = req.query;
     const admin = await Admin.findOne({
       where: {
