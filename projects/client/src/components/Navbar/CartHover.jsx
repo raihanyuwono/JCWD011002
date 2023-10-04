@@ -65,7 +65,7 @@ const CartHover = () => {
             justifyContent={"space-between"}
             alignItems="center"
           >
-            <Image width="50px" src={item.image} />
+            <Image width="50px" src={`${API_URL}/${item.image}`} />
             <Flex direction="column">
               <Text fontWeight={"bold"} fontSize={"sm"} ml={4}>
                 {item.name.length > 30

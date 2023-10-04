@@ -37,7 +37,7 @@ const Charts = () => {
           labels: labels,
           datasets: [
             {
-              label: "Total Sales",
+              label: "All Time Sales",
               data: totalSales,
               backgroundColor: "#34638A",
               borderColor: "rgba(75, 192, 192, 1)",
@@ -50,10 +50,19 @@ const Charts = () => {
           scales: {
             y: {
               beginAtZero: true,
+              ticks: {
+                color: "white",
+              },
+            },
+            x: {
+              ticks: {
+                color: "white",
+              },
             },
           },
           plugins: {
             datalabels: {
+              color: "#ffffff",
               anchor: "end",
               align: "end",
               offset: -5,
@@ -68,8 +77,13 @@ const Charts = () => {
   }, [data]);
 
   return (
-    <Box w={"80vw"}>
-      <canvas ref={chartRef} width={"full"} height={100}></canvas>
+    <Box w={"80vw"} borderRadius={"10px"}>
+      <canvas
+        style={{ backgroundColor: "#393939", padding: "20px" }}
+        ref={chartRef}
+        width={"full"}
+        height={100}
+      ></canvas>
     </Box>
   );
 };

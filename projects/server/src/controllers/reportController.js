@@ -127,6 +127,30 @@ const getMonthlySales = async (req, res) => {
   }
 };
 
+const getSalesProductMonthly = async (req, res) => {
+  try {
+    const {
+      page,
+      pageSize,
+      filterByMonth,
+      filterByYear,
+      orderBy,
+      warehouseId,
+    } = req.query;
+    const result = await reportService.getSalesProductMonthly(
+      page,
+      pageSize,
+      filterByMonth,
+      filterByYear,
+      orderBy,
+      warehouseId
+    );
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+};
+
 module.exports = {
   getStockHistory,
   getAllStockHistory,
@@ -134,4 +158,5 @@ module.exports = {
   getSalesProduct,
   getSalesCategory,
   getMonthlySales,
+  getSalesProductMonthly,
 };

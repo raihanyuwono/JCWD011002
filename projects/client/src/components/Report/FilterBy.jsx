@@ -1,5 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Flex, Select } from "@chakra-ui/react";
+
+function getMonthAndYear() {
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth() + 1;
+  const currentYear = currentDate.getFullYear();
+
+  return { currentMonth, currentYear };
+}
+
 const FilterBy = ({
   filterByMonth,
   setFilterByMonth,
@@ -13,6 +22,13 @@ const FilterBy = ({
   const handleYearChange = (e) => {
     setFilterByYear(e.target.value);
   };
+
+  useEffect(() => {
+    const { currentMonth, currentYear } = getMonthAndYear();
+    setFilterByMonth(currentMonth.toString());
+    setFilterByYear(currentYear.toString()); 
+  }, [setFilterByMonth, setFilterByYear]);
+
   return (
     <Flex gap={2}>
       <Select
