@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import { Box, Divider, Flex, Image, Text, Tooltip } from "@chakra-ui/react";
+import {
+  Box,
+  Divider,
+  Flex,
+  Image,
+  Text,
+  Tooltip,
+  useMediaQuery,
+  extendTheme,
+} from "@chakra-ui/react";
 import { Badge } from "@chakra-ui/react";
 import Pagination from "../Pagination";
 import SearchBar from "../SearchBar";
@@ -73,18 +82,29 @@ const ToPay = () => {
     setEndDate(end);
   };
 
+  const breakpoints = {
+    sm: "320px",
+    md: "768px",
+    lg: "960px",
+    xl: "1200px",
+    "2xl": "1536px",
+  };
+
+  const theme = extendTheme({ breakpoints });
+  const [isMd] = useMediaQuery("(max-width: " + theme.breakpoints.md + ")");
+
   return (
     <>
-      <Flex justifyContent={"space-between"} mb={4}>
-        <Box w={"30vw"}>
-          <SearchBar onSearch={setSearchQuery} />
-        </Box>
-        <Box ml={2}>
-          <FilterBy
-            onFilterChange={setFilterBy}
-            onDateRangeFilter={handleDateRangeFilter}
-          />
-        </Box>
+      <Flex
+        direction={isMd ? "column" : "row"}
+        justifyContent={"space-between"}
+        mb={2}
+      >
+        <SearchBar onSearch={setSearchQuery} />
+        <FilterBy
+          onFilterChange={setFilterBy}
+          onDateRangeFilter={handleDateRangeFilter}
+        />
       </Flex>
       {data.map((item) => (
         <Box
@@ -92,16 +112,27 @@ const ToPay = () => {
           mb={2}
           bg={"bgSecondary"}
           p={4}
-          w={"70vw"}
+          w={isMd ? "100vw" : "70vw"}
           color={"white"}
         >
           <Flex justifyContent={"space-between"}>
             <Flex>
-              <Text fontWeight={"bold"}>{item.txn_date}&nbsp;</Text>
-              <Badge alignSelf={"center"} colorScheme="green">
-                {item.status}
+              <Text fontSize={isMd ? "sm" : "md"} fontWeight={"bold"}>
+                {item.txn_date}&nbsp;
+              </Text>
+              <Badge
+                alignSelf={"center"}
+                colorScheme="green"
+              >
+                {item.status === "Menunggu Pembayaran" ? "To Pay" : ""}
               </Badge>
-              <Text>&nbsp;MWECG2/ID/TXN{item.transactionId}</Text>
+              {isMd ? (
+                <></>
+              ) : (
+                <Text fontSize={isMd ? "sm" : "md"}>
+                  &nbsp;MWECG2/ID/TXN{item.transactionId}
+                </Text>
+              )}
             </Flex>
             <Flex>
               <Tooltip
@@ -117,18 +148,31 @@ const ToPay = () => {
                     .padStart(2, "0")}
                 </Text>
               </Tooltip>
-              <ButtonUpload transactionId={item.transactionId} />
-              &nbsp;
-              <CancelOrder transactionId={item.transactionId} />
+              {isMd ? (
+                <>
+                  <ButtonUpload transactionId={item.transactionId} />
+                  &nbsp;
+                  <CancelOrder transactionId={item.transactionId} />
+                </>
+              ) : (
+                <>
+                  <ButtonUpload transactionId={item.transactionId} />
+                  &nbsp;
+                  <CancelOrder transactionId={item.transactionId} />
+                </>
+              )}
             </Flex>
           </Flex>
           <Divider mt={2} mb={2} />
           <Flex align={"center"} justifyContent={"space-between"}>
             <Flex>
-              <Image borderRadius={"5px"} w={"75px"}
-                src={`${API_URL}/${item.product_image}`} />
+              <Image
+                borderRadius={"5px"}
+                w={isMd ? "60px" : "75px"}
+                src={`${API_URL}/${item.product_image}`}
+              />
               <Flex direction={"column"}>
-                <Text ml={4} fontWeight={"bold"}>
+                <Text ml={4} fontSize={isMd ? "sm" : "md"} fontWeight={"bold"}>
                   {item.product_name}
                 </Text>
                 {item.numProducts > 1 ? (
@@ -142,7 +186,7 @@ const ToPay = () => {
             </Flex>
             <Flex direction={"column"}>
               <Text fontSize={"sm"}>Total:</Text>
-              <Text fontWeight={"bold"} fontSize={"xl"}>
+              <Text fontSize={isMd ? "md" : "xl"} fontWeight={"bold"}>
                 {toRupiah(item.total, { dot: ".", floatingPoint: 0 })}
               </Text>
               <SeeDetailTxn transactionId={item.transactionId} />

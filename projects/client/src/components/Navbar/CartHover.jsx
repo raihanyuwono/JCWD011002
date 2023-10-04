@@ -18,6 +18,8 @@ const CartHover = () => {
   const [total, setTotal] = useState(0);
   const API_URL = process.env.REACT_APP_API_BASE_URL;
   const userId = jwt_decode(localStorage.getItem("token")).id;
+  const [showSpinner, setShowSpinner] = useState(true);
+
   const viewCart = async () => {
     try {
       const response = await axios.get(`${API_URL}/order/cart/${userId}`);
@@ -36,6 +38,7 @@ const CartHover = () => {
     const intervalId = setInterval(() => {
       getCartTotal();
       viewCart();
+      setShowSpinner(false);
     }, 1500);
     return () => clearInterval(intervalId);
   }, []);
@@ -44,7 +47,7 @@ const CartHover = () => {
     <>
       {cartLength === 0 ? (
         <Box display={"flex"} justifyContent={"center"} w={"350px"}>
-          <Spinner color="blue.500" />
+          {showSpinner ? <Spinner color="blue.500" /> : <Text>Cart Empty</Text>}
         </Box>
       ) : (
         <Flex justifyContent={"space-between"}>
