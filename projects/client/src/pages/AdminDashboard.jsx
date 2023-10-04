@@ -15,6 +15,7 @@ import { SlGraph as IcReport } from "react-icons/sl";
 import Dashboard from "../components/AdminDashboard/Menu/Dashboard";
 import ManageUsers from "../components/AdminDashboard/Menu/ManageUser";
 import Report from "../pages/Report";
+import ManageOrder from "../components/AdminDashboard/Menu/ManageOrder";
 
 const ACCESS_ADMIN = ["admin"];
 const ACCESS_ALL_ADMIN = ["admin", "admin warehouse"];
@@ -65,7 +66,7 @@ const menuList = [
     ACCESS_ALL_ADMIN,
     dummyPage("Manage Mutation")
   ),
-  createMenuSet("Orders", <IcOrder />, ACCESS_ADMIN, dummyPage("Manage Order")),
+  createMenuSet("Orders", <IcOrder />, ACCESS_ADMIN, <ManageOrder />),
   createMenuSet("Reports", <IcReport />, ACCESS_ALL_ADMIN, <Report />),
 ];
 

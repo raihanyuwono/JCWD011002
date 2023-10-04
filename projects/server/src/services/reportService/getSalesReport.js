@@ -76,6 +76,7 @@ const getSalesReport = async (
               include: [
                 {
                   model: db.category,
+                  as: "_category",
                   attributes: ["id", "name"],
                 },
                 {

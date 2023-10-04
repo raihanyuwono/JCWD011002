@@ -80,7 +80,7 @@ const getSalesCategory = async (
           sequelize.fn("SUM", sequelize.literal("product.price * qty")),
           "total_price_sold",
         ],
-        [sequelize.col("product.category.name"), "category_name"],
+        [sequelize.col("product._category.name"), "category_name"],
         [
           sequelize.literal(
             "GROUP_CONCAT(DISTINCT productWarehouse.id_warehouse)"
@@ -95,6 +95,7 @@ const getSalesCategory = async (
           include: [
             {
               model: category,
+              as: "_category",
               attributes: [],
             },
           ],

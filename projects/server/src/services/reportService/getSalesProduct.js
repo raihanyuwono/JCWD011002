@@ -94,6 +94,7 @@ const getSalesProduct = async (
           ],
           include: {
             model: category,
+            as: "_category",
             attributes: ["name"],
           },
         },
