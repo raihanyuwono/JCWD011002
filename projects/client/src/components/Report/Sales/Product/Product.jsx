@@ -47,7 +47,7 @@ const Product = () => {
         {
           params: {
             page: currentPage,
-            pageSize: 10,
+            pageSize: 10000,
             orderBy,
             filterByMonth,
             filterByYear,

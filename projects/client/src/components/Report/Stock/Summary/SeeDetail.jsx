@@ -4,45 +4,70 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
   useDisclosure,
   Button,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
   Select,
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
-  Box,
   Td,
   TableCaption,
   TableContainer,
-  Text,
   Flex,
-  Input,
+  ModalFooter,
 } from "@chakra-ui/react";
 import { BsBoxArrowInUpRight } from "react-icons/bs";
 import SeeDetailMutation from "./SeeDetailMutation";
 
 const SeeDetail = ({ warehouse_name, month }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const mergeMonthData = (monthData) => {
+    const allMonths = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    const currentYear = new Date().getFullYear();
+    return allMonths.map((monthName) => {
+      const foundMonth = monthData.find((item) => item?.month === monthName);
+
+      if (foundMonth) {
+        return foundMonth;
+      } else {
+        return {
+          month: monthName,
+          year: currentYear,
+          sum_addition_qty: 0,
+          sum_subtraction_qty: 0,
+          product_stock_history: [],
+        };
+      }
+    });
+  };
+
+  const mergedMonthData = mergeMonthData(month);
 
   return (
     <>
       <Button size={"md"} variant={"edit"} onClick={onOpen}>
-        Detail&nbsp;
+        Show&nbsp;
         <BsBoxArrowInUpRight size={18} />
       </Button>
       <Modal
-        size={"3xl"}
+        size={"5xl"}
         scrollBehavior={"inside"}
         onClose={onClose}
         isOpen={isOpen}
@@ -68,7 +93,12 @@ const SeeDetail = ({ warehouse_name, month }) => {
               </Select>
             </Flex>
             <TableContainer>
-              <Table size="sm">
+              <Table
+                variant="striped"
+                colorScheme="whiteAlpha"
+                bgColor={"bgSecondary"}
+                size="sm"
+              >
                 <TableCaption color={"white"}>
                   Only displays data for the current year, use filters for
                   previous years
@@ -87,19 +117,23 @@ const SeeDetail = ({ warehouse_name, month }) => {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {month?.map((item) => (
-                    <Tr key={item?.month_id}>
+                  {mergedMonthData.map((item, index) => (
+                    <Tr key={index}>
                       <Td>{item?.month}</Td>
                       <Td>{item?.year}</Td>
                       <Td isNumeric>{item?.sum_addition_qty}</Td>
                       <Td isNumeric>{item?.sum_subtraction_qty}</Td>
-                      <Td>
-                        <SeeDetailMutation
-                        warehouse_name={warehouse_name}
-                          month_name={item?.month}
-                          year={item?.year}
-                          mutation={item?.product_stock_history}
-                        />
+                      <Td textAlign={"center"}>
+                        {item.product_stock_history.length > 0 ? (
+                          <SeeDetailMutation
+                            warehouse_name={warehouse_name}
+                            month_name={item?.month}
+                            year={item?.year}
+                            mutation={item?.product_stock_history}
+                          />
+                        ) : (
+                          <></>
+                        )}
                       </Td>
                     </Tr>
                   ))}

@@ -34,7 +34,7 @@ const SalesCard = () => {
   const [catBestSeller, setCatBestSeller] = useState([]);
   const [allTimeSales, setAllTimeSales] = useState([]);
   const [data, setData] = useState([]);
-
+  console.log(currentMonthSales);
   const fetchSalesMonth = async () => {
     try {
       const response = await axios.get(

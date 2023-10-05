@@ -3,7 +3,7 @@ const models = require("../../database");
 
 const getSalesProductMonthly = async (
   page = 1,
-  pageSize = 10,
+  pageSize = 100000,
   filterByMonth,
   filterByYear,
   orderBy,
@@ -13,7 +13,12 @@ const getSalesProductMonthly = async (
   pageSize = parseInt(pageSize);
 
   try {
-    const whereClause = {};
+    const whereClause = {
+      id_status: {
+        [Op.not]: 6, 
+      },
+    };
+
     if (filterByMonth && filterByYear) {
       whereClause.created_at = {
         [Op.and]: [

@@ -19,7 +19,7 @@ const Summary = () => {
 
   useEffect(() => {
     fetchData();
-  });
+  }, []);
 
   return (
     <>

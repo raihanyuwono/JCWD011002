@@ -1,4 +1,37 @@
-const { transaction, sequelize } = require("../../database");
+const {
+  transaction,
+  sequelize,
+  transaction_product,
+  product,
+} = require("../../database");
+
+const getBestSellerProduct = async () => {
+  try {
+    const bestSellerProduct = await transaction_product.findAll({
+      attributes: [
+        "id_product",
+        [sequelize.fn("SUM", sequelize.col("qty")), "total_qty"],
+      ],
+      group: ["id_product"],
+      order: [[sequelize.literal("total_qty"), "DESC"]],
+      limit: 1,
+      include: [
+        {
+          model: product,
+          attributes: ["name"],
+        },
+      ],
+    });
+
+    if (bestSellerProduct.length > 0) {
+      return bestSellerProduct[0].product.name;
+    } else {
+      return "No best-selling product found";
+    }
+  } catch (error) {
+    throw error;
+  }
+};
 
 const getSummary = async () => {
   try {
@@ -55,6 +88,7 @@ const getSummary = async () => {
           user_active: activeUserCount || 0,
           order_success: summary.dataValues.order_success || 0,
           popular_shipping: popular_shipping,
+          best_seller_product: await getBestSellerProduct(),
         },
       ],
     };

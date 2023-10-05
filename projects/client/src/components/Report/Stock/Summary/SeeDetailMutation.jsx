@@ -4,32 +4,22 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
   useDisclosure,
   Button,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
-  Select,
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
-  Box,
   Td,
-  TableCaption,
   TableContainer,
-  Text,
   Flex,
   Input,
 } from "@chakra-ui/react";
 import { BsBoxArrowInUpRight } from "react-icons/bs";
+import Pagination from "../../Pagination";
 
 const SeeDetail = ({ mutation, month_name, year, warehouse_name }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -37,7 +27,7 @@ const SeeDetail = ({ mutation, month_name, year, warehouse_name }) => {
   return (
     <>
       <Button size={"xs"} variant={"edit"} onClick={onOpen}>
-        Detail Mutation&nbsp;
+        Detail&nbsp;
         <BsBoxArrowInUpRight size={14} />
       </Button>
       <Modal
@@ -54,10 +44,21 @@ const SeeDetail = ({ mutation, month_name, year, warehouse_name }) => {
           <ModalCloseButton />
           <ModalBody pb={8} color={"white"} bgColor={"bgSecondary"}>
             <Flex direction={"row"} alignItems={"center"} mb={2}>
-              <Input size={"sm"} type={"text"} color={"black"} bg={"white"} placeholder="Search by Product" />
+              <Input
+                size={"sm"}
+                type={"text"}
+                color={"black"}
+                bg={"white"}
+                placeholder="Search by Product"
+              />
             </Flex>
             <TableContainer>
-              <Table size="sm">
+              <Table
+                size="sm"
+                variant="striped"
+                colorScheme="whiteAlpha"
+                bgColor={"bgSecondary"}
+              >
                 <Thead bg={"primary"}>
                   <Tr>
                     <Th color={"white"} textAlign={"center"}>
@@ -92,6 +93,13 @@ const SeeDetail = ({ mutation, month_name, year, warehouse_name }) => {
                 </Tbody>
               </Table>
             </TableContainer>
+            <Pagination
+              totalItems={10}
+              itemsPerPage={10}
+              // onPageChange={handlePageChange}
+              // currentPage={currentPage}
+              totalPages={1}
+            />
           </ModalBody>
         </ModalContent>
       </Modal>
