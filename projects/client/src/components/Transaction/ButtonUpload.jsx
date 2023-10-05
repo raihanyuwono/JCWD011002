@@ -40,7 +40,7 @@ export default function ButtonUpload({ transactionId }) {
         _hover={{ bgColor: "white", color: "black" }}
         onClick={openPhotoModal}
       >
-        UPLOAD RECEIPT
+        UPLOAD
       </Badge>
       <UploadReceipt
         isOpen={uploadReceipt}

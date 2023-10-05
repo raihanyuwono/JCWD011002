@@ -22,7 +22,29 @@ async function updateAdmin(req, res) {
   }
 }
 
+async function getAdmin(req, res) {
+  try {
+    const { id } = req.account;
+    const result = await adminService.getAdmin(id);
+    res.status(result.status).json(messages.response(result));
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+async function addAdmin(req, res) {
+  try {
+    const { access } = req;
+    const attributes = req.body;
+    const result = await adminService.addAdmin(access, attributes);
+    res.status(result.status).json(messages.response(result));
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 module.exports = {
   getRoles,
   updateAdmin,
+  getAdmin,
+  addAdmin,
 };

@@ -14,6 +14,7 @@ import {
   Badge,
   Divider,
   filter,
+  useMediaQuery,
 } from "@chakra-ui/react";
 import { FiEdit } from "react-icons/fi";
 import AddAddress from "./AddAddress";
@@ -22,6 +23,7 @@ import { MdLocationOn } from "react-icons/md";
 import axios from "axios";
 import DeleteAddress from "../Profile/DeleteAddress";
 import jwtDecode from "jwt-decode";
+import { extendTheme } from "@chakra-ui/react";
 
 const SelectAddress = () => {
   const API_URL = process.env.REACT_APP_API_BASE_URL;
@@ -116,13 +118,24 @@ const SelectAddress = () => {
     fetchDefault();
   }, []);
 
+  const breakpoints = {
+    sm: "320px",
+    md: "768px",
+    lg: "960px",
+    xl: "1200px",
+    "2xl": "1536px",
+  };
+
+  const theme = extendTheme({ breakpoints });
+  const [isMd] = useMediaQuery("(max-width: " + theme.breakpoints.md + ")");
+
   return (
     <Box>
       <Flex>
-        <Text fontWeight={"bold"} fontSize={"lg"}>
+        <Text fontWeight={"bold"} fontSize={isMd ? "md" : "lg"}>
           Shipping Address&nbsp;
         </Text>
-        <MdLocationOn size={25} />
+        <MdLocationOn size={isMd ? "20px" : "25px"} />
       </Flex>
       <Divider mt={2} mb={2} />
       <Flex align={"center"} justifyContent={"space-between"}>
@@ -148,7 +161,7 @@ const SelectAddress = () => {
           >
             <ModalOverlay />
             <ModalContent bgColor={"#233947"}>
-              <ModalHeader color={"white"}>Shipping tojgjg?</ModalHeader>
+              <ModalHeader color={"white"}>Shipping to?</ModalHeader>
               <ModalCloseButton color={"white"} />
               <ModalBody>
                 <Button
@@ -168,7 +181,9 @@ const SelectAddress = () => {
                   ) : (
                     dataAddress.map((address) => (
                       <Text
-                        bgColor={"white"}
+                        bgColor="white"
+                        border={"4px"}
+                        borderColor={address.is_default ? "#C6F7D4" : "white"}
                         boxShadow={"xl"}
                         borderRadius={"5px"}
                         mt={3}
@@ -178,7 +193,7 @@ const SelectAddress = () => {
                           <Flex
                             alignItems={"center"}
                             justifyContent={"space-between"}
-                            mr={5}
+                            mr={4}
                           >
                             <Text
                               px={3}
@@ -198,7 +213,7 @@ const SelectAddress = () => {
                           <Text
                             px={3}
                             mt={1}
-                            fontSize={"lg"}
+                            fontSize={isMd ? "md" : "lg"}
                             fontWeight={"bold"}
                           >
                             {address.user.name}
@@ -245,16 +260,25 @@ const SelectAddress = () => {
           </Modal>
           {selectAddress && (
             <Box key={selectAddress.id}>
-              <Text fontWeight={"bold"}>{selectAddress.name}</Text>
-              <Text>
-                {selectAddress.full_address}, {selectAddress.city_name},{" "}
-                {selectAddress.province}, {selectAddress.postal_code}
+              <Text fontSize={isMd ? "sm" : ""} fontWeight={"bold"}>
+                {selectAddress.name}
+              </Text>
+              <Text fontSize={isMd ? "sm" : ""}>
+                {selectAddress.full_address}, {selectAddress.city_name}{" "}
+                {selectAddress.province} {selectAddress.postal_code}
               </Text>
             </Box>
           )}
         </Box>
-        <Button size="md" mt={2} onClick={openSelectAddressModal}>
-          Select Address
+        <Button
+          ml={2}
+          p={4}
+          size={isMd ? "sm" : "md"}
+          fontSize={isMd ? "sm" : ""}
+          mt={2}
+          onClick={openSelectAddressModal}
+        >
+          Select
         </Button>
       </Flex>
     </Box>

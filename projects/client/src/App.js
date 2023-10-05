@@ -19,9 +19,13 @@ import ProductCategory from "./components/AdminDashboard/Menu/ProductCategory/Pr
 import ProductList from "./components/AdminDashboard/Menu/Product/ProductList";
 import ManageUsers from "./components/AdminDashboard/Menu/ManageUser";
 import WarehouseList from "./components/AdminDashboard/Menu/Warehouse/WarehouseList";
+import ProductDetail from "./pages/ProductDetail";
+import Report from "./pages/Report";
 
 
 const ADMIN_PATH = ["/", "/category", "/profile"];
+
+const ADMIN = ["admin", "admin warehouse"];
 
 const mainContainerAttr = {
   w: "100vw",
@@ -36,14 +40,14 @@ const contentContainerAttr = {
 };
 
 function setPage() {
-  if (getRole() !== "user") return <AdminDashboard />;
+  if (ADMIN.includes(getRole())) return <AdminDashboard />;
   return <HomePage />;
 }
 
 function adminPath() {
   const role = getRole();
   const currentPath = document.location.pathname;
-  if (role !== "user" && !ADMIN_PATH.includes(currentPath))
+  if (ADMIN.includes(role) && !ADMIN_PATH.includes(currentPath))
     document.location.href = "/";
 }
 
@@ -72,7 +76,7 @@ function App() {
   const toast = useToast()
   const token = localStorage.getItem('token')
   const fetchUserData = async () => {
-    await getUser(token, setUserData, toast);
+    if (token) await getUser(token, setUserData, toast);
   };
 
   useEffect(() => {
@@ -92,7 +96,7 @@ function App() {
               <Route path="product" element={<ProductList />} />
               {/* <Route path="stockmutation" element={} /> */}
               {/* <Route path="order" element={} /> */}
-              {/* <Route path="report" element={} /> */}
+              <Route path="report" element={<Report />} />
             </Route>
             <Route path="/registration/:token" element={<Registration />} />
             <Route path="/profile" element={<Profile userData={userData} />}>
@@ -104,6 +108,7 @@ function App() {
             <Route path="/cart" element={<CartPage />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/category" element={<ProductCategory />} />
+            <Route path="/product/:id" element={<ProductDetail />} />
           </Routes>
         </Flex>
         <Footer />

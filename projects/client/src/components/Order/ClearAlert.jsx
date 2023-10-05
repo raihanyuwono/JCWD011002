@@ -29,7 +29,7 @@ const ClearAlert = ({ coba, userId }) => {
   };
   return (
     <>
-      <Popover isLazy>
+      <Popover  isLazy>
         <PopoverTrigger>
           <Button borderRadius={"none"} w={"full"} variant={"error"}>
             Clear

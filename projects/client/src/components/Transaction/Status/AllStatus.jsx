@@ -10,6 +10,7 @@ import toRupiah from "@develoka/angka-rupiah-js";
 import SeeDetailTxn from "../SeeDetailTxn";
 import ViewReceipt from "../ViewReceipt";
 import { BsBoxArrowInUpRight } from "react-icons/bs";
+import { extendTheme, useMediaQuery } from "@chakra-ui/react";
 
 const AllStatus = () => {
   const API_URL = process.env.REACT_APP_API_BASE_URL;
@@ -18,7 +19,7 @@ const AllStatus = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filterBy, setFilterBy] = useState("asc");
+  const [filterBy, setFilterBy] = useState("desc");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
@@ -42,20 +43,29 @@ const AllStatus = () => {
     setStartDate(start);
     setEndDate(end);
   };
+  const breakpoints = {
+    sm: "320px",
+    md: "768px",
+    lg: "960px",
+    xl: "1200px",
+    "2xl": "1536px",
+  };
+
+  const theme = extendTheme({ breakpoints });
+  const [isMd] = useMediaQuery("(max-width: " + theme.breakpoints.md + ")");
 
   return (
     <>
-      <Flex justifyContent={"space-between"} mb={4}>
-        <Box>
-          <SearchBar onSearch={setSearchQuery} />
-        </Box>
-        &nbsp;&nbsp;
-        <Box>
-          <FilterBy
-            onFilterChange={setFilterBy}
-            onDateRangeFilter={handleDateRangeFilter}
-          />
-        </Box>
+      <Flex
+        direction={isMd ? "column" : "row"}
+        justifyContent={"space-between"}
+        mb={2}
+      >
+        <SearchBar onSearch={setSearchQuery} />
+        <FilterBy
+          onFilterChange={setFilterBy}
+          onDateRangeFilter={handleDateRangeFilter}
+        />
       </Flex>
       {data.map((item) => (
         <Box
@@ -63,22 +73,45 @@ const AllStatus = () => {
           mb={2}
           bg={"bgSecondary"}
           p={4}
-          w={"58vw"}
+          w={isMd ? "100vw" : "70vw"}
           color={"white"}
         >
           <Flex justifyContent={"space-between"}>
             <Flex>
-              <Text fontWeight={"bold"}>{item.txn_date}&nbsp;</Text>
+              <Text fontSize={isMd ? "sm" : "md"} fontWeight={"bold"}>
+                {item.txn_date}&nbsp;
+              </Text>
+
               {item.status === "Dibatalkan" ? (
                 <Badge alignSelf={"center"} colorScheme="red">
-                  Dibatalkan
+                  Cancelled
                 </Badge>
               ) : (
                 <Badge alignSelf={"center"} colorScheme="green">
-                  {item.status}
+                  {item.status === "Menunggu Pembayaran" ? (
+                    <Text>To Pay</Text>
+                  ) : item.status === "Menunggu Konfirmasi Pembayaran" ? (
+                    <Text>To Confirm</Text>
+                  ) : item.status === "Diproses" ? (
+                    <Text>Processed</Text>
+                  ) : item.status === "Dikirim" ? (
+                    <Text>Shipped</Text>
+                  ) : item.status === "Pesanan Dikonfirmasi" ? (
+                    <Text>Completed</Text>
+                  ) : item.status === "Dibatalkan" ? (
+                    <Text>Cancelled</Text>
+                  ) : (
+                    <></>
+                  )}
                 </Badge>
               )}
-              <Text>&nbsp;MWECG2/ID/TXN{item.transactionId}</Text>
+              {isMd ? (
+                <></>
+              ) : (
+                <Text fontSize={isMd ? "sm" : "md"}>
+                  &nbsp;MWECG2/ID/TXN{item.transactionId}
+                </Text>
+              )}
             </Flex>
             {item.status === "Dibatalkan" ||
             item.status === "Menunggu Pembayaran" ? (
@@ -90,9 +123,13 @@ const AllStatus = () => {
           <Divider mt={2} mb={2} />
           <Flex align={"center"} justifyContent={"space-between"}>
             <Flex>
-              <Image borderRadius={"5px"} src={item.product_image} />
+              <Image
+                borderRadius={"5px"}
+                w={isMd ? "60px" : "75px"}
+                src={`${API_URL}/${item.product_image}`}
+              />
               <Flex direction={"column"}>
-                <Text ml={4} fontWeight={"bold"}>
+                <Text ml={4} fontSize={isMd ? "sm" : "md"} fontWeight={"bold"}>
                   {item.product_name}
                 </Text>
                 {item.numProducts > 1 ? (
@@ -104,9 +141,9 @@ const AllStatus = () => {
                 )}
               </Flex>
             </Flex>
-            <Flex textAlign={"right"} direction={"column"}>
-              <Text fontSize={"sm"}>Total</Text>
-              <Text fontWeight={"bold"} fontSize={"xl"}>
+            <Flex direction={"column"}>
+              <Text fontSize={"sm"}>Total:</Text>
+              <Text fontSize={isMd ? "md" : "xl"} fontWeight={"bold"}>
                 {toRupiah(item.total, { dot: ".", floatingPoint: 0 })}
               </Text>
               <SeeDetailTxn transactionId={item.transactionId} />

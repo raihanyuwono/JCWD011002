@@ -47,6 +47,8 @@ const themes = extendTheme({
     bgSecondary: "#2D2D2D",
     textPrimary: "#FFFFFF",
     textSecondary: "#E0E0E0",
+    textReversePrimary: "#000000",
+    textReverseSecondary: "gray.500",
     successPrimary: "#2E7D32",
     successSecondary: "#4CAF50",
     errorPrimary: "#D32F2F",
@@ -56,7 +58,7 @@ const themes = extendTheme({
     editPrimary: "#34638A",
     editSecondary: "#2C4E69",
     blueCold: "#9E9FA5",
-    darkBlue: "#34638A"
+    darkBlue: "#34638A",
   },
   components: {
     Text: {
@@ -82,6 +84,13 @@ const themes = extendTheme({
         capsuleError: {
           borderRadius: "3rem",
           ...errorScheme,
+        },
+        iconCircleSuccess: {
+          borderRadius: "50%",
+          w: "60px",
+          h: "60px",
+          fontSize:"28px",
+          ...successScheme,
         },
       },
     },

@@ -1,5 +1,6 @@
 import axios from "axios";
 import notification, { setToastParams } from "../helpers/Notification";
+import { getQueries } from "../helpers/api";
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const USER_URL = `${BASE_URL}/user`;
@@ -18,20 +19,21 @@ function setHeaders(token) {
   };
 }
 
-async function getUsers(toast) {
+async function getUsers(toast, attributes) {
   try {
-    const response = await axios.get(`${USER_URL}`, setHeaders());
+    const queries = getQueries(attributes);
+    const response = await axios.get(`${USER_URL}?${queries}`, setHeaders());
     return response.data;
   } catch (error) {
     const { response } = error;
-    notification(toast, setToastParams(response.status ? response : error));
+    notification(toast, setToastParams(response?.status ? response : error));
+
   }
 }
 
 async function getRoles(toast) {
   try {
     const response = await axios.get(`${ADMIN_URL}/roles`, setHeaders());
-    console.log(response.data);
     return response.data;
   } catch (error) {
     const { response } = error;
@@ -41,7 +43,7 @@ async function getRoles(toast) {
 
 async function register(toast, attributes) {
   try {
-    const response = await axios.post(`${AUTH_URL}/user`, attributes);
+    const response = await axios.post(`${ADMIN_URL}/user`, attributes, setHeaders());
     notification(toast, setToastParams(response));
   } catch (error) {
     const { response } = error;
@@ -49,4 +51,18 @@ async function register(toast, attributes) {
   }
 }
 
-export { getUsers, getRoles, register };
+async function updateAdmin(toast, id, attributes) {
+  try {
+    const response = await axios.patch(
+      `${ADMIN_URL}/user/${id}`,
+      attributes,
+      setHeaders()
+    );
+    notification(toast, setToastParams(response));
+  } catch (error) {
+    const { response } = error;
+    notification(toast, setToastParams(response.status ? response : error));
+  }
+}
+
+export { getUsers, getRoles, register, updateAdmin };

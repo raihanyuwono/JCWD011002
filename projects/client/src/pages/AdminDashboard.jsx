@@ -15,6 +15,7 @@ import { SlGraph as IcReport } from "react-icons/sl";
 import { Link, Outlet } from "react-router-dom";
 import Dashboard from "../components/AdminDashboard/Menu/Dashboard";
 import ManageUsers from "../components/AdminDashboard/Menu/ManageUser";
+import Report from "../pages/Report";
 
 const ACCESS_ADMIN = ["admin"];
 const ACCESS_ALL_ADMIN = ["admin", "admin warehouse"];
@@ -24,7 +25,7 @@ const container = {
   p: "12px",
   gap: "12px",
   bgColor: "bgPrimary",
-  warp: "wrap"
+  warp: "wrap",
 };
 const contentContainer = {
   flexGrow: 1,
@@ -36,7 +37,7 @@ function createMenuSet(name, logo, access, url) {
 
 
 const menuList = [
-  createMenuSet("Dashboard", <IcHome />, ACCESS_ALL_ADMIN, "/"),
+  createMenuSet("Dashboard", <IcHome />, ACCESS_ALL_ADMIN, "/", <Dashboard />),
   createMenuSet("Users", <IcUser />, ACCESS_ADMIN, "/user"),
   createMenuSet("Warehouses", <IcWarehouse />, ACCESS_ADMIN, "/warehouse"),
   createMenuSet("Categories", <IcCategory />, ACCESS_ADMIN, "/category"),
@@ -44,6 +45,9 @@ const menuList = [
   createMenuSet("Mutations", <IcMutation />, ACCESS_ALL_ADMIN, "/stockmutation"),
   createMenuSet("Orders", <IcOrder />, ACCESS_ADMIN, "/order"),
   createMenuSet("Reports", <IcReport />, ACCESS_ALL_ADMIN, "/report"),
+  createMenuSet("Dashboard", <IcHome />, ACCESS_ALL_ADMIN, <Dashboard />),
+  // createMenuSet("Users", <IcUser />, ACCESS_ADMIN, <ManageUsers />),
+  // createMenuSet("Reports", <IcReport />, ACCESS_ALL_ADMIN, <Report />),
 ];
 
 function AdminDashboard() {
