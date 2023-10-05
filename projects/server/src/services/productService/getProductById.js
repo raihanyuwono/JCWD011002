@@ -21,6 +21,7 @@ const getProductById = async (req, res, id) => {
       where: { id }, include: [
         {
           model: Category,
+          as: "_category",
           attributes: ["name"]
         },
         {
@@ -35,7 +36,7 @@ const getProductById = async (req, res, id) => {
         }
       ]
     })
-    if (!product) return res.status(404).json({ message: "Product not found" })
+    if (!product) return messages.error(404, "Product not found")
     // return res.status(200).json({
     //   message: "Product retrieved successfully",
     //   data: product,

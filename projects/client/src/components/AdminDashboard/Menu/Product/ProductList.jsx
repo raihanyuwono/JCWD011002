@@ -33,7 +33,7 @@ const ProductList = () => {
   }
   const fetchProducts = async () => {
     try {
-      const { data } = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/product`, {
+      const { data } = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/product/admin`, {
         params: {
           search: search || '',
           id_category: categoryId,
@@ -62,7 +62,7 @@ const ProductList = () => {
 
   const handleDetailClick = async (id) => {
     try {
-      const { data } = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/product/${id}`, {
+      const { data } = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/product/admin/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         }
@@ -89,7 +89,7 @@ const ProductList = () => {
   const handleDetailStock = async (id) => {
     try {
       // Ambil data stok terbaru
-      const { data } = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/product/${id}`, {
+      const { data } = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/product/admin/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
