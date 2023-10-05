@@ -1,9 +1,8 @@
 const { product, warehouse, product_warehouse, sequelize } = require('../../database/models')
 const { messages } = require('../../helpers')
 
-const createProduct = async (req, res) => {
+const createProduct = async (req, res, name, price, id_category, is_active, description) => {
   try {
-    const { name, price, id_category, is_active, description } = req.body
     const image = req.file.path
 
     const isProductExist = await product.findOne({
@@ -12,12 +11,10 @@ const createProduct = async (req, res) => {
       }
     })
     if (isProductExist) {
-      return res.status(400).json({
-        message: 'Product already exist'
-      });
+      return messages.error(400, 'Product already exist')
     }
 
-    await sequelize.transaction(async (t) => {
+    return await sequelize.transaction(async (t) => {
       const result = await product.create({
         name,
         price,
@@ -36,14 +33,16 @@ const createProduct = async (req, res) => {
           stock: 0
         }, { transaction: t })
       }
-      await t.commit();
+      // await t.commit();
       // return messages.success('successfully created product', result)
-      return res.status(201).json(result)
+      // return res.status(201).json(result)
+      return messages.success('successfully created product', result)
     })
   }
   catch (error) {
     console.log(error)
-    return messages.error(500, error.message || 'Internal server error')
+    return messages.error(500, error.message)
+    // return messages.error(500, error.message || 'Internal server error')
   }
 }
 

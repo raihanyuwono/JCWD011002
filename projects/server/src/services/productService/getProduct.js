@@ -7,11 +7,8 @@ const Admin = db.admin;
 const { messages } = require("../../helpers");
 const { Op } = require('sequelize')
 
-const getProductList = async (req, res) => {
+const getProductList = async (id, role, sort, price, name, id_category, search, page, limit, status) => {
   try {
-    const { id, role } = req.account
-    console.log("ini id dan role", id, role)
-    const { sort, price, name, id_category, search, page, limit, status } = req.query;
     const admin = await Admin.findOne({
       where: {
         id_user: id,
@@ -61,17 +58,25 @@ const getProductList = async (req, res) => {
       limit: itemsPerPage,
     });
 
-    return res.status(200).json({
-      message: "Product list retrieved successfully",
+    // return res.status(200).json({
+    //   message: "Product list retrieved successfully",
+    //   totalRows: totalCount,
+    //   totalPages: totalPages,
+    //   currentPage: currentPage,
+    //   itemsPerPage: itemsPerPage,
+    //   data: productList,
+    // });
+    return messages.success("Product list retrieved successfully", {
       totalRows: totalCount,
       totalPages: totalPages,
       currentPage: currentPage,
       itemsPerPage: itemsPerPage,
-      data: productList,
-    });
+      data: productList
+    })
   } catch (error) {
     console.log(error);
-    return res.status(500).json({ message: "Error retrieving product list" });
+    // return res.status(500).json({ message: "Error retrieving product list" });
+    return messages.error(500, error.message);
   }
 }
 

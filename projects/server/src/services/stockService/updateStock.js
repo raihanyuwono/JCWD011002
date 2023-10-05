@@ -4,12 +4,13 @@ const ProductWarehouse = db.product_warehouse;
 const Admin = db.admin
 const StockHistory = db.stock_history
 const sequelize = db.sequelize;
+const { messages } = require("../../helpers")
 
-const updateStock = async (req, res) => {
+const updateStock = async (id, role, addition, subtraction, warehouseId, productId) => {
   try {
-    const { id, role } = req.account
-    const { addition, subtraction, warehouseId, productId } = req.body;
-    await sequelize.transaction(async (t) => {
+    // const { id, role } = req.account
+    // const { addition, subtraction, warehouseId, productId } = req.body;
+    return await sequelize.transaction(async (t) => {
       if (role === "admin warehouse") {
         const admin = await Admin.findOne({
           where: { id_user: id },
@@ -18,7 +19,7 @@ const updateStock = async (req, res) => {
           where: { id_warehouse: admin.id_warehouse, id_product: productId }
         })
         if (!productWarehouses || productWarehouses.length === 0) {
-          return res.status(404).json({ message: 'product warehouse not found' });
+          return messages.error(404, 'product warehouse not found')
         }
         const stockHistory = await StockHistory.create({
           id_user: id,
@@ -50,7 +51,7 @@ const updateStock = async (req, res) => {
           where: { id_warehouse: warehouseId, id_product: productId }
         });
         if (!productWarehouses || productWarehouses.length === 0) {
-          return res.status(404).json({ message: 'product warehouse not found' });
+          return messages.error(404, 'product warehouse not found')
         }
         const stockHistory = await StockHistory.create({
           id_user: id,
@@ -78,10 +79,10 @@ const updateStock = async (req, res) => {
           )
         }
       }
-      return res.status(200).json({ message: 'successfully updated stock' });
+      return messages.success('successfully updated stock')
     })
   } catch (error) {
-    return res.status(500).json({ message: 'Internal server error' });
+    return messages.error(500, error.message)
   }
 };
 

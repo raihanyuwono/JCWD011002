@@ -5,11 +5,11 @@ const { messages } = require("../../helpers")
 const { Op } = require('sequelize')
 const fs = require('fs')
 
-const updateProduct = async (req, res) => {
+const updateProduct = async (id, name, price, id_category, is_active, description, req) => {
   try {
-    const id = req.params.id;
+    // const id = req.params.id;
     const product = await Product.findByPk(id);
-    const { name, price, id_category, is_active, description } = req.body
+    // const { name, price, id_category, is_active, description } = req.body
     let updateData = {
       name: name,
       price: price,
@@ -25,7 +25,7 @@ const updateProduct = async (req, res) => {
       }
     }
 
-    await sequelize.transaction(async (t) => {
+    return await sequelize.transaction(async (t) => {
       const result = await Product.update(
         updateData,
         {
@@ -35,16 +35,18 @@ const updateProduct = async (req, res) => {
         },
         { transaction: t }
       );
-      return res.status(200).json({
-        message: "Product successfully updated!",
-        data: updateData
-      });
+      // return res.status(200).json({
+      //   message: "Product successfully updated!",
+      //   data: result
+      // });
+      return messages.success("Product successfully updated!", result)
     });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({
-      message: error.message
-    });
+    // return res.status(500).json({
+    //   message: error.message
+    // });
+    return messages.error(500, error.message)
   }
 }
 

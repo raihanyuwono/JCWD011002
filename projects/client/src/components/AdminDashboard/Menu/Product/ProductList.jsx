@@ -48,9 +48,9 @@ const ProductList = () => {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         }
       })
-      console.log(data.data)
-      setProducts(data.data)
-      setTotalPages(data.totalPages)
+      console.log(data.data.data)
+      setProducts(data.data.data)
+      setTotalPages(data.data.totalPages)
     } catch (error) {
       console.log(error)
     }

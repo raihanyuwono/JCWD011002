@@ -7,13 +7,10 @@ const Admin = db.admin
 const { messages } = require('../../helpers')
 const { Op } = require('sequelize')
 
-const getProductById = async (req, res) => {
+const getProductById = async (req, res, id) => {
   try {
     const id_admin = req.account.id
     const role = req.account.role
-    console.log("ini id dan role", id_admin, role)
-    const { id } = req.params
-
     const admin = await Admin.findOne({
       where: {
         id_user: id_admin,
@@ -39,13 +36,14 @@ const getProductById = async (req, res) => {
       ]
     })
     if (!product) return res.status(404).json({ message: "Product not found" })
-    return res.status(200).json({
-      message: "Product retrieved successfully",
-      data: product,
-    })
+    // return res.status(200).json({
+    //   message: "Product retrieved successfully",
+    //   data: product,
+    // })
+    return messages.success("Product retrieved successfully", product)
   } catch (error) {
     console.log(error)
-    return res.status(500).json({ message: "Internal server error" })
+    return messages.error(500, error.message)
   }
 }
 

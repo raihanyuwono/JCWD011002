@@ -1,12 +1,12 @@
-const { createProductCategory, getAllCategory, updateProductCategory, deleteProductCategory } = require('../controllers/productController');
+const { createProductCategory, getAllCategory, updateProductCategory, deleteProductCategory, getProductList, getProductById, createProduct, updateProduct, updateStock } = require('../controllers/productController');
 const authentication = require('../middlewares/authentication');
-const createProduct = require('../services/productService/createProduct');
+// const createProduct = require('../services/productService/createProduct');
 const multer = require('../middlewares/multer');
-const updateProduct = require('../services/productService/updateProduct');
-const getProductList = require('../services/productService/getProduct');
+// const updateProduct = require('../services/productService/updateProduct');
+// const getProductList = require('../services/productService/getProduct');
 const disableProduct = require('../services/productService/deleteProduct');
-const getProductById = require('../services/productService/getProductById');
-const updateStock = require('../services/stockService/updateStock');
+// const getProductById = require('../services/productService/getProductById');
+// const updateStock = require('../services/stockService/updateStock');
 
 const router = require('express').Router();
 
