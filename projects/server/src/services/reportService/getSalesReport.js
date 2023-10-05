@@ -76,6 +76,7 @@ const getSalesReport = async (
               include: [
                 {
                   model: db.category,
+                  as: "_category",
                   attributes: ["id", "name"],
                 },
                 {
@@ -136,8 +137,8 @@ const getSalesReport = async (
         products: transaction.transaction_products.map((product) => ({
           id_product: product.product.id,
           name: product.product.name,
-          id_category: product.product.category.id,
-          category: product.product.category.name,
+          id_category: product.product._category.id,
+          category: product.product._category.name,
           id_warehouse: product.product.product_warehouses[0].warehouse.id,
           warehouse_name: product.product.product_warehouses[0].warehouse.name,
           image: product.product.image,

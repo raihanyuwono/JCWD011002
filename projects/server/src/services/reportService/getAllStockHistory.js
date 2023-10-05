@@ -1,186 +1,133 @@
 const { Op } = require("sequelize");
-const { stock_history, sequelize, product } = require("../../database");
+const models = require("../../database");
 
-const getAllStockHistory = async (
-  filterByMonth,
-  filterByYear,
-  page = 1,
-  pageSize = 12,
-  orderBy = "desc"
-) => {
+const getAllStockHistory = async () => {
   try {
-    const currentYear = new Date().getFullYear();
-    const startDate = new Date(currentYear, 0, 1);
-    const endDate = new Date(currentYear, 11, 31, 23, 59, 59);
+    const warehouses = await models.warehouse.findAll();
 
-    const whereClause = {
-      created_at: {
-        [Op.between]: [startDate, endDate],
-      },
-    };
+    const warehouseData = [];
 
-    if (filterByMonth) {
-      whereClause.created_at = {
-        [Op.and]: [
-          whereClause.created_at,
-          sequelize.where(
-            sequelize.fn("MONTH", sequelize.col("created_at")),
-            filterByMonth
-          ),
-        ],
-      };
-    }
-
-    if (filterByYear) {
-      whereClause.created_at = {
-        [Op.and]: [
-          whereClause.created_at,
-          sequelize.where(
-            sequelize.fn("YEAR", sequelize.col("created_at")),
-            filterByYear
-          ),
-        ],
-      };
-    }
-
-    const allProducts = await product.findAll();
-
-    const stockMutations = await Promise.all(
-      allProducts.map(async (productItem) => {
-        const lastStockPerMonth = await stock_history.findAll({
-          attributes: [
-            [
-              sequelize.fn("MAX", sequelize.col("created_at")),
-              "max_created_at",
-            ],
-            [sequelize.fn("MONTH", sequelize.col("created_at")), "month"],
-            [sequelize.fn("YEAR", sequelize.col("created_at")), "year"],
-          ],
-          where: {
-            created_at: whereClause.created_at,
-            id_product: productItem.id,
-          },
-          group: ["month", "year"],
-        });
-
-        return Promise.all(
-          lastStockPerMonth.map(async (row) => {
-            const { max_created_at, month, year } = row.dataValues;
-
-            const lastStock = await stock_history.findOne({
-              attributes: [
-                "id_product",
-                [sequelize.literal("last_stock"), "last_stock"],
-              ],
-              where: {
-                created_at: max_created_at,
-                id_product: productItem.id,
-              },
-              include: [
-                {
-                  model: product,
-                  attributes: ["id", "name"],
-                },
-              ],
-            });
-
-            const firstDayOfMonth = new Date(year, month - 1, 1);
-            const lastDayOfMonth = new Date(year, month, 0, 23, 59, 59);
-
-            const subtractionQty = await stock_history.sum("qty", {
-              where: {
-                created_at: {
-                  [Op.between]: [firstDayOfMonth, lastDayOfMonth],
-                },
-                id_warehouse_to: null,
-                id_product: productItem.id,
-              },
-            });
-
-            const additionQty = await stock_history.sum("qty", {
-              where: {
-                created_at: {
-                  [Op.between]: [firstDayOfMonth, lastDayOfMonth],
-                },
-                id_warehouse_to: {
-                  [Op.not]: null,
-                },
-                id_warehouse_from: {
-                  [Op.ne]: sequelize.col("id_warehouse_to"),
-                },
-                id_product: productItem.id,
-              },
-            });
-
-            return {
-              id: productItem.id,
-              product_name: productItem.name,
-              last_stock: lastStock ? lastStock.dataValues.last_stock : 0,
-              month,
-              year,
-              subtraction_qty: subtractionQty || 0,
-              addition_qty: additionQty || 0,
-            };
-          })
-        );
-      })
-    );
-
-    const groupedStockMutations = {};
-    stockMutations.flat().forEach((mutation) => {
-      const { month, year } = mutation;
-      if (!groupedStockMutations[`${month}-${year}`]) {
-        groupedStockMutations[`${month}-${year}`] = {
-          month,
-          year,
-          subtraction_qty: 0,
-          addition_qty: 0,
-          last_stock: [],
-        };
-      }
-      groupedStockMutations[`${month}-${year}`].last_stock.push({
-        id: mutation.id,
-        product_name: mutation.product_name,
-        last_stock: mutation.last_stock,
+    for (const warehouse of warehouses) {
+      const warehouseStockHistory = await models.stock_history.findAll({
+        where: {
+          id_warehouse_from: warehouse.id,
+        },
+        order: [["created_at", "DESC"]],
       });
-      groupedStockMutations[`${month}-${year}`].subtraction_qty +=
-        mutation.subtraction_qty;
-      groupedStockMutations[`${month}-${year}`].addition_qty +=
-        mutation.addition_qty;
-    });
 
-    const result = Object.values(groupedStockMutations);
+      const warehouseMonths = [];
+      const uniqueMonths = [];
 
-    result.sort((a, b) => {
-      if (orderBy === "asc") {
-        return a.year !== b.year ? a.year - b.year : a.month - b.month;
-      } else {
-        return b.year !== a.year ? b.year - a.year : b.month - a.month;
+      for (const history of warehouseStockHistory) {
+        const historyMonth = new Date(history.created_at).getMonth() + 1;
+        const historyYear = new Date(history.created_at).getFullYear();
+        const monthYearKey = `${historyMonth}-${historyYear}`;
+
+        if (!uniqueMonths.includes(monthYearKey)) {
+          uniqueMonths.push(monthYearKey);
+
+          const productStockHistory = await models.stock_history.findAll({
+            where: {
+              id_warehouse_from: warehouse.id,
+              created_at: {
+                [Op.between]: [
+                  new Date(`${historyYear}-${historyMonth}-01`),
+                  new Date(`${historyYear}-${historyMonth + 1}-01`),
+                ],
+              },
+            },
+          });
+
+          const productStockDataMap = new Map();
+
+          for (const productHistory of productStockHistory) {
+            const product = await models.product.findByPk(
+              productHistory.id_product
+            );
+
+            if (!productStockDataMap.has(product.id)) {
+              productStockDataMap.set(product.id, {
+                id_product: product.id,
+                product_name: product.name,
+                subtraction_qty: 0,
+                addition_qty: 0,
+                final_qty_mutation: 0,
+                last_stock_in_warehouse: 0, 
+              });
+            }
+
+            const productData = productStockDataMap.get(product.id);
+            if (productHistory.id_status === 1) {
+              productData.addition_qty += productHistory.qty;
+              productData.final_qty_mutation += productHistory.qty;
+            } else {
+              productData.subtraction_qty += productHistory.qty;
+              productData.final_qty_mutation -= productHistory.qty;
+            }
+          }
+
+          const productStockData = Array.from(productStockDataMap.values());
+          const sumSubtractionQty = productStockData.reduce(
+            (acc, product) => acc + product.subtraction_qty,
+            0
+          );
+          const sumAdditionQty = productStockData.reduce(
+            (acc, product) => acc + product.addition_qty,
+            0
+          );
+
+          for (const productData of productStockData) {
+            const lastStock = await getLastStock(productData.id_product);
+            productData.last_stock_in_warehouse = lastStock;
+          }
+
+          warehouseMonths.push({
+            month_id: historyMonth,
+            month: new Date(history.created_at).toLocaleString("en-US", {
+              month: "long",
+            }),
+            year: historyYear,
+            sum_subtraction_qty: sumSubtractionQty,
+            sum_addition_qty: sumAdditionQty,
+            product_stock_history: productStockData,
+          });
+        }
       }
-    });
 
-    const startIndex = (page - 1) * pageSize;
-    const endIndex = page * pageSize;
+      warehouseData.push({
+        id_warehouse: warehouse.id,
+        warehouse_name: warehouse.name,
+        data: warehouseMonths,
+      });
+    }
 
-    const paginatedResult = result.slice(startIndex, endIndex);
-    const totalItems = result.length;
-    const totalPage = Math.ceil(totalItems / pageSize);
-    const currentPage = page;
-
-    const resultData = {
-      total_page: totalPage,
-      current_page: currentPage,
-      total_items: totalItems,
-      data: paginatedResult.map((item, index) => ({
-        data_id: index + 1,
-        ...item,
-      })),
+    return {
+      total_page: 1,
+      current_page: 1,
+      total_items: warehouseData.length,
+      data: warehouseData,
     };
-
-    return resultData;
   } catch (error) {
-    throw new Error(error.message);
+    throw error;
   }
 };
+
+async function getLastStock(productId) {
+  const lastStock = await models.stock_history.findOne({
+    attributes: [[models.sequelize.literal("last_stock"), "last_stock"]],
+    where: {
+      id_product: productId,
+    },
+    order: [["created_at", "DESC"]],
+    include: [
+      {
+        model: models.product,
+        attributes: ["id", "name"],
+      },
+    ],
+  });
+
+  return lastStock ? lastStock.dataValues.last_stock : 0;
+}
 
 module.exports = getAllStockHistory;
