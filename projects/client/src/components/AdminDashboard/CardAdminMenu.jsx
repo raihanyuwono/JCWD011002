@@ -1,5 +1,5 @@
 import { Flex, Grid, GridItem, Text } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const logoAttr = {
   justifyContent: "center",
@@ -20,8 +20,10 @@ function CardAdminMenu({ name, logo, selected = false, setSelected, display, url
       bgColor: selected ? "primary" : "secondary",
     },
   };
+  const navigate = useNavigate();
   function handleClick() {
     setSelected();
+    navigate(url);
   }
 
   return (
@@ -30,8 +32,7 @@ function CardAdminMenu({ name, logo, selected = false, setSelected, display, url
         <Flex {...logoAttr}>{logo}</Flex>
       </GridItem>
       <GridItem>
-        {/* <Text>{name}</Text> */}
-        <Link to={url}>{name}</Link>
+        <Text>{name}</Text>
       </GridItem>
     </Grid>
   );

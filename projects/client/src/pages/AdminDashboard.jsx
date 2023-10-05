@@ -57,7 +57,7 @@ function AdminDashboard() {
     <>
       <Flex {...container}>
         <SideMenu {...sideMenuAttr} />
-        {/* <Flex {...contentContainer}>{menuList[selected]["page"]}</Flex> */}
+        <Flex {...contentContainer}>{menuList[selected]["page"]}</Flex>
         <Outlet />
       </Flex>
     </>
