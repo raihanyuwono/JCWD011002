@@ -26,7 +26,7 @@ const updateStock = async (id, role, addition, subtraction, warehouseId, product
           id_product: productId,
           id_warehouse_to: admin.id_warehouse,
           qty: addition ? addition : subtraction,
-          id_status: addition ? 9 : 10
+          id_status: addition ? 10 : 11
         })
         console.log("stock hystory", stockHistory)
         if (addition) {

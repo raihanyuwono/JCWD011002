@@ -46,6 +46,7 @@ app.use("/api/product", productRouter);
 app.use("/api/report", reportRouter);
 app.use("/api/warehouse", warehouseRouter);
 app.use("/api/admin", adminRouter);
+app.use("/api/stock", stockRouter);
 app.get("/api", (req, res) => {
   res.send(`Hello, this is my API`);
 });
