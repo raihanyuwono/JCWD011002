@@ -21,6 +21,7 @@ import ManageUsers from "./components/AdminDashboard/Menu/ManageUser";
 import WarehouseList from "./components/AdminDashboard/Menu/Warehouse/WarehouseList";
 import ProductDetail from "./pages/ProductDetail";
 import Report from "./pages/Report";
+import Dashboard from "./components/AdminDashboard/Menu/Dashboard";
 
 
 const ADMIN_PATH = ["/", "/category", "/profile"];
@@ -95,6 +96,7 @@ function App() {
               <Route path="category" element={<ProductCategory />} />
               <Route path="product" element={<ProductList />} />
               {/* <Route path="stockmutation" element={} /> */}
+              <Route path="dashboard" element={<Dashboard />} />
               {/* <Route path="order" element={} /> */}
               <Route path="report" element={<Report />} />
             </Route>

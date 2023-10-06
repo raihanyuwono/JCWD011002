@@ -37,7 +37,7 @@ function createMenuSet(name, logo, access, url) {
 
 
 const menuList = [
-  createMenuSet("Dashboard", <IcHome />, ACCESS_ALL_ADMIN, "/", <Dashboard />),
+  createMenuSet("Dashboard", <IcHome />, ACCESS_ALL_ADMIN, "/dashboard"),
   createMenuSet("Users", <IcUser />, ACCESS_ADMIN, "/user"),
   createMenuSet("Warehouses", <IcWarehouse />, ACCESS_ADMIN, "/warehouse"),
   createMenuSet("Categories", <IcCategory />, ACCESS_ADMIN, "/category"),
@@ -45,7 +45,7 @@ const menuList = [
   createMenuSet("Mutations", <IcMutation />, ACCESS_ALL_ADMIN, "/stockmutation"),
   createMenuSet("Orders", <IcOrder />, ACCESS_ADMIN, "/order"),
   createMenuSet("Reports", <IcReport />, ACCESS_ALL_ADMIN, "/report"),
-  createMenuSet("Dashboard", <IcHome />, ACCESS_ALL_ADMIN, <Dashboard />),
+  // createMenuSet("Dashboard", <IcHome />, ACCESS_ALL_ADMIN, <Dashboard />),
   // createMenuSet("Users", <IcUser />, ACCESS_ADMIN, <ManageUsers />),
   // createMenuSet("Reports", <IcReport />, ACCESS_ALL_ADMIN, <Report />),
 ];
