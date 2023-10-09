@@ -22,6 +22,7 @@ import WarehouseList from "./components/AdminDashboard/Menu/Warehouse/WarehouseL
 import ProductDetail from "./pages/ProductDetail";
 import Report from "./pages/Report";
 import Dashboard from "./components/AdminDashboard/Menu/Dashboard";
+import MutationList from "./components/AdminDashboard/Menu/Mutation/MutationList";
 
 
 const ADMIN_PATH = ["/", "/category", "/profile"];
@@ -95,7 +96,7 @@ function App() {
               <Route path="warehouse" element={<WarehouseList />} />
               <Route path="category" element={<ProductCategory />} />
               <Route path="product" element={<ProductList />} />
-              {/* <Route path="stockmutation" element={} /> */}
+              <Route path="stockmutation" element={<MutationList />} />
               <Route path="dashboard" element={<Dashboard />} />
               {/* <Route path="order" element={} /> */}
               <Route path="report" element={<Report />} />

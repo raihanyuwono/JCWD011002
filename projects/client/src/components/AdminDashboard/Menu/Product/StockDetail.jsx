@@ -21,6 +21,7 @@ import {
   HStack,
   useToast,
   Flex,
+  DrawerFooter,
 } from '@chakra-ui/react';
 import AddStockConfirm from './AddStockConfirm';
 import ReduceStockConfirm from './ReduceStockConfirm';
@@ -163,6 +164,9 @@ const EditStockDrawer = ({ isOpen, onClose, products, fetchProducts, fetchDetail
             })}
           </Accordion>
         </DrawerBody>
+        <DrawerFooter>
+          <Button bg={"green.500"} w={"full"}>Request Mutation</Button>
+        </DrawerFooter>
       </DrawerContent>
     </Drawer>
   );
