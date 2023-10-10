@@ -38,7 +38,7 @@ const Charts = () => {
           labels: labels,
           datasets: [
             {
-              label: "All Time Sales",
+              label: "Yearly Sales",
               data: totalSales,
               backgroundColor: "#34638A",
               borderColor: "rgba(75, 192, 192, 1)",

@@ -128,7 +128,7 @@ const SalesCard = () => {
   const stats = [
     {
       id: 1,
-      label: "All Time Sales",
+      label: "Yearly Sales",
       value:
         allTimeSales !== null
           ? toRupiah(allTimeSales, { dot: ".", floatingPoint: 0 })

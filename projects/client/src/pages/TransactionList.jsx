@@ -6,17 +6,6 @@ import {
   Tab,
   Tabs,
   TabPanels,
-  Text,
-  Button,
-  Flex,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuItemOption,
-  MenuGroup,
-  MenuOptionGroup,
-  MenuDivider,
 } from "@chakra-ui/react";
 import Pagination from "../components/Transaction/Pagination";
 import ToPay from "../components/Transaction/Status/ToPay";
@@ -26,6 +15,7 @@ import Shipped from "../components/Transaction/Status/Shipped";
 import Completed from "../components/Transaction/Status/Completed";
 import Cancelled from "../components/Transaction/Status/Cancelled";
 import AllStatus from "../components/Transaction/Status/AllStatus";
+import StatusNavigation from "../components/Transaction/StatusNavigation";
 import { extendTheme, useMediaQuery } from "@chakra-ui/react";
 
 const TransactionList = () => {
@@ -40,8 +30,6 @@ const TransactionList = () => {
   const theme = extendTheme({ breakpoints });
   const [isMd] = useMediaQuery("(max-width: " + theme.breakpoints.md + ")");
 
-  const [selectedStatus, setSelectedStatus] = useState("all");
-
   const tab = {
     fontSize: isMd ? "sm" : "md",
   };
@@ -52,61 +40,7 @@ const TransactionList = () => {
   return (
     <>
       {isMd ? (
-        <Flex direction={"column"}>
-          <Menu>
-            <MenuButton
-              w={isMd ? "100vw" : ""}
-              color={"white"}
-              borderRadius={"none"}
-              _hover={{ color: "black", bg: "gray" }}
-              as={Button}
-              bg="#2D2D2D"
-            >
-              Select Status
-            </MenuButton>
-            <MenuList minWidth="240px">
-              <MenuOptionGroup
-                color={"black"}
-                defaultValue="all"
-                title="Order Status"
-                type="radio"
-                onChange={(value) => setSelectedStatus(value)}
-              >
-                <MenuItemOption color={"black"} value="all">
-                  All Status
-                </MenuItemOption>
-                <MenuItemOption color={"black"} value="toPay">
-                  To Pay
-                </MenuItemOption>
-                <MenuItemOption color={"black"} value="toConfirm">
-                  To Confirm
-                </MenuItemOption>
-                <MenuItemOption color={"black"} value="processed">
-                  Processed
-                </MenuItemOption>
-                <MenuItemOption color={"black"} value="shipped">
-                  Shipped
-                </MenuItemOption>
-                <MenuItemOption color={"black"} value="completed">
-                  Completed
-                </MenuItemOption>
-                <MenuItemOption color={"black"} value="cancelled">
-                  Cancelled
-                </MenuItemOption>
-              </MenuOptionGroup>
-            </MenuList>
-          </Menu>
-          <Pagination />
-          <Box w={isMd ? "100vw" : ""}>
-            {selectedStatus === "all" && <AllStatus />}
-            {selectedStatus === "toPay" && <ToPay />}
-            {selectedStatus === "toConfirm" && <ToConfirm />}
-            {selectedStatus === "processed" && <Processed />}
-            {selectedStatus === "shipped" && <Shipped />}
-            {selectedStatus === "completed" && <Completed />}
-            {selectedStatus === "cancelled" && <Cancelled />}
-          </Box>
-        </Flex>
+        <StatusNavigation />
       ) : (
         <>
           <Tabs
