@@ -40,7 +40,7 @@ const getWarehouseStock = async (req, res) => {
       attributes: {
         exclude: ["id_product", "id_warehouse"]
       },
-      raw: true
+      // raw: true
     })
     res.status(200).json({
       message: "success",

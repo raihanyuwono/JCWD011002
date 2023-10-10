@@ -25,6 +25,8 @@ import {
 } from '@chakra-ui/react';
 import AddStockConfirm from './AddStockConfirm';
 import ReduceStockConfirm from './ReduceStockConfirm';
+import jwtDecode from 'jwt-decode';
+import RequestMutation from '../Mutation/RequestMutation';
 
 const EditStockDrawer = ({ isOpen, onClose, products, fetchProducts, fetchDetailStock }) => {
   const [quantityToAdd, setQuantityToAdd] = useState(null);
@@ -33,8 +35,11 @@ const EditStockDrawer = ({ isOpen, onClose, products, fetchProducts, fetchDetail
   const [isReducing, setIsReducing] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isReduceModalOpen, setIsReduceModalOpen] = useState(false);
+  const [isRequestMutation, setIsRequestMutation] = useState(false);
+  console.log("request mutation drawer", isRequestMutation)
   const quantityToAddAsInt = parseInt(quantityToAdd, 10);
-
+  const decode = jwtDecode(localStorage.getItem('token'));
+  const role = decode.role
   const toast = useToast();
 
   const validateAndOpenModal = (warehouse, stock, isReducing) => {
@@ -94,81 +99,85 @@ const EditStockDrawer = ({ isOpen, onClose, products, fetchProducts, fetchDetail
   };
 
   return (
-    <Drawer
-      isOpen={isOpen}
-      placement='right'
-      onClose={onClose}
-    >
-      <DrawerOverlay />
-      <DrawerContent bg={"darkBlue"} color={"white"}>
-        <DrawerCloseButton />
-        <DrawerHeader>{products?.name}</DrawerHeader>
+    <>
+      <Drawer
+        isOpen={isOpen}
+        placement='right'
+        onClose={onClose}
+      >
+        <DrawerOverlay />
+        <DrawerContent bg={"darkBlue"} color={"white"}>
+          <DrawerCloseButton />
+          <DrawerHeader>{products?.name}</DrawerHeader>
 
-        <DrawerBody>
-          <Text></Text>
-          <Accordion defaultIndex={[0]} allowToggle>
-            {products?.product_warehouses.map((warehouse, index) => {
-              return (
-                <AccordionItem key={warehouse.id || index}>
-                  <h2>
-                    <AccordionButton>
-                      <Box flex='1' textAlign='left'>
-                        <Flex justifyContent={"space-between"}>
-                          <Box>{warehouse?.warehouse?.name}</Box>
-                          <Box mr={4}>{warehouse?.stock} pcs</Box>
-                        </Flex>
-                      </Box>
+          <DrawerBody>
+            <Text></Text>
+            <Accordion defaultIndex={[0]} allowToggle>
+              {products?.product_warehouses.map((warehouse, index) => {
+                return (
+                  <AccordionItem key={warehouse.id || index}>
+                    <h2>
+                      <AccordionButton>
+                        <Box flex='1' textAlign='left'>
+                          <Flex justifyContent={"space-between"}>
+                            <Box>{warehouse?.warehouse?.name}</Box>
+                            <Box mr={4}>{warehouse?.stock} pcs</Box>
+                          </Flex>
+                        </Box>
 
-                      <AccordionIcon />
+                        <AccordionIcon />
 
-                    </AccordionButton>
-                  </h2>
-                  <AccordionPanel>
-                    <form>
-                      <Box display='flex' alignItems='center'>
-                        <Text mr={2}>Qty:</Text>
-                        <Input
-                          placeholder='0'
-                          type='number'
-                          value={quantityToAdd}
-                          onChange={(e) => setQuantityToAdd(e.target.value)}
-                        />
+                      </AccordionButton>
+                    </h2>
+                    <AccordionPanel>
+                      <form>
+                        <Box display='flex' alignItems='center'>
+                          <Text mr={2}>Qty:</Text>
+                          <Input
+                            placeholder='0'
+                            type='number'
+                            value={quantityToAdd}
+                            onChange={(e) => setQuantityToAdd(e.target.value)}
+                          />
 
-                      </Box>
-                      <HStack mt={2}>
-                        <Button w={"100%"}
-                          isDisabled={!quantityToAdd || quantityToAdd === null}
-                          colorScheme='red'
-                          onClick={() => {
-                            validateAndOpenModal(warehouse, warehouse?.stock, true)
-                          }}
-                        >
-                          reduce
-                        </Button>
-                        <Button w={"100%"}
-                          isDisabled={!quantityToAdd || quantityToAdd === null}
-                          colorScheme='green'
-                          onClick={() => {
-                            validateAndOpenModal(warehouse, warehouse?.stock, false)
-                          }}
-                        >
-                          add
-                        </Button>
-                      </HStack>
-                    </form>
-                    <AddStockConfirm isAddModalOpen={isAddModalOpen} setIsAddModalOpen={setIsAddModalOpen} products={products} quantityToAdd={quantityToAdd} selectedWarehouse={selectedWarehouse} setQuantityToAdd={setQuantityToAdd} updateStock={updateStock} />
-                    <ReduceStockConfirm isReduceModalOpen={isReduceModalOpen} setIsReduceModalOpen={setIsReduceModalOpen} products={products} quantityToAdd={quantityToAdd} selectedWarehouse={selectedWarehouse} setQuantityToAdd={setQuantityToAdd} updateStock={updateStock} />
-                  </AccordionPanel>
-                </AccordionItem>
-              );
-            })}
-          </Accordion>
-        </DrawerBody>
-        <DrawerFooter>
-          <Button bg={"green.500"} w={"full"}>Request Mutation</Button>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
+                        </Box>
+                        <HStack mt={2}>
+                          <Button w={"100%"}
+                            isDisabled={!quantityToAdd || quantityToAdd === null}
+                            colorScheme='red'
+                            onClick={() => {
+                              validateAndOpenModal(warehouse, warehouse?.stock, true)
+                            }}
+                          >
+                            reduce
+                          </Button>
+                          <Button w={"100%"}
+                            isDisabled={!quantityToAdd || quantityToAdd === null}
+                            colorScheme='green'
+                            onClick={() => {
+                              validateAndOpenModal(warehouse, warehouse?.stock, false)
+                            }}
+                          >
+                            add
+                          </Button>
+                        </HStack>
+                      </form>
+                      <AddStockConfirm isAddModalOpen={isAddModalOpen} setIsAddModalOpen={setIsAddModalOpen} products={products} quantityToAdd={quantityToAdd} selectedWarehouse={selectedWarehouse} setQuantityToAdd={setQuantityToAdd} updateStock={updateStock} />
+                      <ReduceStockConfirm isReduceModalOpen={isReduceModalOpen} setIsReduceModalOpen={setIsReduceModalOpen} products={products} quantityToAdd={quantityToAdd} selectedWarehouse={selectedWarehouse} setQuantityToAdd={setQuantityToAdd} updateStock={updateStock} />
+                    </AccordionPanel>
+                  </AccordionItem>
+                );
+              })}
+            </Accordion>
+          </DrawerBody>
+          <DrawerFooter>
+            {role === "admin warehouse" && <Button bg={"green.500"} w={"full"} onClick={() => setIsRequestMutation(true)}>Request Mutation</Button>
+            }
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+      <RequestMutation isOpen={isRequestMutation} onClose={() => setIsRequestMutation(false)} products={products} fetchProducts={fetchProducts} fetchDetailStock={fetchDetailStock}/>
+    </>
   );
 };
 
