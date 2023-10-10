@@ -27,7 +27,7 @@ const Pagination = ({
   };
 
   return (
-    <Box mt={4} color={"white"}>
+    <Box ml={2} mt={4} color={"white"}>
       <HStack spacing={2}>
         {currentPage > 1 && (
           <Button onClick={handlePreviousClick} variant="solid">

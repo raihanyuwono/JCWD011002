@@ -4,112 +4,82 @@
   "total_items": 1,
   "data": [
     {
-      "id": 1,
-      "month": 10,
-      "year": 2023,
-      "total_sales_monthly": 100000,
-      "month_sales": [
+      "id_warehouse": 1,
+      "warehouse_name": "Warehouse Bandung",
+      "data": [
         {
-          "product_id": 1,
-          "product_name": "Seagate 1TB",
-          "image": "public/images/products/1.jpg",
-          "total_qty_sold_product": 1400,
-          "detail_product_sales": [
+          "month_id": 1,
+          "month": "October",
+          "year": 2023,
+          "product_stock_history": [
             {
-              "data_id": 1,
-              "transaction_id": 10,
-              "transaction_date": "12/10/2022 from created_at",
-              "qty": 1000,
-              "warehouse_from": "Warehouse Medan",
-              "price": 1000
+              "id_product": 1,
+              "product_name": "Samsung Monitor",
+              "subtraction_qty": 2720,
+              "addition_qty": 0,
+              "last_stock_this_month": 2720
             },
             {
-              "data_id": 2,
-              "transaction_id": 12,
-              "transaction_date": "12/10/2022 from created_at",
-              "qty": 200,
-              "warehouse_from": "Warehouse Surabaya",
-              "price": 100
-            },
-            {
-              "data_id": 3,
-              "transaction_id": 12,
-              "transaction_date": "12/10/2022 from created_at",
-              "qty": 200,
-              "warehouse_from": "Warehouse Badung",
-              "price": 800
+              "id_product": 2,
+              "product_name": "SSD 1TB",
+              "subtraction_qty": 34,
+              "addition_qty": 345,
+              "last_stock_this_month": 2720
             }
           ]
         },
         {
-          "product_id": 2,
-          "product_name": "Samsung Monitor",
-          "image": "public/images/products/2.jpg",
-          "total_qty_sold_product": 5000,
-          "detail_product_sales": [
+          "month_id": 2,
+          "month": "November",
+          "year": 2023,
+          "product_stock_history": [
             {
-              "data_id": 1,
-              "transaction_id": 10,
-              "transaction_date": "12/10/2022 from created_at",
-              "qty": 1000,
-              "warehouse_from": "Warehouse Makassar",
-              "price": 1000
+              "id_product": 1,
+              "product_name": "Samsung Monitor",
+              "subtraction_qty": 6443,
+              "addition_qty": 30,
+              "last_stock_this_month": 2720
             }
           ]
         }
       ]
     },
     {
-      "id": 1,
-      "month": 11,
-      "year": 2023,
-      "total_sales_monthly": 260000,
-      "month_sales": [
+      "id_warehouse": 2,
+      "warehouse_name": "Warehouse Makassar",
+      "data": [
         {
-          "product_id": 1,
-          "product_name": "Seagate 1TB",
-          "image": "public/images/products/1.jpg",
-          "total_qty_sold_product": 4400,
-          "detail_product_sales": [
+          "month_id": 1,
+          "month": "October",
+          "year": 2023,
+          "product_stock_history": [
             {
-              "data_id": 1,
-              "transaction_id": 10,
-              "transaction_date": "12/10/2022 from created_at",
-              "qty": 300,
-              "warehouse_from": "Warehouse Makassar",
-              "price": 1000
+              "id_product": 1,
+              "product_name": "Samsung Monitor",
+              "subtraction_qty": 27320,
+              "addition_qty": 0,
+              "last_stock_this_month": 23720
             },
             {
-              "data_id": 2,
-              "transaction_id": 212,
-              "transaction_date": "12/10/2022 from created_at",
-              "qty": 3200,
-              "warehouse_from": "Warehouse Jakarta",
-              "price": 100
-            },
-            {
-              "data_id": 3,
-              "transaction_id": 122,
-              "transaction_date": "12/10/2022 from created_at",
-              "qty": 1200,
-              "warehouse_from": "Warehouse jakarta",
-              "price": 5800
+              "id_product": 2,
+              "product_name": "SSD 1TB",
+              "subtraction_qty": 234,
+              "addition_qty": 3245,
+              "last_stock_this_month": 22720
             }
           ]
         },
         {
-          "product_id": 3,
-          "product_name": "RTX 3090",
-          "image": "public/images/products/4.jpg",
-          "total_qty_sold_product": 5000,
-          "detail_product_sales": [
+          "month_id": 2,
+          "month": "November",
+          "year": 2023,
+          "product_stock_history": [
             {
-              "data_id": 1,
-              "transaction_id": 10,
-              "transaction_date": "12/10/2022 from created_at",
-              "qty": 2000,
-              "warehouse_from": "Warehouse Medan",
-              "price": 100
+              "id_product": 1,
+              "product_name": "Samsung Monitor",
+              "subtraction_qty": 26443,
+              "addition_qty": 220,
+              "last_stock_this_month": 22720
             }
           ]
         }
@@ -117,3 +87,4 @@
     }
   ]
 }
+

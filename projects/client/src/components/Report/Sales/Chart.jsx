@@ -3,6 +3,7 @@ import axios from "axios";
 import { Box } from "@chakra-ui/react";
 import Chart from "chart.js/auto";
 import "chartjs-plugin-datalabels";
+import SalesCard from "./SalesCard";
 
 const Charts = () => {
   const API_URL = process.env.REACT_APP_API_BASE_URL;
@@ -37,7 +38,7 @@ const Charts = () => {
           labels: labels,
           datasets: [
             {
-              label: "All Time Sales",
+              label: "Yearly Sales",
               data: totalSales,
               backgroundColor: "#34638A",
               borderColor: "rgba(75, 192, 192, 1)",
@@ -77,14 +78,17 @@ const Charts = () => {
   }, [data]);
 
   return (
-    <Box w={"80vw"} borderRadius={"10px"}>
-      <canvas
-        style={{ backgroundColor: "#393939", padding: "20px" }}
-        ref={chartRef}
-        width={"full"}
-        height={100}
-      ></canvas>
-    </Box>
+    <>
+      <Box mb={2} w={"80vw"} borderRadius={"10px"}>
+        <canvas
+          style={{ backgroundColor: "#393939", padding: "20px" }}
+          ref={chartRef}
+          width={"full"}
+          height={100}
+        ></canvas>
+      </Box>
+      <SalesCard />
+    </>
   );
 };
 

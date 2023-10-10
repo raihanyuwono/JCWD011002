@@ -120,7 +120,7 @@ const AllStatus = () => {
               <ViewReceipt transactionId={item.transactionId} />
             )}
           </Flex>
-          <Divider mt={2} mb={2} />
+          <Divider mt={2} mb={2} /> 
           <Flex align={"center"} justifyContent={"space-between"}>
             <Flex>
               <Image

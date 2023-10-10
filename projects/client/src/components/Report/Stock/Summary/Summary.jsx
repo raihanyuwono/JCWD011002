@@ -1,132 +1,76 @@
 import React, { useEffect, useState } from "react";
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  TableContainer,
-  Flex,
-} from "@chakra-ui/react";
+import { Flex, Box, Text } from "@chakra-ui/react";
 import axios from "axios";
-import Pagination from "../../Pagination";
-import OrderBy from "./OrderBy";
-import FilterBy from "../../FilterBy";
+import { FaWarehouse } from "react-icons/fa";
 import SeeDetail from "./SeeDetail";
 
 const Summary = () => {
   const API_URL = process.env.REACT_APP_API_BASE_URL;
-  const [stock, setStock] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [filterByMonth, setFilterByMonth] = useState("");
-  const [filterByYear, setFilterByYear] = useState("");
-  const [orderBy, setOrderBy] = useState("");
+  const [warehouse, setWarehouse] = useState([]);
 
-  const fetchStock = async () => {
+  const fetchData = async () => {
     try {
-      const response = await axios.get(`${API_URL}/report/stock/summary`, {
-        params: {
-          page: currentPage,
-          pageSize: 10,
-          orderBy,
-          filterByMonth,
-          filterByYear,
-        },
-      });
-      setStock(response.data.data);
-      setTotalPages(response.data.totalPages);
+      const response = await axios.get(`${API_URL}/report/stock/summary`);
+      setWarehouse(response.data.data);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    fetchStock();
-  }, [filterByMonth, filterByYear, orderBy, currentPage]);
-
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
-  };
-
-  function getMonthName(month) {
-    const monthNames = [
-      "January", "February", "March", "April",
-      "May", "June", "July", "August",
-      "September", "October", "November", "December"
-    ];
-    return monthNames[month - 1] || '';
-  }
+    fetchData();
+  }, []);
 
   return (
     <>
-      <Flex>
-        <FilterBy
-          filterByMonth={filterByMonth}
-          setFilterByMonth={setFilterByMonth}
-          filterByYear={filterByYear}
-          setFilterByYear={setFilterByYear}
-        />
-        <OrderBy orderBy={orderBy} setOrderBy={setOrderBy} />
+      <Flex direction={"column"} gap={2} mr={2}>
+        {warehouse.map((item) => (
+          <Flex
+            key={item.id}
+            w={"79vw"}
+            p={"15px"}
+            bg="bgSecondary"
+            borderRadius="lg"
+            boxShadow="sm"
+            justifyContent={"space-between"}
+            alignItems={"center"}
+          >
+            <Flex justifyContent={"flex-start"}>
+              <Box
+                display={"flex"}
+                justifyContent={"center"}
+                alignItems={"center"}
+                bg={"#34638A"}
+                h={"60px"}
+                w={"60px"}
+                borderRadius={"full"}
+              >
+                <FaWarehouse size={"22px"} />
+              </Box>
+              <Flex
+                justifyContent={"center"}
+                color={"white"}
+                direction={"column"}
+              >
+                <Text
+                  ml={4}
+                  fontSize={"lg"}
+                  align={"right"}
+                  fontWeight={"bold"}
+                >
+                  {item.warehouse_name}
+                </Text>
+              </Flex>
+            </Flex>
+            <Box>
+              <SeeDetail
+                warehouse_name={item.warehouse_name}
+                month={item.data}
+              />
+            </Box>
+          </Flex>
+        ))}
       </Flex>
-      <TableContainer mt={4}>
-        <Table
-          variant="striped"
-          bgColor={"bgSecondary"}
-          colorScheme="whiteAlpha"
-        >
-          <Thead bgColor={"primary"}>
-            <Tr>
-              <Th textAlign="center" color={"white"}>
-                NO
-              </Th>
-              <Th textAlign="center" color={"white"}>
-                MONTH
-              </Th>
-              <Th textAlign="center" color={"white"}>
-                YEAR
-              </Th>
-              <Th textAlign="center" color={"white"}>
-                QTY REDUCTION
-              </Th>
-              <Th textAlign="center" color={"white"}>
-                QTY ADDITION
-              </Th>
-              <Th textAlign="center" color={"white"}></Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {stock.map((item) => (
-              <Tr key={item.data_id}>
-                <Td textAlign="center">{item.data_id}</Td>
-                <Td textAlign="center">{getMonthName(item.month)}</Td>
-                <Td textAlign="center">{item.year}</Td>
-                <Td textAlign="center">{item.subtraction_qty}</Td>
-                <Td textAlign="center">{item.addition_qty}</Td>
-                <Td textAlign="center">
-                  <SeeDetail
-                    month={item.month}
-                    year={item.year}
-                    last_stock={item.last_stock}
-                  />
-                </Td>
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      </TableContainer>
-      {stock.length >= 10 ? (
-        <Pagination
-          totalItems={stock.length}
-          itemsPerPage={10}
-          onPageChange={handlePageChange}
-          currentPage={currentPage}
-          totalPages={totalPages}
-        />
-      ) : (
-        <></>
-      )}
     </>
   );
 };
