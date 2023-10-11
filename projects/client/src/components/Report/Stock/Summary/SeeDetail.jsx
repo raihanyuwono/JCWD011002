@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -19,12 +19,15 @@ import {
   TableContainer,
   Flex,
   ModalFooter,
+  Text,
 } from "@chakra-ui/react";
 import { BsBoxArrowInUpRight } from "react-icons/bs";
 import SeeDetailMutation from "./SeeDetailMutation";
 
 const SeeDetail = ({ warehouse_name, month }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+
   const mergeMonthData = (monthData) => {
     const allMonths = [
       "January",
@@ -57,14 +60,17 @@ const SeeDetail = ({ warehouse_name, month }) => {
       }
     });
   };
-
+  const yearNow = new Date().getFullYear();
   const mergedMonthData = mergeMonthData(month);
+
+  const dataFound = () => {
+    return mergedMonthData.some((item) => item.year === parseInt(selectedYear));
+  };
 
   return (
     <>
       <Button size={"md"} variant={"edit"} onClick={onOpen}>
-        Show&nbsp;
-        <BsBoxArrowInUpRight size={18} />
+        Show
       </Button>
       <Modal
         size={"5xl"}
@@ -84,7 +90,9 @@ const SeeDetail = ({ warehouse_name, month }) => {
                 size={"sm"}
                 color={"black"}
                 bg={"white"}
-                placeholder="Select Year"
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(e.target.value)}
+                // placeholder="Select Year"
               >
                 <option value="2020">2020</option>
                 <option value="2021">2021</option>
@@ -92,54 +100,66 @@ const SeeDetail = ({ warehouse_name, month }) => {
                 <option value="2023">2023</option>
               </Select>
             </Flex>
-            <TableContainer>
-              <Table
-                variant="striped"
-                colorScheme="whiteAlpha"
-                bgColor={"bgSecondary"}
-                size="sm"
-              >
-                <TableCaption color={"white"}>
-                  Only displays data for the current year, use filters for
-                  previous years
-                </TableCaption>
-                <Thead bg={"primary"}>
-                  <Tr>
-                    <Th color={"white"}>MONTH</Th>
-                    <Th color={"white"}>YEAR</Th>
-                    <Th color={"white"} isNumeric>
-                      TOTAL INCOMING QTY
-                    </Th>
-                    <Th color={"white"} isNumeric>
-                      TOTAL OUTCOMING QTY
-                    </Th>
-                    <Th></Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {mergedMonthData.map((item, index) => (
-                    <Tr key={index}>
-                      <Td>{item?.month}</Td>
-                      <Td>{item?.year}</Td>
-                      <Td isNumeric>{item?.sum_addition_qty}</Td>
-                      <Td isNumeric>{item?.sum_subtraction_qty}</Td>
-                      <Td textAlign={"center"}>
-                        {item.product_stock_history.length > 0 ? (
-                          <SeeDetailMutation
-                            warehouse_name={warehouse_name}
-                            month_name={item?.month}
-                            year={item?.year}
-                            mutation={item?.product_stock_history}
-                          />
-                        ) : (
-                          <></>
-                        )}
-                      </Td>
+            {dataFound() ? (
+              <TableContainer>
+                <Table
+                  variant="striped"
+                  colorScheme="whiteAlpha"
+                  bgColor={"bgSecondary"}
+                  size="sm"
+                >
+                  <TableCaption color={"white"}>
+                    Only displays data for the current year, use filters for
+                    previous years
+                  </TableCaption>
+                  <Thead bg={"primary"}>
+                    <Tr>
+                      <Th color={"white"}>MONTH</Th>
+                      <Th textAlign={"center"} color={"white"}>
+                        YEAR
+                      </Th>
+                      <Th textAlign={"center"} color={"white"}>
+                        TOTAL INCOMING QTY
+                      </Th>
+                      <Th textAlign={"center"} color={"white"}>
+                        TOTAL OUTCOMING QTY
+                      </Th>
+                      <Th></Th>
                     </Tr>
-                  ))}
-                </Tbody>
-              </Table>
-            </TableContainer>
+                  </Thead>
+                  <Tbody>
+                    {mergedMonthData
+                      .filter((item) => item.year === parseInt(selectedYear))
+                      .map((item, index) => (
+                        <Tr key={index}>
+                          <Td>{item?.month}</Td>
+                          <Td textAlign={"center"}>{item?.year}</Td>
+                          <Td textAlign={"center"}>{item?.sum_addition_qty}</Td>
+                          <Td textAlign={"center"}>
+                            {item?.sum_subtraction_qty}
+                          </Td>
+                          <Td textAlign={"center"}>
+                            {item.product_stock_history.length > 0 ? (
+                              <SeeDetailMutation
+                                warehouse_name={warehouse_name}
+                                month_name={item?.month}
+                                year={item?.year}
+                                mutation={item?.product_stock_history}
+                              />
+                            ) : (
+                              <></>
+                            )}
+                          </Td>
+                        </Tr>
+                      ))}
+                  </Tbody>
+                </Table>
+              </TableContainer>
+            ) : (
+              <Text mt={8} align={"center"}>
+                No Data
+              </Text>
+            )}
           </ModalBody>
         </ModalContent>
       </Modal>

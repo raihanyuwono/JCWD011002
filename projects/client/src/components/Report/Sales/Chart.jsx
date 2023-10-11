@@ -11,6 +11,7 @@ const Charts = () => {
   const API_URL = process.env.REACT_APP_API_BASE_URL;
   const [data, setData] = useState([]);
   const chartRef = useRef(null);
+  const yearNow = new Date().getFullYear();
 
   const fetchData = async () => {
     try {
@@ -40,7 +41,7 @@ const Charts = () => {
           labels: labels,
           datasets: [
             {
-              label: "Yearly Sales",
+              label: `${yearNow} Sales`,
               data: totalSales,
               backgroundColor: "#34638A",
               borderColor: "rgba(75, 192, 192, 1)",
