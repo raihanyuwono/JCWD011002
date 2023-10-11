@@ -146,7 +146,7 @@ const SalesCard = () => {
     },
     {
       id: 3,
-      label: "Best Seller",
+      label: `${currentMonth} Best Sales`,
       value: (
         <Tooltip
           label={bestSeller.name}

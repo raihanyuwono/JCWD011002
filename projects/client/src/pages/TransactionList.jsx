@@ -87,7 +87,7 @@ const TransactionList = () => {
               </TabPanel>
             </TabPanels>
           </Tabs>
-          <Pagination />
+          {/* <Pagination /> */}
         </>
       )}
     </>

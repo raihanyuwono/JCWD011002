@@ -26,7 +26,7 @@ const AllStatus = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `${API_URL}/transaction/${userId}/?sortBy=${filterBy}&page=${currentPage}&pageSize=10&searchProductName=${searchQuery}&startDate=${startDate}&endDate=${endDate}`
+        `${API_URL}/transaction/${userId}/?sortBy=${filterBy}&page=${currentPage}&pageSize=2&searchProductName=${searchQuery}&startDate=${startDate}&endDate=${endDate}`
       );
       setData(response.data.data);
       setTotalPages(response.data.total_page);
@@ -120,7 +120,7 @@ const AllStatus = () => {
               <ViewReceipt transactionId={item.transactionId} />
             )}
           </Flex>
-          <Divider mt={2} mb={2} /> 
+          <Divider mt={2} mb={2} />
           <Flex align={"center"} justifyContent={"space-between"}>
             <Flex>
               <Image

@@ -4,8 +4,10 @@ import { Box } from "@chakra-ui/react";
 import Chart from "chart.js/auto";
 import "chartjs-plugin-datalabels";
 import SalesCard from "./SalesCard";
+import jwt_decode from "jwt-decode";
 
 const Charts = () => {
+  const role = jwt_decode(localStorage.getItem("token")).role;
   const API_URL = process.env.REACT_APP_API_BASE_URL;
   const [data, setData] = useState([]);
   const chartRef = useRef(null);
@@ -87,7 +89,7 @@ const Charts = () => {
           height={100}
         ></canvas>
       </Box>
-      <SalesCard />
+      {role === "admin" ? <SalesCard /> : <></>}
     </>
   );
 };
