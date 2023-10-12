@@ -221,8 +221,9 @@ const WarehouseList = () => {
         </Box>
 
         <TableContainer>
-          <Table>
-            <Thead>
+          <Table variant={"striped"} colorScheme="whiteAlpha"
+            bgColor={"bgSecondary"}>
+            <Thead bg={"primary"}>
               <Tr>
                 <Th color={"white"}>Warehouse</Th>
                 <Th color={"white"}>Address</Th>

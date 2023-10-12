@@ -37,7 +37,7 @@ const updateStatusMutation = async (req, res) => {
 
       if (id_status === 8) {
         // Update stok di productWarehouse
-        await productWarehouse.increment(
+        await productWarehouse.decrement(
           'stock',
           {
             by: warehouse.qty,
@@ -49,7 +49,7 @@ const updateStatusMutation = async (req, res) => {
           }
         );
 
-        await productWarehouse.decrement(
+        await productWarehouse.increment(
           'stock',
           {
             by: warehouse.qty,

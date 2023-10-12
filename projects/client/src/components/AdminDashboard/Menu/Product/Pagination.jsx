@@ -3,6 +3,7 @@ import { Button, Flex, } from '@chakra-ui/react';
 import { BiRightArrow, BiLeftArrow } from 'react-icons/bi';
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   const handlePageChange = (page) => {
+    console.log("klik next page", page)
     onPageChange(page);
   };
 

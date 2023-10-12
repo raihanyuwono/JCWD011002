@@ -1,20 +1,34 @@
 import { Table, Tbody, Td, Text, Th, Thead, Tr, useToast, Popover, PopoverTrigger, Button, PopoverContent, PopoverHeader, PopoverArrow, PopoverCloseButton, PopoverBody } from '@chakra-ui/react'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import Pagination from '../Product/Pagination'
+import { FilterWhFromMutation } from './FilterMutation'
 
 const ReqMutationFrom = () => {
   const [data, setData] = useState([])
+  const [sort, setSort] = useState('')
+  const [search, setSearch] = useState('')
+  const [searchInput, setSearchInput] = useState('')
+  const [warehouse_to, setWarehouseTo] = useState('')
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   console.log(data.length)
   const toast = useToast()
   const fetchData = async () => {
     try {
       const { data } = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/stock/pendingwhfrom`, {
+        params: {
+          sort,
+          search: search || '',
+          warehouse_to
+        },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`
         }
       })
       console.log(data);
       setData(data.data)
+      setTotalPages(data.totalPages)
     } catch (error) {
       console.log(error)
     }
@@ -43,13 +57,18 @@ const ReqMutationFrom = () => {
 
   useEffect(() => {
     fetchData()
-  }, [])
+  }, [sort, warehouse_to, search, page])
+
+  const handlePageChange = (newPage) => {
+    setPage(newPage)
+  }
 
   return (
     <>
-      <Text my={5} align={"center"}>Request Mutation To Your Warehouse</Text>
-      <Table>
-        <Thead bg={"darkBlue"}>
+      <FilterWhFromMutation sort={sort} setSort={setSort} search={search} setSearch={setSearch} warehouse_to={warehouse_to} setWarehouseTo={setWarehouseTo} searchInput={searchInput} setSearchInput={setSearchInput} />
+      <Table variant={"striped"} colorScheme="whiteAlpha"
+        bgColor={"bgSecondary"}>
+        <Thead bg={"primary"}>
           <Tr>
             <Th color={"white"}>No</Th>
             <Th color={"white"}>Admin</Th>
@@ -90,6 +109,9 @@ const ReqMutationFrom = () => {
         </Tbody>
       </Table>
       {(!data || data.length) === 0 && <Text align={"center"} my={5}>No data request mutation to your warehouse</Text>}
+      {data.length > 0 ? (
+        <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} />
+      ) : null}
     </>
   )
 }

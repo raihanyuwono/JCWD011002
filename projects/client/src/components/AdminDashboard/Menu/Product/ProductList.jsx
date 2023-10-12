@@ -130,8 +130,9 @@ const ProductList = () => {
           />
         </Box>
         <TableContainer>
-          <Table>
-            <Thead>
+          <Table variant={"striped"} colorScheme="whiteAlpha"
+            bgColor={"bgSecondary"}>
+            <Thead bg={"primary"}>
               <Tr>
                 <Th color={"white"}>No</Th>
                 <Th color={"white"}>Image</Th>

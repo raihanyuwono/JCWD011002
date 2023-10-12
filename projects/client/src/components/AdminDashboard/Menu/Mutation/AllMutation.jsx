@@ -1,19 +1,44 @@
 import { Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import Pagination from '../Product/Pagination'
+import { FilterAllMutation } from './FilterMutation'
 
 const AllMutation = () => {
   const [data, setData] = useState([])
+  const [sort, setSort] = useState("newest")
+  const [status, setStatus] = useState('')
+  const [warehouse_from, setWarehouseFrom] = useState('')
+  const [warehouse_to, setWarehouseTo] = useState('')
+  const [search, setSearch] = useState('')
+  const [searchInput, setSearchInput] = useState('')
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10)
+  const [totalPages, setTotalPages] = useState(1)
+
+  const handlePageChange = (newPage) => {
+    setPage(newPage)
+  }
   console.log("all mutaion:", data)
   const fetchData = async () => {
     try {
       const { data } = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/stock`, {
+        params: {
+          sort,
+          status,
+          warehouse_from,
+          warehouse_to,
+          search: search || '',
+          page,
+          limit
+        },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`
         }
       })
       console.log(data);
-      setData(data)
+      setData(data.data)
+      setTotalPages(data.totalPages)
     } catch (error) {
       console.log(error)
     }
@@ -21,13 +46,14 @@ const AllMutation = () => {
 
   useEffect(() => {
     fetchData()
-  }, [])
+  }, [sort, status, warehouse_from, warehouse_to, search, page, limit])
 
   return (
     <>
-      <Text align={"center"} my={5}>All Mutation</Text>
-      <Table>
-        <Thead bg={"darkBlue"}>
+      <FilterAllMutation sort={sort} setSort={setSort} search={search} setSearch={setSearch} status={status} setStatus={setStatus} warehouse_from={warehouse_from} setWarehouseFrom={setWarehouseFrom} warehouse_to={warehouse_to} setWarehouseTo={setWarehouseTo} searchInput={searchInput} setSearchInput={setSearchInput} />
+      <Table variant={"striped"} colorScheme="whiteAlpha"
+        bgColor={"bgSecondary"}>
+        <Thead bg={"primary"}>
           <Tr>
             <Th color={"white"}>No</Th>
             <Th color={"white"}>Admin</Th>
@@ -53,6 +79,9 @@ const AllMutation = () => {
         </Tbody>
       </Table>
       {(!data || data.length) === 0 && <Text align={"center"} my={5}>No data mutation</Text>}
+      {data.length > 0 ? (
+        <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} />
+      ) : null}
     </>
   )
 }

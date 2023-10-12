@@ -199,8 +199,9 @@ const ProductCategory = () => {
         </Flex>
 
         <TableContainer>
-          <Table borderRadius={"8px"} mb={4} variant="striped" bg={"darkBlue"} color={"black"}>
-            <Thead>
+          <Table variant={"striped"} colorScheme="whiteAlpha"
+            bgColor={"bgSecondary"}>
+            <Thead bg={"primary"}>
               <Tr>
                 <Th color={"white"}>Category Name</Th>
                 <Th color={"white"}>Action</Th>

@@ -1,13 +1,26 @@
 import { Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import Pagination from '../Product/Pagination'
+import { FilterWhToMutation } from './FilterMutation'
 
 const ReqMutationTo = () => {
   const [data, setData] = useState([])
+  const [sort, setSort] = useState('')
+  const [search, setSearch] = useState('')
+  const [searchInput, setSearchInput] = useState('')
+  const [warehouse_from, setWarehouseFrom] = useState('')
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   console.log(data)
   const fetchData = async () => {
     try {
       const { data } = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/stock/pendingwhto`, {
+        params: {
+          sort,
+          search: search || '',
+          warehouse_from
+        },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`
         }
@@ -21,13 +34,17 @@ const ReqMutationTo = () => {
 
   useEffect(() => {
     fetchData()
-  }, [])
+  }, [sort, search, warehouse_from, page])
 
+  const handlePageChange = (newPage) => {
+    setPage(newPage)
+  }
   return (
     <>
-      <Text align={"center"} my={5}>Your Request Mutation</Text>
-      <Table>
-        <Thead bg={"darkBlue"}>
+      <FilterWhToMutation sort={sort} setSort={setSort} search={search} setSearch={setSearch} warehouse_from={warehouse_from} setWarehouseFrom={setWarehouseFrom} searchInput={searchInput} setSearchInput={setSearchInput} />
+      <Table variant={"striped"} colorScheme="whiteAlpha"
+        bgColor={"bgSecondary"}>
+        <Thead bg={"primary"}>
           <Tr>
             <Th color={"white"}>No</Th>
             <Th color={"white"}>Admin</Th>
@@ -53,6 +70,9 @@ const ReqMutationTo = () => {
         </Tbody>
       </Table>
       {(!data || data.length) === 0 && <Text align={"center"} my={5}>No data request mutation from your warehouse</Text>}
+      {data.length > 0 ? (
+        <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} />
+      ) : null}
     </>
   )
 }
