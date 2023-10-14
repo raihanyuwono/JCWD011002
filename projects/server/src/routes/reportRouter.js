@@ -13,4 +13,6 @@ router.get("/sales/warehouse/:warehouseId", reportController.getSalesWH);
 
 router.get("/summary", reportController.getSummary);
 
+router.get("/summary", reportController.getSummary);
+
 module.exports = router;
