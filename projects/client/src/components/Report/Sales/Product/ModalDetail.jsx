@@ -101,7 +101,11 @@ const ModalDetail = ({ detail_product_sales, product_name }) => {
 
   useEffect(() => {
     fetchWarehouse();
-    {role === "admin warehouse" ? filterByWarehouse(selectedWarehouse) : filterByWarehouse(1);}
+    {
+      role === "admin warehouse"
+        ? filterByWarehouse(selectedWarehouse)
+        : filterByWarehouse(1);
+    }
     // filterByWarehouse(selectedWarehouse);
   }, []);
 
@@ -221,8 +225,10 @@ const ModalDetail = ({ detail_product_sales, product_name }) => {
               </Table>
             </TableContainer>
           </ModalBody>
-          <ModalFooter>
-            <Button onClick={onClose}>Close</Button>
+          <ModalFooter w={"full"}>
+            <Button w={"full"} colorScheme="red" borderRadius={0} onClick={onClose}>
+              Close
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

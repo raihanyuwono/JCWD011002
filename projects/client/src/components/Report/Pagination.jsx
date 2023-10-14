@@ -8,8 +8,13 @@ import {
   useToast,
   useMediaQuery,
   extendTheme,
+  Text,
 } from "@chakra-ui/react";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import {
+  HiOutlineChevronDoubleRight,
+  HiOutlineChevronDoubleLeft,
+} from "react-icons/hi";
 
 const Pagination = ({
   totalItems,
@@ -24,28 +29,37 @@ const Pagination = ({
   const [inputPage, setInputPage] = useState(currentPage);
   const toast = useToast();
 
-  const handlePageClick = (page) => {
-    onPageChange(page);
+  // const handlePageClick = (page) => {
+  //   onPageChange(page);
+  //   setInputPage(page);
+  // };
+
+  const handleFirstPage = () => {
+    const firstPage = 1;
+    onPageChange(firstPage);
+    setInputPage(firstPage);
   };
 
-  const handleFirstPageClick = () => {
-    onPageChange(1);
-  };
-
-  const handleLastPageClick = () => {
-    onPageChange(pagesToDisplay);
-  };
-
-  const handlePreviousClick = () => {
+  const handlePrevious = () => {
     if (currentPage > 1) {
-      onPageChange(currentPage - 1);
+      const previousPage = currentPage - 1;
+      onPageChange(previousPage);
+      setInputPage(previousPage);
     }
   };
 
-  const handleNextClick = () => {
+  const handleNext = () => {
     if (currentPage < pagesToDisplay) {
-      onPageChange(currentPage + 1);
+      const nextPage = currentPage + 1;
+      onPageChange(nextPage);
+      setInputPage(nextPage);
     }
+  };
+
+  const handleLastPage = () => {
+    const lastPage = pagesToDisplay;
+    onPageChange(lastPage);
+    setInputPage(lastPage);
   };
 
   const handleInputPageChange = (event) => {
@@ -78,35 +92,59 @@ const Pagination = ({
   const theme = extendTheme({ breakpoints });
   const [isMd] = useMediaQuery("(max-width: " + theme.breakpoints.md + ")");
 
+  const handleInputKeyDown = (event) => {
+    if (event.key === "Enter") {
+      handleGoToPage();
+    }
+  };
+
   return (
     <Box px={isMd ? 2 : 0} mt={2} color={"white"}>
       <HStack spacing={2}>
         <Button
-          onClick={handleFirstPageClick}
+          onClick={handleFirstPage}
           size={isMd ? "sm" : "sm"}
           variant="solid"
           isDisabled={currentPage === 1}
         >
-          First
+          <HiOutlineChevronDoubleLeft />
         </Button>
         <Button
-          onClick={handlePreviousClick}
+          onClick={handlePrevious}
           variant={"solid"}
           size={isMd ? "sm" : "sm"}
           isDisabled={currentPage === 1}
         >
           <Icon as={IoIosArrowBack} />
         </Button>
-        <Button
+        {/* <Button
           key={currentPage}
           onClick={() => handlePageClick(currentPage)}
           variant="solid"
           size={isMd ? "sm" : "sm"}
         >
           {currentPage}
-        </Button>
+        </Button> */}
+        <Input
+          textAlign={"center"}
+          type="number"
+          variant="outline"
+          borderRadius={7}
+          color="white"
+          size={isMd ? "sm" : "sm"}
+          // borderRadius={"none"}
+          _hover={{ color: "black", bgColor: "white" }}
+          w={"60px"}
+          placeholder="Page"
+          value={inputPage}
+          onChange={handleInputPageChange}
+          onKeyDown={handleInputKeyDown}
+        />
+        <Text w={"39px"} fontSize={"md"}>
+          of {pagesToDisplay}
+        </Text>
         <Button
-          onClick={handleNextClick}
+          onClick={handleNext}
           variant="solid"
           size={isMd ? "sm" : "sm"}
           isDisabled={currentPage === pagesToDisplay}
@@ -114,33 +152,20 @@ const Pagination = ({
           <Icon as={IoIosArrowForward} />
         </Button>
         <Button
-          onClick={handleLastPageClick}
+          onClick={handleLastPage}
           variant="solid"
           size={isMd ? "sm" : "sm"}
           isDisabled={currentPage === pagesToDisplay}
         >
-          Last
+          <HiOutlineChevronDoubleRight />
         </Button>
-        <Input
-          textAlign={"center"}
-          type="number"
-          variant="outline"
-          color="white"
-          size={isMd ? "sm" : "sm"}
-          borderRadius={"none"}
-          _hover={{ color: "black", bgColor: "white" }}
-          w={"55px"}
-          placeholder="Go"
-          value={inputPage}
-          onChange={handleInputPageChange}
-        />
-        <Button
+        {/* <Button
           size={isMd ? "sm" : "sm"}
           onClick={handleGoToPage}
           variant="solid"
         >
           Go
-        </Button>
+        </Button> */}
       </HStack>
     </Box>
   );

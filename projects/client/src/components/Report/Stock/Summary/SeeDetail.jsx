@@ -92,8 +92,8 @@ const SeeDetail = ({ warehouse_name, month }) => {
                 bg={"white"}
                 value={selectedYear}
                 onChange={(e) => setSelectedYear(e.target.value)}
-                // placeholder="Select Year"
               >
+                <option value={yearNow}>Select Year</option>
                 <option value="2020">2020</option>
                 <option value="2021">2021</option>
                 <option value="2022">2022</option>
@@ -129,7 +129,7 @@ const SeeDetail = ({ warehouse_name, month }) => {
                   </Thead>
                   <Tbody>
                     {mergedMonthData
-                      .filter((item) => item.year === parseInt(selectedYear))
+                      .filter((item) => item?.year === parseInt(selectedYear))
                       .map((item, index) => (
                         <Tr key={index}>
                           <Td>{item?.month}</Td>
@@ -139,7 +139,7 @@ const SeeDetail = ({ warehouse_name, month }) => {
                             {item?.sum_subtraction_qty}
                           </Td>
                           <Td textAlign={"center"}>
-                            {item.product_stock_history.length > 0 ? (
+                            {item?.product_stock_history.length > 0 ? (
                               <SeeDetailMutation
                                 warehouse_name={warehouse_name}
                                 month_name={item?.month}
@@ -161,6 +161,16 @@ const SeeDetail = ({ warehouse_name, month }) => {
               </Text>
             )}
           </ModalBody>
+          <ModalFooter bg={"bgSecondary"} w={"full"}>
+            <Button
+              w={"full"}
+              colorScheme="red"
+              borderRadius={0}
+              onClick={onClose}
+            >
+              Close
+            </Button>
+          </ModalFooter>
         </ModalContent>
       </Modal>
     </>

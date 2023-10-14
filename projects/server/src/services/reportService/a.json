@@ -1,90 +1,28 @@
 {
-  "total_page": 1,
-  "current_page": 1,
-  "total_items": 1,
   "data": [
     {
       "id_warehouse": 1,
       "warehouse_name": "Warehouse Bandung",
-      "data": [
+      "warehouse_sales": [
         {
-          "month_id": 1,
-          "month": "October",
+          "data_id": 1,
+          "month": "September",
           "year": 2023,
-          "product_stock_history": [
-            {
-              "id_product": 1,
-              "product_name": "Samsung Monitor",
-              "subtraction_qty": 2720,
-              "addition_qty": 0,
-              "last_stock_this_month": 2720
-            },
-            {
-              "id_product": 2,
-              "product_name": "SSD 1TB",
-              "subtraction_qty": 34,
-              "addition_qty": 345,
-              "last_stock_this_month": 2720
-            }
-          ]
+          "total_sales_per_month": 22000
         },
         {
-          "month_id": 2,
-          "month": "November",
-          "year": 2023,
-          "product_stock_history": [
-            {
-              "id_product": 1,
-              "product_name": "Samsung Monitor",
-              "subtraction_qty": 6443,
-              "addition_qty": 30,
-              "last_stock_this_month": 2720
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id_warehouse": 2,
-      "warehouse_name": "Warehouse Makassar",
-      "data": [
-        {
-          "month_id": 1,
+          "data_id": 2,
           "month": "October",
           "year": 2023,
-          "product_stock_history": [
-            {
-              "id_product": 1,
-              "product_name": "Samsung Monitor",
-              "subtraction_qty": 27320,
-              "addition_qty": 0,
-              "last_stock_this_month": 23720
-            },
-            {
-              "id_product": 2,
-              "product_name": "SSD 1TB",
-              "subtraction_qty": 234,
-              "addition_qty": 3245,
-              "last_stock_this_month": 22720
-            }
-          ]
+          "total_sales_per_month": 2000
         },
         {
-          "month_id": 2,
-          "month": "November",
+          "data_id": 3,
+          "month": "December",
           "year": 2023,
-          "product_stock_history": [
-            {
-              "id_product": 1,
-              "product_name": "Samsung Monitor",
-              "subtraction_qty": 26443,
-              "addition_qty": 220,
-              "last_stock_this_month": 22720
-            }
-          ]
+          "total_sales_per_month": 45557
         }
       ]
     }
   ]
 }
-

@@ -17,6 +17,7 @@ import {
   TableContainer,
   Flex,
   Input,
+  ModalFooter,
 } from "@chakra-ui/react";
 import { BsBoxArrowInUpRight } from "react-icons/bs";
 import Pagination from "../../Pagination";
@@ -80,6 +81,7 @@ const SeeDetail = ({ mutation, month_name, year, warehouse_name }) => {
                 variant="striped"
                 colorScheme="whiteAlpha"
                 bgColor={"bgSecondary"}
+                mb={2}
               >
                 <Thead bg={"primary"}>
                   <Tr>
@@ -123,6 +125,16 @@ const SeeDetail = ({ mutation, month_name, year, warehouse_name }) => {
               totalPages={totalPages}
             />
           </ModalBody>
+          <ModalFooter bg={"bgSecondary"} w={"full"}>
+            <Button
+              w={"full"}
+              colorScheme="red"
+              borderRadius={0}
+              onClick={onClose}
+            >
+              Back
+            </Button>
+          </ModalFooter>
         </ModalContent>
       </Modal>
     </>

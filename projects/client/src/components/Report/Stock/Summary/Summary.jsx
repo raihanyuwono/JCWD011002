@@ -36,7 +36,6 @@ const Summary = () => {
     fetchWHAdmin();
   }, []);
 
-  // Filter warehouses based on wh
   const filteredWarehouses = warehouse.filter((item) => {
     if (!wh) {
       return true;

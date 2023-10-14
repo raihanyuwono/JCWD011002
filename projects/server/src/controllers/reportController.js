@@ -166,7 +166,17 @@ const getSummary = async (req, res) => {
   } catch (error) {
     return res.status(500).json(error.message);
   }
-}
+};
+
+const getSalesWH = async (req, res) => {
+  try {
+    const { warehouseId } = req.params;
+    const result = await reportService.getSalesWH(warehouseId);
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json(error.message);
+  }
+};
 
 module.exports = {
   getStockHistory,
@@ -176,5 +186,6 @@ module.exports = {
   getSalesCategory,
   getMonthlySales,
   getSalesProductMonthly,
-  getSummary
+  getSummary,
+  getSalesWH,
 };
