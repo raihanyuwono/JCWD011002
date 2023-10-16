@@ -60,18 +60,16 @@ const SalesCard = () => {
 
   const fetchBestSeller = async () => {
     try {
-      const response = await axios.get(
-        `${API_URL}/report/sales/product?orderBy=total_qty_sold desc`
-      );
-      setBestSeller(response.data.products[0]);
+      const response = await axios.get(`${API_URL}/report/summary`);
+      setBestSeller(response.data.data[0]);
     } catch (error) {
       console.log(error);
     }
   };
   const prod_best =
-    bestSeller?.name?.length > 10
-      ? bestSeller?.name?.slice(0, 10) + "..."
-      : bestSeller?.name;
+    bestSeller?.best_seller_product?.length > 10
+      ? bestSeller?.best_seller_product?.slice(0, 10) + "..."
+      : bestSeller?.best_seller_product;
 
   const fetchCatBestSeller = async () => {
     try {
@@ -79,7 +77,6 @@ const SalesCard = () => {
         `${API_URL}/report/sales/category?orderBy=total_qty_sold desc`
       );
       setCatBestSeller(response.data.categories[0]);
-      console.log(response.data.categories[0]);
     } catch (error) {
       console.log(error);
     }
@@ -150,7 +147,7 @@ const SalesCard = () => {
       label: `${currentMonth.slice(0, 3)}. Best Sales`,
       value: (
         <Tooltip
-          label={bestSeller.name}
+          label={bestSeller.best_seller_product}
           bg={"white"}
           color={"black"}
           aria-label="A tooltip"
