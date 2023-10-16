@@ -18,6 +18,10 @@ import {
   Button,
   Modal,
   Text,
+  Input,
+  Divider,
+  InputGroup,
+  InputRightAddon,
 } from "@chakra-ui/react";
 import axios from "axios";
 import Pagination from "../../Pagination";
@@ -25,6 +29,7 @@ import FilterBy from "../../FilterBy";
 import OrderBy from "./OrderBy";
 import toRupiah from "@develoka/angka-rupiah-js";
 import ModalDetail from "./ModalDetail";
+import { Search2Icon } from "@chakra-ui/icons";
 
 const Product = () => {
   const [product, setProduct] = useState([]);
@@ -32,16 +37,17 @@ const Product = () => {
   const [filterByYear, setFilterByYear] = useState("");
   const [orderBy, setOrderBy] = useState("month_year DESC");
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
   const [warehouseId, setWarehouseId] = useState("");
   const [productId, setProductId] = useState("");
   const [month, setMonth] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const API_URL = process.env.REACT_APP_API_BASE_URL;
 
   const fetchSales = async () => {
     try {
-      setProduct([]);
+      setMonth([]);
       const response = await axios.get(
         `${API_URL}/report/sales/product/permonth`,
         {
@@ -55,7 +61,6 @@ const Product = () => {
         }
       );
       setMonth(response.data.data);
-      setTotalPages(response.data.totalPage);
     } catch (error) {
       console.log(error);
     }
@@ -68,7 +73,6 @@ const Product = () => {
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
   };
-
   function getMonthName(month) {
     const monthNames = [
       "January",
@@ -105,7 +109,7 @@ const Product = () => {
           setProductId={setProductId}
         />
       </Flex>
-      <Accordion mt={6} allowToggle>
+      <Accordion mt={3} allowToggle>
         {month.map((item) => (
           <AccordionItem borderRadius={"10px"} key={item.month_id}>
             <h2>
@@ -125,42 +129,95 @@ const Product = () => {
               </AccordionButton>
             </h2>
             <AccordionPanel bg={"#393939"} pb={4}>
+              <Flex
+                gap={4}
+                mb={3}
+                alignItems={"center"}
+                justifyContent={"center"}
+              >
+                <InputGroup size="sm">
+                  <Input
+                    mt={2}
+                    w={"15vw"}
+                    size={"sm"}
+                    type={"text"}
+                    color={"black"}
+                    bg={"white"}
+                    value={searchQuery}
+                    placeholder="Search Product"
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                  <InputRightAddon
+                    mt={2}
+                    color={"primary"}
+                    children=<Search2Icon />
+                  />
+                </InputGroup>
+                <Divider w={"250%"} mt={2} />
+                <Pagination
+                  totalItems={
+                    item.month_sales.filter((monthSale) =>
+                      monthSale.product_name
+                        .toLowerCase()
+                        .includes(searchQuery.toLowerCase())
+                    ).length
+                  }
+                  itemsPerPage={itemsPerPage}
+                  onPageChange={handlePageChange}
+                  currentPage={currentPage}
+                />
+              </Flex>
               <TableContainer>
-                <Table size={"xs"} variant="simple">
+                <Table
+                  size={"xs"}
+                  variant="striped"
+                  bgColor={"bgSecondary"}
+                  colorScheme="whiteAlpha"
+                >
                   <Tbody>
-                    {item.month_sales.map((monthSale) => (
-                      <Tr key={monthSale.product_id}>
-                        <Td>
-                          <Image
-                            w={"35px"}
-                            src={`${API_URL}/${monthSale.image}`}
-                            alt={monthSale.product_name}
-                          />
-                        </Td>
-                        <Td>{monthSale.product_name}</Td>
-                        <Td>
-                          <Text fontSize={"2xs"}>QTY SOLD:</Text>
-                          <Text>{monthSale.total_qty_sold_product}</Text>
-                        </Td>
-                        <Td>
-                          <Text fontSize={"2xs"}>TOTAL SALES:</Text>
-                          <Text>
-                            {toRupiah(monthSale.total_sales_product, {
-                              dot: ".",
-                              floatingPoint: 0,
-                            })}
-                          </Text>
-                        </Td>
-                        <Td>
-                          <ModalDetail
-                            detail_product_sales={
-                              monthSale.detail_product_sales
-                            }
-                            product_name={monthSale.product_name}
-                          />
-                        </Td>
-                      </Tr>
-                    ))}
+                    {item.month_sales
+                      .filter((monthSale) =>
+                        monthSale.product_name
+                          .toLowerCase()
+                          .includes(searchQuery.toLowerCase())
+                      )
+                      .slice(
+                        (currentPage - 1) * itemsPerPage,
+                        currentPage * itemsPerPage
+                      )
+                      .map((monthSale) => (
+                        <Tr key={monthSale.product_id}>
+                          <Td>
+                            <Image
+                              w={"35px"}
+                              src={`${API_URL}/${monthSale.image}`}
+                              alt={monthSale.product_name}
+                            />
+                          </Td>
+                          <Td>{monthSale.product_name}</Td>
+                          <Td>
+                            <Text fontSize={"2xs"}>QTY SOLD:</Text>
+                            <Text>{monthSale.total_qty_sold_product}</Text>
+                          </Td>
+                          <Td>
+                            <Text fontSize={"2xs"}>TOTAL SALES:</Text>
+                            <Text>
+                              {toRupiah(monthSale.total_sales_product, {
+                                dot: ".",
+                                floatingPoint: 0,
+                              })}
+                            </Text>
+                          </Td>
+                          <Td>
+                            <ModalDetail
+                              detail_product_sales={
+                                monthSale.detail_product_sales
+                              }
+                              product_name={monthSale.product_name}
+                            />
+                          </Td>
+                        </Tr>
+                      ))}
                   </Tbody>
                 </Table>
               </TableContainer>
@@ -168,18 +225,6 @@ const Product = () => {
           </AccordionItem>
         ))}
       </Accordion>
-
-      {month.length >= 10 ? (
-        <Pagination
-          totalItems={product.length}
-          itemsPerPage={10}
-          onPageChange={handlePageChange}
-          currentPage={currentPage}
-          totalPages={totalPages}
-        />
-      ) : (
-        <></>
-      )}
     </>
   );
 };

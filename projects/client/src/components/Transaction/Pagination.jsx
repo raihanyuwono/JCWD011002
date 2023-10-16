@@ -1,58 +1,168 @@
-import React from "react";
-import { Box, Button, HStack, Icon } from "@chakra-ui/react";
+import React, { useState } from "react";
+import {
+  Box,
+  Button,
+  HStack,
+  Icon,
+  Input,
+  useToast,
+  useMediaQuery,
+  extendTheme,
+  Text,
+} from "@chakra-ui/react";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import {
+  HiOutlineChevronDoubleRight,
+  HiOutlineChevronDoubleLeft,
+} from "react-icons/hi";
 
 const Pagination = ({
   totalItems,
   itemsPerPage,
   onPageChange,
   currentPage,
+  totalPages,
 }) => {
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const calculatedTotalPages = Math.ceil(totalItems / itemsPerPage);
+  const pagesToDisplay = totalPages || calculatedTotalPages;
 
-  const handlePageClick = (page) => {
-    onPageChange(page);
+  const [inputPage, setInputPage] = useState(currentPage);
+  const toast = useToast();
+
+  // const handlePageClick = (page) => {
+  //   onPageChange(page);
+  //   setInputPage(page);
+  // };
+
+  const handleFirstPage = () => {
+    const firstPage = 1;
+    onPageChange(firstPage);
+    setInputPage(firstPage);
   };
 
-  const handlePreviousClick = () => {
+  const handlePrevious = () => {
     if (currentPage > 1) {
-      onPageChange(currentPage - 1);
+      const previousPage = currentPage - 1;
+      onPageChange(previousPage);
+      setInputPage(previousPage);
     }
   };
 
-  const handleNextClick = () => {
-    if (currentPage < totalPages) {
-      onPageChange(currentPage + 1);
+  const handleNext = () => {
+    if (currentPage < pagesToDisplay) {
+      const nextPage = currentPage + 1;
+      onPageChange(nextPage);
+      setInputPage(nextPage);
+    }
+  };
+
+  const handleLastPage = () => {
+    const lastPage = pagesToDisplay;
+    onPageChange(lastPage);
+    setInputPage(lastPage);
+  };
+
+  const handleInputPageChange = (event) => {
+    setInputPage(event.target.value);
+  };
+
+  const handleGoToPage = () => {
+    const page = parseInt(inputPage);
+    if (page >= 1 && page <= pagesToDisplay) {
+      onPageChange(page);
+    } else {
+      toast({
+        title: "Invalid Page",
+        description: `Please enter a page number between 1 and ${pagesToDisplay}.`,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
+  const breakpoints = {
+    sm: "320px",
+    md: "768px",
+    lg: "960px",
+    xl: "1200px",
+    "2xl": "1536px",
+  };
+
+  const theme = extendTheme({ breakpoints });
+  const [isMd] = useMediaQuery("(max-width: " + theme.breakpoints.md + ")");
+
+  const handleInputKeyDown = (event) => {
+    if (event.key === "Enter") {
+      handleGoToPage();
     }
   };
 
   return (
-    <Box ml={2} mt={4} color={"white"}>
+    <Box px={isMd ? 2 : 0} mt={4} color={"white"}>
       <HStack spacing={2}>
-        {currentPage > 1 && (
-          <Button onClick={handlePreviousClick} variant="solid">
-            <Icon as={IoIosArrowBack} />
-          </Button>
-        )}
-        {Array.from({ length: totalPages }, (_, index) => {
-          const pageNumber = index + 1;
-          return (
-            <Button
-              color={currentPage === pageNumber ? "black" : "white"}
-              _hover={{ color: "black", bgColor: "white" }}
-              key={pageNumber}
-              onClick={() => handlePageClick(pageNumber)}
-              variant={currentPage === pageNumber ? "solid" : "outline"}
-            >
-              {pageNumber}
-            </Button>
-          );
-        })}
-        {currentPage < totalPages && (
-          <Button onClick={handleNextClick} variant="solid">
-            <Icon as={IoIosArrowForward} />
-          </Button>
-        )}
+        <Button
+          onClick={handleFirstPage}
+          size={isMd ? "sm" : "md"}
+          variant="solid"
+          isDisabled={currentPage === 1}
+        >
+          <HiOutlineChevronDoubleLeft />
+        </Button>
+        <Button
+          onClick={handlePrevious}
+          variant={"solid"}
+          size={isMd ? "sm" : "md"}
+          isDisabled={currentPage === 1}
+        >
+          <Icon as={IoIosArrowBack} />
+        </Button>
+        {/* <Button
+          key={currentPage}
+          onClick={() => handlePageClick(currentPage)}
+          variant="solid"
+          size={isMd ? "sm" : "md"}
+        >
+          {currentPage}
+        </Button> */}
+        <Input
+          textAlign={"center"}
+          type="number"
+          variant="outline"
+          color="white"
+          size={isMd ? "sm" : "md"}
+          // borderRadius={"none"}
+          _hover={{ color: "black", bgColor: "white" }}
+          w={"55px"}
+          placeholder="Page"
+          value={inputPage}
+          onChange={handleInputPageChange}
+          onKeyDown={handleInputKeyDown}
+        />
+        <Text fontSize={"md"}>of {pagesToDisplay}</Text>
+        <Button
+          onClick={handleNext}
+          variant="solid"
+          size={isMd ? "sm" : "md"}
+          isDisabled={currentPage === pagesToDisplay}
+        >
+          <Icon as={IoIosArrowForward} />
+        </Button>
+        <Button
+          onClick={handleLastPage}
+          variant="solid"
+          size={isMd ? "sm" : "md"}
+          isDisabled={currentPage === pagesToDisplay}
+        >
+          <HiOutlineChevronDoubleRight />
+        </Button>
+        {/* <Button
+          size={isMd ? "sm" : "md"}
+          onClick={handleGoToPage}
+          variant="solid"
+        >
+          Go
+        </Button> */}
       </HStack>
     </Box>
   );

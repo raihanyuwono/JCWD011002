@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -17,18 +17,39 @@ import {
   TableContainer,
   Flex,
   Input,
+  ModalFooter,
 } from "@chakra-ui/react";
 import { BsBoxArrowInUpRight } from "react-icons/bs";
 import Pagination from "../../Pagination";
 
+const itemsPerPage = 20;
+
 const SeeDetail = ({ mutation, month_name, year, warehouse_name }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const filteredMutation = mutation.filter((item) =>
+    item.product_name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredMutation.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
+
+  const totalPages = Math.ceil(filteredMutation.length / itemsPerPage);
+
+  const onPageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
 
   return (
     <>
       <Button size={"xs"} variant={"edit"} onClick={onOpen}>
-        Detail&nbsp;
-        <BsBoxArrowInUpRight size={14} />
+        Detail
       </Button>
       <Modal
         size={"5xl"}
@@ -50,6 +71,8 @@ const SeeDetail = ({ mutation, month_name, year, warehouse_name }) => {
                 color={"black"}
                 bg={"white"}
                 placeholder="Search by Product"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
             </Flex>
             <TableContainer>
@@ -58,6 +81,7 @@ const SeeDetail = ({ mutation, month_name, year, warehouse_name }) => {
                 variant="striped"
                 colorScheme="whiteAlpha"
                 bgColor={"bgSecondary"}
+                mb={2}
               >
                 <Thead bg={"primary"}>
                   <Tr>
@@ -79,14 +103,14 @@ const SeeDetail = ({ mutation, month_name, year, warehouse_name }) => {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {mutation?.map((item) => (
-                    <Tr key={item?.id_product}>
-                      <Td>{item?.product_name}</Td>
-                      <Td textAlign={"center"}>{item?.subtraction_qty}</Td>
-                      <Td textAlign={"center"}>{item?.addition_qty}</Td>
-                      <Td textAlign={"center"}>{item?.final_qty_mutation}</Td>
+                  {currentItems.map((item) => (
+                    <Tr key={item.id_product}>
+                      <Td>{item.product_name}</Td>
+                      <Td textAlign={"center"}>{item.subtraction_qty}</Td>
+                      <Td textAlign={"center"}>{item.addition_qty}</Td>
+                      <Td textAlign={"center"}>{item.final_qty_mutation}</Td>
                       <Td textAlign={"center"}>
-                        {item?.last_stock_in_warehouse}
+                        {item.last_stock_in_warehouse}
                       </Td>
                     </Tr>
                   ))}
@@ -94,13 +118,23 @@ const SeeDetail = ({ mutation, month_name, year, warehouse_name }) => {
               </Table>
             </TableContainer>
             <Pagination
-              totalItems={10}
-              itemsPerPage={10}
-              // onPageChange={handlePageChange}
-              // currentPage={currentPage}
-              totalPages={1}
+              totalItems={filteredMutation.length}
+              itemsPerPage={itemsPerPage}
+              onPageChange={onPageChange}
+              currentPage={currentPage}
+              totalPages={totalPages}
             />
           </ModalBody>
+          <ModalFooter bg={"bgSecondary"} w={"full"}>
+            <Button
+              w={"full"}
+              colorScheme="red"
+              borderRadius={0}
+              onClick={onClose}
+            >
+              Back
+            </Button>
+          </ModalFooter>
         </ModalContent>
       </Modal>
     </>

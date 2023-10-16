@@ -7,6 +7,7 @@ import SeeDetail from "./SeeDetail";
 const Summary = () => {
   const API_URL = process.env.REACT_APP_API_BASE_URL;
   const [warehouse, setWarehouse] = useState([]);
+  const [wh, setWh] = useState(null);
 
   const fetchData = async () => {
     try {
@@ -17,14 +18,35 @@ const Summary = () => {
     }
   };
 
+  const fetchWHAdmin = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/admin/roles/warehouse`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setWh(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     fetchData();
+    fetchWHAdmin();
   }, []);
+
+  const filteredWarehouses = warehouse.filter((item) => {
+    if (!wh) {
+      return true;
+    }
+    return item.warehouse_name === wh.warehouse_name;
+  });
 
   return (
     <>
       <Flex direction={"column"} gap={2} mr={2}>
-        {warehouse.map((item) => (
+        {filteredWarehouses.map((item) => (
           <Flex
             key={item.id}
             w={"79vw"}

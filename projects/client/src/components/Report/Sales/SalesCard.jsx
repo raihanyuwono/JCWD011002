@@ -34,7 +34,8 @@ const SalesCard = () => {
   const [catBestSeller, setCatBestSeller] = useState([]);
   const [allTimeSales, setAllTimeSales] = useState([]);
   const [data, setData] = useState([]);
-  console.log(currentMonthSales);
+  const yearNow = new Date().getFullYear();
+
   const fetchSalesMonth = async () => {
     try {
       const response = await axios.get(
@@ -128,7 +129,7 @@ const SalesCard = () => {
   const stats = [
     {
       id: 1,
-      label: "Yearly Sales",
+      label: `${yearNow} Sales`,
       value:
         allTimeSales !== null
           ? toRupiah(allTimeSales, { dot: ".", floatingPoint: 0 })
@@ -146,7 +147,7 @@ const SalesCard = () => {
     },
     {
       id: 3,
-      label: "Best Seller",
+      label: `${currentMonth.slice(0, 3)}. Best Sales`,
       value: (
         <Tooltip
           label={bestSeller.name}
