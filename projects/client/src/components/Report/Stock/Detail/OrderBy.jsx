@@ -58,6 +58,7 @@ const OrderBy = ({
         },
       });
       const products = response.data.data.products;
+      console.log(products);
       setInitialItems(
         products.map((product) => ({
           name: product.name,
@@ -329,15 +330,15 @@ const OrderBy = ({
       </Menu>
       <Select
         ml={2}
-        w={"10vw"}
+        w={"15vw"}
         color={"black"}
         bg={"white"}
         value={orderBy}
         onChange={handleOrderChange}
       >
         <option value="desc">Sort By</option>
-        <option value="asc">ASC</option>
-        <option value="desc">DESC</option>
+        <option value="asc">DATE : Oldest</option>
+        <option value="desc">DATE : Newest</option>
       </Select>
       <Box>
         <Popover placement="top-start">

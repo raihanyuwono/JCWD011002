@@ -104,7 +104,7 @@ const Shipped = () => {
                 </Flex>
                 <Flex>
                   <ViewReceipt transactionId={item.transactionId} />
-                  <Badge ml={1} alignSelf={"center"} colorScheme="green">
+                  <Badge bg={"green"} ml={1} alignSelf={"center"} color={"white"}>
                     CONFIRM
                   </Badge>
                 </Flex>

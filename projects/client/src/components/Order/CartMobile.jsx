@@ -116,7 +116,7 @@ const CartMobile = () => {
       </Box>
       {cart.map((item) => (
         <>
-          <Box ml={2} mt={2} bg={"bgSecondary"} color={"white"}>
+          <Box ml={2} mr={2} mt={2} bg={"bgSecondary"} color={"white"}>
             <Flex align={"center"} justifyContent={"space-between"}>
               <Flex>
                 <Image

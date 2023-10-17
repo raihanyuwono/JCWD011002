@@ -22,6 +22,7 @@ import {
   Divider,
   InputGroup,
   InputRightAddon,
+  TableCaption,
 } from "@chakra-ui/react";
 import axios from "axios";
 import Pagination from "../../Pagination";
@@ -174,51 +175,73 @@ const Product = () => {
                   bgColor={"bgSecondary"}
                   colorScheme="whiteAlpha"
                 >
-                  <Tbody>
-                    {item.month_sales
-                      .filter((monthSale) =>
-                        monthSale.product_name
-                          .toLowerCase()
-                          .includes(searchQuery.toLowerCase())
-                      )
-                      .slice(
-                        (currentPage - 1) * itemsPerPage,
-                        currentPage * itemsPerPage
-                      )
-                      .map((monthSale) => (
-                        <Tr key={monthSale.product_id}>
-                          <Td>
-                            <Image
-                              w={"35px"}
-                              src={`${API_URL}/${monthSale.image}`}
-                              alt={monthSale.product_name}
-                            />
-                          </Td>
-                          <Td>{monthSale.product_name}</Td>
-                          <Td>
-                            <Text fontSize={"2xs"}>QTY SOLD:</Text>
-                            <Text>{monthSale.total_qty_sold_product}</Text>
-                          </Td>
-                          <Td>
-                            <Text fontSize={"2xs"}>TOTAL SALES:</Text>
-                            <Text>
-                              {toRupiah(monthSale.total_sales_product, {
-                                dot: ".",
-                                floatingPoint: 0,
-                              })}
-                            </Text>
-                          </Td>
-                          <Td>
-                            <ModalDetail
-                              detail_product_sales={
-                                monthSale.detail_product_sales
-                              }
-                              product_name={monthSale.product_name}
-                            />
-                          </Td>
-                        </Tr>
-                      ))}
-                  </Tbody>
+                  <TableCaption fontStyle={"italic"} fontSize={"sm"} color={"white"}>
+                  Click Detail to see details of each warehouse
+                  </TableCaption>
+                  {item.month_sales
+                    .filter((monthSale) =>
+                      monthSale.product_name
+                        .toLowerCase()
+                        .includes(searchQuery.toLowerCase())
+                    )
+                    .slice(
+                      (currentPage - 1) * itemsPerPage,
+                      currentPage * itemsPerPage
+                    ).length === 0 ? (
+                    <Tbody>
+                      <Tr>
+                        <Td textAlign={"center"} colSpan={5}>
+                          No Data
+                        </Td>
+                      </Tr>
+                    </Tbody>
+                  ) : (
+                    <Tbody>
+                      {item.month_sales
+                        .filter((monthSale) =>
+                          monthSale.product_name
+                            .toLowerCase()
+                            .includes(searchQuery.toLowerCase())
+                        )
+                        .slice(
+                          (currentPage - 1) * itemsPerPage,
+                          currentPage * itemsPerPage
+                        )
+                        .map((monthSale) => (
+                          <Tr key={monthSale.product_id}>
+                            <Td>
+                              <Image
+                                w={"35px"}
+                                src={`${API_URL}/${monthSale.image}`}
+                                alt={monthSale.product_name}
+                              />
+                            </Td>
+                            <Td>{monthSale.product_name}</Td>
+                            <Td>
+                              <Text fontSize={"2xs"}>ALL QTY SOLD:</Text>
+                              <Text>{monthSale.total_qty_sold_product}</Text>
+                            </Td>
+                            <Td>
+                              <Text fontSize={"2xs"}>ALL TOTAL SALES:</Text>
+                              <Text>
+                                {toRupiah(monthSale.total_sales_product, {
+                                  dot: ".",
+                                  floatingPoint: 0,
+                                })}
+                              </Text>
+                            </Td>
+                            <Td>
+                              <ModalDetail
+                                detail_product_sales={
+                                  monthSale.detail_product_sales
+                                }
+                                product_name={monthSale.product_name}
+                              />
+                            </Td>
+                          </Tr>
+                        ))}
+                    </Tbody>
+                  )}
                 </Table>
               </TableContainer>
             </AccordionPanel>

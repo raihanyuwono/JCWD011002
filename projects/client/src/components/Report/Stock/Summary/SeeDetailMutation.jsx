@@ -102,19 +102,29 @@ const SeeDetail = ({ mutation, month_name, year, warehouse_name }) => {
                     </Th>
                   </Tr>
                 </Thead>
-                <Tbody>
-                  {currentItems.map((item) => (
-                    <Tr key={item.id_product}>
-                      <Td>{item.product_name}</Td>
-                      <Td textAlign={"center"}>{item.subtraction_qty}</Td>
-                      <Td textAlign={"center"}>{item.addition_qty}</Td>
-                      <Td textAlign={"center"}>{item.final_qty_mutation}</Td>
-                      <Td textAlign={"center"}>
-                        {item.last_stock_in_warehouse}
+                {currentItems.length === 0 ? (
+                  <Tbody>
+                    <Tr>
+                      <Td py={6} colSpan={5} align={"center"} textAlign="center">
+                        No Data
                       </Td>
                     </Tr>
-                  ))}
-                </Tbody>
+                  </Tbody>
+                ) : (
+                  <Tbody>
+                    {currentItems.map((item) => (
+                      <Tr key={item.id_product}>
+                        <Td>{item.product_name}</Td>
+                        <Td textAlign={"center"}>{item.subtraction_qty}</Td>
+                        <Td textAlign={"center"}>{item.addition_qty}</Td>
+                        <Td textAlign={"center"}>{item.final_qty_mutation}</Td>
+                        <Td textAlign={"center"}>
+                          {item.last_stock_in_warehouse}
+                        </Td>
+                      </Tr>
+                    ))}
+                  </Tbody>
+                )}
               </Table>
             </TableContainer>
             <Pagination

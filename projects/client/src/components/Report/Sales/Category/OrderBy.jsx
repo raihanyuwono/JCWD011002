@@ -149,10 +149,10 @@ const OrderBy = ({
         value={orderBy}
         onChange={handleOrderChange}
       >
-        <option value="total_qty_sold asc">TOTAL : ASC</option>
-        <option value="total_qty_sold desc">TOTAL : DESC</option>
-        <option value="month_year asc">DATE : ASC</option>
-        <option value="month_year desc">DATE : DESC</option>
+        <option value="total_qty_sold asc">TOTAL SALES : Lowest</option>
+        <option value="total_qty_sold desc">TOTAL SALES : Highest</option>
+        <option value="month_year asc">MONTH : Oldest</option>
+        <option value="month_year desc">MONTH : Newest</option>
       </Select>
     </>
   );
