@@ -152,7 +152,7 @@ const Checkout = () => {
   };
 
   const getPayment = async () => {
-    const response = await axios.get(`${API_URL}/transaction`);
+    const response = await axios.get(`${API_URL}/transaction/payments`);
     setPayment(response.data.data);
   };
 
