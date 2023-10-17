@@ -218,11 +218,11 @@ const Product = () => {
                             </Td>
                             <Td>{monthSale.product_name}</Td>
                             <Td>
-                              <Text fontSize={"2xs"}>ALL WH QTY SOLD:</Text>
+                              <Text fontSize={"2xs"}>ALL QTY SOLD:</Text>
                               <Text>{monthSale.total_qty_sold_product}</Text>
                             </Td>
                             <Td>
-                              <Text fontSize={"2xs"}>ALL WH TOTAL SALES:</Text>
+                              <Text fontSize={"2xs"}>ALL TOTAL SALES:</Text>
                               <Text>
                                 {toRupiah(monthSale.total_sales_product, {
                                   dot: ".",
