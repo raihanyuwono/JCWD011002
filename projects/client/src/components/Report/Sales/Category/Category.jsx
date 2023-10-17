@@ -62,7 +62,7 @@ const Category = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8000/api/report/sales/product/permonth"
+        `${API_URL}/report/sales/product/permonth`
       );
       const categoryTotals = extractCategoryTotals(response.data.data);
       setCategoryTotals(categoryTotals);
@@ -175,7 +175,9 @@ const Category = () => {
           {category.length === 0 ? (
             <Tbody>
               <Tr>
-                <Td colSpan={6} textAlign="center">No Data</Td>
+                <Td colSpan={6} textAlign="center">
+                  No Data
+                </Td>
               </Tr>
             </Tbody>
           ) : (
