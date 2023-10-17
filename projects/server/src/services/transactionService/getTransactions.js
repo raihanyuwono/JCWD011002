@@ -67,7 +67,6 @@ const attributes = {
 async function getTransactions(access, query) {
   const { page = 1, limit = 10, sort = "DESC", status } = query;
   const { warehouse, year, month, search = "" } = query;
-  console.log(query)
 
   const pages = pagination.setPagination(page, limit);
   const { count, rows: result } = await transactions.findAndCountAll({

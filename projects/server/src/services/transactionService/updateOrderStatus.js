@@ -6,11 +6,9 @@ const transactions = db["transaction"];
 
 async function updateOrderStatus(id, status) {
   return await db.sequelize.transaction(async function (t) {
-    await transactions.update(
-      { id_status: status },
-      { where: { id }, transaction: t }
-    );
-    console.log("CRON JOB", cronJob);
+    const attr = { id_status: status };
+    if (status === 5) attr["is_confirm"] = true;
+    await transactions.update(attr, { where: { id }, transaction: t });
     if (status === 4) cronJob.startCronJob();
     return messages.success("Status successfully updated");
   });

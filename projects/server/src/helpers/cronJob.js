@@ -20,7 +20,7 @@ const cronJob = async (userId) => {
       if (txn.id_status == 1 && txn.created_at <= expired) {
         await cancelOrder(userId, txn.id);
         console.log(`Updated transaction ID ${txn.id}.`);
-      } else if (txn.id_status == 4 && txn.created_at <= expired_week) {
+      } else if (txn.id_status == 4 && txn.updated_at <= expired_week) {
         txn.update({id_status : 5})
       } else {
         console.log(

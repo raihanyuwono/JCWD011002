@@ -21,7 +21,7 @@ router.get("/:userId", userOrderController.getTransaction);
 // get what payment method each transaction
 router.post("/:id", userOrderController.getPayment);
 // Update Order Status
-router.patch("/status/:id", authentication, authorization, adminController.updateOrderStatus);
+router.patch("/status/:id", authentication, adminController.updateOrderStatus);
 
 //upload receipt
 router.post(
