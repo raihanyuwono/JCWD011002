@@ -48,22 +48,31 @@ const OrderBy = ({
   const decode = jwt_decode(localStorage.getItem("token"));
   const role = decode.role;
   const [wh, setWh] = useState("");
+  const [initialItems, setInitialItems] = useState([]);
 
-  const initialItems = [
-    { name: "Seagate 1TB", value: "1" },
-    { name: "RTX 3090", value: "2" },
-    { name: "Samsung Curve Monitor", value: "3" },
-    { name: "AMD Radeon Supra X", value: "4" },
-    { name: "LG Monitor", value: "5" },
-    { name: "AMD", value: "6" },
-    { name: "BBBBBBBBB", value: "7" },
-    { name: "CCCCCCCCC", value: "8" },
-    { name: "DDDDDDDDDDD", value: "9" },
-    { name: "CCCCCCCCCCCCC", value: "10" },
-    { name: "DDDDDDDDDDDDC", value: "11" },
-    { name: "AEEEEEEEEEEEEEEE", value: "12" },
-    { name: "FFFFFFFFFFFF", value: "13" },
-  ];
+  const fetchProduct = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/product`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      const products = response.data.data.products;
+      console.log(products);
+      setInitialItems(
+        products.map((product) => ({
+          name: product.name,
+          value: product.id,
+        }))
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProduct();
+  }, []);
 
   const [items, setItems] = useState(initialItems.slice(0, 5));
   const [filteredItems, setFilteredItems] = useState(initialItems);
@@ -79,14 +88,14 @@ const OrderBy = ({
     );
 
     setFilteredItems(filtered);
-    setItems(filtered.slice(0, 5)); 
+    setItems(filtered.slice(0, 5));
     setShowLoadMore(filtered.length > 5);
   };
 
   const handleLoadMore = () => {
     const remainingItems = filteredItems.slice(items.length, items.length + 5);
     setItems([...items, ...remainingItems]);
-    setShowLoadMore(remainingItems.length > 0); 
+    setShowLoadMore(remainingItems.length > 0);
   };
   const handleClearSearch = () => {
     setSearchQuery("");
@@ -321,15 +330,15 @@ const OrderBy = ({
       </Menu>
       <Select
         ml={2}
-        w={"10vw"}
+        w={"15vw"}
         color={"black"}
         bg={"white"}
         value={orderBy}
         onChange={handleOrderChange}
       >
         <option value="desc">Sort By</option>
-        <option value="asc">ASC</option>
-        <option value="desc">DESC</option>
+        <option value="asc">DATE : Oldest</option>
+        <option value="desc">DATE : Newest</option>
       </Select>
       <Box>
         <Popover placement="top-start">

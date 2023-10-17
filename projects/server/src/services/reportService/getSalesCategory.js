@@ -77,7 +77,7 @@ const getSalesCategory = async (
         [sequelize.col("product._category.id"), "id_category"],
         [sequelize.fn("SUM", sequelize.col("qty")), "total_qty_sold"],
         [
-          sequelize.fn("SUM", sequelize.literal("product.price * qty")),
+          sequelize.fn("SUM", sequelize.literal("transaction_product.price * qty")),
           "total_price_sold",
         ],
         [sequelize.col("product._category.name"), "category_name"],

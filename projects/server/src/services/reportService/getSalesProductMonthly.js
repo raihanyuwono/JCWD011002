@@ -3,7 +3,7 @@ const models = require("../../database");
 
 const getSalesProductMonthly = async (
   page = 1,
-  pageSize = 10,
+  pageSize = 100000,
   filterByMonth,
   filterByYear,
   orderBy,
@@ -13,7 +13,12 @@ const getSalesProductMonthly = async (
   pageSize = parseInt(pageSize);
 
   try {
-    const whereClause = {};
+    const whereClause = {
+      id_status: {
+        [Op.not]: 6,
+      },
+    };
+
     if (filterByMonth && filterByYear) {
       whereClause.created_at = {
         [Op.and]: [
@@ -42,7 +47,7 @@ const getSalesProductMonthly = async (
               include: [
                 {
                   model: models.category,
-                  attributes: ["name"],
+                  attributes: ["id", "name"],
                   as: "_category",
                 },
               ],
@@ -91,6 +96,8 @@ const getSalesProductMonthly = async (
             product_id: productData.id,
             product_name: productData.name,
             image: productData.image,
+            id_category: productData._category.id,
+            category_name: productData._category.name,
             total_qty_sold_product: productTransaction.qty,
             total_sales_product:
               productTransaction.price * productTransaction.qty,

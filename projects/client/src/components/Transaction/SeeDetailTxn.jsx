@@ -23,6 +23,7 @@ import axios from "axios";
 import jwt_decode from "jwt-decode";
 import toRupiah from "@develoka/angka-rupiah-js";
 import { BsBoxArrowInUpRight } from "react-icons/bs";
+import { extendTheme, useMediaQuery } from "@chakra-ui/react";
 
 const SeeDetailTxn = ({ transactionId }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -59,11 +60,22 @@ const SeeDetailTxn = ({ transactionId }) => {
 
     return rupiah;
   }
+  const breakpoints = {
+    sm: "320px",
+    md: "768px",
+    lg: "960px",
+    xl: "1200px",
+    "2xl": "1536px",
+  };
+
+  const theme = extendTheme({ breakpoints });
+  const [isMd] = useMediaQuery("(max-width: " + theme.breakpoints.md + ")");
+
 
   return (
     <>
       <Flex cursor={"pointer"} onClick={handleOpen} align={"center"}>
-        <Text>See Detail&nbsp;</Text>
+        <Text fontSize={isMd ? "sm" : "md"}>See Detail&nbsp;</Text>
         <BsBoxArrowInUpRight size={20} />
       </Flex>
       <Modal
@@ -117,7 +129,7 @@ const SeeDetailTxn = ({ transactionId }) => {
                 >
                   <Flex align={"center"} justifyContent={"space-between"}>
                     <Flex>
-                      <Image w={"4rem"} src={item.image} />
+                      <Image w={"4rem"} src={`${API_URL}/${item.image}`} />
                       <Flex direction={"column"} justifyContent={"center"}>
                         <Text ml={3}>{item.name}</Text>
                         <Text ml={3} fontSize={"xs"}>

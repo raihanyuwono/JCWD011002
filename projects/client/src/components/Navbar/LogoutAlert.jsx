@@ -40,8 +40,8 @@ const LogoutAlert = () => {
       >
         <AlertDialogOverlay />
 
-        <AlertDialogContent>
-          <AlertDialogHeader>Log Out?</AlertDialogHeader>
+        <AlertDialogContent bg={"bgSecondary"} color={"white"}>
+          <AlertDialogHeader bg={"primary"}>Log Out?</AlertDialogHeader>
           <AlertDialogCloseButton />
           <AlertDialogBody>Are you sure you want to log out?</AlertDialogBody>
           <AlertDialogFooter>

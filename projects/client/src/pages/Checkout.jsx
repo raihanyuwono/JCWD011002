@@ -54,6 +54,8 @@ const Checkout = () => {
   const [payment, setPayment] = useState([]);
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [dataAddress, setDataAddress] = useState([]);
+
   const handlePaymentMethodChange = (event) => {
     const selectedMethodId = event.target.value;
     const selectedMethod = payment.find(
@@ -73,6 +75,26 @@ const Checkout = () => {
     };
   }, []);
 
+  useEffect(() => {
+    viewCart();
+    getTotal();
+    fetchAddress();
+    getPayment();
+  }, []);
+
+  const fetchAddress = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/address`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setDataAddress(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const viewCart = async () => {
     const response = await axios.get(`${API_URL}/order/cart/${userId}`);
     setCart(response.data.data);
@@ -81,6 +103,30 @@ const Checkout = () => {
     const response = await axios.get(`${API_URL}/order/${userId}`);
     setTotal(response.data.data.total);
   };
+  const emptyAddress = `{
+    "name": "",
+    "province": "",
+    "city_name": "Please Add New Address!",
+    "postal_code": "",
+    "full_address": "Address Not Found"
+  }`;
+
+  const noDefault = `{
+    "name": "",
+    "province": "",
+    "city_name": "Please Select Address!",
+    "postal_code": "",
+    "full_address": "No Default"
+  }`;
+
+  let add = localStorage.getItem("selectedAddress");
+  if (dataAddress.length === 0) {
+    localStorage.setItem("selectedAddress", emptyAddress);
+  } else if (add === "undefined") {
+    localStorage.setItem("selectedAddress", noDefault);
+  } else {
+    localStorage.getItem("selectedAddress");
+  }
 
   const address = JSON.parse(localStorage.getItem("selectedAddress"));
   const { province, city_name, full_address, postal_code } = address;
@@ -156,12 +202,6 @@ const Checkout = () => {
     setPayment(response.data.data);
   };
 
-  useEffect(() => {
-    viewCart();
-    getTotal();
-    getPayment();
-  }, []);
-
   const handleExplore = () => {
     navigate("/");
   };
@@ -187,7 +227,7 @@ const Checkout = () => {
             Checkout
           </Text>
           <Box mb={1} w={"100vw"} px={6} py={6} bgColor={"secondary"}>
-            <SelectAddress />
+            <SelectAddress dataAddress={dataAddress} />
           </Box>
           <TableContainer>
             <Table
@@ -348,8 +388,14 @@ const Checkout = () => {
             >
               <AlertDialogOverlay />
 
-              <AlertDialogContent>
-                <AlertDialogHeader>Place Order?</AlertDialogHeader>
+              <AlertDialogContent bg={"bgSecondary"} color={"white"}>
+                <AlertDialogHeader
+                  bg={"primary"}
+                  border={"none"}
+                  color={"white"}
+                >
+                  Place Order?
+                </AlertDialogHeader>
                 <AlertDialogCloseButton />
                 <AlertDialogBody>
                   Are you sure you want to place an order? or explore more
@@ -358,10 +404,10 @@ const Checkout = () => {
                 <AlertDialogFooter>
                   <Button onClick={handleExplore}>Explore</Button>
                   <Button
+                    ml={2}
                     isLoading={isLoading}
                     onClick={handleCheckout}
                     colorScheme="green"
-                    ml={3}
                   >
                     Place Order
                   </Button>

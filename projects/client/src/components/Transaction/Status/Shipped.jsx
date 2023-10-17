@@ -9,6 +9,7 @@ import FilterBy from "../FilterBy";
 import toRupiah from "@develoka/angka-rupiah-js";
 import SeeDetailTxn from "../SeeDetailTxn";
 import ViewReceipt from "../ViewReceipt";
+import { extendTheme, useMediaQuery } from "@chakra-ui/react";
 
 const Shipped = () => {
   const API_URL = process.env.REACT_APP_API_BASE_URL;
@@ -42,72 +43,115 @@ const Shipped = () => {
     setEndDate(end);
   };
 
+  const breakpoints = {
+    sm: "320px",
+    md: "768px",
+    lg: "960px",
+    xl: "1200px",
+    "2xl": "1536px",
+  };
+
+  const theme = extendTheme({ breakpoints });
+  const [isMd] = useMediaQuery("(max-width: " + theme.breakpoints.md + ")");
+
   return (
     <>
-      <Flex justifyContent={"space-between"} mb={4}>
-        <Box w={"30vw"}>
-          <SearchBar onSearch={setSearchQuery} />
-        </Box>
-        <Box ml={2}>
-          <FilterBy
-            onFilterChange={setFilterBy}
-            onDateRangeFilter={handleDateRangeFilter}
-          />
-        </Box>
-      </Flex>
-      {data.map((item) => (
-        <Box
-          key={item.transactionId}
-          mb={2}
-          bg={"bgSecondary"}
-          p={4}
-          w={"70vw"}
-          color={"white"}
+      {data.length === 0 ? (
+        <Text
+          align={"center"}
+          fontSize={isMd ? "sm" : "md"}
+          fontWeight={"bold"}
         >
-          <Flex justifyContent={"space-between"}>
-            <Flex>
-              <Text fontWeight={"bold"}>{item.txn_date}&nbsp;</Text>
-              <Badge alignSelf={"center"} colorScheme="green">
-                {item.status}
-              </Badge>
-              <Text>&nbsp;MWECG2/ID/TXN{item.transactionId}</Text>
-            </Flex>
-            <ViewReceipt transactionId={item.transactionId} />
+          No Transaction Found
+        </Text>
+      ) : (
+        <>
+          <Flex
+            direction={isMd ? "column" : "row"}
+            justifyContent={"space-between"}
+            mb={2}
+          >
+            <SearchBar onSearch={setSearchQuery} />
+            <FilterBy
+              onFilterChange={setFilterBy}
+              onDateRangeFilter={handleDateRangeFilter}
+            />
           </Flex>
-          <Divider mt={2} mb={2} />
-          <Flex align={"center"} justifyContent={"space-between"}>
-            <Flex>
-              <Image borderRadius={"5px"} w={"75px"}
-                src={`${API_URL}/${item.product_image}`}/>
-              <Flex direction={"column"}>
-                <Text ml={4} fontWeight={"bold"}>
-                  {item.product_name}
-                </Text>
-                {item.numProducts > 1 ? (
-                  <Text ml={4} fontSize={"sm"}>
-                    + {item.numProducts} other
+          {data.map((item) => (
+            <Box
+              key={item.transactionId}
+              mb={2}
+              bg={"bgSecondary"}
+              p={4}
+              w={isMd ? "100vw" : "70vw"}
+              color={"white"}
+            >
+              <Flex justifyContent={"space-between"}>
+                <Flex>
+                  <Text fontSize={isMd ? "sm" : "md"} fontWeight={"bold"}>
+                    {item.txn_date}&nbsp;
                   </Text>
-                ) : (
-                  <></>
-                )}
+                  <Badge alignSelf={"center"} colorScheme="green">
+                    {item.status === "Dikirim" ? "Shipped" : ""}
+                  </Badge>
+                  {isMd ? (
+                    <></>
+                  ) : (
+                    <Text fontSize={isMd ? "sm" : "md"}>
+                      &nbsp;MWECG2/ID/TXN{item.transactionId}
+                    </Text>
+                  )}
+                </Flex>
+                <Flex>
+                  <ViewReceipt transactionId={item.transactionId} />
+                  <Badge bg={"green"} ml={1} alignSelf={"center"} color={"white"}>
+                    CONFIRM
+                  </Badge>
+                </Flex>
               </Flex>
-            </Flex>
-            <Flex direction={"column"}>
-              <Text fontSize={"sm"}>Total:</Text>
-              <Text fontWeight={"bold"} fontSize={"xl"}>
-                {toRupiah(item.total, { dot: ".", floatingPoint: 0 })}
-              </Text>
-              <SeeDetailTxn transactionId={item.transactionId} />
-            </Flex>
-          </Flex>
-        </Box>
-      ))}
-      <Pagination
-        totalItems={totalPages * 10}
-        itemsPerPage={10}
-        onPageChange={setCurrentPage}
-        currentPage={currentPage}
-      />
+              <Divider mt={2} mb={2} />
+              <Flex align={"center"} justifyContent={"space-between"}>
+                <Flex>
+                  <Image
+                    w={isMd ? "60px" : "75px"}
+                    borderRadius={"5px"}
+                    src={`${API_URL}/${item.product_image}`}
+                  />
+                  <Flex direction={"column"}>
+                    <Text
+                      ml={4}
+                      fontSize={isMd ? "sm" : "md"}
+                      fontWeight={"bold"}
+                    >
+                      {item.product_name}
+                    </Text>
+                    {item.numProducts > 1 ? (
+                      <Text ml={4} fontSize={"sm"}>
+                        + {item.numProducts} other
+                      </Text>
+                    ) : (
+                      <></>
+                    )}
+                  </Flex>
+                </Flex>
+                <Flex direction={"column"}>
+                  <Text fontSize={"sm"}>Total:</Text>
+                  <Text fontWeight={"bold"} fontSize={isMd ? "md" : "xl"}>
+                    {toRupiah(item.total, { dot: ".", floatingPoint: 0 })}
+                  </Text>
+                  <SeeDetailTxn transactionId={item.transactionId} />
+                </Flex>
+              </Flex>
+            </Box>
+          ))}
+          <Pagination
+            totalItems={totalPages * 10}
+            itemsPerPage={10}
+            onPageChange={setCurrentPage}
+            currentPage={currentPage}
+          />
+        </>
+      )}
     </>
   );
 };

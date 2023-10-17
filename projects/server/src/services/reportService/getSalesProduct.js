@@ -118,7 +118,7 @@ const getSalesProduct = async (
       id_product: sales.product.id,
       name: sales.product.name,
       id_category: sales.product.id_category,
-      category: sales.product.category.name,
+      category: sales.product._category ? sales.product._category.name : "",
       image: sales.product.image,
       description: sales.product.description,
       price: sales.product.price,

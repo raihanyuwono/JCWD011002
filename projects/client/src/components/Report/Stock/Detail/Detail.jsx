@@ -10,6 +10,7 @@ import {
   TableCaption,
   TableContainer,
   Flex,
+  Text,
 } from "@chakra-ui/react";
 import axios from "axios";
 import OrderBy from "./OrderBy";
@@ -66,6 +67,7 @@ const Detail = () => {
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
   };
+
   const handleDateRangeFilter = (start, end) => {
     setStartDate(start);
     setEndDate(end);
@@ -97,38 +99,68 @@ const Detail = () => {
           <Thead bgColor={"primary"}>
             <Tr>
               <Th color={"white"}>NO</Th>
-              <Th textAlign={"center"} color={"white"}>WH FROM</Th>
-              <Th textAlign={"center"} color={"white"}>WH TO</Th>
-              <Th textAlign={"center"} color={"white"}>PRODUCT</Th>
-              <Th textAlign={"center"} color={"white"}>QTY</Th>
-              <Th textAlign={"center"} color={"white"}>STATUS</Th>
-              <Th textAlign={"center"} color={"white"}>INVOICE</Th>
-              <Th textAlign={"center"} color={"white"}>INVOICE DATE</Th>
+              <Th textAlign={"center"} color={"white"}>
+                WH FROM
+              </Th>
+              <Th textAlign={"center"} color={"white"}>
+                WH TO
+              </Th>
+              <Th textAlign={"center"} color={"white"}>
+                PRODUCT
+              </Th>
+              <Th textAlign={"center"} color={"white"}>
+                QTY
+              </Th>
+              <Th textAlign={"center"} color={"white"}>
+                STATUS
+              </Th>
+              <Th textAlign={"center"} color={"white"}>
+                INVOICE
+              </Th>
+              <Th textAlign={"center"} color={"white"}>
+                INVOICE DATE
+              </Th>
             </Tr>
           </Thead>
-          <Tbody>
-            {data.map((item) => (
-              <Tr key={item.id}>
-                <Td>{item.id}</Td>
-                <Td>{item.wh_from}</Td>
-                <Td>{item.wh_to}</Td>
-                <Td>{item.product}</Td>
-                <Td textAlign={"center"}>{item.qty}</Td>
-                <Td textAlign={"center"}>{item.status}</Td>
-                <Td textAlign={"center"}>MWECG2/ID/TXN{item.txn_id}</Td>
-                <Td textAlign={"center"}>{item.txn_date}</Td>
+          {/* <Tbody> */}
+          {data.length === 0 ? (
+            <Tbody>
+              <Tr>
+                <Td colSpan={8} align={"center"} textAlign="center">
+                  No Data
+                </Td>
               </Tr>
-            ))}
-          </Tbody>
+            </Tbody>
+          ) : (
+            <Tbody>
+              {data.map((item, index) => (
+                <Tr key={item.id}>
+                  <Td>{(currentPage - 1) * 10 + index + 1}</Td>
+                  <Td>{item.wh_from}</Td>
+                  <Td>{item.wh_to}</Td>
+                  <Td>{item.product}</Td>
+                  <Td textAlign={"center"}>{item.qty}</Td>
+                  <Td textAlign={"center"}>{item.status}</Td>
+                  <Td textAlign={"center"}>MWECG2/ID/TXN{item.txn_id}</Td>
+                  <Td textAlign={"center"}>{item.txn_date}</Td>
+                </Tr>
+              ))}
+            </Tbody>
+          )}
+          {/* </Tbody> */}
         </Table>
       </TableContainer>
-      <Pagination
-        totalItems={data.length}
-        itemsPerPage={10}
-        onPageChange={handlePageChange}
-        currentPage={currentPage}
-        totalPages={totalPages}
-      />
+      {data.length === 0 ? (
+        <></>
+      ) : (
+        <Pagination
+          totalItems={data.length}
+          itemsPerPage={10}
+          onPageChange={handlePageChange}
+          currentPage={currentPage}
+          totalPages={totalPages}
+        />
+      )}
     </>
   );
 };
