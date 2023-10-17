@@ -17,6 +17,7 @@ import {
   InputGroup,
   InputLeftElement,
   Text,
+  Image,
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 import { RiShoppingCartLine } from "react-icons/ri";
@@ -110,7 +111,7 @@ export default function Simple() {
             className="navbar"
           />
           <HStack spacing={8} alignItems={"center"}>
-            <Box>Logo</Box>
+            <Image src="/logo.png" h="36px"/>
           </HStack>
           {/* <InputGroup maxW={"300px"} display={{ base: "none", md: "block" }}>
             <InputLeftElement
