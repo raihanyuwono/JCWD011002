@@ -13,6 +13,8 @@ import { getTransactions } from "../../../../../api/transactions";
 import Pagination from "../../../../Utility/Pagination";
 import { useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { getRole } from "../../../../../helpers/Roles";
+import { getAdminWarehouse } from "../../../../../api/admin";
 
 const date = new Date();
 
@@ -37,18 +39,24 @@ const thAttr = {
   color: "textPrimary",
 };
 
-function TabPayment({ status }) {
-  const [transactions, setTransaction] = useState([]);
-  const [maxPage, setMaxPage] = useState(1);
-  const toast = useToast();
-  const [searchParams, setSearchParams] = useSearchParams({
+function setUrlParams(){
+  const params = {
     page: 1,
     month: date.getMonth(),
     year: date.getFullYear(),
     sort: "DESC",
     k_order: "",
     warehouse: 0,
-  });
+  }
+  if(getRole() === "admin warehouse") delete params.warehouse;
+  return params;
+}
+
+
+function TabPayment({ status }) {
+  const [transactions, setTransaction] = useState([]);
+  const [maxPage, setMaxPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams(setUrlParams());
   const currentPage = searchParams.get("page");
   const currentSort = searchParams.get("sort");
   const currentMonth = searchParams.get("month");
@@ -56,7 +64,16 @@ function TabPayment({ status }) {
   const currentWarehouse = searchParams.get("warehouse");
   const currentSearch = useSelector((state) => state.search.orders);
   const dependancies = [currentSort, currentMonth, currentYear, currentSearch, currentWarehouse];
-
+  const toast = useToast();
+  
+  // let currentWarehouse;
+  
+  async function selectWarehouse(){
+    if(getRole() === "admin") return currentWarehouse
+    const { data } = await getAdminWarehouse(toast);
+    return data?.id_warehouse;
+  }
+  
   async function fetchTransactions() {
     const attributes = {
       status,
@@ -66,7 +83,7 @@ function TabPayment({ status }) {
       month: currentMonth,
       year: currentYear,
       search: currentSearch,
-      warehouse: currentWarehouse,
+      warehouse: await selectWarehouse(),
     };
     if (parseInt(currentWarehouse) === 0) delete attributes.warehouse;
     const { data } = await getTransactions(toast, attributes);

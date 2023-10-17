@@ -1,19 +1,14 @@
 import {
-  Button,
   Drawer,
   DrawerBody,
   DrawerCloseButton,
   DrawerContent,
-  DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  Flex,
-  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { cancelOrder, getTransaction } from "../../../../../api/transactions";
+import { getTransaction } from "../../../../../api/transactions";
 import { useEffect, useState } from "react";
-import PopoverConfirmation from "../../../../Utility/PopoverConfirmation";
 import TransactionDetail from "./TransactionDetail";
 import HeaderDetail from "./HeaderDetail";
 import FooterButtons from "./FooterButtons";
@@ -50,16 +45,6 @@ function DrawerTransaction({
   onClose,
 }) {
   const { transaction_payments: payment, user } = transaction;
-  const {
-    isOpen: isConfirmOpen,
-    onOpen: confirmOpen,
-    onClose: confirmClose,
-  } = useDisclosure();
-  const {
-    isOpen: isCancelOpen,
-    onOpen: cancelOpen,
-    onClose: cancelClose,
-  } = useDisclosure();
   const [products, setProducts] = useState([]);
   const toast = useToast();
 
@@ -78,33 +63,6 @@ function DrawerTransaction({
   useEffect(() => {
     fetchTransactionProduct();
   }, []);
-
-  const btnConfirm = {
-    children: "Confirm",
-    variant: "success",
-    onClick: confirmOpen,
-  };
-  const btnCancel = {
-    children: "Cancel",
-    variant: "error",
-    onClick: cancelOpen,
-  };
-
-  const attributes = { userId: user?.id, transactionId: transaction?.id };
-
-  const confirmAttr = {
-    trigger: <Button {...btnConfirm} />,
-    confirm: () => console.log("Confirm Transaction"),
-    isOpen: isConfirmOpen,
-    onClose: confirmClose,
-  };
-
-  const cancelAttr = {
-    trigger: <Button {...btnCancel} />,
-    confirm: async () => await cancelOrder(toast, attributes),
-    isOpen: isCancelOpen,
-    onClose: cancelClose,
-  };
 
   const headerAttr = {
     id: transaction?.id || 0,

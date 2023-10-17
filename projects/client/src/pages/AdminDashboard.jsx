@@ -66,7 +66,7 @@ const menuList = [
     ACCESS_ALL_ADMIN,
     dummyPage("Manage Mutation")
   ),
-  createMenuSet("Orders", <IcOrder />, ACCESS_ADMIN, <ManageOrder />),
+  createMenuSet("Orders", <IcOrder />, ACCESS_ALL_ADMIN, <ManageOrder />),
   createMenuSet("Reports", <IcReport />, ACCESS_ALL_ADMIN, <Report />),
 ];
 

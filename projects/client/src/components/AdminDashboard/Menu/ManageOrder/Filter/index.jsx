@@ -3,6 +3,7 @@ import FilterWarehouse from "./FilterWarehouse";
 import Searchbar from "./Searchbar";
 import FilterDate from "./FilterDate";
 import FilterSort from "./FilterSort";
+import { getRole } from "../../../../../helpers/Roles";
 
 const container = {
   direction: "row",
@@ -12,9 +13,10 @@ const container = {
 };
 
 function Filter() {
+  const role = getRole();
   return (
     <Flex {...container}>
-      <FilterWarehouse />
+      {role === "admin" && <FilterWarehouse />}
       <FilterDate />
       <Searchbar />
       <FilterSort />
