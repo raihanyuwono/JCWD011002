@@ -19,7 +19,7 @@ function setFilter(warehouses) {
 }
 
 function FilterStatus() {
-  const [warehouses, setWarehouses] = useState([{ name: "All", id: 0 }]);
+  const [warehouses, setWarehouses] = useState([{ name: "All Warehouse", id: 0 }]);
   const [searchParams, setSearchParams] = useSearchParams({ warehouse: 0 });
   const toast = useToast();
 
