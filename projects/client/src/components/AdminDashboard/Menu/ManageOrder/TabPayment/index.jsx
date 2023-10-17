@@ -39,7 +39,7 @@ const thAttr = {
   color: "textPrimary",
 };
 
-function setUrlParams(){
+function setUrlParams() {
   const params = {
     page: 1,
     month: date.getMonth(),
@@ -47,11 +47,10 @@ function setUrlParams(){
     sort: "DESC",
     k_order: "",
     warehouse: 0,
-  }
-  if(getRole() === "admin warehouse") delete params.warehouse;
+  };
+  if (getRole() === "admin warehouse") delete params.warehouse;
   return params;
 }
-
 
 function TabPayment({ status }) {
   const [transactions, setTransaction] = useState([]);
@@ -63,17 +62,23 @@ function TabPayment({ status }) {
   const currentYear = searchParams.get("year");
   const currentWarehouse = searchParams.get("warehouse");
   const currentSearch = useSelector((state) => state.search.orders);
-  const dependancies = [currentSort, currentMonth, currentYear, currentSearch, currentWarehouse];
+  const updateStatus = useSelector((state) => state.trigger.updateStatus);
+  const dependancies = [
+    currentSort,
+    currentMonth,
+    currentYear,
+    currentSearch,
+    currentWarehouse,
+    updateStatus,
+  ];
   const toast = useToast();
-  
-  // let currentWarehouse;
-  
-  async function selectWarehouse(){
-    if(getRole() === "admin") return currentWarehouse
+
+  async function selectWarehouse() {
+    if (getRole() === "admin") return currentWarehouse;
     const { data } = await getAdminWarehouse(toast);
     return data?.id_warehouse;
   }
-  
+
   async function fetchTransactions() {
     const attributes = {
       status,
@@ -113,14 +118,7 @@ function TabPayment({ status }) {
     resetPage();
   }, dependancies);
 
-  const headers = [
-    "Invoice",
-    "Date",
-    "User",
-    "Payment",
-    "Total",
-    "Action",
-  ];
+  const headers = ["Invoice", "Date", "User", "Payment", "Total", "Action"];
 
   const transactionsAttr = {
     transactions,
