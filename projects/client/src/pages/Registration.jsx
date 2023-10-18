@@ -7,13 +7,13 @@ const banner = {
   h: "full",
   bgPos: "center",
   bgSize: "cover",
-  filter: "brightness(80%)",
+  filter: {base: "none", lg: "brightness(60%)"},
 };
 
 function MobileView() {
   const backdrop = {
     w: "full",
-    backdropFilter: "blur(8px)",
+    backdropFilter: "blur(8px) brightness(60%)",
   };
   const mobile = { display: { base: "flex", lg: "none" } };
   return (

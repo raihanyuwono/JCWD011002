@@ -58,7 +58,7 @@ function FormLogin() {
     "Username or Email",
     <FiUser />,
     formik,
-    "textReverseSecondary"
+    "light"
   );
   const passwordAttr = setAttr(
     "password",
@@ -66,7 +66,7 @@ function FormLogin() {
     "Password",
     <FiUnlock />,
     formik,
-    "textReverseSecondary"
+    "light"
   );
   const buttonAttr = {
     type: "submit",

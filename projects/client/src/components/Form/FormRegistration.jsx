@@ -49,7 +49,7 @@ function FormRegistration() {
     "Name",
     <FiUser />,
     formik,
-    "textPrimary"
+    "dark"
   );
   const usernameAttr = setAttr(
     "username",
@@ -57,7 +57,7 @@ function FormRegistration() {
     "Username",
     <FiUser />,
     formik,
-    "textPrimary"
+    "dark"
   );
   const phoneAttr = setAttr(
     "phone",
@@ -65,7 +65,7 @@ function FormRegistration() {
     "Phone",
     <FiPhone />,
     formik,
-    "textPrimary"
+    "dark"
   );
   const passwordAttr = setAttr(
     "password",
@@ -73,7 +73,7 @@ function FormRegistration() {
     "Password",
     <FiUnlock />,
     formik,
-    "textPrimary"
+    "dark"
   );
   const confirmPasswordAttr = setAttr(
     "confirmPassword",
@@ -81,7 +81,7 @@ function FormRegistration() {
     "Confirm Password",
     <FiUnlock />,
     formik,
-    "textPrimary"
+    "dark"
   );
 
   const buttonAttr = {

@@ -37,7 +37,7 @@ function FormForgotPassword({ onClose }) {
     "Email",
     <FiMail />,
     formik,
-    "textReverseSecondary"
+    "light"
   );
   const buttonAttr = {
     type: "submit",

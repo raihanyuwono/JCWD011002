@@ -31,7 +31,7 @@ function FormRegister({ onClose }) {
     onSubmit: (values) => handleSubmit(values),
   });
 
-  const emailAttr = setAttr("email", "email", "Email", <FiMail />, formik, "textReverseSecondary");
+  const emailAttr = setAttr("email", "email", "Email", <FiMail />, formik, "light");
   const buttonAttr = {
     type: "submit",
     variant: "capsuleSuccess",

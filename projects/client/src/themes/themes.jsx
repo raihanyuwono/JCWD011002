@@ -46,7 +46,7 @@ const themes = extendTheme({
     bgPrimary: "#1C1C1C",
     bgSecondary: "#2D2D2D",
     textPrimary: "#FFFFFF",
-    textSecondary: "#E0E0E0",
+    textSecondary: "#C7C7C7",
     textReversePrimary: "#000000",
     textReverseSecondary: "#61677A",
     successPrimary: "#2E7D32",

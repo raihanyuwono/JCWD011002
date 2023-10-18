@@ -15,10 +15,8 @@ const additionalAttr = {
   bgColor: "primary",
 };
 
-function setAttr(id, type, placeholder, icon, formik, placeholderColor) {
-  const attr = { id, type, placeholder, icon, formik };
-  if (placeholderColor) attr["placeholderColor"] = placeholderColor;
-  return attr;
+function setAttr(id, type, placeholder, icon, formik, mode = "light") {
+  return { id, type, placeholder, icon, formik, mode };
 }
 
 function rightElement(id, type, showPass, setShowPass) {
@@ -42,14 +40,7 @@ function rightElement(id, type, showPass, setShowPass) {
   );
 }
 
-function InputTextCustom({
-  id,
-  type,
-  placeholder,
-  icon,
-  formik,
-  placeholderColor,
-}) {
+function InputTextCustom({ id, type, placeholder, icon, formik, mode }) {
   const [showPass, setShowPass] = useState(false);
 
   function handleOnChange(event) {
@@ -72,9 +63,10 @@ function InputTextCustom({
     placeholder,
     border: "none",
     pl: "3rem",
+    color: mode === "light" ? "textReversePrimary" : "textPrimary",
     onChange: (event) => handleOnChange(event),
     _placeholder: {
-      color: placeholderColor || "textSecondary",
+      color: mode === "light" ? "textReverseSecondary" : "textSecondary",
     },
   };
   const formErrorAttr = {

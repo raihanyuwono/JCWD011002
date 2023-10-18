@@ -46,13 +46,15 @@ function FormResetPassword() {
     "Password",
     <FiUnlock />,
     formik,
+    "dark"
   );
   const confirmPasswordAttr = setAttr(
     "confirmPassword",
     "password",
     "Confirm Password",
     <FiUnlock />,
-    formik
+    formik,
+    "dark"
   );
 
   const buttonAttr = {
@@ -62,7 +64,7 @@ function FormResetPassword() {
     isLoading,
   };
   return (
-    <form style={{width: "100%"}} onSubmit={formik.handleSubmit}>
+    <form style={{ width: "100%" }} onSubmit={formik.handleSubmit}>
       <Flex {...container}>
         <InputTextCustom {...passwordAttr} />
         <InputTextCustom {...confirmPasswordAttr} />
