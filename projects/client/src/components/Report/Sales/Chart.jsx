@@ -12,9 +12,8 @@ const Charts = () => {
   const [data, setData] = useState([]);
   const chartRef = useRef(null);
   const yearNow = new Date().getFullYear();
-  const [dataWarehouse, setDataWarehouse] = useState([]);
   const [whName, setWhName] = useState("");
-  const [wh, setWh] = useState(null);
+  const [wh, setWh] = useState(0);
 
   const fetchWHAdmin = async () => {
     try {
@@ -24,26 +23,13 @@ const Charts = () => {
         },
       });
       setWh(response.data.data.id_warehouse);
+      setWhName(response.data.data.warehouse_name);
     } catch (error) {
       console.log(error);
     }
   };
 
-  // const fetchWarehouse = async () => {
-  //   try {
-  //     const response = await axios.get(`${API_URL}/warehouse`, {
-  //       headers: {
-  //         Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //       },
-  //     });
-  //     setDataWarehouse(response.data.data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
   useEffect(() => {
-    // fetchWarehouse();
     fetchWHAdmin();
     fetchData();
   }, [wh]);
@@ -62,7 +48,7 @@ const Charts = () => {
         `${API_URL}/report/sales/warehouse/${wh}`
       );
       setData(response.data.warehouse_sales);
-      setWhName(response.data.warehouseName);
+      setWhName(response.data.warehouse_name);
     } catch (error) {
       console.log(error);
     }
@@ -81,12 +67,16 @@ const Charts = () => {
     if (data.length > 0 && chartRef.current) {
       const ctx = chartRef.current.getContext("2d");
 
+      if (chartRef.current.chart) {
+        chartRef.current.chart.destroy();
+      }
+  
       const labels = data.map((item) => `${item.month} ${item.year}`);
       const totalSales = data.map((item) =>
         parseInt(item.total_sales_per_month)
       );
-
-      new Chart(ctx, {
+  
+      const newChart = new Chart(ctx, {
         type: "bar",
         data: {
           labels: labels,
@@ -128,8 +118,10 @@ const Charts = () => {
           },
         },
       });
+      chartRef.current.chart = newChart;
     }
   }, [data]);
+  
 
   return (
     <>
@@ -141,24 +133,6 @@ const Charts = () => {
             </Text>
           ) : (
             <></>
-            // <Select
-            //   bg={"#393939"}
-            //   color={"white"}
-            //   border={"none"}
-            //   borderBottomRadius={0}
-            //   w={"12vw"}
-            //   placeholder="Select Warehouse"
-            // >
-            //   {dataWarehouse.map((warehouse) => (
-            //     <option
-            //       style={{ color: "black" }}
-            //       key={warehouse.id}
-            //       value={warehouse.id}
-            //     >
-            //       {warehouse.name}
-            //     </option>
-            //   ))}
-            // </Select>
           )}
         </Flex>
         <canvas
