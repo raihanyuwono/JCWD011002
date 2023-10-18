@@ -18,6 +18,8 @@ function UserProfile() {
     confirm_password: '',
     avatar: '',
   });
+
+  
   const fetchUserData = async () => {
     if (token) {
       const { data } = await getUser(token, setUserData, toast);
@@ -91,7 +93,7 @@ function UserProfile() {
       <Card w={['100%', '100%', '90%']} bg={"blueCold"}>
         <Flex justifyContent="center" alignItems="center" minH="65vh" direction={{ base: 'column', md: 'column', xl: 'row' }}>
           <ChangeAvatar
-            userData={userData}
+            userData={userData} fetchUserData={fetchUserData}
           />
           <RenderDataUser userData={userData} renderField={renderField} />
           <ModalChangePassword

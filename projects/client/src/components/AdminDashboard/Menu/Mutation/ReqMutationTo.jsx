@@ -12,7 +12,6 @@ const ReqMutationTo = () => {
   const [warehouse_from, setWarehouseFrom] = useState('')
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  console.log(data)
   const fetchData = async () => {
     try {
       const { data } = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/stock/pendingwhto`, {
@@ -25,7 +24,6 @@ const ReqMutationTo = () => {
           Authorization: `Bearer ${localStorage.getItem("token")}`
         }
       })
-      console.log(data);
       setData(data.data)
     } catch (error) {
       console.log(error)

@@ -19,7 +19,6 @@ const AllMutation = () => {
   const handlePageChange = (newPage) => {
     setPage(newPage)
   }
-  console.log("all mutaion:", data)
   const fetchData = async () => {
     try {
       const { data } = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/stock`, {
@@ -36,7 +35,6 @@ const AllMutation = () => {
           Authorization: `Bearer ${localStorage.getItem("token")}`
         }
       })
-      console.log(data);
       setData(data.data)
       setTotalPages(data.totalPages)
     } catch (error) {

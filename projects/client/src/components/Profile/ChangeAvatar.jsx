@@ -3,10 +3,13 @@ import { Box, Avatar, Text, Button, Stack, Flex, Input, useToast } from '@chakra
 import { MdOutlineCancelPresentation } from 'react-icons/md'
 import { FaRegEdit, FaRegSave } from 'react-icons/fa'
 import { updateAvatar } from '../../api/profile'
+import { useDispatch } from 'react-redux'
+import { updateUserAvatar } from '../../storage/userReducer'
 
-const ChangeAvatar = ({ userData }) => {
+const ChangeAvatar = ({ userData, fetchUserData }) => {
   const toast = useToast();
   const token = localStorage.getItem('token');
+  const dispatch = useDispatch()
 
   const [isEditingAvatar, setIsEditingAvatar] = useState(false);
   const [file, setFile] = useState(null);
@@ -17,8 +20,17 @@ const ChangeAvatar = ({ userData }) => {
     setIsEditingAvatar(false);
   }
   const handleSaveAvatarClick = async () => {
-    await updateAvatar(token, toast, file, userData);
+    console.log("save di klik")
+    await dispatch(updateUserAvatar({ token, file, userData }));
     setIsEditingAvatar(false);
+    fetchUserData();
+    toast({
+      title: 'Success',
+      description: 'Avatar updated successfully',
+      status: 'success',
+      duration: 3000,
+      isClosable: true
+    })
   }
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];

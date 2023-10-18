@@ -12,7 +12,6 @@ const ReqMutationFrom = () => {
   const [warehouse_to, setWarehouseTo] = useState('')
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  console.log(data.length)
   const toast = useToast()
   const fetchData = async () => {
     try {
@@ -26,7 +25,6 @@ const ReqMutationFrom = () => {
           Authorization: `Bearer ${localStorage.getItem("token")}`
         }
       })
-      console.log(data);
       setData(data.data)
       setTotalPages(data.totalPages)
     } catch (error) {

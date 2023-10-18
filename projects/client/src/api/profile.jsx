@@ -45,13 +45,13 @@ const updateAvatar = async (token, toast, file, userData) => {
     });
     const response = await axios.patch(`${USER_URL}`, formData, setHeaders(token));
     notification(toast, setToastParams(response));
-    if (response.status === 200) {
-      setTimeout(() => (window.location.reload()), 1000);
-    }
+    // if (response.status === 200) {
+    //   setTimeout(() => (window.location.reload()), 1000);
+    // }
   } catch (error) {
     console.log(error)
-    const { response } = error;
-    notification(toast, setToastParams(response.status ? response : error));
+    // const { response } = error;
+    // notification(toast, setToastParams(response.status ? response : error));
   }
 }
 

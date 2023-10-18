@@ -10,7 +10,6 @@ import {
   MenuList,
   MenuItem,
   MenuDivider,
-  useDisclosure,
   Text,
   Image,
 } from "@chakra-ui/react";
@@ -24,22 +23,31 @@ import CartHover from "./CartHover";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import LogoutAlert from "./LogoutAlert";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserData } from "../../storage/userReducer";
 
 export default function Simple() {
   const navigate = useNavigate();
   const location = useLocation();
   const profilePath = location.pathname === "/profile" || location.pathname === "/profile/address" || location.pathname === "/profile/transaction";
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [isCartOpen, setCartOpen] = useState(false);
-
   const [cartLength, setCartLength] = useState(0);
   const API_URL = process.env.REACT_APP_API_BASE_URL;
+  const token = localStorage.getItem("token");
+
+  const dispatch = useDispatch();
+  const userData = useSelector((state) => state.user.userData);
+  console.log("userData", userData)
+  useEffect(() => {
+    if (token) {
+      dispatch(fetchUserData());
+    }
+  }, [dispatch]);
 
   useEffect(() => {
     viewCart();
   });
 
-  const token = localStorage.getItem("token");
   let userId = "";
   let role = "";
   if (token) {
@@ -80,11 +88,17 @@ export default function Simple() {
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <HStack spacing={2} alignItems={"center"}>
             {profilePath ? (
-              <Image src="/logo.png" h="36px" position={{ base: "absolute", md: "static" }} left={16} onClick={() => navigate("/")} cursor="pointer" />
+              <HStack position={{ base: "absolute", md: "static" }} left={16} onClick={() => navigate("/")} cursor="pointer">
+                <Image src="/logo.png" h="36px" />
+                <Text fontFamily="Fira Code" fontSize="xl" fontWeight="bold">NetComp</Text>
+
+              </HStack>
             ) : (
-              <Image src="/logo.png" h="36px" onClick={() => navigate("/")} cursor="pointer"/>
+              <HStack onClick={() => navigate("/")} cursor="pointer">
+                <Image src="/logo.png" h="36px" />
+                <Text fontFamily="Fira Code" fontSize="xl" fontWeight="bold">NetComp</Text>
+              </HStack>
             )}
-            <Text fontFamily="Fira Code" fontSize="xl" fontWeight="bold">NetComp</Text>
           </HStack>
           {role === "user" && !profilePath && (
             <Searchbar />
@@ -121,7 +135,7 @@ export default function Simple() {
                     cursor={"pointer"}
                     minW={0}
                   >
-                    <Avatar size={"sm"} />
+                    <Avatar size={"sm"} src={`${API_URL}/${userData?.avatar}`} />
                   </MenuButton>
                   <MenuList
                     border={"0.5px solid gray"}
