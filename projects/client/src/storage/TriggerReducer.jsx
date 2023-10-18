@@ -15,6 +15,7 @@ export const TriggerReducer = createSlice({
     },
     setOrderTrigger: (state, action) => {
       state.orderStatus = uuidv4();
+      console.log(state.orderStatus)
     },
   },
 });
