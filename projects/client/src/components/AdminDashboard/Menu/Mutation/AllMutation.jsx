@@ -70,7 +70,7 @@ const AllMutation = () => {
               <Td>{index + 1}</Td>
               <Td>{item.user?.name}</Td>
               <Td>{item._warehouse_from.name}</Td>
-              <Td>{item._warehouse_to.name}</Td>
+              <Td>{item._warehouse_to?.name}</Td>
               <Td>{item.product.name}</Td>
               <Td>{item.qty}</Td>
               <Td>{item.status.name}</Td>
