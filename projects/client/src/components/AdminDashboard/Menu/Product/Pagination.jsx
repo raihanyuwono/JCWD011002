@@ -1,9 +1,8 @@
 import React from 'react';
 import { Button, Flex, } from '@chakra-ui/react';
-import { BiRightArrow, BiLeftArrow } from 'react-icons/bi';
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   const handlePageChange = (page) => {
-    console.log("klik next page", page)
     onPageChange(page);
   };
 
@@ -33,47 +32,35 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
 
   return (
     <Flex justify="center" mt="4">
-      {currentPage > 1 ? (
         <Button
           mr={1}
           onClick={() => handlePageChange(currentPage - 1)}
-          bg={"darkBlue"}
-          color={"white"}
-          variant={'outline'}
-          disabled={currentPage === 1}
+          bg={"white"}
+          color={"black"}
+          isDisabled={currentPage === 1}
         >
-          <BiLeftArrow />
+          <IoIosArrowBack />
         </Button>
-      ) : (<Button mr={1} colorScheme='blue' variant={'outline'} disabled><BiLeftArrow /></Button>)}
       {pagesToShow.map((page) => (
         <Button
           key={page}
           mx={1}
           onClick={() => handlePageChange(page)}
-          variant={'solid'}
-          border={'1px'}
-          color={"white"}
-          borderColor={'white'}
-          bg={currentPage === page ? 'darkBlue' : 'gray.300'}
+          color={"black"}
+          bg={currentPage === page ? 'white' : 'white.300'}
           style={{ borderRadius: '5px' }}
         >
           {page}
         </Button>
       ))}
-      {currentPage < totalPages ? (
         <Button
           ml={1}
-          bg={'darkBlue'}
-          color={"white"}
-          colorScheme='teal' variant={'outline'}
+          bg={"white"} color={"black"}
           onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
+          isDisabled={currentPage === totalPages}
         >
-          <BiRightArrow />
+          <IoIosArrowForward />
         </Button>
-      ) : (
-        <Button ml={1} colorScheme='blue' variant={'outline'} disabled><BiRightArrow /></Button>
-      )}
     </Flex>
   );
 };

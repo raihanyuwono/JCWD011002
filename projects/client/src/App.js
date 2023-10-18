@@ -23,6 +23,7 @@ import ProductDetail from "./pages/ProductDetail";
 import Report from "./pages/Report";
 import Dashboard from "./components/AdminDashboard/Menu/Dashboard";
 import MutationList from "./components/AdminDashboard/Menu/Mutation/MutationList";
+import ManageOrder from "./components/AdminDashboard/Menu/ManageOrder";
 
 
 const ADMIN_PATH = ["/", "/category", "/profile"];
@@ -69,13 +70,13 @@ function App() {
         <Flex {...contentContainerAttr}>
           <Routes>
             <Route path="/" element={setPage()}>
+              <Route path="" element={<Dashboard />} />
               <Route path="user" element={<ManageUsers />} />
               <Route path="warehouse" element={<WarehouseList />} />
               <Route path="category" element={<ProductCategory />} />
               <Route path="product" element={<ProductList />} />
               <Route path="stockmutation" element={<MutationList />} />
-              <Route path="dashboard" element={<Dashboard />} />
-              {/* <Route path="order" element={} /> */}
+              <Route path="order" element={<ManageOrder />} />
               <Route path="report" element={<Report />} />
             </Route>
             <Route path="/registration/:token" element={<Registration />} />

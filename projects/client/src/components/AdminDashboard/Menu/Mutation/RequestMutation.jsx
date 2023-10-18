@@ -73,6 +73,8 @@ const RequestMutation = ({ isOpen, onClose, products, fetchProducts, fetchDetail
         isClosable: true
       })
       onClose()
+      fetchProducts()
+      fetchDetailStock(products.id)
     } catch (error) {
       console.log(error)
     }
@@ -89,7 +91,7 @@ const RequestMutation = ({ isOpen, onClose, products, fetchProducts, fetchDetail
       // finalFocusRef={btnRef}
       >
         <DrawerOverlay />
-        <DrawerContent bg={"darkBlue"} color={"white"}>
+        <DrawerContent bg={"secondary"} color={"white"}>
           <DrawerCloseButton />
           <DrawerHeader>Request Mutation</DrawerHeader>
 
@@ -116,7 +118,7 @@ const RequestMutation = ({ isOpen, onClose, products, fetchProducts, fetchDetail
               <Button w={"full"} type='submit' colorScheme='blue' onClick={sendRequestMutation}>Send Request</Button>
             </Box>
             <Box w={"full"}>
-              <Button w={"full"} mt={4} variant='outline' mr={3} onClick={onClose}>
+              <Button w={"full"} mt={4} colorScheme='gray' mr={3} onClick={onClose}>
                 Cancel
               </Button>
             </Box>

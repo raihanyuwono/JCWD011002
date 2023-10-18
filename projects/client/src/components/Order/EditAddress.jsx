@@ -83,7 +83,6 @@ const EditAddress = ({ isOpen, onClose, onEditAddress, addressData, fetchAddress
       is_default: addressData.is_default || false,
     });
   }, [addressData]);
-  console.log("in province edit address", formData)
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -98,8 +97,6 @@ const EditAddress = ({ isOpen, onClose, onEditAddress, addressData, fetchAddress
     try {
       setIsLoading(true);
       await updateAddressUser(addressData, formData, toast, onEditAddress, onClose, selectedProvinceName);
-      console.log("formdata", formData)
-      console.log('selecprovinceedit', selectedProvinceName)
       fetchAddressUser()
     } catch (error) {
       console.error("Error editing address:", error);

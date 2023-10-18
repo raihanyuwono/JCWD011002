@@ -1,32 +1,8 @@
 import {
   Button,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
   useToast,
-  Drawer,
-  DrawerBody,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  Input,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  Select,
   Box,
   Flex,
-  FormLabel,
-  FormControl,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { getWarehouseList } from "../../../../api/warehouse";
@@ -34,6 +10,10 @@ import axios from "axios";
 import { getCityByProvince, getProvince } from "../../../../api/address";
 import Pagination from "../Product/Pagination";
 import FilterWarehouse from "./FilterWarehouse";
+import DeleteWarehouse from "./DeleteWarehouse";
+import WarehouseTable from "./WarehouseTable";
+import UpdateWarehouse from "./UpdateWarehouse";
+import CreateWarehouse from "./CreateWarehouse";
 
 const WarehouseList = () => {
   const [warehouses, setWarehouses] = useState([]);
@@ -48,14 +28,13 @@ const WarehouseList = () => {
   const [filterProvince, setFilterProvince] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  console.log("filter province", filterProvince)
   const [editedWarehouse, setEditedWarehouse] = useState({
     name: "",
     address: "",
     province: "",
     city_name: "",
     postal_code: "",
-  }); // State untuk menyimpan data yang akan diubah
+  });
   const toast = useToast();
   const [city, setCity] = useState([]);
   const [province, setProvince] = useState([]);
@@ -103,14 +82,13 @@ const WarehouseList = () => {
     // setCity([]);
     setEditedWarehouse({
       ...editedWarehouse,
-      province: selectedName, // Update the province value in editedWarehouse
+      province: selectedName, 
       city_name: "",
     });
   }
 
   const fetchWarehouses = async () => {
     const { data } = await getWarehouseList(toast, page, sort, name, search, filterProvince);
-    console.log("fetch warehouse", data)
     setWarehouses(data.data);
     setTotalPages(data.totalPages);
   };
@@ -238,234 +216,17 @@ const WarehouseList = () => {
           <FilterWarehouse
             sort={sort} setSort={setSort} search={search} setSearch={setSearch} searchInput={searchInput} setSearchInput={setSearchInput} name={name} setName={setName} province={filterProvince} setProvince={setFilterProvince} />
         </Flex>
-
-        <TableContainer>
-          <Table variant={"striped"} colorScheme="whiteAlpha"
-            bgColor={"bgSecondary"}>
-            <Thead bg={"primary"}>
-              <Tr>
-                <Th color={"white"}>No</Th>
-                <Th color={"white"}>Warehouse</Th>
-                <Th color={"white"}>Address</Th>
-                <Th color={"white"}>Province</Th>
-                <Th color={"white"}>City</Th>
-                <Th color={"white"}>Postal Code</Th>
-                <Th color={"white"}>Action</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {warehouses.map((warehouse, index) => (
-                <Tr key={warehouse.id}>
-                  <Td>{index + 1}</Td>
-                  <Td>{warehouse.name}</Td>
-                  <Td>{warehouse.address}</Td>
-                  <Td>{warehouse.province}</Td>
-                  <Td>{warehouse.city_name}</Td>
-                  <Td>{warehouse.postal_code}</Td>
-                  <Td>
-                    <Button mr={2} bg={"darkBlue"} color={"white"} onClick={() => openEditDrawer(warehouse)}>Edit</Button>
-                    <Button bg={"red"} color={"white"} onClick={() => openDeleteModal(warehouse)}>delete</Button>
-                  </Td>
-                </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        </TableContainer>
+        <WarehouseTable warehouses={warehouses} openEditDrawer={openEditDrawer} openDeleteModal={openDeleteModal} />
         {warehouses.length > 0 ? (
           <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} />
         ) : null}
       </Flex>
       {/* Edit Drawer */}
-      <Drawer isOpen={isDrawerOpen} onClose={closeEditDrawer}>
-        <DrawerOverlay>
-          <DrawerContent bg={"darkBlue"} color={"white"}>
-            <DrawerCloseButton />
-            <DrawerHeader>Edit Warehouse</DrawerHeader>
-            <DrawerBody>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  handleEditWarehouse();
-                }}
-              >
-                <Input my={2}
-                  placeholder="Name"
-                  value={editedWarehouse.name}
-                  onChange={(e) =>
-                    setEditedWarehouse({
-                      ...editedWarehouse,
-                      name: e.target.value,
-                    })
-                  }
-                />
-                <Input my={2}
-                  placeholder="Address"
-                  value={editedWarehouse.address}
-                  onChange={(e) =>
-                    setEditedWarehouse({
-                      ...editedWarehouse,
-                      address: e.target.value,
-                    })
-                  }
-                />
-                <Select my={2} placeholder={editedWarehouse.province} name="province" value={selectedProvinceId} onChange={handleSelectProvince}>
-                  {province.map((province) => (
-                    <option key={province.province_id} value={province.province_id}>{province.province}</option>
-                  ))}
-                </Select>
-                <Select my={4} isDisabled={!selectedProvinceId} placeholder={selectedProvinceId ? "select city" : editedWarehouse.city_name} name="city_name" value={editedWarehouse.city_name} onChange={(e) => setEditedWarehouse({ ...editedWarehouse, city_name: e.target.value })} >
-                  {city.map((city) => (
-                    <option style={{ color: "white" }} key={city.city_id} value={city.city_name}>{city.city_name}</option>
-                  ))}
-                </Select>
-                <Input mb={4}
-                  placeholder="Postal Code"
-                  value={editedWarehouse.postal_code}
-                  onChange={(e) =>
-                    setEditedWarehouse({
-                      ...editedWarehouse,
-                      postal_code: e.target.value,
-                    })
-                  }
-                />
-                <Box w={"85%"} position={"absolute"} bottom={0}>
-                  <Button w={"full"} colorScheme="green" mb={3} type="submit">Save</Button>
-                  <br />
-                  <Button w={"full"} mb={3} onClick={closeEditDrawer}>Cancel</Button>
-                </Box>
-              </form>
-            </DrawerBody>
-          </DrawerContent>
-        </DrawerOverlay>
-      </Drawer>
-      {/* Delete Modal */}
-      <Modal isOpen={isDeleteModalOpen} onClose={closeDeleteModal} >
-        <ModalOverlay />
-        <ModalContent bg={"darkBlue"} color={"white"}>
-          <ModalHeader>Delete Warehouse</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            Are you sure you want to delete this warehouse?
-          </ModalBody>
-          <ModalFooter>
-            <Button colorScheme="red" mr={3} onClick={handleDeleteWarehouse}>
-              Delete
-            </Button>
-            <Button onClick={closeDeleteModal}>
-              Cancel
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <UpdateWarehouse city={city} isDrawerOpen={isDrawerOpen} closeEditDrawer={closeEditDrawer} handleEditWarehouse={handleEditWarehouse} province={province} selectedProvinceId={selectedProvinceId} handleSelectProvince={handleSelectProvince} editedWarehouse={editedWarehouse} setEditedWarehouse={setEditedWarehouse} />
+
+      <DeleteWarehouse isDeleteModalOpen={isDeleteModalOpen} closeDeleteModal={closeDeleteModal} handleDeleteWarehouse={handleDeleteWarehouse} />
       {/* Create Warehouse Drawer */}
-      <Drawer isOpen={isDrawerCreateOpen} onClose={() => setIsDrawerCreateOpen(false)}>
-        <DrawerOverlay>
-          <DrawerContent bg={"darkBlue"} color={"white"}>
-            <DrawerCloseButton />
-            <DrawerHeader>Create Warehouse</DrawerHeader>
-            <DrawerBody>
-              {/* Isi form untuk membuat gudang baru di sini */}
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  handleCreateWarehouse(editedWarehouse);
-                }}
-              >
-                <FormControl mb={2}>
-                  <FormLabel>Name :</FormLabel>
-                  <Input
-                    placeholder="Name"
-                    value={editedWarehouse.name}
-                    onChange={(e) =>
-                      setEditedWarehouse({
-                        ...editedWarehouse,
-                        name: e.target.value,
-                      })
-                    }
-                  />
-                </FormControl>
-                <FormControl mb={2}>
-                  <FormLabel>Full Address :</FormLabel>
-                  <Input
-                    placeholder="Address"
-                    value={editedWarehouse.address}
-                    onChange={(e) =>
-                      setEditedWarehouse({
-                        ...editedWarehouse,
-                        address: e.target.value,
-                      })
-                    }
-                  />
-                </FormControl>
-                <FormControl mb={2}>
-                  <FormLabel>Province :</FormLabel>
-                  <Select
-                    placeholder={selectedProvinceId ? "Select Province" : "Province"}
-                    name="province"
-                    value={selectedProvinceId}
-                    onChange={handleSelectProvince}
-                  >
-                    {province.map((province) => (
-                      <option
-                        key={province.province_id}
-                        value={province.province_id}
-                      >
-                        {province.province}
-                      </option>
-                    ))}
-                  </Select>
-                </FormControl>
-                <FormControl mb={2}>
-                  <FormLabel>City :</FormLabel>
-                  <Select
-                    isDisabled={!selectedProvinceId}
-                    placeholder={
-                      selectedProvinceId
-                        ? "Select City"
-                        : "City"
-                    }
-                    name="city_name"
-                    value={editedWarehouse.city_name}
-                    onChange={(e) =>
-                      setEditedWarehouse({
-                        ...editedWarehouse,
-                        city_name: e.target.value,
-                      })
-                    }
-                  >
-                    {city.map((city) => (
-                      <option
-                        key={city.city_id}
-                        value={city.city_name}
-                      >
-                        {city.city_name}
-                      </option>
-                    ))}
-                  </Select>
-                </FormControl>
-                <FormControl mb={4}>
-                  <FormLabel>Postal Code :</FormLabel>
-                  <Input
-                    placeholder="Postal Code"
-                    value={editedWarehouse.postal_code}
-                    onChange={(e) =>
-                      setEditedWarehouse({
-                        ...editedWarehouse,
-                        postal_code: e.target.value,
-                      })
-                    }
-                  />
-                </FormControl>
-                <Box w={"85%"} position={"absolute"} bottom={5}>
-                  <Button w={"full"} mb={2} colorScheme="green" type="submit">Create</Button>
-                  <br />
-                  <Button w={"full"} onClick={() => setIsDrawerCreateOpen(false)}>Cancel</Button>
-                </Box>
-              </form>
-            </DrawerBody>
-          </DrawerContent>
-        </DrawerOverlay>
-      </Drawer>
+      <CreateWarehouse isDrawerCreateOpen={isDrawerCreateOpen} setIsDrawerCreateOpen={setIsDrawerCreateOpen} handleCreateWarehouse={handleCreateWarehouse} province={province} selectedProvinceId={selectedProvinceId} handleSelectProvince={handleSelectProvince} editedWarehouse={editedWarehouse} setEditedWarehouse={setEditedWarehouse} city={city}/>
 
     </>
   );

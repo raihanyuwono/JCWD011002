@@ -1,66 +1,3 @@
-// import React from "react";
-// import {
-//   Modal,
-//   ModalOverlay,
-//   ModalContent,
-//   ModalHeader,
-//   ModalCloseButton,
-//   ModalBody,
-//   ModalFooter,
-//   Input,
-//   Button,
-// } from "@chakra-ui/react";
-// import { useFormik } from "formik";
-// import * as Yup from "yup";
-
-// const FormCreateCategory = ({ isOpen, onClose, onSubmit }) => {
-//   const formik = useFormik({
-//     initialValues: {
-//       name: "",
-//     },
-//     validationSchema: Yup.object({
-//       name: Yup.string().required("Category name can't be empty"),
-//     }),
-//     onSubmit: (values, actions) => {
-//       onSubmit(values);
-//       actions.resetForm();
-//       onClose();
-//     },
-//   });
-
-//   return (
-//     <Modal isOpen={isOpen} onClose={onClose}>
-//       <ModalOverlay />
-//       <ModalContent>
-//         <ModalHeader>Create Category</ModalHeader>
-//         <ModalCloseButton />
-//         <form onSubmit={formik.handleSubmit}>
-//           <ModalBody>
-//             <Input
-//               type="text"
-//               name="name"
-//               value={formik.values.name}
-//               onChange={formik.handleChange}
-//               onBlur={formik.handleBlur}
-//               placeholder="Category Name"
-//             />
-//             {formik.touched.name && formik.errors.name && (
-//               <div style={{ color: "red" }}>{formik.errors.name}</div>
-//             )}
-//           </ModalBody>
-//           <ModalFooter>
-//             <Button colorScheme="blue" mr={3} type="submit">
-//               Save
-//             </Button>
-//             <Button onClick={onClose}>Cancel</Button>
-//           </ModalFooter>
-//         </form>
-//       </ModalContent>
-//     </Modal>
-//   );
-// };
-
-// export default FormCreateCategory;
 import React, { useState } from "react";
 import {
   Drawer,
@@ -74,6 +11,7 @@ import {
   Box,
   Text,
   useToast,
+  DrawerCloseButton,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -83,7 +21,6 @@ const FormCreateCategory = ({ isOpen, onClose, fetchCategory }) => {
   const toast = useToast()
   const handleCreateCategory = async (categoryData) => {
     try {
-      console.log("request create category")
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -123,23 +60,22 @@ const FormCreateCategory = ({ isOpen, onClose, fetchCategory }) => {
     image: Yup.mixed()
       .required("Image is required")
       .test("fileType", "Invalid file type, only images are allowed", (value) => {
-        if (!value) return true; // No file selected, validation is passed
+        if (!value) return true;
         return value && value.type.startsWith("image/");
       })
       .test("fileSize", "File size must be less than 1MB", (value) => {
-        if (!value) return true; // No file selected, validation is passed
-        return value.size <= 1048576; // 1MB in bytes
+        if (!value) return true; 
+        return value.size <= 1048576; 
       }),
   });
   const formik = useFormik({
     initialValues: {
       name: "",
-      image: null, // Simpan file gambar di sini
+      image: null, 
     },
     validationSchema,
     onSubmit: (values, actions) => {
-      console.log("Form submitted with values:", values);
-      handleCreateCategory(values); // Kirim data termasuk gambar
+      handleCreateCategory(values);
       actions.resetForm();
       onClose();
     },
@@ -155,7 +91,8 @@ const FormCreateCategory = ({ isOpen, onClose, fetchCategory }) => {
     <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
       <DrawerOverlay />
       <form onSubmit={formik.handleSubmit}>
-        <DrawerContent>
+        <DrawerContent bg={"secondary"} color={"white"}>
+        <DrawerCloseButton />
           <DrawerHeader>Create Category</DrawerHeader>
           <DrawerBody>
             <Input
@@ -185,10 +122,10 @@ const FormCreateCategory = ({ isOpen, onClose, fetchCategory }) => {
 
           </DrawerBody>
           <DrawerFooter>
-            <Button colorScheme="blue" mr={3} type="submit">
+            <Button w={"100%"} colorScheme="blue" mr={3} type="submit">
               Save
             </Button>
-            <Button onClick={onClose}>Cancel</Button>
+            <Button w={"100%"} onClick={onClose}>Cancel</Button>
           </DrawerFooter>
         </DrawerContent>
       </form>

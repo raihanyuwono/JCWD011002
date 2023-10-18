@@ -6,6 +6,8 @@ import CreateProduct from './CreateProduct'
 import FilterProducts from './FilterProduct'
 import Pagination from './Pagination'
 import EditStockDrawer from './StockDetail'
+import { getRole } from '../../../../helpers/Roles'
+import ProductTable from './ProductTable'
 const ProductList = () => {
   const [products, setProducts] = useState([])
   const [search, setSearch] = useState('');
@@ -22,9 +24,7 @@ const ProductList = () => {
   const [isDetailStockOpen, setIsDetailStockOpen] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState(null)
   const [isDrawerCreateOpen, setIsDrawerCreateOpen] = useState(false)
-
-  console.log("selected product", selectedProduct)
-  console.log("ini status", typeof (status))
+  const role = getRole()
   const handleCreateClick = () => {
     setIsDrawerCreateOpen(true)
   }
@@ -48,7 +48,6 @@ const ProductList = () => {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         }
       })
-      console.log(data.data.data)
       setProducts(data.data.data)
       setTotalPages(data.data.totalPages)
     } catch (error) {
@@ -88,7 +87,6 @@ const ProductList = () => {
 
   const handleDetailStock = async (id) => {
     try {
-      // Ambil data stok terbaru
       const { data } = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/product/admin/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -106,10 +104,11 @@ const ProductList = () => {
   return (
     <>
       <Flex flexDirection={"column"} w={"full"} mt={4}>
-
-        <Box>
-          <Button onClick={handleCreateClick} bg={"darkBlue"} mb={4} color={"white"} >Create Product</Button>
-        </Box>
+        {role === "admin" &&
+          <Box>
+            <Button onClick={handleCreateClick} bg={"darkBlue"} mb={4} color={"white"} >Create Product</Button>
+          </Box>
+        }
         <Box>
           <FilterProducts
             searchInput={searchInput}
@@ -129,39 +128,7 @@ const ProductList = () => {
             setSearch={setSearch}
           />
         </Box>
-        <TableContainer>
-          <Table variant={"striped"} colorScheme="whiteAlpha"
-            bgColor={"bgSecondary"}>
-            <Thead bg={"primary"}>
-              <Tr>
-                <Th color={"white"}>No</Th>
-                <Th color={"white"}>Image</Th>
-                <Th color={"white"}>Name</Th>
-                <Th color={"white"}>Category</Th>
-                <Th color={"white"}>Status</Th>
-                <Th color={"white"}>Stock</Th>
-                <Th color={"white"}>Action</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-
-              {products?.map((product, index) => (
-                <Tr key={product?.id}>
-                  <Td>{index + 1}</Td>
-                  <Td><Img src={`${process.env.REACT_APP_API_BASE_URL}/${product?.image}`} boxSize={"70px"} objectFit={"cover"} borderRadius={"5px"} /></Td>
-                  <Td>{product?.name}</Td>
-                  <Td>{product?.category?.name}</Td>
-                  <Td>{product?.is_active ? "Active" : "Inactive"}</Td>
-                  <Td>{product?.product_warehouses?.map((warehouse) => warehouse?.stock).reduce((a, b) => a + b, 0)}
-                    <Button ml={4} bg={"darkBlue"} color={"white"} onClick={() => handleDetailStock(product.id)}>edit stock</Button>
-                  </Td>
-                  <Td><Button bg={"darkBlue"} color={"white"} onClick={() => handleDetailClick(product.id)}>Detail</Button></Td>
-                </Tr>
-
-              ))}
-            </Tbody>
-          </Table>
-        </TableContainer>
+        <ProductTable products={products} handleDetailClick={handleDetailClick} handleDetailStock={handleDetailStock} />
         {products.length === 0 && (
           <Center mt={10}>
             <Text>Product not found</Text>

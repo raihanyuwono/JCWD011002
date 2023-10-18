@@ -15,6 +15,7 @@ import {
   Textarea,
   Select,
   useToast,
+  DrawerFooter,
 } from '@chakra-ui/react';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
@@ -35,10 +36,8 @@ const DetailProduct = ({ isOpen, onClose, product, fetchProduct }) => {
   const [currentProductImage, setCurrentProductImage] = useState(''); // Menyimpan URL gambar produk saat ini
   const token = localStorage.getItem('token');
   const decodedToken = jwtDecode(token);
-  console.log("ini decoded token", decodedToken)
 
   useEffect(() => {
-    // Ketika komponen dimuat, set URL gambar produk saat ini
     setCurrentProductImage(`${process.env.REACT_APP_API_BASE_URL}/${product?.image}`);
   }, [product]);
 
@@ -154,7 +153,7 @@ const DetailProduct = ({ isOpen, onClose, product, fetchProduct }) => {
   return (
     <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
       <DrawerOverlay />
-      <DrawerContent bg={'darkBlue'} color={'white'}>
+      <DrawerContent bg={'secondary'} color={'white'}>
         <DrawerCloseButton />
         <DrawerHeader>Product Details</DrawerHeader>
         <DrawerBody>
@@ -237,7 +236,7 @@ const DetailProduct = ({ isOpen, onClose, product, fetchProduct }) => {
                   onChange={handleEditChange}
                 >
                   {categories.map((category) => (
-                    <option key={category?.id} value={category?.id}>
+                    <option style={{ color: "white", backgroundColor: "#233947" }} key={category?.id} value={category?.id}>
                       {category?.name}
                     </option>
                   ))}
@@ -251,13 +250,12 @@ const DetailProduct = ({ isOpen, onClose, product, fetchProduct }) => {
               <Text>Status :</Text>
               {isEditing ? (
                 <Select
-                  placeholder="Select Status"
                   name="is_active"
                   value={editedProduct.is_active}
                   onChange={handleEditChange}
                 >
-                  <option value="true">Active</option>
-                  <option value="false">Inactive</option>
+                  <option style={{ color: "white", backgroundColor: "#233947" }} value="true">Active</option>
+                  <option style={{ color: "white", backgroundColor: "#233947" }} value="false">Inactive</option>
                 </Select>
               ) : (
                 <Text>{product?.is_active ? 'Active' : 'Inactive'}</Text>
@@ -294,37 +292,38 @@ const DetailProduct = ({ isOpen, onClose, product, fetchProduct }) => {
                 </>
               )}
             </Box>
-            {decodedToken.role === 'admin' && (
-              <Box w={'full'} bg={'darkBlue'} color={'white'} py={4}>
-                {isEditing ? (
-                  <>
-                    <Button
-                      w={'full'}
-                      mb={2}
-                      colorScheme="green"
-                      onClick={saveChanges}
-                    >
-                      Save
-                    </Button>
-                    <Button w={'full'} mb={2} onClick={() => setIsEditing(false)}>
-                      Cancel
-                    </Button>
-                  </>
-                ) : (
+          </Box>
+        </DrawerBody>
+        <DrawerFooter>
+          {decodedToken.role === 'admin' && (
+            <Box w={'full'}>
+              {isEditing ? (
+                <>
                   <Button
                     w={'full'}
                     mb={2}
                     colorScheme="green"
-                    onClick={startEditing}
+                    onClick={saveChanges}
                   >
-                    Edit
+                    Save
                   </Button>
-                )}
-              </Box>
-            )}
-
-          </Box>
-        </DrawerBody>
+                  <Button w={'full'} mb={2} onClick={() => setIsEditing(false)}>
+                    Cancel
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  w={'full'}
+                  mb={2}
+                  colorScheme="green"
+                  onClick={startEditing}
+                >
+                  Edit
+                </Button>
+              )}
+            </Box>
+          )}
+        </DrawerFooter>
       </DrawerContent>
     </Drawer>
   );

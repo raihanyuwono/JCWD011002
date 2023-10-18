@@ -24,7 +24,6 @@ const AddAddress = ({ isOpen, onClose, onAddAddress, fetchAddressUser }) => {
   const [selectedProvinceId, setSelectedProvinceId] = useState("");
   const [selectedProvinceName, setSelectedProvinceName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  console.log("in province add address", province)
   const toast = useToast();
   const fetchProvince = async () => {
     await getProvince(setProvince, toast)

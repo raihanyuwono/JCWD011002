@@ -88,8 +88,8 @@ function UserProfile() {
 
   return (
     <Flex justifyContent={"center"}>
-      <Card w={['100%', '100%', '80%']} bg={"blueCold"}>
-        <Flex flexWrap={"wrap"} justifyContent="center" alignItems="center" minH="100vh" direction={{ base: 'column', md: 'column', xl: 'row' }}>
+      <Card w={['100%', '100%', '90%']} bg={"blueCold"}>
+        <Flex justifyContent="center" alignItems="center" minH="65vh" direction={{ base: 'column', md: 'column', xl: 'row' }}>
           <ChangeAvatar
             userData={userData}
           />

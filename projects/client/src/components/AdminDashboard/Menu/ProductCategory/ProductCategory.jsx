@@ -24,6 +24,7 @@ import FormCreateCategory from "./CreateCategory";
 import Pagination from "../Product/Pagination";
 import FilterCategory from "./FilterCategory";
 import UpdateCategory from "./UpdateCategory";
+import { getRole } from "../../../../helpers/Roles";
 
 const ProductCategory = () => {
   const [categories, setCategories] = useState([]);
@@ -41,7 +42,7 @@ const ProductCategory = () => {
     onOpen: onConfirmationOpen,
     onClose: onConfirmationClose,
   } = useDisclosure()
-
+  const role = getRole();
   const toast = useToast()
   const handlePageChange = (newPage) => {
     setPage(newPage);
@@ -66,7 +67,6 @@ const ProductCategory = () => {
       );
       setCategories(data.data);
       setTotalPages(data.message.totalPages)
-      console.log(data)
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -125,11 +125,13 @@ const ProductCategory = () => {
 
   return (
     <Box w={"full"} p={4} borderRadius={"8px"}>
-      <Flex justifyContent="space-between" mb={4} m={4}>
-        <Button bg={"primary"} color={"white"} leftIcon={<AddIcon />} onClick={onOpen}>
-          Create Category
-          <FormCreateCategory isOpen={isOpen} onClose={onClose} fetchCategory={fetchCategories} />
-        </Button>
+      <Flex justifyContent={role === "admin" ? "space-between" : "flex-end"} mb={4} m={4}>
+        {role === "admin" &&
+          <Button bg={"primary"} color={"white"} leftIcon={<AddIcon />} onClick={onOpen}>
+            Create Category
+            <FormCreateCategory isOpen={isOpen} onClose={onClose} fetchCategory={fetchCategories} />
+          </Button>
+        }
         <FilterCategory search={search} setSearch={setSearch} sort={sort} setSort={setSort} name={name} setName={setName} searchInput={searchInput} setSearchInput={setSearchInput} />
       </Flex>
 
@@ -141,7 +143,7 @@ const ProductCategory = () => {
               <Th color={"white"}>No</Th>
               <Th color={"white"}>Image</Th>
               <Th color={"white"}>Category Name</Th>
-              <Th color={"white"}>Action</Th>
+              {role === "admin" && <Th color={"white"}>Action</Th>}
             </Tr>
           </Thead>
           <Tbody>
@@ -150,21 +152,22 @@ const ProductCategory = () => {
                 <Td>{index + 1}</Td>
                 <Td><Image src={`${process.env.REACT_APP_API_BASE_URL}/${category.image}`} alt={category.name} width={50} height={50} /></Td>
                 <Td>{category.name}</Td>
-                <Td>
-                  <>
-                    <IconButton mr={3}
-                      icon={<EditIcon />}
-                      colorScheme="blue"
-                      onClick={() => handleEdit(category.id)}
-                    />
-                    <IconButton
-                      icon={<DeleteIcon />}
-                      colorScheme="red"
-                      onClick={() => handleDelete(category.id)}
-                    />
-                  </>
-
-                </Td>
+                {role === "admin" &&
+                  <Td>
+                    <>
+                      <IconButton mr={3}
+                        icon={<EditIcon />}
+                        colorScheme="blue"
+                        onClick={() => handleEdit(category.id)}
+                      />
+                      <IconButton
+                        icon={<DeleteIcon />}
+                        colorScheme="red"
+                        onClick={() => handleDelete(category.id)}
+                      />
+                    </>
+                  </Td>
+                }
               </Tr>
             ))}
           </Tbody>

@@ -12,6 +12,7 @@ import {
   Text,
   useToast,
   Image,
+  DrawerCloseButton,
 } from "@chakra-ui/react";
 import axios from "axios";
 
@@ -127,6 +128,7 @@ const UpdateCategory = ({ isOpen, onClose, categoryId, fetchCategory }) => {
     <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
       <DrawerOverlay />
       <DrawerContent bg={"secondary"} color={"white"}>
+      <DrawerCloseButton />
         <DrawerHeader>Edit Category</DrawerHeader>
         <DrawerBody>
           <Input
@@ -155,10 +157,10 @@ const UpdateCategory = ({ isOpen, onClose, categoryId, fetchCategory }) => {
           </Box>
         </DrawerBody>
         <DrawerFooter>
-          <Button colorScheme="blue" mr={3} onClick={handleUpdateCategory}>
+          <Button w={"100%"} colorScheme="blue" mr={3} onClick={handleUpdateCategory}>
             Save
           </Button>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button w={"100%"} onClick={onClose}>Cancel</Button>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>

@@ -17,7 +17,6 @@ function DeleteAddress({ addressData, fetchAddressUser }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
   const toast = useToast();
-  console.log("addressData di delete", addressData);
   const handleDelete = async () => {
     const headers = {
       headers: {
@@ -26,8 +25,7 @@ function DeleteAddress({ addressData, fetchAddressUser }) {
     }
     try {
       const response = await axios.delete(
-        `http://localhost:8000/api/address/${addressData.id}`, headers);
-      console.log('address data id', addressData.id)
+        `${process.env.REACT_APP_API_BASE_URL}/address/${addressData.id}`, headers);
       if (response.status === 200) {
         onClose();
         toast({

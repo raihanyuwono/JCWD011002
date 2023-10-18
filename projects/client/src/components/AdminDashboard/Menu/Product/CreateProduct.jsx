@@ -22,7 +22,7 @@ const CreateProduct = ({ isOpen, onClose, fetchProducts }) => {
   const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
     name: '',
-    image: null, // Store the selected image file
+    image: null,
     price: '',
     description: '',
     id_category: '',
@@ -92,10 +92,7 @@ const CreateProduct = ({ isOpen, onClose, fetchProducts }) => {
   }, []);
 
   const handleSubmit = async () => {
-    console.log("ini di klik");
     try {
-      console.log("masuk try")
-      // Prepare a FormData object to send the image file
       const formDataToSend = new FormData();
       formDataToSend.append('name', formData.name);
       formDataToSend.append('price', formData.price);

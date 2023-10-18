@@ -21,8 +21,6 @@ const FilterProducts = ({
   setSearch
 }) => {
 
-  console.log("coba nyari klik", search);
-
   const handleCategoryChange = (e) => {
     setCategoryId(e.target.value);
   };
@@ -50,20 +48,17 @@ const FilterProducts = ({
           }
         }
       )
-      console.log(data);
       setCategory(data.data);
     } catch (error) {
       console.log(error);
     }
   }
-  console.log("coba nyari search input", searchInput);
 
   const handleSearch = () => {
     setSearch(searchInput)
   }
 
   const handleEnterKey = (e) => {
-    console.log("key yang ditekan", e.key)
     if (e.key === "Enter") {
       handleSearch()
     }

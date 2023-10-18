@@ -36,7 +36,6 @@ const EditStockDrawer = ({ isOpen, onClose, products, fetchProducts, fetchDetail
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isReduceModalOpen, setIsReduceModalOpen] = useState(false);
   const [isRequestMutation, setIsRequestMutation] = useState(false);
-  console.log("request mutation drawer", isRequestMutation)
   const quantityToAddAsInt = parseInt(quantityToAdd, 10);
   const decode = jwtDecode(localStorage.getItem('token'));
   const role = decode.role
@@ -70,7 +69,7 @@ const EditStockDrawer = ({ isOpen, onClose, products, fetchProducts, fetchDetail
         addition: isReducing ? null : quantityToAddAsInt,
         subtraction: isReducing ? quantityToAddAsInt : null,
       };
-      const response = await axios.patch('http://localhost:8000/api/product/stock', data, {
+      const response = await axios.patch(`${process.env.REACT_APP_API_BASE_URL}/stock`, data, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         }
@@ -98,6 +97,11 @@ const EditStockDrawer = ({ isOpen, onClose, products, fetchProducts, fetchDetail
     }
   };
 
+  const handleRequestMutationClick = () => {
+    setIsRequestMutation(true);
+    onClose();
+  }
+
   return (
     <>
       <Drawer
@@ -106,7 +110,7 @@ const EditStockDrawer = ({ isOpen, onClose, products, fetchProducts, fetchDetail
         onClose={onClose}
       >
         <DrawerOverlay />
-        <DrawerContent bg={"darkBlue"} color={"white"}>
+        <DrawerContent bg={"secondary"} color={"white"}>
           <DrawerCloseButton />
           <DrawerHeader>{products?.name}</DrawerHeader>
 
@@ -171,12 +175,12 @@ const EditStockDrawer = ({ isOpen, onClose, products, fetchProducts, fetchDetail
             </Accordion>
           </DrawerBody>
           <DrawerFooter>
-            {role === "admin warehouse" && <Button bg={"green.500"} w={"full"} onClick={() => setIsRequestMutation(true)}>Request Mutation</Button>
+            {role === "admin warehouse" && <Button bg={"green.500"} color={"white"} w={"full"} onClick={handleRequestMutationClick}>Request Mutation</Button>
             }
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
-      <RequestMutation isOpen={isRequestMutation} onClose={() => setIsRequestMutation(false)} products={products} fetchProducts={fetchProducts} fetchDetailStock={fetchDetailStock}/>
+      <RequestMutation isOpen={isRequestMutation} onClose={() => setIsRequestMutation(false)} products={products} fetchProducts={fetchProducts} fetchDetailStock={fetchDetailStock} detailStockClosed={onClose} />
     </>
   );
 };
