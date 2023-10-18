@@ -1,9 +1,29 @@
-import React from 'react'
-import {Box, Avatar, Text, Button, Stack, Flex, Input} from '@chakra-ui/react'
+import React, { useState } from 'react'
+import {Box, Avatar, Text, Button, Stack, Flex, Input, useToast} from '@chakra-ui/react'
 import { MdOutlineCancelPresentation } from 'react-icons/md'
 import { FaRegEdit, FaRegSave } from 'react-icons/fa'
+import { updateAvatar } from '../../api/profile'
 
-const ChangeAvatar = ({userData, isEditingAvatar, handleCancelAvatarClick, handleEditAvatarClick, handleSaveAvatarClick, handleFileChange}) => {
+const ChangeAvatar = ({userData}) => {
+  const toast = useToast();
+  const token = localStorage.getItem('token');
+
+  const [isEditingAvatar, setIsEditingAvatar] = useState(false);
+  const [file, setFile] = useState(null);
+  const handleEditAvatarClick = () => {
+    setIsEditingAvatar(true);
+  }
+  const handleCancelAvatarClick = () => {
+    setIsEditingAvatar(false);
+  }
+  const handleSaveAvatarClick = async () => {
+    await updateAvatar(token, toast, file, userData);
+    setIsEditingAvatar(false);
+  }
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
+  };
   return (
     <>
       <Box w={['100%', '30%']} align={'center'}>

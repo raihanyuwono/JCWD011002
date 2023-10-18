@@ -17,11 +17,13 @@ import {
 } from "@chakra-ui/react";
 import jwt_decode from "jwt-decode";
 import { addAddress, getCityByProvince, getProvince } from "../../api/address";
-const AddAddress = ({ isOpen, onClose, onAddAddress }) => {
+import Loading from "../Utility/Loading";
+const AddAddress = ({ isOpen, onClose, onAddAddress, fetchAddressUser }) => {
   const [city, setCity] = useState([]);
   const [province, setProvince] = useState([]);
   const [selectedProvinceId, setSelectedProvinceId] = useState("");
   const [selectedProvinceName, setSelectedProvinceName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   console.log("in province add address", province)
   const toast = useToast();
   const fetchProvince = async () => {
@@ -58,7 +60,9 @@ const AddAddress = ({ isOpen, onClose, onAddAddress }) => {
   const [formData, setFormData] = React.useState(initialFormData);
   const sendDataToApi = async () => {
     try {
+      setIsLoading(true);
       await addAddress(formData, selectedProvinceName, toast, onAddAddress, setFormData, initialFormData, onClose)
+      fetchAddressUser()
     } catch (error) {
       console.log(error);
     }
@@ -86,6 +90,7 @@ const AddAddress = ({ isOpen, onClose, onAddAddress }) => {
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
+      {isLoading && <Loading />}
       <ModalOverlay />
       <ModalContent color={"white"} bgColor={"#233947"}>
         <ModalHeader>Add New Address</ModalHeader>
@@ -137,7 +142,7 @@ const AddAddress = ({ isOpen, onClose, onAddAddress }) => {
               placeholder="your full address"
             />
           </FormControl>
-          <Checkbox mt={4} name="is_default" defaultChecked isChecked={formData.is_default} onChange={handleChange}>Default Address</Checkbox>
+          {/* <Checkbox mt={4} name="is_default" defaultChecked isChecked={formData.is_default} onChange={handleChange}>Default Address</Checkbox> */}
         </ModalBody>
         <ModalFooter>
           <Button

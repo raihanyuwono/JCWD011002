@@ -14,19 +14,28 @@ import {
   useToast,
   Flex,
   ButtonGroup,
-  Box
+  Box,
+  Image
 } from "@chakra-ui/react";
 import { EditIcon, DeleteIcon, CheckIcon, CloseIcon, AddIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import ConfirmationModal from "./ConfirmationModal"
 import FormCreateCategory from "./CreateCategory";
+import Pagination from "../Product/Pagination";
+import FilterCategory from "./FilterCategory";
+import UpdateCategory from "./UpdateCategory";
 
 const ProductCategory = () => {
   const [categories, setCategories] = useState([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
-  const [editingCategoryId, setEditingCategoryId] = useState(null);
-  const [editedCategoryName, setEditedCategoryName] = useState("");
+  const [search, setSearch] = useState("");
+  const [sort, setSort] = useState("");
+  const [name, setName] = useState("");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [searchInput, setSearchInput] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isEditOpen, setIsEditOpen] = useState(false);
   const {
     isOpen: isConfirmationOpen,
     onOpen: onConfirmationOpen,
@@ -34,7 +43,9 @@ const ProductCategory = () => {
   } = useDisclosure()
 
   const toast = useToast()
-
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+  }
   const fetchCategories = async () => {
     try {
       const headers = {
@@ -44,10 +55,17 @@ const ProductCategory = () => {
       const { data } = await axios.get(
         `${process.env.REACT_APP_API_BASE_URL}/product/category`,
         {
-          headers,
+          params: {
+            page,
+            sort,
+            name,
+            search
+          },
+          headers
         }
       );
       setCategories(data.data);
+      setTotalPages(data.message.totalPages)
       console.log(data)
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -56,94 +74,7 @@ const ProductCategory = () => {
 
   useEffect(() => {
     fetchCategories();
-  }, [])
-
-  const handleCreateCategory = async (categoryData) => {
-    try {
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      };
-
-      await axios.post(
-        `${process.env.REACT_APP_API_BASE_URL}/product/category`,
-        {
-          name: categoryData.name,
-        },
-        { headers }
-      );
-
-      fetchCategories();
-
-      toast({
-        title: "Create category success",
-        status: "success",
-        duration: "2000",
-        isClosable: true,
-      });
-
-    } catch (error) {
-      toast({
-        title: "Create category can't be completed",
-        description: error.response.data.message || error.response.data.errors[0].msg,
-        status: "error",
-        duration: "2000",
-        isClosable: true,
-      });
-    }
-  };
-
-  const handleEdit = (categoryId, categoryName) => {
-    setEditingCategoryId(categoryId);
-    setEditedCategoryName(categoryName);
-  };
-
-  const handleSave = async (categoryId) => {
-    try {
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      };
-
-      await axios.patch(
-        `${process.env.REACT_APP_API_BASE_URL}/product/category/${categoryId}`,
-        { name: editedCategoryName },
-        { headers }
-      );
-
-      setCategories((prevCategories) =>
-        prevCategories.map((category) =>
-          category.id === categoryId
-            ? { ...category, name: editedCategoryName }
-            : category
-        )
-      );
-
-      toast({
-        title: "Edit category name success",
-        status: "success",
-        duration: "2000",
-        isClosable: true,
-      });
-
-      setEditingCategoryId(null);
-      setEditedCategoryName("");
-
-    } catch (error) {
-      toast({
-        title: "Failed to edit data",
-        description: error.response.data.message || error.response.data.errors[0].msg,
-        status: "error",
-        duration: "2000",
-        isClosable: true,
-      })
-    }
-  };
-
-  const handleCancel = () => {
-    setEditingCategoryId(null);
-    setEditedCategoryName("");
-  };
+  }, [sort, name, search, page]);
 
   const handleDelete = (categoryId) => {
     setSelectedCategoryId(categoryId);
@@ -187,85 +118,71 @@ const ProductCategory = () => {
       onConfirmationClose();
     }
   };
+  const handleEdit = (categoryId) => {
+    setSelectedCategoryId(categoryId);
+    setIsEditOpen(true);
+  }
 
   return (
-    <Flex w={"full"} flexWrap={"wrap"} direction={"column"} justifyContent={"center"} alignItems={"center"}>
-      <Box p={4} w={["100%", "50%"]} borderRadius={"8px"}>
-        <Flex justifyContent="flex-end" mb={4} m={4}>
-          <Button bg={"primary"} color={"white"} leftIcon={<AddIcon />} onClick={onOpen}>
-            Create Category
-            <FormCreateCategory isOpen={isOpen} onClose={onClose} onSubmit={handleCreateCategory} />
-          </Button>
-        </Flex>
+    <Box w={"full"} p={4} borderRadius={"8px"}>
+      <Flex justifyContent="space-between" mb={4} m={4}>
+        <Button bg={"primary"} color={"white"} leftIcon={<AddIcon />} onClick={onOpen}>
+          Create Category
+          <FormCreateCategory isOpen={isOpen} onClose={onClose} fetchCategory={fetchCategories} />
+        </Button>
+        <FilterCategory search={search} setSearch={setSearch} sort={sort} setSort={setSort} name={name} setName={setName} searchInput={searchInput} setSearchInput={setSearchInput} />
+      </Flex>
 
-        <TableContainer>
-          <Table variant={"striped"} colorScheme="whiteAlpha"
-            bgColor={"bgSecondary"}>
-            <Thead bg={"primary"}>
-              <Tr>
-                <Th color={"white"}>Category Name</Th>
-                <Th color={"white"}>Action</Th>
+      <TableContainer>
+        <Table variant={"striped"} colorScheme="whiteAlpha"
+          bgColor={"bgSecondary"}>
+          <Thead bg={"primary"}>
+            <Tr>
+              <Th color={"white"}>No</Th>
+              <Th color={"white"}>Image</Th>
+              <Th color={"white"}>Category Name</Th>
+              <Th color={"white"}>Action</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {categories.map((category, index) => (
+              <Tr key={category.id}>
+                <Td>{index + 1}</Td>
+                <Td><Image src={`${process.env.REACT_APP_API_BASE_URL}/${category.image}`} alt={category.name} width={50} height={50} /></Td>
+                <Td>{category.name}</Td>
+                <Td>
+                  <>
+                    <IconButton mr={3}
+                      icon={<EditIcon />}
+                      colorScheme="blue"
+                      onClick={() => handleEdit(category.id)}
+                    />
+                    <IconButton
+                      icon={<DeleteIcon />}
+                      colorScheme="red"
+                      onClick={() => handleDelete(category.id)}
+                    />
+                  </>
+
+                </Td>
               </Tr>
-            </Thead>
-            <Tbody>
-              {categories.map((category) => (
-                <Tr key={category.id}>
-                  <Td>
-                    {editingCategoryId === category.id ? (
-                      <Input
-                        isRequired
-                        value={editedCategoryName}
-                        onChange={(e) => setEditedCategoryName(e.target.value)}
-                      />
-                    ) : (
-                      category.name
-                    )}
-                  </Td>
-                  <Td>
-                    {editingCategoryId === category.id ? (
-                      <>
-                        <ButtonGroup gap={"1"}>
-                          <IconButton
-                            icon={<CheckIcon />}
-                            colorScheme="green"
-                            onClick={() => handleSave(category.id)}
-                          />
-                          <IconButton
-                            icon={<CloseIcon />}
-                            colorScheme="red"
-                            onClick={handleCancel}
-                          />
-                        </ButtonGroup>
-                      </>
-                    ) : (
-                      <>
-                        <IconButton mr={3}
-                          icon={<EditIcon />}
-                          colorScheme="blue"
-                          onClick={() => handleEdit(category.id, category.name)}
-                        />
-                        <IconButton
-                          icon={<DeleteIcon />}
-                          colorScheme="red"
-                          onClick={() => handleDelete(category.id)}
-                        />
-                      </>
-                    )}
-                  </Td>
-                </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        </TableContainer>
-        <ConfirmationModal
-          isOpen={isConfirmationOpen}
-          onClose={onConfirmationClose}
-          onConfirm={handleConfirmationDelete}
-          title="Delete Category"
-          message="Are you sure you want to delete this category?"
-        />
-      </Box>
-    </Flex>
+            ))}
+          </Tbody>
+        </Table>
+      </TableContainer>
+      {categories.length > 0 ? (
+        <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} />
+      ) : null}
+
+      <UpdateCategory isOpen={isEditOpen} onClose={() => setIsEditOpen(false)} categoryId={selectedCategoryId} fetchCategory={fetchCategories} />
+      <ConfirmationModal
+        isOpen={isConfirmationOpen}
+        onClose={onConfirmationClose}
+        onConfirm={handleConfirmationDelete}
+        title="Delete Category"
+        message="Are you sure you want to delete this category?"
+      />
+    </Box>
   );
 };
 

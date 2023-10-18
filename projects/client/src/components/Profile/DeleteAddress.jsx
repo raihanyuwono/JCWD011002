@@ -13,7 +13,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 
-function DeleteAddress({ addressData }) {
+function DeleteAddress({ addressData, fetchAddressUser }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
   const toast = useToast();
@@ -28,7 +28,7 @@ function DeleteAddress({ addressData }) {
       const response = await axios.delete(
         `http://localhost:8000/api/address/${addressData.id}`, headers);
       console.log('address data id', addressData.id)
-      if (response.status === 200) {// Memanggil fungsi onDeleteAddress dengan ID yang dihapus
+      if (response.status === 200) {
         onClose();
         toast({
           title: "Address Deleted",
@@ -37,14 +37,12 @@ function DeleteAddress({ addressData }) {
           duration: 3000,
           isClosable: true,
         });
+        fetchAddressUser();
       } else {
         console.error("Failed to delete address");
-        // Tampilkan pesan kesalahan kepada pengguna jika perlu
       }
     } catch (error) {
       console.error("Error deleting address:", error);
-      // Tangani kesalahan jaringan atau kesalahan lainnya di sini
-      // Tampilkan pesan kesalahan kepada pengguna jika perlu
     }
   };
 

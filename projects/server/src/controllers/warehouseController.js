@@ -38,8 +38,9 @@ const deleteWarehouse = async (req, res) => {
 
 const getWarehouse = async (req, res) => {
   try {
-    const result = await warehouseService.getWarehouse();
-    res.status(result.status).json(messages.success(result));
+    const { search, province, name, sort, page, limit } = req.query
+    const result = await warehouseService.getWarehouse(search, province, name, sort, page, limit);
+    res.status(result.status).json(messages.response(result));
   } catch (error) {
     res.status(500).json({ message: error.messages })
   }
@@ -55,4 +56,4 @@ async function getWarehouses(req, res) {
   }
 }
 
-module.exports = { createWarehouse, updateWarehouse, deleteWarehouse, getWarehouses }
+module.exports = { createWarehouse, updateWarehouse, deleteWarehouse, getWarehouses, getWarehouse }

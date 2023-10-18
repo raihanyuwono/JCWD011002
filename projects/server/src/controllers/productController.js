@@ -7,7 +7,7 @@ const createProductCategory = async (req, res) => {
     const body = { name };
     console.log("body", body.name);
 
-    const result = await productCategoryService.createProductCategory(body);
+    const result = await productCategoryService.createProductCategory(body, req);
     res.status(result.status).json(messages.response(result));
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -16,12 +16,23 @@ const createProductCategory = async (req, res) => {
 
 const getAllCategory = async (req, res) => {
   try {
-    const result = await productCategoryService.getAllCategory();
+    const { sort, name, search, page, limit } = req.query
+    const result = await productCategoryService.getAllCategory(sort, name, search, page, limit);
     res.status(result.status).json(messages.response(result));
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
+const getCategoryById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await productCategoryService.getCategoryById(id);
+    res.status(result.status).json(messages.response(result));
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
 
 const updateProductCategory = async (req, res) => {
   try {
@@ -29,13 +40,24 @@ const updateProductCategory = async (req, res) => {
     const { name } = req.body;
     console.log("id", id);
     const body = { name };
-    const result = await productCategoryService.updateProductCategory(id, body);
+    const result = await productCategoryService.updateProductCategory(id, body, req);
     res.status(result.status).json(messages.response(result));
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: error.message });
   }
 };
+
+const updateImageCategory = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await productCategoryService.updateImage(id, req);
+    res.status(result.status).json(messages.response(result));
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: error.message });
+  }
+}
 
 const deleteProductCategory = async (req, res) => {
   try {
@@ -128,5 +150,5 @@ const updateStock = async (req, res) => {
 
 module.exports = {
   createProductCategory, getAllCategory, updateProductCategory, deleteProductCategory, getProductList, getProductById, createProduct, updateProduct, updateStock, getProducts,
-  getProduct,
+  getProduct, getCategoryById, updateImageCategory
 };

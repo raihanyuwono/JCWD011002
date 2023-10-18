@@ -29,9 +29,11 @@ import {
   FormControl,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { getWarehouses } from "../../../../api/warehouse";
+import { getWarehouseList } from "../../../../api/warehouse";
 import axios from "axios";
 import { getCityByProvince, getProvince } from "../../../../api/address";
+import Pagination from "../Product/Pagination";
+import FilterWarehouse from "./FilterWarehouse";
 
 const WarehouseList = () => {
   const [warehouses, setWarehouses] = useState([]);
@@ -39,6 +41,14 @@ const WarehouseList = () => {
   const [isDrawerCreateOpen, setIsDrawerCreateOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedWarehouse, setSelectedWarehouse] = useState(null);
+  const [sort, setSort] = useState("");
+  const [name, setName] = useState("");
+  const [search, setSearch] = useState("");
+  const [searchInput, setSearchInput] = useState("");
+  const [filterProvince, setFilterProvince] = useState("");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  console.log("filter province", filterProvince)
   const [editedWarehouse, setEditedWarehouse] = useState({
     name: "",
     address: "",
@@ -51,6 +61,9 @@ const WarehouseList = () => {
   const [province, setProvince] = useState([]);
   const [selectedProvinceId, setSelectedProvinceId] = useState("");
   const [selectedProvinceName, setSelectedProvinceName] = useState("");
+  const handlePageChange = (newPage) => {
+    setPage(newPage)
+  }
   const fetchProvince = async () => {
     await getProvince(setProvince, toast)
   }
@@ -96,8 +109,10 @@ const WarehouseList = () => {
   }
 
   const fetchWarehouses = async () => {
-    const { data } = await getWarehouses(toast);
-    setWarehouses(data);
+    const { data } = await getWarehouseList(toast, page, sort, name, search, filterProvince);
+    console.log("fetch warehouse", data)
+    setWarehouses(data.data);
+    setTotalPages(data.totalPages);
   };
 
   const openEditDrawer = (warehouse) => {
@@ -147,7 +162,7 @@ const WarehouseList = () => {
 
   useEffect(() => {
     fetchWarehouses();
-  }, []);
+  }, [page, sort, name, search, filterProvince]);
 
   const openDeleteModal = (warehouse) => {
     setSelectedWarehouse(warehouse);
@@ -216,15 +231,20 @@ const WarehouseList = () => {
     <>
       {/* Table content */}
       <Flex flexDirection={"column"} w={"full"} mt={4}>
-        <Box>
-          <Button bg={"darkBlue"} mb={4} color={"white"} onClick={handleDrawerCreateOpen}>Create Warehouse</Button>
-        </Box>
+        <Flex justifyContent={"space-between"}>
+          <Box>
+            <Button bg={"darkBlue"} mb={4} color={"white"} onClick={handleDrawerCreateOpen}>Create Warehouse</Button>
+          </Box>
+          <FilterWarehouse
+            sort={sort} setSort={setSort} search={search} setSearch={setSearch} searchInput={searchInput} setSearchInput={setSearchInput} name={name} setName={setName} province={filterProvince} setProvince={setFilterProvince} />
+        </Flex>
 
         <TableContainer>
           <Table variant={"striped"} colorScheme="whiteAlpha"
             bgColor={"bgSecondary"}>
             <Thead bg={"primary"}>
               <Tr>
+                <Th color={"white"}>No</Th>
                 <Th color={"white"}>Warehouse</Th>
                 <Th color={"white"}>Address</Th>
                 <Th color={"white"}>Province</Th>
@@ -234,8 +254,9 @@ const WarehouseList = () => {
               </Tr>
             </Thead>
             <Tbody>
-              {warehouses.map((warehouse) => (
+              {warehouses.map((warehouse, index) => (
                 <Tr key={warehouse.id}>
+                  <Td>{index + 1}</Td>
                   <Td>{warehouse.name}</Td>
                   <Td>{warehouse.address}</Td>
                   <Td>{warehouse.province}</Td>
@@ -250,6 +271,9 @@ const WarehouseList = () => {
             </Tbody>
           </Table>
         </TableContainer>
+        {warehouses.length > 0 ? (
+          <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} />
+        ) : null}
       </Flex>
       {/* Edit Drawer */}
       <Drawer isOpen={isDrawerOpen} onClose={closeEditDrawer}>

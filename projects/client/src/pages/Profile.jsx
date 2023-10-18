@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import {
   IconButton,
   Box,
@@ -20,10 +20,10 @@ import {
   FiCompass,
   FiMenu
 } from "react-icons/fi"
-import UserProfile from "../components/Profile/UpdateProfile"
-import { getUser } from "../api/profile"
-import UserAddress from "./UserAddress"
-import { Link, Outlet } from "react-router-dom"
+
+import { Link, Outlet, useLocation } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
+import { fetchUserData } from "../storage/userReducer"
 const LinkItems = [
   { name: "Profile", icon: FiHome, url: "" },
   { name: "Address", icon: FiCompass, url: "address" },
@@ -32,27 +32,26 @@ const LinkItems = [
 
 export default function Profile() {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [userData, setUserData] = useState({
-    name: '',
-    username: '',
-    email: '',
-    phone: '',
-    is_verified: false,
-    role: '',
-    current_password: '',
-    new_password: '',
-    confirm_password: '',
-    avatar: '',
-  });
+
   const toast = useToast()
-  const token = localStorage.getItem('token')
-  const fetchUserData = async () => {
-    await getUser(token, setUserData, toast);
-  };
+
+  const dispatch = useDispatch()
+  const userData = useSelector((state) => state.user.userData)
+
+  const token = localStorage.getItem('token');
+  console.log("token", token)
+  console.log("userData", userData)
 
   useEffect(() => {
-    fetchUserData();
-  }, []);
+    if (token) {
+      dispatch(fetchUserData(toast));
+    }
+  }, [dispatch]);
+
+  const location = useLocation();
+  console.log("location", location)
+  const profilePath = location.pathname === "/profile" || location.pathname === "/profile/address" || location.pathname === "/profile/transaction";
+  console.log("profilePath", profilePath)
 
   return (
     <Box w={"full"} mx="auto">
@@ -81,7 +80,7 @@ export default function Profile() {
         </DrawerContent>
       </Drawer>
       {/* mobilenav */}
-      <MobileNav display={{ base: "flex", md: "none" }} onOpen={onOpen} />
+      {/* <MobileNav display={{ base: "flex", md: "none" }} onOpen={onOpen} /> */}
 
     </Box>
   )
@@ -164,7 +163,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
       borderBottomWidth="1px"
       borderBottomColor={useColorModeValue("gray.200", "gray.700")}
       justifyContent="flex-start"
-      {...rest}
+      // {...rest}
     >
       <IconButton
         position={"absolute"}

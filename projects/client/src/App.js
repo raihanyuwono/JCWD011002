@@ -62,29 +62,6 @@ function App() {
     }, 10);
   }, []);
 
-  // Bisa taruh di redux
-  const [userData, setUserData] = useState({
-    name: '',
-    username: '',
-    email: '',
-    phone: '',
-    is_verified: false,
-    role: '',
-    current_password: '',
-    new_password: '',
-    confirm_password: '',
-    avatar: '',
-  });
-  const toast = useToast()
-  const token = localStorage.getItem('token')
-  const fetchUserData = async () => {
-    if (token) await getUser(token, setUserData, toast);
-  };
-
-  useEffect(() => {
-    fetchUserData();
-  }, []);
-
   if (!isLoading)
     return (
       <Flex {...mainContainerAttr}>
@@ -102,8 +79,8 @@ function App() {
               <Route path="report" element={<Report />} />
             </Route>
             <Route path="/registration/:token" element={<Registration />} />
-            <Route path="/profile" element={<Profile userData={userData} />}>
-              <Route path="" element={<UserProfile userData={userData} setUserData={setUserData} />} />
+            <Route path="/profile" element={<Profile />}>
+              <Route path="" element={<UserProfile />} />
               <Route path="address" element={<UserAddress />} />
               <Route path="transaction" element={<Transaction />} />
             </Route>

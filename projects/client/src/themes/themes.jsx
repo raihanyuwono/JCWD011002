@@ -57,7 +57,7 @@ const themes = extendTheme({
     warningSecondary: "#FF9800",
     editPrimary: "#34638A",
     editSecondary: "#2C4E69",
-    blueCold: "#9E9FA5",
+    blueCold: "#4D5356",
     darkBlue: "#34638A",
   },
   components: {
