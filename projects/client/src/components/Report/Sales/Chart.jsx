@@ -51,7 +51,6 @@ const Charts = () => {
         }
       );
       setData(response.data.warehouse_sales);
-      setWhName(response.data.warehouse_name);
     } catch (error) {
       console.log(error);
     }
@@ -138,7 +137,6 @@ const Charts = () => {
               fontWeight={"bold"}
               px={6}
               py={3}
-              w={"220px"}
               bg={"#393939"}
               color={"white"}
             >
