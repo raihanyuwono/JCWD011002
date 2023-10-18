@@ -14,7 +14,6 @@ import { TbCategory as IcCategory, TbUsers as IcUser } from "react-icons/tb";
 import { SlGraph as IcReport } from "react-icons/sl";
 import { Outlet } from "react-router-dom";
 
-
 const ACCESS_ADMIN = ["admin"];
 const ACCESS_ALL_ADMIN = ["admin", "admin warehouse"];
 
@@ -41,7 +40,7 @@ const menuList = [
   createMenuSet("Categories", <IcCategory />, ACCESS_ALL_ADMIN, "/category"),
   createMenuSet("Products", <IcProduct />, ACCESS_ALL_ADMIN, "/product"),
   createMenuSet("Mutations", <IcMutation />, ACCESS_ALL_ADMIN, "/stockmutation"),
-  createMenuSet("Orders", <IcOrder />, ACCESS_ADMIN, "/order"),
+  createMenuSet("Orders", <IcOrder />, ACCESS_ALL_ADMIN, "/order"),
   createMenuSet("Reports", <IcReport />, ACCESS_ALL_ADMIN, "/report"),
 ];
 

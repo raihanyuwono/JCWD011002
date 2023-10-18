@@ -62,7 +62,7 @@ function TabPayment({ status }) {
   const currentYear = searchParams.get("year");
   const currentWarehouse = searchParams.get("warehouse");
   const currentSearch = useSelector((state) => state.search.orders);
-  const updateStatus = useSelector((state) => state.trigger.updateStatus);
+  const updateStatus = useSelector((state) => state.trigger.orderStatus);
   const dependancies = [
     currentSort,
     currentMonth,
