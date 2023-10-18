@@ -94,15 +94,6 @@ const themes = extendTheme({
         },
       },
     },
-    Table: {
-      parts: ["Thead"],
-      Thead: {
-        baseStyle: {
-          color: "red",
-          bgColor: "yellow",
-        },
-      },
-    },
   },
 });
 
