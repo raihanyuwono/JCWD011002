@@ -95,111 +95,124 @@ const ToPay = () => {
 
   return (
     <>
-      <Flex
-        direction={isMd ? "column" : "row"}
-        justifyContent={"space-between"}
-        mb={2}
-      >
-        <SearchBar onSearch={setSearchQuery} />
-        <FilterBy
-          onFilterChange={setFilterBy}
-          onDateRangeFilter={handleDateRangeFilter}
-        />
-      </Flex>
-      {data.map((item) => (
-        <Box
-          key={item.transactionId}
-          mb={2}
-          bg={"bgSecondary"}
-          p={4}
-          w={isMd ? "100vw" : "70vw"}
-          color={"white"}
+      {data.length === 0 ? (
+        <Text
+          align={"center"}
+          fontSize={isMd ? "sm" : "md"}
+          fontWeight={"bold"}
         >
-          <Flex justifyContent={"space-between"}>
-            <Flex>
-              <Text fontSize={isMd ? "sm" : "md"} fontWeight={"bold"}>
-                {item.txn_date}&nbsp;
-              </Text>
-              <Badge
-                alignSelf={"center"}
-                colorScheme="green"
-              >
-                {item.status === "Menunggu Pembayaran" ? "To Pay" : ""}
-              </Badge>
-              {isMd ? (
-                <></>
-              ) : (
-                <Text fontSize={isMd ? "sm" : "md"}>
-                  &nbsp;MWECG2/ID/TXN{item.transactionId}
-                </Text>
-              )}
-            </Flex>
-            <Flex>
-              <Tooltip
-                hasArrow
-                textAlign={"center"}
-                label="Please upload receipt before the time runs out, or your order will be cancelled automatically by the system"
-                bg="red.600"
-              >
-                <Text fontWeight={"bold"} mr={3}>
-                  {Math.floor(remainingTime[item.transactionId] / 60)}:
-                  {(remainingTime[item.transactionId] % 60)
-                    .toString()
-                    .padStart(2, "0")}
-                </Text>
-              </Tooltip>
-              {isMd ? (
-                <>
-                  <ButtonUpload transactionId={item.transactionId} />
-                  &nbsp;
-                  <CancelOrder transactionId={item.transactionId} />
-                </>
-              ) : (
-                <>
-                  <ButtonUpload transactionId={item.transactionId} />
-                  &nbsp;
-                  <CancelOrder transactionId={item.transactionId} />
-                </>
-              )}
-            </Flex>
+          No Transaction Found
+        </Text>
+      ) : (
+        <>
+          <Flex
+            direction={isMd ? "column" : "row"}
+            justifyContent={"space-between"}
+            mb={2}
+          >
+            <SearchBar onSearch={setSearchQuery} />
+            <FilterBy
+              onFilterChange={setFilterBy}
+              onDateRangeFilter={handleDateRangeFilter}
+            />
           </Flex>
-          <Divider mt={2} mb={2} />
-          <Flex align={"center"} justifyContent={"space-between"}>
-            <Flex>
-              <Image
-                borderRadius={"5px"}
-                w={isMd ? "60px" : "75px"}
-                src={`${API_URL}/${item.product_image}`}
-              />
-              <Flex direction={"column"}>
-                <Text ml={4} fontSize={isMd ? "sm" : "md"} fontWeight={"bold"}>
-                  {item.product_name}
-                </Text>
-                {item.numProducts > 1 ? (
-                  <Text ml={4} fontSize={"sm"}>
-                    + {item.numProducts} other
+          {data.map((item) => (
+            <Box
+              key={item.transactionId}
+              mb={2}
+              bg={"bgSecondary"}
+              p={4}
+              w={isMd ? "100vw" : "70vw"}
+              color={"white"}
+            >
+              <Flex justifyContent={"space-between"}>
+                <Flex>
+                  <Text fontSize={isMd ? "sm" : "md"} fontWeight={"bold"}>
+                    {item.txn_date}&nbsp;
                   </Text>
-                ) : (
-                  <></>
-                )}
+                  <Badge alignSelf={"center"} colorScheme="green">
+                    {item.status === "Menunggu Pembayaran" ? "To Pay" : ""}
+                  </Badge>
+                  {isMd ? (
+                    <></>
+                  ) : (
+                    <Text fontSize={isMd ? "sm" : "md"}>
+                      &nbsp;MWECG2/ID/TXN{item.transactionId}
+                    </Text>
+                  )}
+                </Flex>
+                <Flex>
+                  <Tooltip
+                    hasArrow
+                    textAlign={"center"}
+                    label="Please upload receipt before the time runs out, or your order will be cancelled automatically by the system"
+                    bg="red.600"
+                  >
+                    <Text fontWeight={"bold"} mr={3}>
+                      {Math.floor(remainingTime[item.transactionId] / 60)}:
+                      {(remainingTime[item.transactionId] % 60)
+                        .toString()
+                        .padStart(2, "0")}
+                    </Text>
+                  </Tooltip>
+                  {isMd ? (
+                    <>
+                      <ButtonUpload transactionId={item.transactionId} />
+                      &nbsp;
+                      <CancelOrder transactionId={item.transactionId} />
+                    </>
+                  ) : (
+                    <>
+                      <ButtonUpload transactionId={item.transactionId} />
+                      &nbsp;
+                      <CancelOrder transactionId={item.transactionId} />
+                    </>
+                  )}
+                </Flex>
               </Flex>
-            </Flex>
-            <Flex direction={"column"}>
-              <Text fontSize={"sm"}>Total:</Text>
-              <Text fontSize={isMd ? "md" : "xl"} fontWeight={"bold"}>
-                {toRupiah(item.total, { dot: ".", floatingPoint: 0 })}
-              </Text>
-              <SeeDetailTxn transactionId={item.transactionId} />
-            </Flex>
-          </Flex>
-        </Box>
-      ))}
-      <Pagination
-        totalItems={totalPages * 10}
-        itemsPerPage={10}
-        onPageChange={setCurrentPage}
-        currentPage={currentPage}
-      />
+              <Divider mt={2} mb={2} />
+              <Flex align={"center"} justifyContent={"space-between"}>
+                <Flex>
+                  <Image
+                    borderRadius={"5px"}
+                    w={isMd ? "60px" : "75px"}
+                    src={`${API_URL}/${item.product_image}`}
+                  />
+                  <Flex direction={"column"}>
+                    <Text
+                      ml={4}
+                      fontSize={isMd ? "sm" : "md"}
+                      fontWeight={"bold"}
+                    >
+                      {item.product_name}
+                    </Text>
+                    {item.numProducts > 1 ? (
+                      <Text ml={4} fontSize={"sm"}>
+                        + {item.numProducts} other
+                      </Text>
+                    ) : (
+                      <></>
+                    )}
+                  </Flex>
+                </Flex>
+                <Flex direction={"column"}>
+                  <Text fontSize={"sm"}>Total:</Text>
+                  <Text fontSize={isMd ? "md" : "xl"} fontWeight={"bold"}>
+                    {toRupiah(item.total, { dot: ".", floatingPoint: 0 })}
+                  </Text>
+                  <SeeDetailTxn transactionId={item.transactionId} />
+                </Flex>
+              </Flex>
+            </Box>
+          ))}
+          <Pagination
+            totalItems={totalPages * 10}
+            itemsPerPage={10}
+            onPageChange={setCurrentPage}
+            currentPage={currentPage}
+          />
+        </>
+      )}
     </>
   );
 };

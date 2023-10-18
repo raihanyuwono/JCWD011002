@@ -12,6 +12,7 @@ import {
   MenuDivider,
   useDisclosure,
   Text,
+  Image,
 } from "@chakra-ui/react";
 import { RiShoppingCartLine } from "react-icons/ri";
 import { CgProfile } from "react-icons/cg";
@@ -78,7 +79,11 @@ export default function Simple() {
       >
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <HStack spacing={8} alignItems={"center"}>
-            <Box onClick={() => navigate("/")}>Logo</Box>
+            {profilePath ? (
+              <Image src="/logo.png" h="36px" position={{ base: "absolute", md: "static" }} left={16} onClick={() => navigate("/")} />
+            ) : (
+              <Image src="/logo.png" h="36px" onClick={() => navigate("/")} />
+            )}
           </HStack>
           {role === "user" && !profilePath && (
             <Searchbar />

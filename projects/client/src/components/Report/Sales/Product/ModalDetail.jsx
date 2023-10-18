@@ -101,7 +101,11 @@ const ModalDetail = ({ detail_product_sales, product_name }) => {
 
   useEffect(() => {
     fetchWarehouse();
-    {role === "admin warehouse" ? filterByWarehouse(selectedWarehouse) : filterByWarehouse(1);}
+    {
+      role === "admin warehouse"
+        ? filterByWarehouse(selectedWarehouse)
+        : filterByWarehouse(1);
+    }
     // filterByWarehouse(selectedWarehouse);
   }, []);
 
@@ -114,7 +118,7 @@ const ModalDetail = ({ detail_product_sales, product_name }) => {
       <Modal size={"3xl"} onClose={onClose} isOpen={isOpen} isCentered>
         <ModalOverlay />
         <ModalContent bgColor={"bgSecondary"}>
-          <ModalHeader color={"white"}>{product_name}</ModalHeader>
+          <ModalHeader color={"white"} bg={"primary"} mb={2}>{product_name}</ModalHeader>
           <ModalCloseButton color={"white"} />
           <ModalBody>
             <Flex>
@@ -192,10 +196,10 @@ const ModalDetail = ({ detail_product_sales, product_name }) => {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {filteredData.map((detailSale) => (
+                  {filteredData.map((detailSale, index) => (
                     <Tr key={detailSale.data_id}>
                       <Td textAlign="center" color={"white"}>
-                        {detailSale.data_id}
+                        {index + 1}
                       </Td>
                       <Td textAlign="center" color={"white"}>
                         MWECG2/ID/TXN{detailSale.transaction_id}
@@ -221,8 +225,10 @@ const ModalDetail = ({ detail_product_sales, product_name }) => {
               </Table>
             </TableContainer>
           </ModalBody>
-          <ModalFooter>
-            <Button onClick={onClose}>Close</Button>
+          <ModalFooter w={"full"}>
+            <Button w={"full"} colorScheme="red" borderRadius={0} onClick={onClose}>
+              Close
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

@@ -1,5 +1,5 @@
-"use client"
-import React, { useEffect } from "react"
+"use client";
+import React, { useEffect, useState } from "react";
 import {
   IconButton,
   Box,
@@ -20,15 +20,10 @@ import {
   FiCompass,
   FiMenu
 } from "react-icons/fi"
-
+import jwt_decode from "jwt-decode";
 import { Link, Outlet, useLocation } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { fetchUserData } from "../storage/userReducer"
-const LinkItems = [
-  { name: "Profile", icon: FiHome, url: "" },
-  { name: "Address", icon: FiCompass, url: "address" },
-  { name: "Transaction", icon: FiTrendingUp, url: "transaction" },
-]
 
 export default function Profile() {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -56,7 +51,6 @@ export default function Profile() {
   return (
     <Box w={"full"} mx="auto">
       <Flex>
-
         <SidebarContent
           // onClose={() => onClose}
           userData={userData}
@@ -80,13 +74,26 @@ export default function Profile() {
         </DrawerContent>
       </Drawer>
       {/* mobilenav */}
-      {/* <MobileNav display={{ base: "flex", md: "none" }} onOpen={onOpen} /> */}
-
+      <MobileNav display={{ base: "flex", md: "none" }} onOpen={onOpen} />
     </Box>
-  )
+  );
 }
 
 const SidebarContent = ({ userData, onClose, ...rest }) => {
+  const role = jwt_decode(localStorage.getItem("token")).role;
+  let LinkItems;
+  if (role === "admin" || role === "admin warehouse") {
+    LinkItems = [
+      { name: "Profile", icon: FiHome, url: "" },
+      { name: "Address", icon: FiCompass, url: "address" },
+    ];
+  } else {
+    LinkItems = [
+      { name: "Profile", icon: FiHome, url: "" },
+      { name: "Address", icon: FiCompass, url: "address" },
+      { name: "Transaction", icon: FiTrendingUp, url: "transaction" },
+    ];
+  }
   return (
     <Box
       borderRight="1px"
@@ -96,25 +103,30 @@ const SidebarContent = ({ userData, onClose, ...rest }) => {
       pos="fixed"
       h="full"
       {...rest}
-      color={'white'}
+      color={"white"}
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="center">
-        <Avatar src={`${process.env.REACT_APP_API_BASE_URL}/${userData?.avatar}`} />
+        <Avatar
+          src={`${process.env.REACT_APP_API_BASE_URL}/${userData?.avatar}`}
+        />
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
-      <Text align={"center"} fontSize="2xl" fontFamily="monospace" fontWeight="bold">
+      <Text
+        align={"center"}
+        fontSize="2xl"
+        fontFamily="monospace"
+        fontWeight="bold"
+      >
         {userData?.name}
       </Text>
-      {LinkItems.map(link => (
+      {LinkItems.map((link) => (
         <Link to={link.url}>
-          <NavItem icon={link.icon}>
-            {link.name}
-          </NavItem>
+          <NavItem icon={link.icon}>{link.name}</NavItem>
         </Link>
       ))}
     </Box>
-  )
-}
+  );
+};
 
 const NavItem = ({ icon, children, ...rest }) => {
   return (
@@ -133,7 +145,7 @@ const NavItem = ({ icon, children, ...rest }) => {
         cursor="pointer"
         _hover={{
           bg: "primary",
-          color: "white"
+          color: "white",
         }}
         {...rest}
       >
@@ -142,7 +154,7 @@ const NavItem = ({ icon, children, ...rest }) => {
             mr="4"
             fontSize="16"
             _groupHover={{
-              color: "white"
+              color: "white",
             }}
             as={icon}
           />
@@ -150,8 +162,8 @@ const NavItem = ({ icon, children, ...rest }) => {
         {children}
       </Flex>
     </Box>
-  )
-}
+  );
+};
 
 const MobileNav = ({ onOpen, ...rest }) => {
   return (
@@ -163,7 +175,9 @@ const MobileNav = ({ onOpen, ...rest }) => {
       borderBottomWidth="1px"
       borderBottomColor={useColorModeValue("gray.200", "gray.700")}
       justifyContent="flex-start"
-      // {...rest}
+      display={{ base: "block", md: "none" }}
+
+    // {...rest}
     >
       <IconButton
         position={"absolute"}
@@ -176,5 +190,5 @@ const MobileNav = ({ onOpen, ...rest }) => {
         icon={<FiMenu />}
       />
     </Flex>
-  )
-}
+  );
+};
