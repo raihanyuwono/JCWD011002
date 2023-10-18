@@ -28,7 +28,10 @@ import LogoutAlert from "./LogoutAlert";
 export default function Simple() {
   const navigate = useNavigate();
   const location = useLocation();
-  const profilePath = location.pathname === "/profile" || location.pathname === "/profile/address" || location.pathname === "/profile/transaction";
+  const profilePath =
+    location.pathname === "/profile" ||
+    location.pathname === "/profile/address" ||
+    location.pathname === "/profile/transaction";
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isCartOpen, setCartOpen] = useState(false);
 
@@ -49,7 +52,11 @@ export default function Simple() {
 
   const viewCart = async () => {
     try {
-      const response = await axios.get(`${API_URL}/order/cart/${userId}`);
+      const response = await axios.get(`${API_URL}/order/cart/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setCartLength(response.data.data.length);
     } catch (error) {
       console.log(error);
@@ -80,15 +87,27 @@ export default function Simple() {
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <HStack spacing={2} alignItems={"center"}>
             {profilePath ? (
-              <Image src="/logo.png" h="36px" position={{ base: "absolute", md: "static" }} left={16} onClick={() => navigate("/")} cursor="pointer" />
+              <Image
+                src="/logo.png"
+                h="36px"
+                position={{ base: "absolute", md: "static" }}
+                left={16}
+                onClick={() => navigate("/")}
+                cursor="pointer"
+              />
             ) : (
-              <Image src="/logo.png" h="36px" onClick={() => navigate("/")} cursor="pointer"/>
+              <Image
+                src="/logo.png"
+                h="36px"
+                onClick={() => navigate("/")}
+                cursor="pointer"
+              />
             )}
-            <Text fontFamily="Fira Code" fontSize="xl" fontWeight="bold">NetComp</Text>
+            <Text fontFamily="Fira Code" fontSize="xl" fontWeight="bold">
+              NetComp
+            </Text>
           </HStack>
-          {role === "user" && !profilePath && (
-            <Searchbar />
-          )}
+          {role === "user" && !profilePath && <Searchbar />}
           <Flex alignItems={"center"}>
             {isLogin ? (
               <>
