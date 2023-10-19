@@ -37,7 +37,6 @@ export default function Simple() {
 
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.userData);
-  console.log("userData", userData)
   useEffect(() => {
     if (token) {
       dispatch(fetchUserData());

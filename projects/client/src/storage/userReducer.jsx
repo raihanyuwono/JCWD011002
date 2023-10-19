@@ -5,6 +5,22 @@ import axios from 'axios';
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const USER_URL = `${BASE_URL}/user`;
 
+let initialState = {
+  userData: {
+    name: '',
+    username: '',
+    email: '',
+    phone: '',
+    is_verified: false,
+    current_password: '',
+    new_password: '',
+    confirm_password: '',
+    avatar: '',
+  },
+  isLoading: false,
+  error: null,
+}
+
 export const fetchUserData = createAsyncThunk('user/fetchUserData', async (toast, { rejectWithValue }) => {
   try {
     const response = await getUser(toast);
@@ -35,11 +51,7 @@ export const updateUserAvatar = createAsyncThunk('user/updateUserAvatar', async 
 
 const userSlice = createSlice({
   name: 'user',
-  initialState: {
-    userData: null,
-    isLoading: false,
-    error: null,
-  },
+  initialState: initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -55,8 +67,17 @@ const userSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload;
       })
+      .addCase(updateUserAvatar.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
       .addCase(updateUserAvatar.fulfilled, (state, action) => {
+        state.isLoading = false;
         state.userData.avatar = action.payload.avatar;
+      })
+      .addCase(updateUserAvatar.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
       })
   },
 });

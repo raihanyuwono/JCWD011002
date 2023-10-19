@@ -45,7 +45,7 @@ const ReqMutationTo = () => {
         <Thead bg={"primary"}>
           <Tr>
             <Th color={"white"}>No</Th>
-            <Th color={"white"}>Admin</Th>
+            <Th color={"white"}>User</Th>
             <Th color={"white"}>From Warehouse</Th>
             <Th color={"white"}>To Warehouse</Th>
             <Th color={"white"}>Product</Th>

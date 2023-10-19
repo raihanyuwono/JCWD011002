@@ -5,8 +5,10 @@ import ModalChangePassword from './ModalChangePassword';
 import RenderFieldInput from './RenderFieldInput';
 import ChangeAvatar from './ChangeAvatar';
 import RenderDataUser from './RenderDataUser';
-
+import { useDispatch } from 'react-redux';
+import { fetchUserData } from '../../storage/userReducer';
 function UserProfile() {
+  const dispatch = useDispatch();
   const [userData, setUserData] = useState({
     name: '',
     username: '',
@@ -19,8 +21,8 @@ function UserProfile() {
     avatar: '',
   });
 
-  
-  const fetchUserData = async () => {
+
+  const fetchUser = async () => {
     if (token) {
       const { data } = await getUser(token, setUserData, toast);
       setUserData(data)
@@ -28,7 +30,7 @@ function UserProfile() {
   };
 
   useEffect(() => {
-    fetchUserData();
+    fetchUser();
   }, []);
   const [isEditing, setIsEditing] = useState({
     name: false,
@@ -58,9 +60,12 @@ function UserProfile() {
   };
 
   const handleSaveClick = async (fieldName) => {
-    await updateUser(token, toast, userData);
-    setIsEditing({ ...isEditing, [fieldName]: false });
-    setIsEditingPassword(false);
+    const response = await updateUser(token, toast, userData);
+    if (response.status === 200) {
+      dispatch(fetchUserData(toast));
+      setIsEditing({ ...isEditing, [fieldName]: false });
+      setIsEditingPassword(false);
+    }
   };
 
   const handleInputChange = (e) => {
@@ -93,7 +98,7 @@ function UserProfile() {
       <Card w={['100%', '100%', '90%']} bg={"blueCold"}>
         <Flex justifyContent="center" alignItems="center" minH="65vh" direction={{ base: 'column', md: 'column', xl: 'row' }}>
           <ChangeAvatar
-            userData={userData} fetchUserData={fetchUserData}
+            userData={userData} fetchUser={fetchUser}
           />
           <RenderDataUser userData={userData} renderField={renderField} />
           <ModalChangePassword
