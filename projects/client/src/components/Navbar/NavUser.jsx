@@ -29,7 +29,10 @@ import { fetchUserData } from "../../storage/userReducer";
 export default function Simple() {
   const navigate = useNavigate();
   const location = useLocation();
-  const profilePath = location.pathname === "/profile" || location.pathname === "/profile/address" || location.pathname === "/profile/transaction";
+  const profilePath =
+    location.pathname === "/profile" ||
+    location.pathname === "/profile/address" ||
+    location.pathname === "/profile/transaction";
   const [isCartOpen, setCartOpen] = useState(false);
   const [cartLength, setCartLength] = useState(0);
   const API_URL = process.env.REACT_APP_API_BASE_URL;
@@ -56,7 +59,11 @@ export default function Simple() {
 
   const viewCart = async () => {
     try {
-      const response = await axios.get(`${API_URL}/order/cart/${userId}`);
+      const response = await axios.get(`${API_URL}/order/cart/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setCartLength(response.data.data.length);
     } catch (error) {
       console.log(error);
@@ -99,9 +106,7 @@ export default function Simple() {
               </HStack>
             )}
           </HStack>
-          {role === "user" && !profilePath && (
-            <Searchbar />
-          )}
+          {role === "user" && !profilePath && <Searchbar />}
           <Flex alignItems={"center"}>
             {isLogin ? (
               <>
