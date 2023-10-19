@@ -15,23 +15,6 @@ const exclude = [
   "updated_at",
 ];
 
-function setInclude(search = "", id_role) {
-  const where = { name: { [Op.like]: `%${search}%` } };
-  if (id_role) where["id_role"] = id_role;
-  return [
-    {
-      model: users,
-      attributes: { exclude },
-      include: {
-        model: roles,
-        attributes: ["name"],
-      },
-      where,
-    },
-    { model: warehouses, attributes: ["name"] },
-  ];
-}
-
 const include = [
   {
     model: users,
@@ -51,7 +34,6 @@ function setWhere(id, search = "", role, warehouse) {
   };
   if (role) conditions["$user.id_role$"] = role;
   if (warehouse) conditions["id_warehouse"] = warehouse;
-  console.log(conditions);
   return conditions;
 }
 
