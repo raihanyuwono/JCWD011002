@@ -24,7 +24,7 @@ const utilityContainer = {
 };
 
 function ManageUsers() {
-  const [firstRander, setFirstRander] = useState(false);
+  const [firstRander, setFirstRander] = useState(true);
   const [users, setUsers] = useState([]);
   const [maxPage, setMaxpage] = useState(1);
   const [searchParams, setSearchParams] = useSearchParams({});
@@ -43,7 +43,7 @@ function ManageUsers() {
       search,
       page: currentPage,
       limit,
-      order: currentSort,
+      sort: currentSort,
       role: currentRoles,
       warehouse: currentWarehouse,
     };

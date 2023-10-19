@@ -56,7 +56,7 @@ function setWhere(id, search = "", role, warehouse) {
 }
 
 async function getUsers(access, id, query) {
-  const { search, role, warehouse, order, page = 1, limit = 10 } = query;
+  const { search, role, warehouse, sort, page = 1, limit = 10 } = query;
   // Check if access only for admin
   if (access !== "admin") return messages.error(401, "Unauthorized access");
   //Pagination
@@ -66,7 +66,8 @@ async function getUsers(access, id, query) {
     attributes: [],
     include,
     order: [
-      [users, roles, "name", order || "ASC"],
+      [users, "name", sort || "ASC"],
+      [users, roles, "name", "ASC"],
       [warehouses, "name", "ASC"],
     ],
     where: setWhere(id, search, role, warehouse),
