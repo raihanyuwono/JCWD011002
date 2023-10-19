@@ -24,9 +24,7 @@ const Charts = () => {
       });
       setWh(response.data.data.id_warehouse);
       setWhName(response.data.data.warehouse_name);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -45,10 +43,14 @@ const Charts = () => {
   const fetchDataWarehouse = async () => {
     try {
       const response = await axios.get(
-        `${API_URL}/report/sales/warehouse/${wh}`
+        `${API_URL}/report/sales/warehouse/${wh}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
       );
       setData(response.data.warehouse_sales);
-      setWhName(response.data.warehouse_name);
     } catch (error) {
       console.log(error);
     }
@@ -56,7 +58,11 @@ const Charts = () => {
 
   const fetchDataMonthly = async () => {
     try {
-      const response = await axios.get(`${API_URL}/report/sales/monthly`);
+      const response = await axios.get(`${API_URL}/report/sales/monthly`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       setData(response.data.data);
     } catch (error) {
       console.log(error);
@@ -70,12 +76,10 @@ const Charts = () => {
       if (chartRef.current.chart) {
         chartRef.current.chart.destroy();
       }
-  
       const labels = data.map((item) => `${item.month} ${item.year}`);
       const totalSales = data.map((item) =>
         parseInt(item.total_sales_per_month)
       );
-  
       const newChart = new Chart(ctx, {
         type: "bar",
         data: {
@@ -128,7 +132,13 @@ const Charts = () => {
       <Box mb={2} w={"80vw"} borderRadius={"10px"}>
         <Flex>
           {role === "admin warehouse" ? (
-            <Text p={3} bg={"#393939"} color={"white"}>
+            <Text
+              fontWeight={"bold"}
+              px={6}
+              py={3}
+              bg={"#393939"}
+              color={"white"}
+            >
               {whName}
             </Text>
           ) : (
