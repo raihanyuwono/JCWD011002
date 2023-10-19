@@ -23,6 +23,8 @@ const ChangeAvatar = () => {
   const [isEditingAvatar, setIsEditingAvatar] = useState(false);
   const [file, setFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
+  console.log('userData', userData);
+  console.log(`${process.env.REACT_APP_API_BASE_URL}/${userData?.avatar}`)
 
   const handleEditAvatarClick = () => {
     setIsEditingAvatar(true);
@@ -34,18 +36,23 @@ const ChangeAvatar = () => {
   };
 
   const handleSaveAvatarClick = async () => {
-    if (file) {
-      await dispatch(updateUserAvatar({ token, file, userData }));
-      dispatch(fetchUserData(toast));
-      toast({
-        title: 'Success',
-        description: 'Avatar updated successfully',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
-      setIsEditingAvatar(false);
+    try {
+      if (file) {
+        await dispatch(updateUserAvatar({ token, file, userData }));
+        dispatch(fetchUserData(toast));
+        toast({
+          title: 'Success',
+          description: 'Avatar updated successfully',
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        });
+        setIsEditingAvatar(false);
+      }
+    } catch (error) {
+      console.log(error);
     }
+
   };
 
   const handleFileChange = (e) => {

@@ -42,6 +42,7 @@ export const updateUserAvatar = createAsyncThunk('user/updateUserAvatar', async 
         Authorization: `Bearer ${token}`,
       },
     });
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.log(error);

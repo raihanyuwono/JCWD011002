@@ -1,37 +1,44 @@
-import React from 'react';
-import { Button, Flex, } from '@chakra-ui/react';
+import React, { useState } from 'react';
+import { Button, Flex, Text, Input, useToast } from '@chakra-ui/react';
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import {
+  HiOutlineChevronDoubleLeft as IcFirst,
+  HiOutlineChevronDoubleRight as IcLast,
+} from "react-icons/hi";
+import Notification from '../../../../helpers/Notification';
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+  const [newPage, setNewPage] = useState(currentPage);
+  const toast = useToast();
   const handlePageChange = (page) => {
     onPageChange(page);
   };
 
-  const showPages = 5;
-  const getPageNumbers = () => {
-    const pages = [];
-    if (totalPages <= showPages) {
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push(i);
-      }
-    } else if (currentPage <= 2) {
-      for (let i = 1; i <= showPages; i++) {
-        pages.push(i);
-      }
-    } else if (currentPage >= totalPages - 1) {
-      for (let i = totalPages - showPages + 1; i <= totalPages; i++) {
-        pages.push(i);
-      }
-    } else {
-      for (let i = currentPage - 2; i <= currentPage + 2; i++) {
-        pages.push(i);
+  const handleOnChange = (e) => {
+    const page = parseInt(e.target.value);
+    setNewPage(page);
+  }
+
+  const onEnterKey = (e) => {
+    if (e.key === 'Enter') {
+      const newPageNumber = parseInt(newPage);
+      if (!isNaN(newPageNumber) && newPageNumber >= 1 && newPageNumber <= totalPages) {
+        handlePageChange(newPageNumber);
+      } else {
+        return Notification(toast, { title: "Invalid Page", status: 500 });
       }
     }
-    return pages;
-  };
-  const pagesToShow = getPageNumbers();
+  }
 
   return (
-    <Flex justify="center" mt="4">
+    <Flex justify="center" align={"center"} mt="4">
+      <Button
+        mr={1}
+        onClick={() => handlePageChange(1)}
+        color={"black"}
+        isDisabled={currentPage === 1}
+      >
+        <IcFirst />
+      </Button>
       <Button
         mr={1}
         onClick={() => handlePageChange(currentPage - 1)}
@@ -41,29 +48,35 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       >
         <IoIosArrowBack />
       </Button>
-      {pagesToShow.map((page) => (
-        <Button
-          key={page}
-          mx={1}
-          onClick={() => handlePageChange(page)}
-          color={"black"}
-          bg={currentPage === page ? 'white' : 'gray'}
-          style={{ borderRadius: '5px' }}
-        >
-          {page}
-        </Button>
-      ))}
+      <Input w={"48px"}
+        type='number'
+        value={Math.min(newPage, totalPages)}
+        onChange={handleOnChange}
+        onKeyDown={onEnterKey} color={"white"}
+        bg={"black"}
+        textAlign={"center"}
+        _hover={{ bg: "white", color: "black" }} />
+      <Text mx={2}>of {totalPages}</Text>
       <Button
         ml={1}
-        bg={"white"} color={"black"}
+        bg={"white"}
+        color={"black"}
         onClick={() => handlePageChange(currentPage + 1)}
         isDisabled={currentPage === totalPages}
       >
         <IoIosArrowForward />
       </Button>
+      <Button
+        ml={1}
+        onClick={() => handlePageChange(totalPages)}
+        bg={"white"}
+        color={"black"}
+        isDisabled={currentPage === totalPages}
+      >
+        <IcLast />
+      </Button>
     </Flex>
   );
 };
-
 
 export default Pagination;
