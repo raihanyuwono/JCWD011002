@@ -3,7 +3,7 @@ import { FiSearch } from "react-icons/fi";
 import { useSearchParams } from "react-router-dom";
 import useDebounce from "../../../../../helpers/useDebounce";
 import { useDispatch } from "react-redux";
-import { searchOrder } from "../../../../../storage/SearchReducer";
+import { searchUser } from "../../../../../storage/SearchReducer";
 
 function Searchbar() {
   const [searchParams, setSearchParams] = useSearchParams({});
@@ -33,7 +33,7 @@ function Searchbar() {
   };
 
   useDebounce(() => {
-    dispatch(searchOrder(query));
+    dispatch(searchUser(query));
   }, [query]);
 
   return (

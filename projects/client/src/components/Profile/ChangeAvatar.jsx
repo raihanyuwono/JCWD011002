@@ -23,8 +23,6 @@ const ChangeAvatar = () => {
   const [isEditingAvatar, setIsEditingAvatar] = useState(false);
   const [file, setFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
-  console.log('userData', userData);
-  console.log(`${process.env.REACT_APP_API_BASE_URL}/${userData?.avatar}`)
 
   const handleEditAvatarClick = () => {
     setIsEditingAvatar(true);
