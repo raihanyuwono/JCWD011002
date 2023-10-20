@@ -11,7 +11,6 @@ const exclude = [
   "password",
   "is_verified",
   "id_role",
-  // "created_at",
   "updated_at",
 ];
 
