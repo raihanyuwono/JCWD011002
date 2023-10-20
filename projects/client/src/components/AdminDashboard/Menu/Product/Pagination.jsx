@@ -34,7 +34,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       <Button
         mr={1}
         onClick={() => handlePageChange(1)}
-        color={"black"}
+        variant={"solid"}
         isDisabled={currentPage === 1}
       >
         <IcFirst />
@@ -42,8 +42,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       <Button
         mr={1}
         onClick={() => handlePageChange(currentPage - 1)}
-        bg={"white"}
-        color={"black"}
+        variant={"solid"}
         isDisabled={currentPage === 1}
       >
         <IoIosArrowBack />
@@ -53,14 +52,14 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
         value={Math.min(newPage, totalPages)}
         onChange={handleOnChange}
         onKeyDown={onEnterKey} color={"white"}
+        variant={"outline"}
         bg={"black"}
         textAlign={"center"}
-        _hover={{ bg: "white", color: "black" }} />
+        _hover={{ bg: "textPrimary", color: "textReversePrimary" }} />
       <Text mx={2}>of {totalPages}</Text>
       <Button
         ml={1}
-        bg={"white"}
-        color={"black"}
+        variant={"solid"}
         onClick={() => handlePageChange(currentPage + 1)}
         isDisabled={currentPage === totalPages}
       >
@@ -69,8 +68,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       <Button
         ml={1}
         onClick={() => handlePageChange(totalPages)}
-        bg={"white"}
-        color={"black"}
+        variant={"solid"}
         isDisabled={currentPage === totalPages}
       >
         <IcLast />
