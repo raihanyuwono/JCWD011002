@@ -16,6 +16,7 @@ import { useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getRole } from "../../../../../helpers/Roles";
 import { getAdminWarehouse } from "../../../../../api/admin";
+import LoadingBar from "../../../../Utility/LoadingBar";
 
 const date = new Date();
 
@@ -42,6 +43,7 @@ const thAttr = {
 };
 
 function TabPayment({ status }) {
+  const [isLoading, setLoading] = useState(false);
   const [firstRander, setFirstRander] = useState(true);
   const [transactions, setTransaction] = useState([]);
   const [maxPage, setMaxPage] = useState(1);
@@ -81,20 +83,21 @@ function TabPayment({ status }) {
       warehouse: await selectWarehouse(),
     };
     if (parseInt(attributes?.warehouse) === 0) delete attributes.warehouse;
+    setLoading(true);
     const { data } = await getTransactions(toast, attributes);
     const { transactions: transactionList, pages } = data;
+    setLoading(false);
     setTransaction(transactionList);
     setMaxPage(pages);
     setFirstRander(true);
   }
 
-  
   const paginationAttr = {
     maxPage,
     currentPage,
     setCurrentPage: setSearchParams,
   };
-  
+
   function resetPage() {
     if (!firstRander) {
       setSearchParams((prev) => {
@@ -120,24 +123,27 @@ function TabPayment({ status }) {
   };
 
   return (
-    <Flex {...mainContainer}>
-      <TableContainer>
-        <Table {...tableAttr}>
-          <Thead {...tHeadAttr}>
-            <Tr>
-              {headers.map((header, index) => (
-                <Th {...thAttr} key={index}>
-                  {header}
-                </Th>
-              ))}
-            </Tr>
-          </Thead>
-          <TransactionList {...transactionsAttr} />
-        </Table>
-      </TableContainer>
-      <Spacer />
-      <Pagination {...paginationAttr} />
-    </Flex>
+    <>
+      <Flex {...mainContainer}>
+        <TableContainer>
+          <Table {...tableAttr}>
+            <Thead {...tHeadAttr}>
+              <Tr>
+                {headers.map((header, index) => (
+                  <Th {...thAttr} key={index}>
+                    {header}
+                  </Th>
+                ))}
+              </Tr>
+            </Thead>
+            <TransactionList {...transactionsAttr} />
+          </Table>
+        </TableContainer>
+        <Spacer />
+        <Pagination {...paginationAttr} />
+      </Flex>
+      {isLoading && <LoadingBar />}
+    </>
   );
 }
 

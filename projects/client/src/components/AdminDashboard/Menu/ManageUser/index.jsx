@@ -18,12 +18,14 @@ import Searchbar from "./Filter/Searchbar";
 import Pagination from "../../../Utility/Pagination";
 import { useSearchParams } from "react-router-dom";
 import Filter from "./Filter";
+import LoadingBar from "../../../Utility/LoadingBar";
 
 const utilityContainer = {
   direction: "row",
 };
 
 function ManageUsers() {
+  const [isLoading, setLoading] = useState(false);
   const [firstRander, setFirstRander] = useState(true);
   const [users, setUsers] = useState([]);
   const [maxPage, setMaxpage] = useState(1);
@@ -49,8 +51,10 @@ function ManageUsers() {
     };
     if (parseInt(attributes?.warehouse) === 0) delete attributes.warehouse;
     if (parseInt(attributes?.role) === 0) delete attributes.role;
+    setLoading(true);
     const { data } = await getUsers(toast, attributes);
     const { users: userList, pages } = data;
+    setLoading(false);
     setMaxpage(pages);
     setUsers(userList);
     setFirstRander(true);
@@ -109,32 +113,35 @@ function ManageUsers() {
   };
 
   return (
-    <Flex {...mainContainer}>
-      <Flex {...utilityContainer}>
-        <AddButton />
+    <>
+      <Flex {...mainContainer}>
+        <Flex {...utilityContainer}>
+          <AddButton />
+          <Spacer />
+          <Filter />
+        </Flex>
+        <TableContainer {...containerAttr}>
+          <Table {...tableAttr}>
+            <Thead bgColor={"primary"}>
+              <Tr>
+                <Th {...thAttr}>No</Th>
+                <Th {...thAttr}>Name</Th>
+                <Th {...thAttr}>Role</Th>
+                <Th {...thAttr}>Warehouse</Th>
+                <Th {...thAttr}>Status</Th>
+                <Th></Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              <UserList {...userListAttr} />
+            </Tbody>
+          </Table>
+        </TableContainer>
         <Spacer />
-        <Filter />
+        <Pagination {...paginationAttr} />
       </Flex>
-      <TableContainer {...containerAttr}>
-        <Table {...tableAttr}>
-          <Thead bgColor={"primary"}>
-            <Tr>
-              <Th {...thAttr}>No</Th>
-              <Th {...thAttr}>Name</Th>
-              <Th {...thAttr}>Role</Th>
-              <Th {...thAttr}>Warehouse</Th>
-              <Th {...thAttr}>Status</Th>
-              <Th></Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            <UserList {...userListAttr} />
-          </Tbody>
-        </Table>
-      </TableContainer>
-      <Spacer />
-      <Pagination {...paginationAttr} />
-    </Flex>
+      {isLoading && <LoadingBar />}
+    </>
   );
 }
 
