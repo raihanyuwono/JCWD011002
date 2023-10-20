@@ -39,7 +39,7 @@ app.use("/api/order", userOrderRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/rajaongkir", rajaongkirRouter);
 app.use("/api/user", userProfileRouter);
-app.use("/api/public", express.static(path.resolve(__dirname, "../public")));
+app.use("/api/src/public", express.static(path.join(__dirname, "public")));
 app.use("/api/transaction", transactionRouter);
 app.use("/api/address", addressRouter);
 app.use("/api/product", productRouter);

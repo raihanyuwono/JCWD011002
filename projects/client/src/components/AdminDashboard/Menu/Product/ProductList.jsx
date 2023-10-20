@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Flex, Box, Button, Table, TableContainer, Thead, Th, Tbody, Tr, Td, Img, Text, Center, } from '@chakra-ui/react'
+import { Flex, Box, Button, Table, TableContainer, Thead, Th, Tbody, Tr, Td, Img, Text, Center, Spacer, } from '@chakra-ui/react'
 import axios from 'axios'
 import DetailProduct from './ProductDetail'
 import CreateProduct from './CreateProduct'
@@ -137,6 +137,8 @@ const ProductList = () => {
         <DetailProduct isOpen={isDetailOpen} onClose={handleCloseDetail} product={selectedProduct} fetchProduct={fetchProducts} />
         <CreateProduct isOpen={isDrawerCreateOpen} onClose={handleCloseCreate} fetchProducts={fetchProducts} />
         <EditStockDrawer isOpen={isDetailStockOpen} onClose={() => setIsDetailStockOpen(false)} products={selectedProduct} fetchProducts={fetchProducts} fetchDetailStock={handleDetailStock} />
+        <Spacer />
+
         {products.length > 0 ? (
           <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} />
         ) : null}

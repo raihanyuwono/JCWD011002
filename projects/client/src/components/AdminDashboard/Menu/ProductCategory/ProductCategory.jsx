@@ -15,7 +15,8 @@ import {
   Flex,
   ButtonGroup,
   Box,
-  Image
+  Image,
+  Spacer
 } from "@chakra-ui/react";
 import { EditIcon, DeleteIcon, CheckIcon, CloseIcon, AddIcon } from "@chakra-ui/icons";
 import axios from "axios";
@@ -38,7 +39,7 @@ const ProductCategory = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const {
     isOpen: isConfirmationOpen,
     onOpen: onConfirmationOpen,
@@ -120,7 +121,7 @@ const ProductCategory = () => {
   }
 
   return (
-    <Box w={"full"} p={4} borderRadius={"8px"}>
+    <Flex direction={"column"} w={"full"} borderRadius={"8px"}>
       <Flex justifyContent={role === "admin" ? "space-between" : "flex-end"} mb={4} m={4}>
         {role === "admin" &&
           <Button bg={"primary"} color={"white"} leftIcon={<AddIcon />} onClick={onOpen}>
@@ -169,6 +170,7 @@ const ProductCategory = () => {
           </Tbody>
         </Table>
       </TableContainer>
+      <Spacer />
       {categories.length > 0 ? (
         <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} />
       ) : null}
@@ -181,7 +183,7 @@ const ProductCategory = () => {
         title="Delete Category"
         message="Are you sure you want to delete this category?"
       />
-    </Box>
+    </Flex>
   );
 };
 

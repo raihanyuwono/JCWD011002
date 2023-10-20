@@ -3,6 +3,7 @@ import {
   useToast,
   Box,
   Flex,
+  Spacer,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { getWarehouseList } from "../../../../api/warehouse";
@@ -260,6 +261,7 @@ const WarehouseList = () => {
             sort={sort} setSort={setSort} search={search} setSearch={setSearch} searchInput={searchInput} setSearchInput={setSearchInput} name={name} setName={setName} province={filterProvince} setProvince={setFilterProvince} />
         </Flex>
         <WarehouseTable warehouses={warehouses} openEditDrawer={openEditDrawer} openDeleteModal={openDeleteModal} />
+        <Spacer />
         {warehouses.length > 0 ? (
           <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} />
         ) : null}

@@ -1,4 +1,4 @@
-import { Table, Tbody, Td, Text, Th, Thead, Tr, useToast, Popover, PopoverTrigger, Button, PopoverContent, PopoverHeader, PopoverArrow, PopoverCloseButton, PopoverBody } from '@chakra-ui/react'
+import { Table, Tbody, Td, Text, Th, Thead, Tr, useToast, Popover, PopoverTrigger, Button, PopoverContent, PopoverHeader, PopoverArrow, PopoverCloseButton, PopoverBody, Flex, Spacer } from '@chakra-ui/react'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import Pagination from '../Product/Pagination'
@@ -62,7 +62,7 @@ const ReqMutationFrom = () => {
   }
 
   return (
-    <>
+    <Flex direction="column">
       <FilterWhFromMutation sort={sort} setSort={setSort} search={search} setSearch={setSearch} warehouse_to={warehouse_to} setWarehouseTo={setWarehouseTo} searchInput={searchInput} setSearchInput={setSearchInput} />
       <Table variant={"striped"} colorScheme="whiteAlpha"
         bgColor={"bgSecondary"}>
@@ -107,10 +107,11 @@ const ReqMutationFrom = () => {
         </Tbody>
       </Table>
       {(!data || data.length) === 0 && <Text align={"center"} my={5}>No data request mutation to your warehouse</Text>}
+      <Spacer />
       {data.length > 0 ? (
         <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} />
       ) : null}
-    </>
+    </Flex>
   )
 }
 

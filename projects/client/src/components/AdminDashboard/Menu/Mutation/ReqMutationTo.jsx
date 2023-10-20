@@ -1,4 +1,4 @@
-import { Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react'
+import { Flex, Spacer, Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import Pagination from '../Product/Pagination'
@@ -38,7 +38,7 @@ const ReqMutationTo = () => {
     setPage(newPage)
   }
   return (
-    <>
+    <Flex direction={"column"}>
       <FilterWhToMutation sort={sort} setSort={setSort} search={search} setSearch={setSearch} warehouse_from={warehouse_from} setWarehouseFrom={setWarehouseFrom} searchInput={searchInput} setSearchInput={setSearchInput} />
       <Table variant={"striped"} colorScheme="whiteAlpha"
         bgColor={"bgSecondary"}>
@@ -68,10 +68,11 @@ const ReqMutationTo = () => {
         </Tbody>
       </Table>
       {(!data || data.length) === 0 && <Text align={"center"} my={5}>No data request mutation from your warehouse</Text>}
+      <Spacer />
       {data.length > 0 ? (
         <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} />
       ) : null}
-    </>
+    </Flex>
   )
 }
 
