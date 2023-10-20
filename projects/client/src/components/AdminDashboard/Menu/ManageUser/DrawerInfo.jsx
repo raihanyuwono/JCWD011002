@@ -13,14 +13,15 @@ function capitalize(x) {
 function showDate(date) {
   date = new Date(date);
   return date.toLocaleDateString(DATE_LOCALE, {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   });
 }
 
-function DrawerInfo({ data }) {
-  const { user, warehouse } = data;
+function DrawerInfo({ user }) {
+  // const { user, warehouse } = user;
+  const { warehouse } = user?.admin || {};
   const container = {
     direction: "column",
     gap: "12px",
@@ -29,7 +30,7 @@ function DrawerInfo({ data }) {
   const avatarAttr = {
     src: getImage(user?.avatar),
     borderRadius: "8px",
-  }
+  };
   const nameAttr = setInfoDetail("Name", user?.name);
   const usernameAttr = setInfoDetail("Username", user?.username);
   const emailAttr = setInfoDetail("Email", user?.email);
@@ -40,14 +41,14 @@ function DrawerInfo({ data }) {
 
   return (
     <Flex {...container}>
-      <Image {...avatarAttr}/>
+      <Image {...avatarAttr} />
       <DrawerInfoDetail {...nameAttr} />
       <DrawerInfoDetail {...usernameAttr} />
       <DrawerInfoDetail {...emailAttr} />
       <DrawerInfoDetail {...phoneAttr} />
       <DrawerInfoDetail {...roleAttr} />
       <DrawerInfoDetail {...joinAtAttr} />
-      {user?.role?.name !== "admin" && <DrawerInfoDetail {...warehouseAttr} />}
+      {warehouse && <DrawerInfoDetail {...warehouseAttr} />}
     </Flex>
   );
 }

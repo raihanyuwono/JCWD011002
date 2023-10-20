@@ -17,23 +17,25 @@ const exclude = [
 
 const include = [
   {
-    model: users,
-    attributes: { exclude },
+    model: admins,
     include: {
-      model: roles,
+      model: warehouses,
       attributes: ["name"],
     },
   },
-  { model: warehouses, attributes: ["name"] },
+  {
+    model: roles,
+    attributes: ["name"],
+  },
 ];
 
 function setWhere(id, search = "", role, warehouse) {
   const conditions = {
-    id_user: { [Op.not]: id },
-    "$user.name$": { [Op.like]: `%${search}%` },
+    name: { [Op.not]: null, [Op.like]: `%${search}%` },
+    id: { [Op.not]: id },
   };
-  if (role) conditions["$user.id_role$"] = role;
-  if (warehouse) conditions["id_warehouse"] = warehouse;
+  if (role) conditions["id_role"] = role;
+  if (warehouse) conditions["$admin.id_warehouse$"] = warehouse;
   return conditions;
 }
 
@@ -44,13 +46,13 @@ async function getUsers(access, id, query) {
   //Pagination
   const pages = pagination.setPagination(page, limit);
 
-  const { count, rows: result } = await admins.findAndCountAll({
-    attributes: [],
+  const { count, rows: result } = await users.findAndCountAll({
+    attributes: { exclude },
     include,
     order: [
-      [users, "name", sort || "ASC"],
-      [users, roles, "name", "ASC"],
-      [warehouses, "name", "ASC"],
+      ["name", sort || "ASC"],
+      [roles, "name", "ASC"],
+      [admins, warehouses, "name", "ASC"]
     ],
     where: setWhere(id, search, role, warehouse),
     subQuery: false,

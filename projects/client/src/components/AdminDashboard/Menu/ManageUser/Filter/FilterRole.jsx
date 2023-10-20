@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 
 const roles = [
   { name: "All Roles", id: 0 },
+  { name: "User", id: 1 },
   { name: "Admin", id: 2 },
   { name: "Admin Warehouse", id: 3 },
 ];

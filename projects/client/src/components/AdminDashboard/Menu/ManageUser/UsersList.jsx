@@ -6,7 +6,7 @@ function UserList({ users, limit, page }) {
     return (page - 1) * limit + n + 1;
   }
   return users.map((user, index) => (
-    <DataUser admin={user} num={setNum(index)} key={index} />
+    <DataUser user={user} num={setNum(index)} key={index} />
   ));
 }
 
