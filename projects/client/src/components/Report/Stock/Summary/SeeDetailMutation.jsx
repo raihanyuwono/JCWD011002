@@ -46,6 +46,11 @@ const SeeDetail = ({ mutation, month_name, year, warehouse_name }) => {
     setCurrentPage(newPage);
   };
 
+  const OverlayOne = () => (
+    <ModalOverlay bg="blackAlpha.400" backdropFilter="blur(30px)" />
+  );
+  const [overlay, setOverlay] = React.useState(<OverlayOne />);
+
   return (
     <>
       <Button size={"xs"} variant={"edit"} onClick={onOpen}>
@@ -57,7 +62,7 @@ const SeeDetail = ({ mutation, month_name, year, warehouse_name }) => {
         onClose={onClose}
         isOpen={isOpen}
       >
-        <ModalOverlay />
+        {overlay}
         <ModalContent>
           <ModalHeader bgColor={"primary"} color={"white"}>
             {warehouse_name} {"=>"} {month_name} {year}
@@ -105,7 +110,12 @@ const SeeDetail = ({ mutation, month_name, year, warehouse_name }) => {
                 {currentItems.length === 0 ? (
                   <Tbody>
                     <Tr>
-                      <Td py={6} colSpan={5} align={"center"} textAlign="center">
+                      <Td
+                        py={6}
+                        colSpan={5}
+                        align={"center"}
+                        textAlign="center"
+                      >
                         No Data
                       </Td>
                     </Tr>

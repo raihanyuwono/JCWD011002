@@ -104,8 +104,12 @@ const Detail = () => {
               <Th textAlign={"center"} color={"white"}>
                 NO
               </Th>
-              <Th textAlign={"center"} color={"white"}>FROM WAREHOUSE</Th>
-              <Th textAlign={"center"} color={"white"}>TO WAREHOUSE</Th>
+              <Th textAlign={"center"} color={"white"}>
+                FROM WAREHOUSE
+              </Th>
+              <Th textAlign={"center"} color={"white"}>
+                TO WAREHOUSE/USER
+              </Th>
               <Th textAlign={"center"} color={"white"}>
                 PRODUCT
               </Th>
