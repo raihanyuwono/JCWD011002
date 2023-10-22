@@ -58,7 +58,8 @@ app.get("/api/greetings", (req, res, next) => {
 
 // app.use("/api/src/public", express.static(path.join(__dirname, "public")));
 // app.use("/api/public", express.static(path.join(__dirname, "public")));
-app.use("/api/public", express.static(path.resolve(__dirname, "src/public")));
+app.use("/api/src/public", express.static(path.resolve(__dirname, "public")));
+// console.log("PATH", path.resolve(__dirname, "public"))
 // ===========================
 
 // not found
