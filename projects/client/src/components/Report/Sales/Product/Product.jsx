@@ -39,13 +39,31 @@ const Product = () => {
   const [filterByYear, setFilterByYear] = useState("");
   const [orderBy, setOrderBy] = useState("month_year DESC");
   const [currentPage, setCurrentPage] = useState(1);
-  const [warehouseId, setWarehouseId] = useState("");
+  const [warehouseId, setWarehouseId] = useState(0);
   const [productId, setProductId] = useState("");
   const [month, setMonth] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [itemsPerPage, setItemsPerPage] = useState(20);
-
+  const itemsPerPage = 10;
   const API_URL = process.env.REACT_APP_API_BASE_URL;
+
+  const fetchWHAdmin = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/admin/roles/warehouse`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      if (response.data.data.id_warehouse > 0) {
+        setWarehouseId(response.data.data.id_warehouse);
+      } else {
+        setWarehouseId(0);
+      }
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    fetchWHAdmin();
+  }, []);
 
   const fetchSales = async () => {
     try {
@@ -54,11 +72,10 @@ const Product = () => {
         `${API_URL}/report/sales/product/permonth`,
         {
           params: {
-            page: currentPage,
-            pageSize: 10000,
             orderBy,
             filterByMonth,
             filterByYear,
+            warehouseId,
           },
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -73,11 +90,20 @@ const Product = () => {
 
   useEffect(() => {
     fetchSales();
-  }, [filterByMonth, filterByYear, orderBy, currentPage]);
+  }, [filterByMonth, filterByYear, orderBy, warehouseId]);
+
+  const totalItems = month
+    .map((item) =>
+      item.month_sales.filter((monthSale) =>
+        monthSale.product_name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    )
+    .flat().length;
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
   };
+
   function getMonthName(month) {
     const monthNames = [
       "January",
@@ -164,15 +190,9 @@ const Product = () => {
                     children=<Search2Icon />
                   />
                 </InputGroup>
-                <Divider w={"110%"} mt={2} />
+                <Divider w={"230%"} mt={2} />
                 <Pagination
-                  totalItems={
-                    item.month_sales.filter((monthSale) =>
-                      monthSale.product_name
-                        .toLowerCase()
-                        .includes(searchQuery.toLowerCase())
-                    ).length
-                  }
+                  totalItems={totalItems}
                   itemsPerPage={itemsPerPage}
                   onPageChange={handlePageChange}
                   currentPage={currentPage}
@@ -223,23 +243,27 @@ const Product = () => {
                         )
                         .map((monthSale) => (
                           <Tr key={monthSale.product_id}>
-                            <Td>
+                            <Td w={"3vw"}>
                               <Image
                                 w={"35px"}
                                 src={`${API_URL}/${monthSale.image}`}
                                 alt={monthSale.product_name}
                               />
                             </Td>
-                            <Tooltip bg={"white"} color={"black"} label={monthSale.product_name}>
-                              <Td>
-                                {sliceProductName(monthSale.product_name, 40)}
+                            <Tooltip
+                              bg={"white"}
+                              color={"black"}
+                              label={monthSale.product_name}
+                            >
+                              <Td w={"50vw"}>
+                                {sliceProductName(monthSale.product_name, 85)}
                               </Td>
                             </Tooltip>
-                            <Td>
+                            <Td w={"10vw"}>
                               <Text fontSize={"2xs"}>ALL QTY SOLD:</Text>
                               <Text>{monthSale.total_qty_sold_product}</Text>
                             </Td>
-                            <Td>
+                            <Td w={"10vw"}>
                               <Text fontSize={"2xs"}>ALL TOTAL SALES:</Text>
                               <Text>
                                 {toRupiah(monthSale.total_sales_product, {
@@ -248,7 +272,7 @@ const Product = () => {
                                 })}
                               </Text>
                             </Td>
-                            <Td>
+                            <Td textAlign="right">
                               <ModalDetail
                                 detail_product_sales={
                                   monthSale.detail_product_sales

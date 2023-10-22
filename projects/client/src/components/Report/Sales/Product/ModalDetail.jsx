@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import {
   Modal,
@@ -23,6 +24,7 @@ import {
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import toRupiah from "@develoka/angka-rupiah-js";
+import Pagination from "../../Pagination";
 
 const ModalDetail = ({ detail_product_sales, product_name }) => {
   const API_URL = process.env.REACT_APP_API_BASE_URL;
@@ -107,6 +109,20 @@ const ModalDetail = ({ detail_product_sales, product_name }) => {
         : filterByWarehouse(1);
     }
   }, []);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  const totalItems = filteredData.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  const onPageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const displayedData = filteredData.slice(startIndex, endIndex);
 
   return (
     <>
@@ -197,7 +213,7 @@ const ModalDetail = ({ detail_product_sales, product_name }) => {
                     </Th>
                   </Tr>
                 </Thead>
-                {filteredData.length === 0 ? (
+                {displayedData.length === 0 ? (
                   <Tbody>
                     <Tr>
                       <Td colSpan={6} textAlign="center" color={"white"}>
@@ -207,7 +223,7 @@ const ModalDetail = ({ detail_product_sales, product_name }) => {
                   </Tbody>
                 ) : (
                   <Tbody>
-                    {filteredData.map((detailSale, index) => (
+                    {displayedData.map((detailSale, index) => (
                       <Tr key={detailSale.data_id}>
                         <Td textAlign="center" color={"white"}>
                           {index + 1}
@@ -236,6 +252,13 @@ const ModalDetail = ({ detail_product_sales, product_name }) => {
                 )}
               </Table>
             </TableContainer>
+            <Pagination
+              totalItems={totalItems}
+              itemsPerPage={10}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={onPageChange}
+            />
           </ModalBody>
           <ModalFooter w={"full"}>
             <Button

@@ -23,7 +23,7 @@ import {
 import { BsBoxArrowInUpRight } from "react-icons/bs";
 import Pagination from "../../Pagination";
 
-const itemsPerPage = 20;
+const itemsPerPage = 5;
 
 const SeeDetail = ({ mutation, month_name, year, warehouse_name }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -136,7 +136,7 @@ const SeeDetail = ({ mutation, month_name, year, warehouse_name }) => {
                           color={"black"}
                           label={item.product_name}
                         >
-                          <Td>{sliceProductName(item.product_name, 30)}</Td>
+                          <Td w={"16vw"}>{sliceProductName(item.product_name, 30)}</Td>
                         </Tooltip>
                         <Td textAlign={"center"}>{item.subtraction_qty}</Td>
                         <Td textAlign={"center"}>{item.addition_qty}</Td>
