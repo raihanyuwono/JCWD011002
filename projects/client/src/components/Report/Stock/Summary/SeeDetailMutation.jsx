@@ -18,6 +18,7 @@ import {
   Flex,
   Input,
   ModalFooter,
+  Tooltip,
 } from "@chakra-ui/react";
 import { BsBoxArrowInUpRight } from "react-icons/bs";
 import Pagination from "../../Pagination";
@@ -45,6 +46,12 @@ const SeeDetail = ({ mutation, month_name, year, warehouse_name }) => {
   const onPageChange = (newPage) => {
     setCurrentPage(newPage);
   };
+
+  function sliceProductName(productName, maxChar) {
+    return productName.length > maxChar
+      ? productName.slice(0, maxChar) + "..."
+      : productName;
+  }
 
   const OverlayOne = () => (
     <ModalOverlay bg="blackAlpha.400" backdropFilter="blur(30px)" />
@@ -124,7 +131,13 @@ const SeeDetail = ({ mutation, month_name, year, warehouse_name }) => {
                   <Tbody>
                     {currentItems.map((item) => (
                       <Tr key={item.id_product}>
-                        <Td>{item.product_name}</Td>
+                        <Tooltip
+                          bg={"white"}
+                          color={"black"}
+                          label={item.product_name}
+                        >
+                          <Td>{sliceProductName(item.product_name, 30)}</Td>
+                        </Tooltip>
                         <Td textAlign={"center"}>{item.subtraction_qty}</Td>
                         <Td textAlign={"center"}>{item.addition_qty}</Td>
                         <Td textAlign={"center"}>{item.final_qty_mutation}</Td>

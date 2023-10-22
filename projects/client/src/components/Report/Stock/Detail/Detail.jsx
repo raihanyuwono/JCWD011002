@@ -11,6 +11,7 @@ import {
   TableContainer,
   Flex,
   Text,
+  Tooltip,
 } from "@chakra-ui/react";
 import axios from "axios";
 import OrderBy from "./OrderBy";
@@ -75,6 +76,12 @@ const Detail = () => {
     setStartDate(start);
     setEndDate(end);
   };
+
+  function sliceProductName(productName, maxChar) {
+    return productName.length > maxChar
+      ? productName.slice(0, maxChar) + "..."
+      : productName;
+  }
 
   return (
     <>
@@ -145,7 +152,13 @@ const Detail = () => {
                   </Td>
                   <Td>{item.wh_from}</Td>
                   <Td>{item.wh_to}</Td>
-                  <Td textAlign={"center"}>{item.product}</Td>
+                  <Tooltip
+                    bg={"white"}
+                    color={"black"}
+                    label={item.product}
+                  >
+                    <Td textAlign={"center"}>{sliceProductName(item.product, 25)}</Td>
+                  </Tooltip>
                   <Td textAlign={"center"}>{item.qty}</Td>
                   <Td textAlign={"center"}>{item.status}</Td>
                   <Td textAlign={"center"}>MWECG2/ID/TXN{item.txn_id}</Td>

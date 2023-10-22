@@ -85,7 +85,6 @@ const handleStock = async (
             item.qty -= qtyToReduceFromNearest;
           }
 
-          // If there's still remaining qty, try to get it from other warehouses
           if (item.qty > 0) {
             for (const warehouseData of productWarehouses) {
               if (warehouseData.id_warehouse !== nearestWarehouseId) {

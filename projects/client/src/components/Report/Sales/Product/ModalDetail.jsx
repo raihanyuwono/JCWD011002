@@ -18,6 +18,7 @@ import {
   TableContainer,
   Select,
   Flex,
+  TableCaption,
 } from "@chakra-ui/react";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
@@ -93,6 +94,7 @@ const ModalDetail = ({ detail_product_sales, product_name }) => {
       setWh(response.data.data);
     } catch (error) {}
   };
+
   useEffect(() => {
     fetchWHAdmin();
   }, []);
@@ -112,7 +114,7 @@ const ModalDetail = ({ detail_product_sales, product_name }) => {
         Detail
       </Button>
 
-      <Modal size={"3xl"} onClose={onClose} isOpen={isOpen} isCentered>
+      <Modal size={"5xl"} onClose={onClose} isOpen={isOpen} isCentered>
         <ModalOverlay />
         <ModalContent bgColor={"bgSecondary"}>
           <ModalHeader color={"white"} bg={"primary"} mb={2}>
@@ -139,7 +141,8 @@ const ModalDetail = ({ detail_product_sales, product_name }) => {
                   color={"black"}
                   mb={2}
                   size={"sm"}
-                  defaultValue={"1"}
+                  placeholder="Select Warehouse"
+                  // defaultValue={"all"}
                   onChange={(e) => filterByWarehouse(e.target.value)}
                 >
                   <option value="all">All Warehouse</option>
@@ -194,33 +197,43 @@ const ModalDetail = ({ detail_product_sales, product_name }) => {
                     </Th>
                   </Tr>
                 </Thead>
-                <Tbody>
-                  {filteredData.map((detailSale, index) => (
-                    <Tr key={detailSale.data_id}>
-                      <Td textAlign="center" color={"white"}>
-                        {index + 1}
-                      </Td>
-                      <Td textAlign="center" color={"white"}>
-                        MWECG2/ID/TXN{detailSale.transaction_id}
-                      </Td>
-                      <Td textAlign="center" color={"white"}>
-                        {detailSale.transaction_date}
-                      </Td>
-                      <Td textAlign="center" color={"white"}>
-                        {detailSale.qty}
-                      </Td>
-                      <Td textAlign="center" color={"white"}>
-                        {toRupiah(detailSale.price, {
-                          dot: ".",
-                          floatingPoint: 0,
-                        })}
-                      </Td>
-                      <Td textAlign="right" color={"white"}>
-                        {getWarehouseName(detailSale.warehouse_id)}
+                {filteredData.length === 0 ? (
+                  <Tbody>
+                    <Tr>
+                      <Td colSpan={6} textAlign="center" color={"white"}>
+                        No Data or Please Select Warehouse!
                       </Td>
                     </Tr>
-                  ))}
-                </Tbody>
+                  </Tbody>
+                ) : (
+                  <Tbody>
+                    {filteredData.map((detailSale, index) => (
+                      <Tr key={detailSale.data_id}>
+                        <Td textAlign="center" color={"white"}>
+                          {index + 1}
+                        </Td>
+                        <Td textAlign="center" color={"white"}>
+                          MWECG2/ID/TXN{detailSale.transaction_id}
+                        </Td>
+                        <Td textAlign="center" color={"white"}>
+                          {detailSale.transaction_date}
+                        </Td>
+                        <Td textAlign="center" color={"white"}>
+                          {detailSale.qty}
+                        </Td>
+                        <Td textAlign="center" color={"white"}>
+                          {toRupiah(detailSale.price, {
+                            dot: ".",
+                            floatingPoint: 0,
+                          })}
+                        </Td>
+                        <Td textAlign="right" color={"white"}>
+                          {getWarehouseName(detailSale.warehouse_id)}
+                        </Td>
+                      </Tr>
+                    ))}
+                  </Tbody>
+                )}
               </Table>
             </TableContainer>
           </ModalBody>

@@ -23,6 +23,7 @@ import {
   InputGroup,
   InputRightAddon,
   TableCaption,
+  Tooltip,
 } from "@chakra-ui/react";
 import axios from "axios";
 import Pagination from "../../Pagination";
@@ -42,7 +43,7 @@ const Product = () => {
   const [productId, setProductId] = useState("");
   const [month, setMonth] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [itemsPerPage, setItemsPerPage] = useState(20);
 
   const API_URL = process.env.REACT_APP_API_BASE_URL;
 
@@ -95,6 +96,12 @@ const Product = () => {
     return monthNames[month - 1] || "";
   }
 
+  function sliceProductName(productName, maxChar) {
+    return productName.length > maxChar
+      ? productName.slice(0, maxChar) + "..."
+      : productName;
+  }
+
   return (
     <>
       <Flex>
@@ -142,7 +149,7 @@ const Product = () => {
                 <InputGroup size="sm">
                   <Input
                     mt={2}
-                    w={"15vw"}
+                    w={"20vw"}
                     size={"sm"}
                     type={"text"}
                     color={"black"}
@@ -157,7 +164,7 @@ const Product = () => {
                     children=<Search2Icon />
                   />
                 </InputGroup>
-                <Divider w={"250%"} mt={2} />
+                <Divider w={"110%"} mt={2} />
                 <Pagination
                   totalItems={
                     item.month_sales.filter((monthSale) =>
@@ -223,7 +230,11 @@ const Product = () => {
                                 alt={monthSale.product_name}
                               />
                             </Td>
-                            <Td>{monthSale.product_name}</Td>
+                            <Tooltip bg={"white"} color={"black"} label={monthSale.product_name}>
+                              <Td>
+                                {sliceProductName(monthSale.product_name, 40)}
+                              </Td>
+                            </Tooltip>
                             <Td>
                               <Text fontSize={"2xs"}>ALL QTY SOLD:</Text>
                               <Text>{monthSale.total_qty_sold_product}</Text>
