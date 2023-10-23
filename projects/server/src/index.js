@@ -75,6 +75,7 @@ if(__dirname.split("/").includes("www")) {
 // console.log(path.resolve("../public"))
 // console.log("PATH", path.resolve(__dirname, "public"))
 // console.log(path.join(__dirname, "../public"))
+
 // ===========================
 
 // not found
