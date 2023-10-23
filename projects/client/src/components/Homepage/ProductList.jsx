@@ -40,7 +40,7 @@ function ProductList() {
       category: currentCategory,
       order: currentOrder,
       sort: currentSort,
-      limit: 2
+      limit: 10
     };
     setIsLoading(true);
     const { data } = await getProducts(toast, attributes);
