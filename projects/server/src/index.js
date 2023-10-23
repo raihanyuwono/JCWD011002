@@ -64,6 +64,7 @@ if (__dirname.split("/").pop() === "src") {
 } else {
   app.use("/api/public", express.static(path.join(__dirname, "public")));
 }
+console.log(__dirname);
 // console.log(path.resolve("../public"))
 console.log(__dirname);
 // console.log("PATH", path.resolve(__dirname, "public"))
