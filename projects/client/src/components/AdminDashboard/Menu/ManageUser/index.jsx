@@ -14,7 +14,6 @@ import { getUsers } from "../../../../api/admin";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import AddButton from "./AddButton";
-import Searchbar from "./Filter/Searchbar";
 import Pagination from "../../../Utility/Pagination";
 import { useSearchParams } from "react-router-dom";
 import Filter from "./Filter";
@@ -29,10 +28,10 @@ function ManageUsers() {
   const [firstRander, setFirstRander] = useState(true);
   const [users, setUsers] = useState([]);
   const [maxPage, setMaxpage] = useState(1);
-  const [searchParams, setSearchParams] = useSearchParams({});
+  const [searchParams, setSearchParams] = useSearchParams();
   const toast = useToast();
   const triggerUpdate = useSelector((state) => state.trigger.listUser);
-  const search = useSelector((state) => state.search.users);
+  const search = useSelector((state) => state.search.users) || "";
   const currentPage = searchParams.get("page") || 1;
   const currentSort = searchParams.get("sort") || "ASC";
   const currentRoles = searchParams.get("role") || 0;
@@ -57,7 +56,7 @@ function ManageUsers() {
     setLoading(false);
     setMaxpage(pages);
     setUsers(userList);
-    setFirstRander(true);
+    setFirstRander(false);
   }
 
   const userListAttr = {
@@ -73,12 +72,12 @@ function ManageUsers() {
   };
 
   function resetPage() {
-    if (!firstRander) {
-      setSearchParams((prev) => {
+    setSearchParams((prev) => {
+      if (!firstRander) {
         prev.set("page", 1);
         return prev;
-      });
-    }
+      }
+    });
   }
 
   useEffect(() => {
@@ -140,7 +139,7 @@ function ManageUsers() {
         <Spacer />
         <Pagination {...paginationAttr} />
       </Flex>
-      {isLoading && <LoadingBar />}
+      {isLoading && !firstRander && <LoadingBar />}
     </>
   );
 }

@@ -124,6 +124,7 @@ function ProductCard({ product }) {
 
   const imageSectionAttr = {
     pos: "relative",
+    minH: "240px"
   };
 
   const addToCartAttr = {
