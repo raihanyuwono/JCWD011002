@@ -36,7 +36,7 @@ const ProductTable = ({ products, handleDetailStock, handleDetailClick }) => {
               <Td>{index + 1}</Td>
               <Td><Img src={`${process.env.REACT_APP_API_BASE_URL}/${product?.image}`} boxSize={"70px"} objectFit={"cover"} borderRadius={"5px"} /></Td>
               <Td>{product?.name}</Td>
-              <Td>{product?.category?.name}</Td>
+              <Td>{product?._category?.name}</Td>
               <Td>{product?.is_active ? "Active" : "Inactive"}</Td>
               <Td>{product?.product_warehouses?.map((warehouse) => warehouse?.stock).reduce((a, b) => a + b, 0)}
                 <Button ml={4} bg={"darkBlue"} color={"white"} onClick={() => handleDetailStock(product.id)}>edit stock</Button>

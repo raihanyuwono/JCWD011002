@@ -25,8 +25,11 @@ const optionAttr = {
   }
 }
 
-export const FilterAllMutation = ({ sort, setSort, search, setSearch, status, setStatus, warehouse_from, warehouse_to, setWarehouseFrom, setWarehouseTo, searchInput, setSearchInput }) => {
+export const FilterAllMutation = ({ sort, setSort, search, setSearch, status, setStatus, warehouse_from, warehouse_to, setWarehouseFrom, setWarehouseTo, searchInput, setSearchInput, month, setMonth, year, setYear }) => {
   const [data, setData] = useState([])
+  const currentMonth = new Date().getMonth() + 1
+  const currentYear = new Date().getFullYear()
+
   const fetchData = async () => {
     const warehouse = await fetchWarehouse()
     setData(warehouse)
@@ -47,6 +50,9 @@ export const FilterAllMutation = ({ sort, setSort, search, setSearch, status, se
   if (searchInput.length <= 0) {
     setSearch(null)
   }
+
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+  const years = [2021, 2022, 2023, 2024]
   return (
     <>
       <Box py="4">
@@ -110,6 +116,18 @@ export const FilterAllMutation = ({ sort, setSort, search, setSearch, status, se
             )}
             <option {...optionAttr} value="8">Approve</option>
             <option {...optionAttr} value="9">Reject</option>
+          </Select>
+          <Select value={month || currentMonth} mr="2" onChange={(e) => setMonth(e.target.value)}>
+            <option {...optionAttr} value="">All Month</option>
+            {months.map((item, index) => (
+              <option {...optionAttr} key={item} value={index + 1}>{item}</option>
+            ))}
+          </Select>
+          <Select value={year || currentYear} mr="2" onChange={(e) => setYear(e.target.value)}>
+            <option {...optionAttr} value="">All Year</option>
+            {years.map((item, index) => (
+              <option {...optionAttr} key={item} value={item}>{item}</option>
+            ))}
           </Select>
         </Flex>
       </Box>
