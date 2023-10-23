@@ -68,6 +68,7 @@ const UpdateCategory = ({ isOpen, onClose, categoryId, fetchCategory, isLoading,
         formData,
         { headers }
       );
+      setIsLoading(true);
       toast({
         title: "Edit category success",
         status: "success",
@@ -86,6 +87,8 @@ const UpdateCategory = ({ isOpen, onClose, categoryId, fetchCategory, isLoading,
         duration: 2000,
         isClosable: true,
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
