@@ -16,7 +16,8 @@ import {
   ButtonGroup,
   Box,
   Image,
-  Spacer
+  Spacer,
+  Icon
 } from "@chakra-ui/react";
 import { EditIcon, DeleteIcon, CheckIcon, CloseIcon, AddIcon } from "@chakra-ui/icons";
 import axios from "axios";
@@ -119,13 +120,24 @@ const ProductCategory = () => {
     setSelectedCategoryId(categoryId);
     setIsEditOpen(true);
   }
-
+  function NotFound() {
+    const container = {
+      textAlign: "center",
+      fontWeight: "semibold",
+      colSpan: 3,
+    };
+    return (
+      <Tr>
+        <Td {...container}>Not Found</Td>
+      </Tr>
+    );
+  }
   return (
-    <Flex direction={"column"} w={"full"} borderRadius={"8px"}>
-      <Flex justifyContent={role === "admin" ? "space-between" : "flex-end"} mb={4} m={4}>
+    <Flex direction={"column"} w={"full"}>
+      <Flex justifyContent={role === "admin" ? "space-between" : "flex-end"} mb={4}>
         {role === "admin" &&
-          <Button bg={"primary"} color={"white"} leftIcon={<AddIcon />} onClick={onOpen}>
-            Create Category
+          <Button bg={"primary"} color={"white"} onClick={onOpen} _hover={{ bg: "editSecondary" }}>
+            <Icon as={AddIcon} mr={2} boxSize={"12px"} /> Create Category
             <FormCreateCategory isLoading={isLoading} setIsLoading={setIsLoading} isOpen={isOpen} onClose={onClose} fetchCategory={fetchCategories} />
           </Button>
         }
@@ -144,7 +156,7 @@ const ProductCategory = () => {
             </Tr>
           </Thead>
           <Tbody>
-            {categories.map((category, index) => (
+            {categories.length > 0 && categories?.map((category, index) => (
               <Tr key={category.id}>
                 <Td>{index + 1}</Td>
                 <Td><Image src={`${process.env.REACT_APP_API_BASE_URL}/${category.image}`} alt={category.name} width={50} height={50} /></Td>
@@ -167,6 +179,7 @@ const ProductCategory = () => {
                 }
               </Tr>
             ))}
+            {(!categories || categories.length) === 0 && <NotFound />}
           </Tbody>
         </Table>
       </TableContainer>

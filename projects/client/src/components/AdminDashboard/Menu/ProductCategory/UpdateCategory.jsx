@@ -15,6 +15,7 @@ import {
   DrawerCloseButton,
 } from "@chakra-ui/react";
 import axios from "axios";
+import LoadingBar from "../../../Utility/LoadingBar";
 
 const UpdateCategory = ({ isOpen, onClose, categoryId, fetchCategory, isLoading, setIsLoading }) => {
   const toast = useToast();
@@ -51,6 +52,7 @@ const UpdateCategory = ({ isOpen, onClose, categoryId, fetchCategory, isLoading,
 
   const handleUpdateCategory = async () => {
     try {
+      setIsLoading(true);
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -66,7 +68,6 @@ const UpdateCategory = ({ isOpen, onClose, categoryId, fetchCategory, isLoading,
         formData,
         { headers }
       );
-      setIsLoading(true);
       toast({
         title: "Edit category success",
         status: "success",
@@ -75,6 +76,7 @@ const UpdateCategory = ({ isOpen, onClose, categoryId, fetchCategory, isLoading,
       });
       fetchCategory();
       onClose();
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
       toast({
@@ -84,8 +86,6 @@ const UpdateCategory = ({ isOpen, onClose, categoryId, fetchCategory, isLoading,
         duration: 2000,
         isClosable: true,
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -151,7 +151,7 @@ const UpdateCategory = ({ isOpen, onClose, categoryId, fetchCategory, isLoading,
             {previewImage && (
               <Image
                 src={previewImage}
-                alt="Category Preview"
+                alt=" "
                 style={{ width: "100px", height: "100px", marginTop: "10px" }}
               />
             )}
@@ -164,6 +164,7 @@ const UpdateCategory = ({ isOpen, onClose, categoryId, fetchCategory, isLoading,
           <Button w={"100%"} onClick={onClose}>Cancel</Button>
         </DrawerFooter>
       </DrawerContent>
+      {isLoading && <LoadingBar />}
     </Drawer>
   );
 };
