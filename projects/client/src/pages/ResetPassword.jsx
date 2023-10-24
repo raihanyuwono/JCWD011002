@@ -1,4 +1,4 @@
-import { Flex } from "@chakra-ui/react";
+import { Flex, useMediaQuery } from "@chakra-ui/react";
 import ResetPassword from "../components/ResetPassword";
 
 const container = {
@@ -13,7 +13,7 @@ const banner = {
   h: "full",
   bgPos: "center",
   bgSize: "cover",
-  filter: {base: "none", lg: "brightness(60%)"},
+  filter: { base: "none", lg: "brightness(60%)" },
 };
 
 function MobileView() {
@@ -44,10 +44,8 @@ function DesktopView() {
 }
 
 function ResetPasswordPage() {
-  return <>
-    <MobileView />
-    <DesktopView />
-  </>;
+  const [isMd] = useMediaQuery("(max-width: 768px)");
+  return <>{isMd ? <MobileView /> : <DesktopView />}</>;
 }
 
 export default ResetPasswordPage;

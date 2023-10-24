@@ -1,4 +1,4 @@
-import { Flex } from "@chakra-ui/react";
+import { Flex, useMediaQuery } from "@chakra-ui/react";
 import Register from "../components/Register";
 
 const banner = {
@@ -7,7 +7,7 @@ const banner = {
   h: "full",
   bgPos: "center",
   bgSize: "cover",
-  filter: {base: "none", lg: "brightness(60%)"},
+  filter: { base: "none", lg: "brightness(60%)" },
 };
 
 function MobileView() {
@@ -44,12 +44,8 @@ const container = {
 };
 
 function Registration() {
-  return (
-    <>
-      <MobileView />
-      <DesktopView />
-    </>
-  );
+  const [isMd] = useMediaQuery("(max-width: 768px)");
+  return <>{isMd ? <MobileView /> : <DesktopView />}</>;
 }
 
 export default Registration;
