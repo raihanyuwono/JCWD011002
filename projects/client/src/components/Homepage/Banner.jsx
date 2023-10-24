@@ -7,7 +7,6 @@ import {
 } from "@chakra-ui/react"
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { BiLeftArrowAlt, BiRightArrowAlt } from "react-icons/bi"
 import Slider from "react-slick"
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 
