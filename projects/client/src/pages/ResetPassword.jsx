@@ -21,9 +21,8 @@ function MobileView() {
     w: "full",
     backdropFilter: "blur(8px) brightness(60%)",
   };
-  const mobile = { display: { base: "flex", lg: "none" } };
   return (
-    <Flex {...container} {...mobile}>
+    <Flex {...container}>
       <Flex {...banner}>
         <Flex {...backdrop}>
           <ResetPassword />
@@ -34,9 +33,8 @@ function MobileView() {
 }
 
 function DesktopView() {
-  const desktop = { display: { base: "none", lg: "flex" } };
   return (
-    <Flex {...container} {...desktop}>
+    <Flex {...container}>
       <Flex {...banner} />
       <ResetPassword />
     </Flex>

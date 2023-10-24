@@ -41,10 +41,7 @@ function ProductList() {
 
   function setLimit() {
     const screen = isSm ? "sm" : isMd ? "md" : "base";
-    // console.log(screen);
     switch(screen) {
-      // case "sm" : return 2;
-      // case "md" : return 3;
       default : return 10;
     }
   }
