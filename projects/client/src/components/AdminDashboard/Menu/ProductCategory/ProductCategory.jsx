@@ -40,7 +40,6 @@ const ProductCategory = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  console.log("search", search, searchInput)
   const {
     isOpen: isConfirmationOpen,
     onOpen: onConfirmationOpen,

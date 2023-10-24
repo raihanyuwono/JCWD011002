@@ -13,7 +13,7 @@ const {
   transactionRouter,
   addressRouter,
   productRouter,
-  stockRouter
+  stockRouter,
 } = require("./routes");
 const path = require("path");
 const PORT = process.env.PORT || 8000;
@@ -22,7 +22,7 @@ app.use(
   cors({
     origin: [
       process.env.WHITELISTED_DOMAIN &&
-      process.env.WHITELISTED_DOMAIN.split(","),
+        process.env.WHITELISTED_DOMAIN.split(","),
     ],
   })
 );
@@ -56,7 +56,12 @@ app.get("/api/greetings", (req, res, next) => {
   });
 });
 
-app.use("/api/src/public", express.static(path.join(__dirname, "public")));
+if(__dirname.split("/").includes("www")) {
+  app.use("/api/public", express.static(path.resolve(__dirname, "../../../public")))
+} else{
+  app.use("/api/public", express.static(path.resolve(__dirname, "../public")))
+}
+
 // ===========================
 
 // not found
@@ -67,7 +72,6 @@ app.use((req, res, next) => {
     next();
   }
 });
-
 
 // error
 app.use((err, req, res, next) => {

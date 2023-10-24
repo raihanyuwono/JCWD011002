@@ -90,7 +90,6 @@ const ReqMutationFrom = () => {
         </Tbody>
       </Table>
       <Spacer />
-
       {data.length > 0 ? (
         <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} />
       ) : null}

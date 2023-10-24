@@ -29,7 +29,7 @@ const TableBody = ({ data }) => {
       })
       }
       {(!data || data.length) === 0 && <NotFound />}
-    </Tbody >
+    </Tbody>
   )
 }
 
