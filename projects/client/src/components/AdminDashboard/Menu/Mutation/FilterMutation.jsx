@@ -24,7 +24,15 @@ const optionAttr = {
     color: 'white'
   }
 }
-
+const btnSearchAttr = {
+  bg: 'primary',
+  color: 'white',
+  height: '2.75rem',
+  px: '2',
+  _hover: {
+    bg: 'editSecondary'
+  }
+}
 export const FilterAllMutation = ({ sort, setSort, search, setSearch, status, setStatus, warehouse_from, warehouse_to, setWarehouseFrom, setWarehouseTo, searchInput, setSearchInput, month, setMonth, year, setYear }) => {
   const [data, setData] = useState([])
   const currentMonth = new Date().getMonth() + 1
@@ -65,10 +73,7 @@ export const FilterAllMutation = ({ sort, setSort, search, setSearch, status, se
             onKeyDown={handleEnterKey}
           />
           <Button
-            bg={"darkBlue"}
-            color={"white"}
-            height={"2.75rem"}
-            px={2}
+            {...btnSearchAttr}
             onClick={handleSearch}
             mb={{ base: '2', md: '0' }}
             mr={{ base: '0', md: '2' }}
@@ -162,25 +167,14 @@ export const FilterWhFromMutation = ({ sort, setSort, search, setSearch, searchI
       <Box py="4">
         <Flex flexDirection={{ base: 'column', md: 'row' }} alignItems={{ base: 'flex-start', md: 'center' }}
           justifyContent="space-between" mb="2" >
-          {/* <InputGroup> */}
-
           <Input
             placeholder="Search products..."
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             onKeyDown={handleEnterKey}
-          // mb={{ base: '2', md: '0' }}
-          // mr={{ base: '0', md: '2' }}
           />
-          {/* <InputRightElement width={'4.5rem'}>
-            
-          </InputRightElement> */}
-          {/* </InputGroup> */}
           <Button
-            bg={"darkBlue"}
-            color={"white"}
-            height={"2.75rem"}
-            px={2}
+            {...btnSearchAttr}
             onClick={handleSearch}
             mb={{ base: '2', md: '0' }}
             mr={{ base: '0', md: '2' }}
@@ -196,21 +190,7 @@ export const FilterWhFromMutation = ({ sort, setSort, search, setSearch, searchI
             {data.map((item) => (
               <option {...optionAttr} key={item.id} value={item.id}>{item.name}</option>
             ))}
-
           </Select>
-          {/* <Select
-            placeholder="Warehouse to"
-            value={warehouse_to}
-            onChange={(e) => setWarehouseTo(e.target.value)}
-            mb={{ base: '2', md: '0' }}
-            mr={{ base: '0', md: '2' }}
-          >
-            <option value="">All Warehouse</option>
-            {data.map((item) => (
-              <option key={item.id} value={item.id}>{item.name}</option>
-            ))}
-
-          </Select> */}
           <Select
             // placeholder="Sort by"
             value={sort}
@@ -254,25 +234,15 @@ export const FilterWhToMutation = ({ sort, setSort, search, setSearch, searchInp
       <Box py="4">
         <Flex flexDirection={{ base: 'column', md: 'row' }} alignItems={{ base: 'flex-start', md: 'center' }}
           justifyContent="space-between" mb="2" >
-          {/* <InputGroup> */}
 
           <Input
             placeholder="Search products..."
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             onKeyDown={handleEnterKey}
-          // mb={{ base: '2', md: '0' }}
-          // mr={{ base: '0', md: '2' }}
           />
-          {/* <InputRightElement width={'4.5rem'}>
-            
-          </InputRightElement> */}
-          {/* </InputGroup> */}
           <Button
-            bg={"darkBlue"}
-            color={"white"}
-            height={"2.75rem"}
-            px={2}
+            {...btnSearchAttr}
             onClick={handleSearch}
             mb={{ base: '2', md: '0' }}
             mr={{ base: '0', md: '2' }}
@@ -290,19 +260,6 @@ export const FilterWhToMutation = ({ sort, setSort, search, setSearch, searchInp
             ))}
 
           </Select>
-          {/* <Select
-            placeholder="Warehouse to"
-            value={warehouse_to}
-            onChange={(e) => setWarehouseTo(e.target.value)}
-            mb={{ base: '2', md: '0' }}
-            mr={{ base: '0', md: '2' }}
-          >
-            <option value="">All Warehouse</option>
-            {data.map((item) => (
-              <option key={item.id} value={item.id}>{item.name}</option>
-            ))}
-
-          </Select> */}
           <Select
             // placeholder="Sort by"
             value={sort}

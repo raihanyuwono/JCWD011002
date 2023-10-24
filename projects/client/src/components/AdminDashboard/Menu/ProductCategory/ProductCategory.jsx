@@ -40,6 +40,7 @@ const ProductCategory = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  console.log("search", search, searchInput)
   const {
     isOpen: isConfirmationOpen,
     onOpen: onConfirmationOpen,
@@ -133,7 +134,7 @@ const ProductCategory = () => {
   }
   return (
     <Flex direction={"column"} w={"full"}>
-      <Flex justifyContent={role === "admin" ? "space-between" : "flex-end"} mb={4}>
+      <Flex justifyContent={role === "admin" ? "space-between" : "flex-end"} mb={2}>
         {role === "admin" &&
           <Button bg={"primary"} color={"white"} onClick={onOpen} _hover={{ bg: "editSecondary" }}>
             <Icon as={AddIcon} mr={2} boxSize={"12px"} /> Create Category

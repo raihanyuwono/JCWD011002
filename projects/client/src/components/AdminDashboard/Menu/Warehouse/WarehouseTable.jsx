@@ -29,8 +29,8 @@ const WarehouseTable = ({ warehouses, openEditDrawer, openDeleteModal }) => {
               <Td>{warehouse.city_name}</Td>
               <Td>{warehouse.postal_code}</Td>
               <Td>
-                <Button mr={2} bg={"darkBlue"} color={"white"} onClick={() => openEditDrawer(warehouse)}>Edit</Button>
-                <Button bg={"red"} color={"white"} onClick={() => openDeleteModal(warehouse)}>delete</Button>
+                <Button mr={2} bg={"primary"} color={"white"} _hover={{ bg: "editSecondary" }} onClick={() => openEditDrawer(warehouse)}>Edit</Button>
+                <Button colorScheme='red' onClick={() => openDeleteModal(warehouse)}>delete</Button>
               </Td>
             </Tr>
           ))}

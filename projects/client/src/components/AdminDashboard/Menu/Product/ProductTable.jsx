@@ -14,6 +14,14 @@ const ProductTable = ({ products, handleDetailStock, handleDetailClick }) => {
       </Tr>
     );
   }
+
+  const btnAttr = {
+    bg: "primary",
+    color: "white",
+    _hover: {
+      bg: "editSecondary",
+    }
+  }
   return (
     <TableContainer>
       <Table variant={"striped"} colorScheme="whiteAlpha"
@@ -39,9 +47,9 @@ const ProductTable = ({ products, handleDetailStock, handleDetailClick }) => {
               <Td>{product?._category?.name}</Td>
               <Td>{product?.is_active ? "Active" : "Inactive"}</Td>
               <Td>{product?.product_warehouses?.map((warehouse) => warehouse?.stock).reduce((a, b) => a + b, 0)}
-                <Button ml={4} bg={"darkBlue"} color={"white"} onClick={() => handleDetailStock(product.id)}>edit stock</Button>
+                <Button ml={4} {...btnAttr} onClick={() => handleDetailStock(product.id)}>edit stock</Button>
               </Td>
-              <Td><Button bg={"darkBlue"} color={"white"} onClick={() => handleDetailClick(product.id)}>Detail</Button></Td>
+              <Td><Button {...btnAttr} onClick={() => handleDetailClick(product.id)}>Detail</Button></Td>
             </Tr>
           ))}
           {(!products || products.length) === 0 && <NotFound />}
