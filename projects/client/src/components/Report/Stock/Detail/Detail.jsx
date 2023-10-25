@@ -142,7 +142,6 @@ const Detail = () => {
               </Th>
             </Tr>
           </Thead>
-          {/* <Tbody> */}
           {data?.length === 0 ? (
             <Tbody>
               <Tr>
@@ -188,7 +187,6 @@ const Detail = () => {
               ))}
             </Tbody>
           )}
-          {/* </Tbody> */}
         </Table>
       </TableContainer>
       <Pagination
