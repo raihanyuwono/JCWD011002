@@ -33,7 +33,6 @@ function AddButton({ add }) {
   };
 
   function setHeight() {
-    // console.log(containerRef.current?.clientWidth);
     const width = containerRef.current?.clientWidth;
     document.getElementById(id).style.height = width;
   }
