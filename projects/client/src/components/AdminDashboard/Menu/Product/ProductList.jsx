@@ -39,7 +39,7 @@ const ProductList = () => {
           id_category: categoryId,
           sort,
           status,
-          page,
+          page: search ? null : page,
           limit,
         },
         headers: {

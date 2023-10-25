@@ -16,6 +16,7 @@ const ReqMutationFrom = () => {
   const [warehouse_to, setWarehouseTo] = useState('')
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [limit, setLimit] = useState(10)
   const toast = useToast()
   const headers = {
     "Content-Type": "application/json",
@@ -27,7 +28,9 @@ const ReqMutationFrom = () => {
         params: {
           sort,
           search: search || '',
-          warehouse_to
+          warehouse_to,
+          page: search ? null : page,
+          limit
         },
         headers
       })
@@ -59,7 +62,7 @@ const ReqMutationFrom = () => {
 
   useEffect(() => {
     fetchData()
-  }, [sort, warehouse_to, search, page])
+  }, [sort, warehouse_to, search, page, limit])
 
   const handlePageChange = (newPage) => {
     setPage(newPage)
@@ -78,7 +81,7 @@ const ReqMutationFrom = () => {
               <Td>{item.user?.name}</Td>
               <Td>{item._warehouse_from.name}</Td>
               <Td>{item._warehouse_to.name}</Td>
-              <Td>{item.product.name}</Td>
+              <Td style={{ whiteSpace: 'normal' }}>{item.product.name}</Td>
               <Td>{item.qty}</Td>
               <Td display={"flex"} justifyContent={"space-between"} alignItems={"center"}><Text>{item.status.name}</Text>
                 <PopoverUpdateStatus approve={() => updateStatusMutation(item.id, 8)} reject={() => updateStatusMutation(item.id, 9)} />
