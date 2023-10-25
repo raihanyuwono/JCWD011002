@@ -23,7 +23,7 @@ const getWarehouseStock = async (req, res) => {
     const result = await ProductWarehouse.findAll({
       where: {
         id_product: id_product,
-        stock: { [Op.gt]: qty },
+        stock: { [Op.gte]: qty },
         id_warehouse: { [Op.ne]: admin.id_warehouse }
       },
       include: [
