@@ -86,7 +86,6 @@ async function getTransactions(access, query) {
     include: setInclude(status, warehouse, search),
     order: [["created_at", sort]],
     where: setWhere(year, month, invoice),
-    // subQuery: false,
     distinct: true,
     ...pages,
   });

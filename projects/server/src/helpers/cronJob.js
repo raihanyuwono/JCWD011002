@@ -9,7 +9,6 @@ const cronJob = async (userId) => {
     const transactions = await transaction.findAll({
       where: {
         id_status: { [Op.in]: [1, 4] },
-        // id_user: userId,
       },
     });
 

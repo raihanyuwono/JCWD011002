@@ -73,7 +73,7 @@ function TabPayment({ status, search, params }) {
     const attributes = {
       status,
       page: currentPage,
-      limit: 10, // limit
+      limit: 10,
       sort: currentSort,
       month: currentMonth,
       year: currentYear,

@@ -9,7 +9,6 @@ function AddButton({ add }) {
     id,
     alignItems: "center",
     justifyContent: "center",
-    // h: { sm: "128px", md: "256px", lg: "280px" },
     h: containerRef.current?.clientWidth,
     borderRadius: "8px",
     overflow: "hidden",
