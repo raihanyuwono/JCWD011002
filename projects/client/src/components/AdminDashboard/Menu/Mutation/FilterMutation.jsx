@@ -33,17 +33,22 @@ const btnSearchAttr = {
     bg: 'editSecondary'
   }
 }
-export const FilterAllMutation = ({ sort, setSort, search, setSearch, status, setStatus, warehouse_from, warehouse_to, setWarehouseFrom, setWarehouseTo, searchInput, setSearchInput, month, setMonth, year, setYear }) => {
+export const FilterAllMutation = ({ sort, setSort, search, setSearch, status, setStatus, warehouse_from, warehouse_to, setWarehouseFrom, setWarehouseTo, searchInput, setSearchInput, month, setMonth, year, setYear, fetchMutation }) => {
   const [data, setData] = useState([])
   const currentMonth = new Date().getMonth() + 1
   const currentYear = new Date().getFullYear()
-
   const fetchData = async () => {
     const warehouse = await fetchWarehouse()
     setData(warehouse)
   }
   useEffect(() => {
     fetchData()
+  }, [])
+
+  useEffect(() => {
+    fetchMutation()
+    setMonth(currentMonth)
+    setYear(currentYear)
   }, [])
 
   const handleSearch = () => {
