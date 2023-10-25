@@ -191,17 +191,13 @@ const Detail = () => {
           {/* </Tbody> */}
         </Table>
       </TableContainer>
-      {data?.length === 0 ? (
-        <></>
-      ) : (
-        <Pagination
-          totalItems={data?.length}
-          itemsPerPage={10}
-          onPageChange={handlePageChange}
-          currentPage={currentPage}
-          totalPages={totalPages}
-        />
-      )}
+      <Pagination
+        totalItems={data?.length}
+        itemsPerPage={10}
+        onPageChange={handlePageChange}
+        currentPage={currentPage}
+        totalPages={totalPages}
+      />
     </>
   );
 };
