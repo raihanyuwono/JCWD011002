@@ -30,11 +30,6 @@ const Pagination = ({
   const [inputPage, setInputPage] = useState(currentPage);
   const toast = useToast();
 
-  // const handlePageClick = (page) => {
-  //   onPageChange(page);
-  //   setInputPage(page);
-  // };
-
   const handleFirstPage = () => {
     const firstPage = 1;
     onPageChange(firstPage);
@@ -124,14 +119,6 @@ const Pagination = ({
         >
           <Icon as={IoIosArrowBack} />
         </Button>
-        {/* <Button
-          key={currentPage}
-          onClick={() => handlePageClick(currentPage)}
-          variant="solid"
-          size={isMd ? "sm" : "sm"}
-        >
-          {currentPage}
-        </Button> */}
         <Input
           textAlign={"center"}
           type="number"
@@ -139,7 +126,6 @@ const Pagination = ({
           borderRadius={7}
           color="white"
           size={isMd ? "sm" : "sm"}
-          // borderRadius={"none"}
           _hover={{ color: "black", bgColor: "white" }}
           w={"60px"}
           placeholder="Page"
@@ -166,13 +152,6 @@ const Pagination = ({
         >
           <HiOutlineChevronDoubleRight />
         </Button>
-        {/* <Button
-          size={isMd ? "sm" : "sm"}
-          onClick={handleGoToPage}
-          variant="solid"
-        >
-          Go
-        </Button> */}
       </HStack>
     </Flex>
   );

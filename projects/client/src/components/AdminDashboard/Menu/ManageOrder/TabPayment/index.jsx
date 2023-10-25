@@ -12,13 +12,10 @@ import TransactionList from "./TransactionList";
 import { useEffect, useState } from "react";
 import { getTransactions } from "../../../../../api/transactions";
 import Pagination from "../../../../Utility/Pagination";
-import { useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getRole } from "../../../../../helpers/Roles";
 import { getAdminWarehouse } from "../../../../../api/admin";
 import LoadingBar from "../../../../Utility/LoadingBar";
-
-const date = new Date();
 
 const mainContainer = {
   direction: "column",
@@ -48,7 +45,7 @@ function TabPayment({ status, search, params }) {
   const [transactions, setTransaction] = useState([]);
   const [maxPage, setMaxPage] = useState(1);
   const { searchParams, setSearchParams } = search;
-  const {currentSort, currentMonth, currentYear, currentWarehouse, currentSearch} = params
+  const {currentSort, currentMonth, currentYear, currentWarehouse, currentSearch, currentInvoice} = params
   const currentPage = searchParams.get("page") || 1;
   const updateStatus = useSelector((state) => state.trigger.orderStatus);
   const dependancies = [
@@ -57,6 +54,7 @@ function TabPayment({ status, search, params }) {
     currentMonth,
     currentYear,
     currentSearch,
+    currentInvoice,
     currentWarehouse,
     updateStatus,
   ];
@@ -72,11 +70,12 @@ function TabPayment({ status, search, params }) {
     const attributes = {
       status,
       page: currentPage,
-      limit: 10, // limit
+      limit: 10,
       sort: currentSort,
       month: currentMonth,
       year: currentYear,
       search: currentSearch,
+      invoice: currentInvoice,
       warehouse: await selectWarehouse(),
     };
     if (parseInt(attributes?.warehouse) === 0) delete attributes.warehouse;
