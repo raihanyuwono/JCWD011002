@@ -139,10 +139,6 @@ const getPendingStatusWhFrom = async (req, res) => {
     const totalPages = Math.ceil(totalCount / limitInt);
 
     const result = await StockHistory.findAll({
-      // where: {
-      //   id_status: 7,
-      //   id_warehouse_from: admin.id_warehouse
-      // },
       where,
       order,
       include: includeModes(),

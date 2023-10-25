@@ -109,7 +109,6 @@ export const FilterAllMutation = ({ sort, setSort, search, setSearch, status, se
 
           </Select>
           <Select
-            // placeholder="Sort by"
             value={sort}
             onChange={(e) => setSort(e.target.value)}
             mb={{ base: '2', md: '0' }}
@@ -185,7 +184,6 @@ export const FilterWhFromMutation = ({ sort, setSort, search, setSearch, searchI
             mr={{ base: '0', md: '2' }}
           ><BsSearch /></Button>
           <Select
-            // placeholder="Warehouse To"
             value={warehouse_to}
             onChange={(e) => setWarehouseTo(e.target.value)}
             mb={{ base: '2', md: '0' }}
@@ -197,7 +195,6 @@ export const FilterWhFromMutation = ({ sort, setSort, search, setSearch, searchI
             ))}
           </Select>
           <Select
-            // placeholder="Sort by"
             value={sort}
             onChange={(e) => setSort(e.target.value)}
             mb={{ base: '2', md: '0' }}
@@ -253,7 +250,6 @@ export const FilterWhToMutation = ({ sort, setSort, search, setSearch, searchInp
             mr={{ base: '0', md: '2' }}
           ><BsSearch /></Button>
           <Select
-            // placeholder="Warehouse From"
             value={warehouse_from}
             onChange={(e) => setWarehouseFrom(e.target.value)}
             mb={{ base: '2', md: '0' }}
@@ -266,7 +262,6 @@ export const FilterWhToMutation = ({ sort, setSort, search, setSearch, searchInp
 
           </Select>
           <Select
-            // placeholder="Sort by"
             value={sort}
             onChange={(e) => setSort(e.target.value)}
             mb={{ base: '2', md: '0' }}
