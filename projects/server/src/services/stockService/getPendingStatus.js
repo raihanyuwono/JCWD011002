@@ -78,7 +78,7 @@ const getPendingStatusWhTo = async (req, res) => {
     const limitInt = parseInt(limit) || 10;
     const offset = (pageInt - 1) * limitInt;
 
-    const totalCount = await StockHistory.count({ where, include: includeModes() });
+    const totalCount = await StockHistory.count({ where, include: { model: Product, attributes: ["name"] } });
     const totalPages = Math.ceil(totalCount / limitInt);
 
     const result = await StockHistory.findAll({
@@ -135,7 +135,7 @@ const getPendingStatusWhFrom = async (req, res) => {
     const limitInt = parseInt(limit) || 10;
     const offset = (pageInt - 1) * limitInt;
 
-    const totalCount = await StockHistory.count({ where, include: includeModes() });
+    const totalCount = await StockHistory.count({ where, include: { model: Product, attributes: ["name"] } });
     const totalPages = Math.ceil(totalCount / limitInt);
 
     const result = await StockHistory.findAll({
